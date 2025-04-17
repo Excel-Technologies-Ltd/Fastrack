@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:clients_name",
  "creation": "2025-04-17 10:48:06.893721",
  "default_view": "List",
  "doctype": "DocType",
@@ -62,7 +63,9 @@
   {
    "fieldname": "clients_name",
    "fieldtype": "Data",
-   "label": "Clients Name"
+   "label": "Clients Name",
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "concern_name",
@@ -150,10 +153,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-04-17 11:19:30.847627",
+ "modified": "2025-04-17 11:46:36.821669",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Sales Man Visit",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
