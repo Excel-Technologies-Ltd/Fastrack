@@ -14,8 +14,8 @@
   "notify_party",
   "delivered_to",
   "pre_carriage_by",
-  "place_of_recipt",
   "column_break_javpt",
+  "place_of_recipt",
   "occean_vessel",
   "voy_no",
   "port_of_loading",
@@ -37,7 +37,8 @@
   "column_break_m62ls",
   "place_of_issue",
   "column_break_svtyl",
-  "date_of_issue"
+  "date_of_issue",
+  "amended_from"
  ],
  "fields": [
   {
@@ -51,7 +52,8 @@
    "fieldname": "shipper",
    "fieldtype": "Link",
    "label": "Shipper",
-   "options": "Supplier"
+   "options": "Supplier",
+   "reqd": 1
   },
   {
    "fieldname": "consignee",
@@ -72,36 +74,43 @@
    "options": "Customer"
   },
   {
+   "fetch_from": "master_bill_no.pre_carried_by",
    "fieldname": "pre_carriage_by",
    "fieldtype": "Data",
    "label": "Pre Carriage By"
   },
   {
+   "fetch_from": "master_bill_no.place_of_receipt",
    "fieldname": "place_of_recipt",
    "fieldtype": "Data",
    "label": "Place of Recipt"
   },
   {
+   "fetch_from": "master_bill_no.vessel",
    "fieldname": "occean_vessel",
    "fieldtype": "Data",
    "label": "Occean Vessel"
   },
   {
+   "fetch_from": "master_bill_no.voyage_number",
    "fieldname": "voy_no",
    "fieldtype": "Data",
    "label": "Voy. No"
   },
   {
+   "fetch_from": "master_bill_no.port_of_loading",
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
    "label": "Port Of Loading"
   },
   {
+   "fetch_from": "master_bill_no.port_of_discharge",
    "fieldname": "port_of_discharge",
    "fieldtype": "Data",
    "label": "Port Of Discharge"
   },
   {
+   "fetch_from": "master_bill_no.final_place_of_delivery",
    "fieldname": "place_of_delivery",
    "fieldtype": "Data",
    "label": "Place Of Delivery"
@@ -123,11 +132,13 @@
    "label": "Freight And Charges Payble At"
   },
   {
+   "fetch_from": "master_bill_no.place_of_issue",
    "fieldname": "place_of_issue",
    "fieldtype": "Data",
    "label": "Place Of Issue"
   },
   {
+   "fetch_from": "master_bill_no.date_of_issue",
    "fieldname": "date_of_issue",
    "fieldtype": "Date",
    "label": "Date Of Issue"
@@ -199,11 +210,22 @@
    "label": "Master Bill No.",
    "options": "Master Bill",
    "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2025-04-17 09:51:41.642958",
+ "modified": "2025-04-17 15:37:52.223364",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "House Bill",
