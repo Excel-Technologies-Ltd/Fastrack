@@ -1,0 +1,228 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-16 17:34:24.081474",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "master_bill_no",
+  "bill_no",
+  "shipper",
+  "consignee",
+  "notify_party",
+  "delivered_to",
+  "pre_carriage_by",
+  "place_of_recipt",
+  "column_break_javpt",
+  "occean_vessel",
+  "voy_no",
+  "port_of_loading",
+  "port_of_discharge",
+  "place_of_delivery",
+  "final_destination",
+  "section_break_mfooh",
+  "container_items",
+  "section_break_jsqsy",
+  "freight_and_charges",
+  "revenue_tone",
+  "prepaid",
+  "column_break_poeav",
+  "rate",
+  "per",
+  "collect",
+  "section_break_r2iv2",
+  "freight_and_charges_payble_at",
+  "column_break_m62ls",
+  "place_of_issue",
+  "column_break_svtyl",
+  "date_of_issue"
+ ],
+ "fields": [
+  {
+   "fieldname": "bill_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bill No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "notify_party",
+   "fieldtype": "Link",
+   "label": "Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "delivered_to",
+   "fieldtype": "Link",
+   "label": "Delivered To",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "pre_carriage_by",
+   "fieldtype": "Data",
+   "label": "Pre Carriage By"
+  },
+  {
+   "fieldname": "place_of_recipt",
+   "fieldtype": "Data",
+   "label": "Place of Recipt"
+  },
+  {
+   "fieldname": "occean_vessel",
+   "fieldtype": "Data",
+   "label": "Occean Vessel"
+  },
+  {
+   "fieldname": "voy_no",
+   "fieldtype": "Data",
+   "label": "Voy. No"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading"
+  },
+  {
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port Of Discharge"
+  },
+  {
+   "fieldname": "place_of_delivery",
+   "fieldtype": "Data",
+   "label": "Place Of Delivery"
+  },
+  {
+   "fieldname": "final_destination",
+   "fieldtype": "Data",
+   "label": "Final Destination"
+  },
+  {
+   "fieldname": "container_items",
+   "fieldtype": "Table",
+   "label": "Container Items",
+   "options": "Fastrack Item"
+  },
+  {
+   "fieldname": "freight_and_charges_payble_at",
+   "fieldtype": "Data",
+   "label": "Freight And Charges Payble At"
+  },
+  {
+   "fieldname": "place_of_issue",
+   "fieldtype": "Data",
+   "label": "Place Of Issue"
+  },
+  {
+   "fieldname": "date_of_issue",
+   "fieldtype": "Date",
+   "label": "Date Of Issue"
+  },
+  {
+   "fieldname": "freight_and_charges",
+   "fieldtype": "Data",
+   "label": "Freight And Charges"
+  },
+  {
+   "fieldname": "revenue_tone",
+   "fieldtype": "Float",
+   "label": "Revenue Tone"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Float",
+   "label": "Rate"
+  },
+  {
+   "fieldname": "per",
+   "fieldtype": "Int",
+   "label": "Per"
+  },
+  {
+   "default": "0",
+   "fieldname": "prepaid",
+   "fieldtype": "Data",
+   "label": "Prepaid"
+  },
+  {
+   "default": "0",
+   "fieldname": "collect",
+   "fieldtype": "Data",
+   "label": "Collect"
+  },
+  {
+   "fieldname": "column_break_javpt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_mfooh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_jsqsy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_r2iv2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_poeav",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_svtyl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_m62ls",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "master_bill_no",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Master Bill No.",
+   "options": "Master Bill",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-17 09:51:41.642958",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "House Bill",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

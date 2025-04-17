@@ -1,0 +1,179 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-16 12:21:52.759962",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "voyage_number",
+  "shipper",
+  "notify_party",
+  "place_of_receipt",
+  "freight_to_be_paid_at",
+  "number_of_original_waybills",
+  "vessel",
+  "column_break_ihvv1",
+  "waybill_number",
+  "consignee",
+  "export_preference",
+  "port_of_loading",
+  "final_place_of_delivery",
+  "port_of_discharge",
+  "pre_carried_by",
+  "section_break_q9lb9",
+  "item_details",
+  "amended_from",
+  "section_break_y3kmf",
+  "place_of_issue",
+  "column_break_pkf3x",
+  "date_of_issue"
+ ],
+ "fields": [
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "notify_party",
+   "fieldtype": "Link",
+   "label": "Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "export_preference",
+   "fieldtype": "Link",
+   "label": "Export Preference",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "pre_carried_by",
+   "fieldtype": "Data",
+   "label": "Pre Carried By"
+  },
+  {
+   "fieldname": "place_of_receipt",
+   "fieldtype": "Data",
+   "label": "Place of Receipt"
+  },
+  {
+   "fieldname": "freight_to_be_paid_at",
+   "fieldtype": "Data",
+   "label": "Freight To Be Paid At"
+  },
+  {
+   "fieldname": "number_of_original_waybills",
+   "fieldtype": "Data",
+   "label": "Number Of Original Waybills"
+  },
+  {
+   "fieldname": "vessel",
+   "fieldtype": "Data",
+   "label": "Vessel"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading"
+  },
+  {
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port Of Discharge"
+  },
+  {
+   "fieldname": "final_place_of_delivery",
+   "fieldtype": "Data",
+   "label": "Final Place Of Delivery"
+  },
+  {
+   "fieldname": "item_details",
+   "fieldtype": "Table",
+   "label": "Item Details",
+   "options": "Fastrack Item"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "MasterBill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_ihvv1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_q9lb9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "voyage_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Voyage Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "waybill_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Waybill Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_y3kmf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "place_of_issue",
+   "fieldtype": "Data",
+   "label": "Place Of Issue"
+  },
+  {
+   "fieldname": "date_of_issue",
+   "fieldtype": "Date",
+   "label": "Date Of Issue"
+  },
+  {
+   "fieldname": "column_break_pkf3x",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-04-16 16:52:20.784111",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "Master Bill",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
