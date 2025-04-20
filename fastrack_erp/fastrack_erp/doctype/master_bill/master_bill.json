@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:MASTER-{YY}-{MM}-{DD}-{####}",
  "creation": "2025-04-16 12:21:52.759962",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,7 +9,9 @@
  "field_order": [
   "voyage_number",
   "shipper",
+  "shipper_address",
   "notify_party",
+  "notify_party_address",
   "place_of_receipt",
   "freight_to_be_paid_at",
   "number_of_original_waybills",
@@ -16,7 +19,9 @@
   "column_break_ihvv1",
   "waybill_number",
   "consignee",
+  "consignee_address",
   "export_preference",
+  "export_preference_address",
   "port_of_loading",
   "final_place_of_delivery",
   "port_of_discharge",
@@ -27,7 +32,8 @@
   "section_break_y3kmf",
   "place_of_issue",
   "column_break_pkf3x",
-  "date_of_issue"
+  "date_of_issue",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -150,15 +156,55 @@
   {
    "fieldname": "column_break_pkf3x",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "fetch_from": "notify_party.primary_address",
+   "fieldname": "notify_party_address",
+   "fieldtype": "Text",
+   "label": "Notify Party Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "shipper.primary_address",
+   "fieldname": "shipper_address",
+   "fieldtype": "Data",
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Text",
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "export_preference.primary_address",
+   "fieldname": "export_preference_address",
+   "fieldtype": "Text",
+   "label": "Export Preference Address",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-04-17 12:50:55.221456",
+ "links": [
+  {
+   "link_doctype": "House Bill",
+   "link_fieldname": "master_bill_no"
+  }
+ ],
+ "modified": "2025-04-20 13:19:09.410438",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Master Bill",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

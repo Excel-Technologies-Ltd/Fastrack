@@ -8,6 +8,14 @@ frappe.ui.form.on('House Bill', {
 	onload: function(frm) {
 		// console.log(frm.doc);
 	},
+    generate_remaining_container_items: function(frm) {
+        frm.trigger('master_bill_no');
+    },
+    refresh:function(frm) {
+        if(frm.is_new()) {
+            frm.trigger('master_bill_no');
+        }
+    },
 
 	master_bill_no: function(frm) {
         let masterBill = frm.doc.master_bill_no;

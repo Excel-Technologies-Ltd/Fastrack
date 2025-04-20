@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:HOUSE-{YY}-{MM}-{DD}-{####}",
  "creation": "2025-04-16 17:34:24.081474",
  "default_view": "List",
  "doctype": "DocType",
@@ -9,10 +10,14 @@
  "field_order": [
   "master_bill_no",
   "bill_no",
-  "shipper",
-  "consignee",
-  "notify_party",
+  "house_shipper",
+  "shipper_address",
+  "house_consignee",
+  "consignee_address",
+  "house_notify_party",
+  "notify_party_adress",
   "delivered_to",
+  "delivered_to_adress",
   "pre_carriage_by",
   "column_break_javpt",
   "place_of_recipt",
@@ -23,6 +28,7 @@
   "place_of_delivery",
   "final_destination",
   "section_break_mfooh",
+  "generate_remaining_container_items",
   "container_items",
   "section_break_jsqsy",
   "freight_and_charges",
@@ -47,25 +53,6 @@
    "in_list_view": 1,
    "label": "Bill No",
    "reqd": 1
-  },
-  {
-   "fieldname": "shipper",
-   "fieldtype": "Link",
-   "label": "Shipper",
-   "options": "Supplier",
-   "reqd": 1
-  },
-  {
-   "fieldname": "consignee",
-   "fieldtype": "Link",
-   "label": "Consignee",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "notify_party",
-   "fieldtype": "Link",
-   "label": "Notify Party",
-   "options": "Customer"
   },
   {
    "fieldname": "delivered_to",
@@ -220,15 +207,69 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "house_shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "house_consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "house_notify_party",
+   "fieldtype": "Link",
+   "label": "Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "generate_remaining_container_items",
+   "fieldtype": "Button",
+   "label": "Generate Container Items"
+  },
+  {
+   "fetch_from": "house_shipper.primary_address",
+   "fieldname": "shipper_address",
+   "fieldtype": "Text",
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "house_consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Data",
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "house_notify_party.primary_address",
+   "fieldname": "notify_party_adress",
+   "fieldtype": "Data",
+   "label": "Notify Party Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "delivered_to.primary_address",
+   "fieldname": "delivered_to_adress",
+   "fieldtype": "Text",
+   "label": "Delivered To Address",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-04-17 15:37:52.223364",
+ "modified": "2025-04-20 13:02:17.736275",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "House Bill",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

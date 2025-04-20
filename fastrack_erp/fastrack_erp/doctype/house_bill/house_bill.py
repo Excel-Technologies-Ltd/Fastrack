@@ -9,17 +9,55 @@ class HouseBill(Document):
 		print("before submit")
 		print(self.container_items)
 		self.validate_weight()
-	pass
+		pass
+
 	def validate_weight(self):
-		master_bill = frappe.get_doc("Master Bill", self.master_bill_no)
-		master_bill_items=master_bill.item_details
-		frappe.msgprint(frappe.as_json(master_bill_items))
-		# check total weight of master bill is equal to total weight of house bill
-		existing_house_bill=frappe.get_all("House Bill", filters={"master_bill_no": self.master_bill_no},fields=["*"])
-		frappe.msgprint(frappe.as_json(existing_house_bill))
+		master_bill_no = self.master_bill_no
+		house_bill_no = self.name
 		for item in self.container_items:
-			if item.weight_in_kg > 0:
-				item.weight_in_kg = item.weight_in_kg * 1000
-			else:
-				frappe.throw("Weight is required")
-		frappe.throw("test")
+			get_master_item = get_single_fastrack_item_by_bill_no([master_bill_no], item.marks_and_nos_container_and_seals)
+			get_existing_house_doc_id = frappe.db.get_list('House Bill', {'master_bill_no': master_bill_no,'docstatus': 1}, ['name'])
+			get_existing_house_doc_id = [doc['name'] for doc in get_existing_house_doc_id]
+			
+			# If this is a new document, exclude it from the existing house bills list
+			if self.name in get_existing_house_doc_id:
+				get_existing_house_doc_id.remove(self.name)
+			
+			get_house_item = get_single_fastrack_item_by_bill_no(get_existing_house_doc_id, item.marks_and_nos_container_and_seals, parent_type='House Bill')
+			print(get_master_item['gross_weight_cargo'])
+			print(get_house_item['gross_weight_cargo'])
+			print(item.gross_weight_cargo)
+			if get_master_item['gross_weight_cargo'] < get_house_item['gross_weight_cargo'] + item.gross_weight_cargo:
+				frappe.throw(f"Weight mismatch for item: {item.marks_and_nos_container_and_seals}, should be less than or equal to {get_master_item['gross_weight_cargo']}")
+
+@frappe.whitelist()
+def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Master Bill'):
+	if not bill_no:  # Handle empty list case
+		return {
+			"item_name": item_name,
+			"gross_weight_cargo": 0.0
+		}
+		
+	# Ensure bill_no is a list of strings and join them properly into a string
+	bill_no_placeholder = ', '.join([f"'{doc}'" for doc in bill_no])
+
+	# Build the query with properly formatted bill_no
+	result = frappe.db.sql(f"""
+		SELECT 
+			marks_and_nos_container_and_seals as item_name,
+			SUM(gross_weight_cargo) as gross_weight_cargo
+		FROM `tabFastrack Item`
+		WHERE parenttype = '{parent_type}'
+		AND parent IN ({bill_no_placeholder})
+		AND marks_and_nos_container_and_seals = '{item_name}'
+		GROUP BY marks_and_nos_container_and_seals
+	""", as_dict=True)
+	
+	if len(result) > 0:
+		return result[0]
+	else:
+		return {
+			"item_name": item_name,
+			"gross_weight_cargo": 0.0
+		}
+

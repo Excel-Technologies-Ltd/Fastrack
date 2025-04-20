@@ -27,6 +27,10 @@
   "amended_from",
   "section_break_cp7ew",
   "image",
+  "address",
+  "longitude",
+  "latitude",
+  "is_set_location",
   "location"
  ],
  "fields": [
@@ -147,12 +151,34 @@
    "fieldname": "location",
    "fieldtype": "Geolocation",
    "label": "Location"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_set_location",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Is Set Location"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-04-17 12:51:08.236389",
+ "modified": "2025-04-19 16:31:10.986493",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Sales Man Visit",
