@@ -7,49 +7,99 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "marks_and_nos_container_and_seals",
-  "no_and_kind_of_packages",
-  "description_of_packages",
+  "container_no",
+  "size",
+  "no_of_pkg",
+  "con_type",
+  "status",
+  "seal_no",
+  "imco",
+  "un",
+  "ctn_location",
+  "commodity_code",
+  "qty",
   "gross_weight_cargo",
-  "tare",
-  "mesurement"
+  "mesurement",
+  "description"
  ],
  "fields": [
-  {
-   "fieldname": "marks_and_nos_container_and_seals",
-   "fieldtype": "Small Text",
-   "label": "Marks And Nos Container And Seals"
-  },
-  {
-   "fieldname": "no_and_kind_of_packages",
-   "fieldtype": "Int",
-   "label": "No And Kind Of Packages"
-  },
-  {
-   "fieldname": "description_of_packages",
-   "fieldtype": "Small Text",
-   "label": "Description of packages"
-  },
   {
    "fieldname": "gross_weight_cargo",
    "fieldtype": "Float",
    "label": "Gross Weight Cargo"
   },
   {
-   "fieldname": "tare",
-   "fieldtype": "Float",
-   "label": "Tare"
-  },
-  {
    "fieldname": "mesurement",
    "fieldtype": "Float",
    "label": "Mesurement"
+  },
+  {
+   "fieldname": "container_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Container No.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Int",
+   "label": "No of Pkg"
+  },
+  {
+   "fieldname": "con_type",
+   "fieldtype": "Data",
+   "label": "Con Type"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "seal_no",
+   "fieldtype": "Data",
+   "label": "Seal No"
+  },
+  {
+   "fieldname": "imco",
+   "fieldtype": "Data",
+   "label": "IMCO"
+  },
+  {
+   "fieldname": "un",
+   "fieldtype": "Data",
+   "label": "UN"
+  },
+  {
+   "fieldname": "ctn_location",
+   "fieldtype": "Data",
+   "label": "CTN Location"
+  },
+  {
+   "fieldname": "commodity_code",
+   "fieldtype": "Data",
+   "label": "Commodity Code"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Int",
+   "label": "Qty"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-16 16:46:59.169321",
+ "modified": "2025-04-27 13:21:27.509344",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Item",

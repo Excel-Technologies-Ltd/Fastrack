@@ -7,7 +7,9 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "mbl_open_by",
   "voyage_number",
+  "serial_no",
   "shipper",
   "shipper_address",
   "notify_party",
@@ -16,13 +18,19 @@
   "freight_to_be_paid_at",
   "number_of_original_waybills",
   "vessel",
+  "total_container",
+  "vol",
   "column_break_ihvv1",
   "waybill_number",
+  "mbl_date",
+  "mbl_type",
+  "mbl_nature",
   "consignee",
   "consignee_address",
   "export_preference",
   "export_preference_address",
   "port_of_loading",
+  "port_of_delivery",
   "final_place_of_delivery",
   "port_of_discharge",
   "pre_carried_by",
@@ -83,7 +91,7 @@
   {
    "fieldname": "vessel",
    "fieldtype": "Data",
-   "label": "Vessel"
+   "label": "MV"
   },
   {
    "fieldname": "port_of_loading",
@@ -135,7 +143,7 @@
    "fieldname": "waybill_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Waybill Number",
+   "label": "MBL No",
    "reqd": 1,
    "unique": 1
   },
@@ -190,6 +198,49 @@
    "fieldtype": "Text",
    "label": "Export Preference Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "mbl_open_by",
+   "fieldtype": "Link",
+   "label": "MBL Open By",
+   "options": "User"
+  },
+  {
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "label": "Serial No"
+  },
+  {
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "mbl_nature",
+   "fieldtype": "Select",
+   "label": "MBL Nature",
+   "options": "Sea"
+  },
+  {
+   "fieldname": "mbl_type",
+   "fieldtype": "Select",
+   "label": "MBL Type",
+   "options": "SEA IMPC"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port Of Delivery"
+  },
+  {
+   "fieldname": "total_container",
+   "fieldtype": "Float",
+   "label": "Total Container"
+  },
+  {
+   "fieldname": "vol",
+   "fieldtype": "Data",
+   "label": "Vol"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -200,7 +251,7 @@
    "link_fieldname": "master_bill_no"
   }
  ],
- "modified": "2025-04-20 13:19:09.410438",
+ "modified": "2025-04-27 12:46:34.464506",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Master Bill",
