@@ -136,8 +136,8 @@
    "fieldname": "voyage_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Voyage Number",
-   "reqd": 1
+   "label": "Voyage Number"
+
   },
   {
    "fieldname": "waybill_number",

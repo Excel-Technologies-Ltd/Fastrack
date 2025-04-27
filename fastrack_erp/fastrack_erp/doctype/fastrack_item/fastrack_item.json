@@ -26,11 +26,13 @@
   {
    "fieldname": "gross_weight_cargo",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Gross Weight Cargo"
   },
   {
    "fieldname": "mesurement",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Mesurement"
   },
   {
@@ -43,16 +45,19 @@
   {
    "fieldname": "size",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Size"
   },
   {
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "No of Pkg"
   },
   {
    "fieldname": "con_type",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Con Type"
   },
   {
@@ -63,6 +68,7 @@
   {
    "fieldname": "seal_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Seal No"
   },
   {
@@ -78,28 +84,32 @@
   {
    "fieldname": "ctn_location",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "CTN Location"
   },
   {
    "fieldname": "commodity_code",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Commodity Code"
   },
   {
    "fieldname": "qty",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Qty"
   },
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-27 13:21:27.509344",
+ "modified": "2025-04-27 15:02:02.778275",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Item",
