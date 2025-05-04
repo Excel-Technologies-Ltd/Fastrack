@@ -1,0 +1,325 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-04-30 13:30:27.082899",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_rzyek",
+  "naming_series",
+  "mbl_open_by",
+  "serial_no",
+  "mbl_no",
+  "agent",
+  "agent_address",
+  "shipping_line",
+  "shipping_line_address",
+  "shipper",
+  "shipper_address",
+  "consignee",
+  "consignee_address",
+  "mv",
+  "port_of_loading",
+  "no_of_pkg",
+  "voyage_dep_date",
+  "voyage_arr_date",
+  "fv",
+  "gr_weight",
+  "column_break_mtgyt",
+  "import_rot_no",
+  "eta",
+  "unit",
+  "mbl_date",
+  "voyage_no",
+  "port_of_discharge",
+  "vol_cbm",
+  "etd",
+  "voyage_ref_no",
+  "fv_voyage_no",
+  "atb",
+  "port_of_delivery",
+  "total_container",
+  "total_no_of_hbl",
+  "section_break_plp8q",
+  "container_info",
+  "hbl_info",
+  "remarks",
+  "hbl_parent",
+  "amended_from",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "mbl_open_by",
+   "fieldtype": "Link",
+   "label": "MBL Open By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "label": "Serial No"
+  },
+  {
+   "fieldname": "mbl_no",
+   "fieldtype": "Data",
+   "label": "MBL No"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shipping_line",
+   "fieldtype": "Link",
+   "label": "Shipping Line",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "shipping_line.primary_address",
+   "fieldname": "shipping_line_address",
+   "fieldtype": "Small Text",
+   "label": "Shipping Line Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mv",
+   "fieldtype": "Data",
+   "label": "MV"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gr. Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Int",
+   "label": "No. of Pkg"
+  },
+  {
+   "fieldname": "voyage_dep_date",
+   "fieldtype": "Datetime",
+   "label": "Voyage Dep. Date"
+  },
+  {
+   "fieldname": "voyage_arr_date",
+   "fieldtype": "Datetime",
+   "label": "Voyage Arr. Date"
+  },
+  {
+   "fieldname": "fv",
+   "fieldtype": "Data",
+   "label": "FV"
+  },
+  {
+   "fieldname": "import_rot_no",
+   "fieldtype": "Data",
+   "label": "Import Rot No."
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Data",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit"
+  },
+  {
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "voyage_no",
+   "fieldtype": "Data",
+   "label": "Voyage No."
+  },
+  {
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port of Discharge"
+  },
+  {
+   "fieldname": "total_container",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total Container ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vol_cbm",
+   "fieldtype": "Int",
+   "label": "Vol (CBM)"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "voyage_ref_no",
+   "fieldtype": "Data",
+   "label": "Voyage Ref No."
+  },
+  {
+   "fieldname": "fv_voyage_no",
+   "fieldtype": "Data",
+   "label": "FV Voyage No."
+  },
+  {
+   "fieldname": "atb",
+   "fieldtype": "Date",
+   "label": "ATB"
+  },
+  {
+   "fieldname": "total_no_of_hbl",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total No. of HBL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "container_info",
+   "fieldtype": "Table",
+   "label": "Container Info.",
+   "options": "Fastrack Item"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_info",
+   "fieldtype": "Table",
+   "label": "HBL Info",
+   "options": "HBL Info",
+   "read_only": 1
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "fieldname": "section_break_plp8q",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_mtgyt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "MBL-.YYYY.-.MM.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "shipper_address",
+   "fieldtype": "Small Text",
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import Sea Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "hbl_parent",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "HBL parent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_rzyek",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections Tab"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Import Sea House Bill",
+   "link_fieldname": "mbl_no"
+  }
+ ],
+ "modified": "2025-05-04 12:23:12.264777",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "Import Sea Master Bill",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

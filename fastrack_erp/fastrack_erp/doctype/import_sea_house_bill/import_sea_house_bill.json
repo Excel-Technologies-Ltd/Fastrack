@@ -1,0 +1,295 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-04-30 17:12:57.586828",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "mbl_no",
+  "office_code",
+  "office_name",
+  "voy_no",
+  "date_of_departure",
+  "ata",
+  "nature",
+  "dg_status",
+  "port_of_origin",
+  "place_of_unloading",
+  "carrier",
+  "carrier_code",
+  "marks_and_numbers",
+  "column_break_r8svn",
+  "agent",
+  "agent_address",
+  "shipping_line",
+  "shipping_line_address",
+  "exporter_name",
+  "exporter_address",
+  "notify_to",
+  "notify_address",
+  "notify_bin_no",
+  "shipper",
+  "shipper_address",
+  "consignee",
+  "consignee_address",
+  "consignee_bin_no",
+  "total_container",
+  "pkg_code",
+  "status",
+  "volume",
+  "manifested_pkgs",
+  "manifested_g_weight",
+  "section_break_0crdz",
+  "container_info",
+  "description_of_good",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "office_code",
+   "fieldtype": "Data",
+   "label": "Office Code"
+  },
+  {
+   "fieldname": "office_name",
+   "fieldtype": "Data",
+   "label": "Office Name"
+  },
+  {
+   "fieldname": "voy_no",
+   "fieldtype": "Data",
+   "label": "Voy No."
+  },
+  {
+   "fieldname": "date_of_departure",
+   "fieldtype": "Data",
+   "label": "Date of Departure"
+  },
+  {
+   "fieldname": "ata",
+   "fieldtype": "Data",
+   "label": "ATA"
+  },
+  {
+   "fieldname": "mbl_no",
+   "fieldtype": "Link",
+   "label": "MBL No.",
+   "options": "Import Sea Master Bill"
+  },
+  {
+   "fieldname": "nature",
+   "fieldtype": "Data",
+   "label": "Nature"
+  },
+  {
+   "fieldname": "dg_status",
+   "fieldtype": "Data",
+   "label": "DG Status"
+  },
+  {
+   "fieldname": "port_of_origin",
+   "fieldtype": "Data",
+   "label": "Port Of Origin"
+  },
+  {
+   "fieldname": "place_of_unloading",
+   "fieldtype": "Data",
+   "label": "Place Of Unloading"
+  },
+  {
+   "fieldname": "carrier_code",
+   "fieldtype": "Data",
+   "label": "Carrier Code"
+  },
+  {
+   "fieldname": "exporter_name",
+   "fieldtype": "Link",
+   "label": "Exporter Name",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "exporter_address",
+   "fieldtype": "Small Text",
+   "label": "Exporter Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notify_to",
+   "fieldtype": "Data",
+   "label": "Notify To"
+  },
+  {
+   "fieldname": "notify_address",
+   "fieldtype": "Small Text",
+   "label": "Notify Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "notify_bin_no",
+   "fieldtype": "Data",
+   "label": "Notify Bin No. "
+  },
+  {
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consignee_bin_no",
+   "fieldtype": "Data",
+   "label": "Consignee Bin No."
+  },
+  {
+   "fieldname": "total_container",
+   "fieldtype": "Float",
+   "label": "Total Container"
+  },
+  {
+   "fieldname": "pkg_code",
+   "fieldtype": "Data",
+   "label": "Pkg Code"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "manifested_pkgs",
+   "fieldtype": "Float",
+   "label": "Manifested Pkgs"
+  },
+  {
+   "fieldname": "manifested_g_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Manifested G Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "volume",
+   "fieldtype": "Float",
+   "label": "Volume"
+  },
+  {
+   "fieldname": "marks_and_numbers",
+   "fieldtype": "Data",
+   "label": "Marks and Numbers"
+  },
+  {
+   "fieldname": "description_of_good",
+   "fieldtype": "Small Text",
+   "label": "Description Of Good"
+  },
+  {
+   "fieldname": "container_info",
+   "fieldtype": "Table",
+   "label": "Container Info",
+   "options": "Fastrack Item"
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "shipper_address",
+   "fieldtype": "Small Text",
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_r8svn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_0crdz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "HBL-.YYYY.-.MM.-"
+  },
+  {
+   "fieldname": "shipping_line",
+   "fieldtype": "Link",
+   "label": "Shipping Line",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "shipping_line_address",
+   "fieldtype": "Small Text",
+   "label": "Shipping Line Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "mbl_no.consignee",
+   "fieldname": "carrier",
+   "fieldtype": "Link",
+   "label": "Carrier",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import Sea House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-05-04 13:25:43.509798",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "Import Sea House Bill",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
