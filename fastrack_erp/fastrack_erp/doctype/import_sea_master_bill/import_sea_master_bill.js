@@ -8,32 +8,32 @@ frappe.ui.form.on('Import Sea Master Bill', {
 frappe.ui.form.on('HBL Info', {
     create_hbl: function (frm, cdt, cdn) {
         const row = locals[cdt][cdn];
-		
-        // Perform routing to a new form (replace 'House Bill' with actual target Doctype)
-        frappe.model.open_mapped_doc({
-			method: "fastrack_erp.api.make_sea_house_bill",
-			frm: {name:frm.doc.name,agent:frm.doc.agent,consignee:frm.doc.consignee,parent:row.parent},
-		});
-    },
-
-    view_hbl: function (frm, cdt, cdn) {
-        const row = locals[cdt][cdn];
-        if (!row.hbl_no) {
-            frappe.msgprint(__('HBL No. not found'));
-            return;
+        console.log(row)
+        if(row.is_create){
+            return frappe.msgprint("HBL already created")
         }
-		frappe.msgprint("work")
-        // Redirect to the existing form for the HBL
-        // frappe.set_route('Form', 'Import Sea House Bill', row.hbl_no);
+        frappe.call({
+            method: "fastrack_erp.api.get_first_uncreated_hbl_info",
+            args: {
+                master_bill_no: frm.doc.name,
+                doctype: frm.doc.doctype
+            },
+            callback: function (r) {
+                if (r.message) {
+                    // match with current hbl name
+                    if (r.message.name == row.name) {
+                        frappe.model.open_mapped_doc({
+                            method: "fastrack_erp.api.make_sea_house_bill",
+                            frm: frm,
+                        });
+                    }
+                    else{
+                        frappe.msgprint("Create previous HBL first")
+                    }
+                }
+            }
+        });    
     },
-
-    is_create: function (frm, cdt, cdn) {
-        toggle_buttons(locals[cdt][cdn]);
-    },
-
-    hbl_no: function (frm, cdt, cdn) {
-        toggle_buttons(locals[cdt][cdn]);
-    }
 });
 
 // Toggle button visibility based on is_create

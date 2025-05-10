@@ -10,39 +10,40 @@
  "field_order": [
   "section_break_rzyek",
   "naming_series",
-  "mbl_open_by",
-  "serial_no",
   "mbl_no",
+  "mv",
+  "etd",
+  "port_of_loading",
+  "no_of_pkg",
+  "fv",
+  "eta",
+  "import_rot_no",
+  "column_break_ibxhu",
+  "mbl_open_by",
+  "mbl_date",
+  "mv_voyage_no",
+  "voyage_arr_date",
+  "port_of_discharge",
+  "gr_weight",
+  "fv_voyage_no",
+  "ata_ctg",
+  "column_break_mtgyt",
   "agent",
   "agent_address",
-  "shipping_line",
-  "shipping_line_address",
   "shipper",
   "shipper_address",
   "consignee",
   "consignee_address",
-  "mv",
-  "port_of_loading",
-  "no_of_pkg",
-  "voyage_dep_date",
-  "voyage_arr_date",
-  "fv",
-  "gr_weight",
-  "column_break_mtgyt",
-  "import_rot_no",
-  "eta",
-  "unit",
-  "mbl_date",
-  "voyage_no",
-  "port_of_discharge",
-  "vol_cbm",
-  "etd",
-  "voyage_ref_no",
-  "fv_voyage_no",
-  "atb",
+  "shipping_line",
+  "shipping_line_address",
   "port_of_delivery",
+  "vol_cbm",
   "total_container",
+  "atb",
   "total_no_of_hbl",
+  "serial_no",
+  "voyage_dep_date",
+  "unit",
   "section_break_plp8q",
   "container_info",
   "hbl_info",
@@ -62,18 +63,21 @@
   {
    "fieldname": "serial_no",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Serial No"
   },
   {
    "fieldname": "mbl_no",
    "fieldtype": "Data",
-   "label": "MBL No"
+   "label": "MBL No",
+   "reqd": 1
   },
   {
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Customer"
+   "options": "Customer",
+   "reqd": 1
   },
   {
    "fetch_from": "agent.primary_address",
@@ -119,12 +123,13 @@
   },
   {
    "fieldname": "voyage_dep_date",
-   "fieldtype": "Datetime",
+   "fieldtype": "Date",
+   "hidden": 1,
    "label": "Voyage Dep. Date"
   },
   {
    "fieldname": "voyage_arr_date",
-   "fieldtype": "Datetime",
+   "fieldtype": "Date",
    "label": "Voyage Arr. Date"
   },
   {
@@ -139,7 +144,7 @@
   },
   {
    "fieldname": "eta",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ETA"
   },
   {
@@ -150,17 +155,13 @@
   {
    "fieldname": "unit",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Unit"
   },
   {
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
-  },
-  {
-   "fieldname": "voyage_no",
-   "fieldtype": "Data",
-   "label": "Voyage No."
   },
   {
    "fieldname": "port_of_discharge",
@@ -183,11 +184,6 @@
    "fieldname": "etd",
    "fieldtype": "Date",
    "label": "ETD"
-  },
-  {
-   "fieldname": "voyage_ref_no",
-   "fieldtype": "Data",
-   "label": "Voyage Ref No."
   },
   {
    "fieldname": "fv_voyage_no",
@@ -217,8 +213,7 @@
    "fieldname": "hbl_info",
    "fieldtype": "Table",
    "label": "HBL Info",
-   "options": "HBL Info",
-   "read_only": 1
+   "options": "HBL Info"
   },
   {
    "fieldname": "port_of_delivery",
@@ -237,7 +232,7 @@
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "MBL-.YYYY.-.MM.-",
+   "options": "SMBL-.YYYY.-.MM.-",
    "reqd": 1
   },
   {
@@ -247,6 +242,7 @@
    "options": "Customer"
   },
   {
+   "fetch_from": "consignee.primary_address",
    "fieldname": "consignee_address",
    "fieldtype": "Small Text",
    "label": "Consignee Address",
@@ -259,6 +255,7 @@
    "options": "Supplier"
   },
   {
+   "fetch_from": "shipper.primary_address",
    "fieldname": "shipper_address",
    "fieldtype": "Small Text",
    "label": "Shipper Address",
@@ -289,6 +286,20 @@
    "fieldname": "connections_tab",
    "fieldtype": "Tab Break",
    "label": "Connections Tab"
+  },
+  {
+   "fieldname": "column_break_ibxhu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mv_voyage_no",
+   "fieldtype": "Data",
+   "label": "MV Voyage No."
+  },
+  {
+   "fieldname": "ata_ctg",
+   "fieldtype": "Data",
+   "label": "ATA (CTG)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -299,7 +310,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-04 12:23:12.264777",
+ "modified": "2025-05-10 07:34:52.061274",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

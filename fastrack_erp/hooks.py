@@ -121,7 +121,13 @@ doc_events = {
 		"on_update": "fastrack_erp.doc_events.mbl.validate",
 	},
  "Import Sea House Bill": {
-	"on_submit": "fastrack_erp.doc_events.mbl.create_child_hbl",
+	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+ },
+ "Import Air Master Bill": {
+	"on_update": "fastrack_erp.doc_events.mbl.validate",
+ },
+ "Import Air House Bill": {
+	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
  }
 }
 

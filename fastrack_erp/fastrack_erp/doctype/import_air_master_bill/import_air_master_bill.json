@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-05-10 05:32:10.941431",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_rzyek",
+  "naming_series",
+  "mbl_no",
+  "etd",
+  "eta",
+  "changeable_weight",
+  "column_break_ibxhu",
+  "mbl_open_by",
+  "mbl_date",
+  "gr_weight",
+  "quantity",
+  "column_break_mtgyt",
+  "agent",
+  "agent_address",
+  "consignee",
+  "consignee_address",
+  "total_no_of_hbl",
+  "section_break_plp8q",
+  "hbl_info",
+  "remarks",
+  "hbl_parent",
+  "amended_from",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_rzyek",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mbl_no",
+   "fieldtype": "Data",
+   "label": "MBL No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "column_break_ibxhu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mbl_open_by",
+   "fieldtype": "Link",
+   "label": "MBL Open By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gross  Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "column_break_mtgyt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_no_of_hbl",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total No. of HBL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_plp8q",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_info",
+   "fieldtype": "Table",
+   "label": "HBL Info",
+   "options": "HBL Air Info"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "hbl_parent",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "HBL parent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import Air Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections Tab"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import Air Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "changeable_weight",
+   "fieldtype": "Float",
+   "label": "Changeable Weight"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "AMBL-.YYYY.-.MM.-",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Import Air House Bill",
+   "link_fieldname": "mbl_no"
+  }
+ ],
+ "modified": "2025-05-10 07:36:54.341410",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "Import Air Master Bill",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

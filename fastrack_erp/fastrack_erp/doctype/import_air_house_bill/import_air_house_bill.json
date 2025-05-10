@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2025-04-30 17:12:57.586828",
+ "creation": "2025-05-10 05:40:08.242840",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -10,39 +10,30 @@
  "field_order": [
   "naming_series",
   "mbl_no",
-  "office_code",
-  "office_name",
-  "voy_no",
-  "date_of_departure",
-  "ata",
-  "nature",
-  "dg_status",
-  "hbl_port_of_origin",
-  "hbl_place_of_unloading",
   "carrier",
   "carrier_address",
-  "carrier_code",
-  "marks_and_numbers",
+  "etd",
+  "eta",
+  "port_of_loading",
+  "port_of_delivery",
+  "column_break_aevai",
+  "lc_number",
+  "lc_date",
+  "flight_name",
+  "flight_date",
+  "quantity_hbl",
+  "gr_weight",
+  "changeable_weight_hbl",
   "column_break_r8svn",
   "agent",
   "agent_address",
-  "shipping_line",
-  "shipping_line_address",
   "notify_to",
   "notify_address",
-  "notify_bin_no",
   "hbl_shipper",
   "shipper_address",
   "hbl_consignee",
   "consignee_address",
-  "consignee_bin_no",
-  "total_container_hbl",
-  "section_break_0crdz",
-  "container_info",
-  "description_of_good",
-  "amended_from",
-  "date_of_arrival",
-  "ata_ctg",
+  "cargo_description",
   "section_break_hgk7r",
   "do_validity",
   "do_party",
@@ -67,55 +58,46 @@
   "hbl_id",
   "hbl_weight",
   "hbl_doc_name",
-  "mbl_doctype"
+  "mbl_doctype",
+  "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "office_code",
-   "fieldtype": "Data",
-   "label": "Office Code"
-  },
-  {
-   "fieldname": "office_name",
-   "fieldtype": "Data",
-   "label": "Office Name"
-  },
-  {
-   "fieldname": "voy_no",
-   "fieldtype": "Data",
-   "label": "Voy No."
-  },
-  {
-   "fetch_from": "mbl_no.etd",
-   "fieldname": "date_of_departure",
-   "fieldtype": "Date",
-   "label": "Date of Departure"
-  },
-  {
-   "fieldname": "ata",
-   "fieldtype": "Data",
-   "label": "ATA"
-  },
   {
    "fieldname": "mbl_no",
    "fieldtype": "Link",
    "label": "MBL No.",
-   "options": "Import Sea Master Bill"
+   "options": "Import Air Master Bill"
   },
   {
-   "fieldname": "nature",
-   "fieldtype": "Data",
-   "label": "Nature"
+   "fetch_from": "mbl_no.consignee",
+   "fieldname": "carrier",
+   "fieldtype": "Link",
+   "label": "Carrier (Airlines)",
+   "options": "Customer"
   },
   {
-   "fieldname": "dg_status",
+   "fetch_from": "carrier.primary_address",
+   "fieldname": "carrier_address",
    "fieldtype": "Data",
-   "label": "DG Status"
+   "label": "Carrier Address",
+   "read_only": 1
   },
   {
-   "fieldname": "carrier_code",
-   "fieldtype": "Data",
-   "label": "Carrier Code"
+   "fieldname": "column_break_r8svn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "label": "Agent Address",
+   "read_only": 1
   },
   {
    "fieldname": "notify_to",
@@ -124,43 +106,17 @@
    "options": "Customer"
   },
   {
+   "fetch_from": "notify_to.primary_address",
    "fieldname": "notify_address",
    "fieldtype": "Small Text",
    "label": "Notify Address",
    "read_only": 1
   },
   {
-   "fieldname": "notify_bin_no",
-   "fieldtype": "Data",
-   "label": "Notify Bin No. "
-  },
-  {
-   "fetch_from": "hbl_consignee.primary_address",
-   "fieldname": "consignee_address",
-   "fieldtype": "Small Text",
-   "label": "Consignee Address",
-   "read_only": 1
-  },
-  {
-   "fieldname": "consignee_bin_no",
-   "fieldtype": "Data",
-   "label": "Consignee Bin No."
-  },
-  {
-   "fieldname": "marks_and_numbers",
-   "fieldtype": "Data",
-   "label": "Marks and Numbers"
-  },
-  {
-   "fieldname": "description_of_good",
-   "fieldtype": "Small Text",
-   "label": "Description Of Good"
-  },
-  {
-   "fieldname": "container_info",
-   "fieldtype": "Table",
-   "label": "Container Info",
-   "options": "Fastrack Item"
+   "fieldname": "hbl_shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
   },
   {
    "fetch_from": "hbl_shipper.primary_address",
@@ -170,90 +126,23 @@
    "read_only": 1
   },
   {
-   "fieldname": "column_break_r8svn",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_0crdz",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Naming Series",
-   "options": "SHBL-.YYYY.-.MM.-",
-   "reqd": 1
-  },
-  {
-   "fieldname": "shipping_line",
-   "fieldtype": "Link",
-   "label": "Shipping Line",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "shipping_line_address",
-   "fieldtype": "Small Text",
-   "label": "Shipping Line Address",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "mbl_no.consignee",
-   "fieldname": "carrier",
-   "fieldtype": "Link",
-   "label": "Carrier",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "agent",
-   "fieldtype": "Link",
-   "label": "Agent",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "agent_address",
-   "fieldtype": "Small Text",
-   "label": "Agent Address",
-   "read_only": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Import Sea House Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
-   "fieldname": "hbl_shipper",
-   "fieldtype": "Link",
-   "label": "Shipper",
-   "options": "Supplier"
-  },
-  {
    "fieldname": "hbl_consignee",
    "fieldtype": "Link",
    "label": "Consignee",
    "options": "Customer"
   },
   {
-   "fetch_from": "mbl_no.eta",
-   "fieldname": "date_of_arrival",
-   "fieldtype": "Date",
-   "label": "Date Of Arrival"
-  },
-  {
-   "fetch_from": "mbl_no.ata_ctg",
-   "fieldname": "ata_ctg",
-   "fieldtype": "Data",
-   "label": "ATA (CTG)"
+   "fetch_from": "hbl_consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "read_only": 1
   },
   {
    "collapsible": 1,
    "fieldname": "section_break_hgk7r",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Delivery Order Details"
   },
   {
@@ -282,6 +171,10 @@
    "label": "C&F Agent"
   },
   {
+   "fieldname": "column_break_tqh0h",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "shipping_line_custom",
    "fieldtype": "Data",
    "label": "Shipping Line"
@@ -297,14 +190,14 @@
    "label": "Shipping Line Address1"
   },
   {
-   "fieldname": "bl_date",
-   "fieldtype": "Date",
-   "label": "B/L Date"
-  },
-  {
    "fieldname": "bl_no",
    "fieldtype": "Data",
    "label": "B/L No"
+  },
+  {
+   "fieldname": "bl_date",
+   "fieldtype": "Date",
+   "label": "B/L Date"
   },
   {
    "fieldname": "man_gr_wt",
@@ -315,6 +208,15 @@
    "fieldname": "man_pkg",
    "fieldtype": "Int",
    "label": "Man Pkg"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks "
+  },
+  {
+   "fieldname": "column_break_zkvni",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "total",
@@ -332,10 +234,6 @@
    "label": "Ocean Freight Remarks"
   },
   {
-   "fieldname": "column_break_tqh0h",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "rotation",
    "fieldtype": "Data",
    "label": "Rotation"
@@ -344,10 +242,6 @@
    "fieldname": "line_no",
    "fieldtype": "Data",
    "label": "Line No"
-  },
-  {
-   "fieldname": "column_break_zkvni",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "hbl_id",
@@ -373,40 +267,95 @@
    "label": "MBL Doctype"
   },
   {
-   "fieldname": "hbl_port_of_origin",
-   "fieldtype": "Data",
-   "label": "Port Of Origin"
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
   },
   {
-   "fieldname": "hbl_place_of_unloading",
-   "fieldtype": "Data",
-   "label": "Place Of Unloading"
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
   },
   {
-   "fetch_from": "carrier.primary_address",
-   "fieldname": "carrier_address",
-   "fieldtype": "Data",
-   "label": "Carrier Address",
-   "read_only": 1
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import Air House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   },
   {
-   "fieldname": "remarks",
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "fieldname": "cargo_description",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Cargo Description"
   },
   {
-   "fieldname": "total_container_hbl",
+   "fieldname": "lc_number",
+   "fieldtype": "Data",
+   "label": "LC/TT Number"
+  },
+  {
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "label": "LC/TT Date"
+  },
+  {
+   "fieldname": "flight_name",
+   "fieldtype": "Data",
+   "label": "Flight Name"
+  },
+  {
+   "fieldname": "flight_date",
+   "fieldtype": "Date",
+   "label": "Flight Date"
+  },
+  {
+   "fieldname": "gr_weight",
    "fieldtype": "Float",
-   "label": "Total Container"
+   "label": "Gr. Weight"
+  },
+  {
+   "fieldname": "column_break_aevai",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quantity_hbl",
+   "fieldtype": "Data",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "changeable_weight_hbl",
+   "fieldtype": "Float",
+   "label": "Changeable Weight"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Naming Series",
+   "options": "AHBL-.YYYY.-.MM.-",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-10 07:35:55.672012",
+ "modified": "2025-05-10 07:36:16.224084",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
- "name": "Import Sea House Bill",
+ "name": "Import Air House Bill",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

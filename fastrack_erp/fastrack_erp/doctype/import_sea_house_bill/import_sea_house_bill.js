@@ -19,8 +19,7 @@ frappe.ui.form.on('Import Sea House Bill', {
                 callback: function(response) {
                     if (response.message && response.message.container_info) {
                         const modifiedItems = response.message.container_info.map(item => ({
-                            ...item,
-                            weight: 0
+                            container_no: item.container_no,
                         }));
                         frm.set_value("container_info", modifiedItems);
                     }
