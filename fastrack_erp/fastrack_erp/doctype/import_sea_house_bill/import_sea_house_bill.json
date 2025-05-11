@@ -20,21 +20,27 @@
   "hbl_port_of_origin",
   "hbl_place_of_unloading",
   "carrier",
-  "carrier_address",
+  "carrier_name",
+  "carrier_address_hbl",
   "carrier_code",
   "marks_and_numbers",
   "column_break_r8svn",
   "agent",
-  "agent_address",
+  "agent_name",
+  "agent_address_hbl",
   "shipping_line",
-  "shipping_line_address",
+  "shippine_line_name",
+  "shipping_line_address_hbl",
   "notify_to",
-  "notify_address",
+  "notify_name",
+  "notify_address_hbl",
   "notify_bin_no",
   "hbl_shipper",
-  "shipper_address",
+  "shipper_name",
+  "shipper_address_hbl",
   "hbl_consignee",
-  "consignee_address",
+  "consignee_name",
+  "consignee_address_hbl",
   "consignee_bin_no",
   "total_container_hbl",
   "section_break_0crdz",
@@ -124,22 +130,9 @@
    "options": "Customer"
   },
   {
-   "fieldname": "notify_address",
-   "fieldtype": "Small Text",
-   "label": "Notify Address",
-   "read_only": 1
-  },
-  {
    "fieldname": "notify_bin_no",
    "fieldtype": "Data",
    "label": "Notify Bin No. "
-  },
-  {
-   "fetch_from": "hbl_consignee.primary_address",
-   "fieldname": "consignee_address",
-   "fieldtype": "Small Text",
-   "label": "Consignee Address",
-   "read_only": 1
   },
   {
    "fieldname": "consignee_bin_no",
@@ -161,13 +154,6 @@
    "fieldtype": "Table",
    "label": "Container Info",
    "options": "Fastrack Item"
-  },
-  {
-   "fetch_from": "hbl_shipper.primary_address",
-   "fieldname": "shipper_address",
-   "fieldtype": "Small Text",
-   "label": "Shipper Address",
-   "read_only": 1
   },
   {
    "fieldname": "column_break_r8svn",
@@ -192,12 +178,6 @@
    "options": "Customer"
   },
   {
-   "fieldname": "shipping_line_address",
-   "fieldtype": "Small Text",
-   "label": "Shipping Line Address",
-   "read_only": 1
-  },
-  {
    "fetch_from": "mbl_no.consignee",
    "fieldname": "carrier",
    "fieldtype": "Link",
@@ -209,12 +189,6 @@
    "fieldtype": "Link",
    "label": "Agent",
    "options": "Customer"
-  },
-  {
-   "fieldname": "agent_address",
-   "fieldtype": "Small Text",
-   "label": "Agent Address",
-   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -287,8 +261,10 @@
    "label": "Shipping Line"
   },
   {
+   "fetch_from": "shipping_line.primary_address",
    "fieldname": "shipping_line_address_custom",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Shipping Line Address"
   },
   {
@@ -383,13 +359,6 @@
    "label": "Place Of Unloading"
   },
   {
-   "fetch_from": "carrier.primary_address",
-   "fieldname": "carrier_address",
-   "fieldtype": "Data",
-   "label": "Carrier Address",
-   "read_only": 1
-  },
-  {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
@@ -398,12 +367,98 @@
    "fieldname": "total_container_hbl",
    "fieldtype": "Float",
    "label": "Total Container"
+  },
+  {
+   "fetch_from": "carrier.primary_address",
+   "fieldname": "carrier_address_hbl",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Carrier Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address_hbl",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "shipping_line.primary_address",
+   "fieldname": "shipping_line_address_hbl",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipping Line Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "notify_to.primary_address",
+   "fieldname": "notify_address_hbl",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Notify Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "hbl_shipper.primary_address",
+   "fieldname": "shipper_address_hbl",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "hbl_consignee.primary_address",
+   "fieldname": "consignee_address_hbl",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "carrier.customer_name",
+   "fieldname": "carrier_name",
+   "fieldtype": "Data",
+   "label": "Carrier Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "agent.customer_name",
+   "fieldname": "agent_name",
+   "fieldtype": "Data",
+   "label": "Agent Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "shipping_line.customer_name",
+   "fieldname": "shippine_line_name",
+   "fieldtype": "Data",
+   "label": "Shippine Line Name"
+  },
+  {
+   "fetch_from": "notify_to.customer_name",
+   "fieldname": "notify_name",
+   "fieldtype": "Data",
+   "label": "Notify Name"
+  },
+  {
+   "fetch_from": "hbl_shipper.supplier_name",
+   "fieldname": "shipper_name",
+   "fieldtype": "Data",
+   "label": "Shipper Name"
+  },
+  {
+   "fetch_from": "hbl_consignee.customer_name",
+   "fieldname": "consignee_name",
+   "fieldtype": "Data",
+   "label": " Consignee Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-10 07:35:55.672012",
+ "modified": "2025-05-11 15:14:49.720031",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

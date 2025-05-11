@@ -83,6 +83,7 @@
    "fetch_from": "agent.primary_address",
    "fieldname": "agent_address",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Agent Address",
    "read_only": 1
   },
@@ -96,6 +97,7 @@
    "fetch_from": "shipping_line.primary_address",
    "fieldname": "shipping_line_address",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Shipping Line Address",
    "read_only": 1
   },
@@ -245,6 +247,7 @@
    "fetch_from": "consignee.primary_address",
    "fieldname": "consignee_address",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Consignee Address",
    "read_only": 1
   },
@@ -258,6 +261,7 @@
    "fetch_from": "shipper.primary_address",
    "fieldname": "shipper_address",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Shipper Address",
    "read_only": 1
   },
@@ -310,7 +314,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-10 07:34:52.061274",
+ "modified": "2025-05-11 14:47:35.662840",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

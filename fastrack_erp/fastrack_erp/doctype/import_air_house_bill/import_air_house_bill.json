@@ -28,11 +28,11 @@
   "agent",
   "agent_address",
   "notify_to",
-  "notify_address",
+  "notify_address_hbl",
   "hbl_shipper",
-  "shipper_address",
+  "shipper_address_hbl",
   "hbl_consignee",
-  "consignee_address",
+  "consignee_address_hbl",
   "cargo_description",
   "section_break_hgk7r",
   "do_validity",
@@ -106,37 +106,16 @@
    "options": "Customer"
   },
   {
-   "fetch_from": "notify_to.primary_address",
-   "fieldname": "notify_address",
-   "fieldtype": "Small Text",
-   "label": "Notify Address",
-   "read_only": 1
-  },
-  {
    "fieldname": "hbl_shipper",
    "fieldtype": "Link",
    "label": "Shipper",
    "options": "Supplier"
   },
   {
-   "fetch_from": "hbl_shipper.primary_address",
-   "fieldname": "shipper_address",
-   "fieldtype": "Small Text",
-   "label": "Shipper Address",
-   "read_only": 1
-  },
-  {
    "fieldname": "hbl_consignee",
    "fieldtype": "Link",
    "label": "Consignee",
    "options": "Customer"
-  },
-  {
-   "fetch_from": "hbl_consignee.primary_address",
-   "fieldname": "consignee_address",
-   "fieldtype": "Small Text",
-   "label": "Consignee Address",
-   "read_only": 1
   },
   {
    "collapsible": 1,
@@ -347,12 +326,33 @@
    "label": "Naming Series",
    "options": "AHBL-.YYYY.-.MM.-",
    "reqd": 1
+  },
+  {
+   "fetch_from": "notify_to.primary_address",
+   "fieldname": "notify_address_hbl",
+   "fieldtype": "Small Text",
+   "label": "Notify Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "hbl_shipper.primary_address",
+   "fieldname": "shipper_address_hbl",
+   "fieldtype": "Small Text",
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "hbl_consignee.primary_address",
+   "fieldname": "consignee_address_hbl",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-10 07:36:16.224084",
+ "modified": "2025-05-11 14:53:15.151961",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

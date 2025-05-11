@@ -258,27 +258,27 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Carrier":{
                             "Carrier_code":hbl_doc.carrier,
                             "Carrier_name":frappe.db.get_value("Customer",hbl_doc.carrier,"customer_name"),
-                            "Carrier_address":hbl_doc.carrier_address or ""
+                            "Carrier_address":hbl_doc.carrier_address_hbl or ""
                         },
                         "Shipping_agent":{
                             "Shipping_agent_code":hbl_doc.shipping_line,
                             "Shipping_agent_name":frappe.db.get_value("Customer",hbl_doc.shipping_line,"customer_name"),
-                            "Shipping_agent_address":hbl_doc.shipping_line_address or ""
+                            "Shipping_agent_address":hbl_doc.shipping_line_address_hbl or ""
                         },
                         "Exporter":{
                             "Exporter_code":hbl_doc.hbl_shipper,
                             "Exporter_name":frappe.db.get_value("Supplier",hbl_doc.hbl_shipper,"supplier_name"),
-                            "Exporter_address":hbl_doc.shipper_address or ""
+                            "Exporter_address":hbl_doc.shipper_address_hbl or ""
                         },
                         "Notify":{
                             "Notify_code":hbl_doc.notify_to,
                             "Notify_name":frappe.db.get_value("Customer",hbl_doc.notify_to,"customer_name"),
-                            "Notify_address":hbl_doc.notify_address or ""
+                            "Notify_address":hbl_doc.notify_address_hbl or ""
                         },
                         "Consignee":{
                             "Consignee_code":hbl_doc.hbl_consignee,
                             "Consignee_name":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"customer_name"),
-                            "Consignee_address":hbl_doc.consignee_address or ""
+                            "Consignee_address":hbl_doc.consignee_address_hbl or ""
                         }
                     },
                     "ctn_segment":get_container_info_for_xml(hbl_doc.container_info),
