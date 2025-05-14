@@ -145,6 +145,7 @@
    "label": "Import Rot No."
   },
   {
+   "depends_on": "eval:doc.etd",
    "fieldname": "eta",
    "fieldtype": "Date",
    "label": "ETA"
@@ -193,6 +194,7 @@
    "label": "FV Voyage No."
   },
   {
+   "depends_on": "eval:doc.etd",
    "fieldname": "atb",
    "fieldtype": "Date",
    "label": "ATB"
@@ -301,6 +303,7 @@
    "label": "MV Voyage No."
   },
   {
+   "depends_on": "eval:doc.etd",
    "fieldname": "ata_ctg",
    "fieldtype": "Data",
    "label": "ATA (CTG)"
@@ -314,7 +317,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-11 14:47:35.662840",
+ "modified": "2025-05-13 10:38:51.589787",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

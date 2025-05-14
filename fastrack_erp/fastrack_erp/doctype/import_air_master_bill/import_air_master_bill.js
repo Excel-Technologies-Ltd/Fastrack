@@ -1,7 +1,6 @@
 frappe.ui.form.on('Import Air Master Bill', {
-
+    
 });
-
 // Child Table Logic: HBL Info
 frappe.ui.form.on('HBL Air Info', {
     create_hbl: function (frm, cdt, cdn) {

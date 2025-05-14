@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-04-16 12:59:12.273068",
+ "creation": "2025-05-14 11:35:48.492353",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "container_no",
+  "custom_container_no",
   "size",
   "no_of_pkg",
   "con_type",
@@ -24,15 +25,15 @@
  ],
  "fields": [
   {
-   "fieldname": "mesurement",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Mesurement"
-  },
-  {
    "fieldname": "container_no",
    "fieldtype": "Data",
+   "hidden": 1,
    "in_list_view": 1,
+   "label": "Container No."
+  },
+  {
+   "fieldname": "custom_container_no",
+   "fieldtype": "Data",
    "label": "Container No.",
    "reqd": 1
   },
@@ -94,26 +95,32 @@
    "label": "Qty"
   },
   {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "in_list_view": 1,
-   "label": "Description"
-  },
-  {
    "fieldname": "weight",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Weight",
    "reqd": 1
+  },
+  {
+   "fieldname": "mesurement",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Mesurement"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-14 11:55:41.257984",
+ "modified": "2025-05-14 11:57:40.102305",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
- "name": "Fastrack Item",
+ "name": "Fastrack Sea Item",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

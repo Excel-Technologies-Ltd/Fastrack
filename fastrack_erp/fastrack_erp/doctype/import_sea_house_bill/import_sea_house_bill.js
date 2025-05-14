@@ -1,9 +1,23 @@
 frappe.ui.form.on('Import Sea House Bill', {
+    on_load: function(frm) {
+        frm.get_field("container_info").grid.cannot_add_rows = true;      
+    },
     refresh: function(frm) {
         if (frm.is_new()) {
             frm.trigger('mbl_no');
         }
+        frm.get_field("container_info").grid.cannot_add_rows = true;
+        
+        // frm.fields_dict['container_info'].grid.grid_buttons.remove();
+        // make a button to make sales invoice from hbl 
+        frm.add_custom_button('Make Sales Invoice from HBL', function () {
+            frappe.model.open_mapped_doc({
+                method: "fastrack_erp.api.make_sales_invoice_from_hbl",
+                frm:frm
+            });
+        });
     },
+    
 
     mbl_no: function(frm) {
         const masterBill = frm.doc.mbl_no;
@@ -28,3 +42,14 @@ frappe.ui.form.on('Import Sea House Bill', {
         }
     }
 });
+
+frappe.ui.form.on('Fastrack Sea Item', {
+    // check if any row container_no empty throw error
+    on_load: function(frm) {
+        frm.get_field("container_info").grid.cannot_add_rows = true;
+    },
+    refresh: function(frm) {
+        frm.get_field("container_info").grid.cannot_add_rows = true;
+    }
+});
+

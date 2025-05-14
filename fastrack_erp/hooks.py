@@ -220,3 +220,19 @@ doc_events = {
 # auth_hooks = [
 # 	"fastrack_erp.auth.validate"
 # ]
+fixtures = [
+	{
+        "dt": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                  "Sales Invoice-custom_hbl_sea_link",
+                  "Sales Invoice-custom_hbl_type",
+                  "Sales Invoice-custom_hbl_air_link"
+                ],
+            ],
+        ]
+    },
+]

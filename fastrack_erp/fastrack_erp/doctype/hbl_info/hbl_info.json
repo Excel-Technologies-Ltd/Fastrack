@@ -8,10 +8,9 @@
  "field_order": [
   "hbl_link",
   "hbl_no",
-  "container_no",
-  "weight",
   "is_create",
-  "create_hbl"
+  "create_hbl",
+  "weight"
  ],
  "fields": [
   {
@@ -20,20 +19,12 @@
    "label": "HBL No."
   },
   {
-   "fieldname": "container_no",
-   "fieldtype": "Data",
-   "label": "Container No."
-  },
-  {
-   "fieldname": "weight",
-   "fieldtype": "Float",
-   "label": "Weight"
-  },
-  {
+   "allow_on_submit": 1,
    "default": "0",
    "fieldname": "is_create",
    "fieldtype": "Check",
-   "label": "Is Create"
+   "label": "Is Create",
+   "read_only": 1
   },
   {
    "depends_on": "eval:doc.is_create==0",
@@ -42,17 +33,25 @@
    "label": "Create"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_link",
    "fieldtype": "Link",
    "label": "HBL Link",
    "options": "Import Sea House Bill",
    "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Weight"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-08 11:21:48.553344",
+ "modified": "2025-05-14 10:14:41.959497",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "HBL Info",

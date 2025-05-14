@@ -8,7 +8,17 @@ class ImportSeaHouseBill(Document):
 
 	def on_update(self):
 		self.validate_container_weight()
-		
+		self.hbl_weight= sum(item.weight for item in self.container_info)
+		self.validate_container_name()
+	def validate_container_name(self):
+		container_name_array= [item.container_no for item in self.container_info]
+		custom_container_name_array = [item.custom_container_no for item in self.container_info]
+		# find unmatch value from custom_container_name_array and container_name_array
+		unmatch_value = [value for value in custom_container_name_array if value not in container_name_array]
+		if len(unmatch_value) > 0:
+			join_unmatch_value = ', '.join(unmatch_value)
+			frappe.throw(f"Container name do not match with master bill: {join_unmatch_value}")
+
 
 	def validate_container_weight(self):
 		master_bill_no = self.mbl_no
@@ -23,7 +33,10 @@ class ImportSeaHouseBill(Document):
 				get_existing_house_doc_id.remove(self.name)
 			
 			get_house_item = get_single_fastrack_item_by_bill_no(get_existing_house_doc_id, item.container_no, parent_type='Import Sea House Bill')
-			if get_master_item['weight'] < get_house_item['weight'] + item.weight:
+			house_item_weight = get_house_item['weight'] or 0.0
+			master_item_weight = get_master_item['weight'] or 0.0
+			item_weight = item.weight or 0.0
+			if master_item_weight < house_item_weight + item_weight :
 				frappe.throw(f"Weight mismatch for container: {item.container_no}, should be less than or equal to {get_master_item['weight']}")
 
 @frappe.whitelist()

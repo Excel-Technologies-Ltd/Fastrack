@@ -10,7 +10,6 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         target.hbl_id=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
-        target.hbl_weight=hbl_info.weight
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
     doclist = get_mapped_doc("Import Sea Master Bill", source_name, {
@@ -30,8 +29,6 @@ def make_air_house_bill(source_name, target_doc=None):
         target.hbl_id=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
-        target.hbl_weight=hbl_info.weight
-        target.gr_weight=hbl_info.weight
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
     doclist = get_mapped_doc("Import Air Master Bill", source_name, {
@@ -41,6 +38,21 @@ def make_air_house_bill(source_name, target_doc=None):
     }, target_doc, set_missing_values)
   
     return doclist
+
+@frappe.whitelist()
+def make_sales_invoice_from_hbl(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        target.custom_hbl_sea_link=source.name
+        target.custom_hbl_type="Import Sea House Bill"
+    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
+        "Import Sea House Bill": {
+            "doctype": "Sales Invoice",
+        },
+    }, target_doc, set_missing_values)
+    return doclist
+
+
+
 @frappe.whitelist()
 def get_containner_items_with_existing_house_bill(master_bill_no):
     
@@ -237,6 +249,7 @@ def get_sea_master_bill_dict_for_xml(master_bill_no="MBL-2025-05-00015"):
 
 def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
     doc = frappe.get_doc("Import Sea Master Bill", master_bill_no)
+    consolidated_cargo=1 if len(doc.hbl_info) > 1 else 0
     hbl_list = []
     if len(doc.hbl_info) > 0:
         for hbl_info in doc.hbl_info:
@@ -247,9 +260,9 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Bol_reference":hbl_doc.hbl_id,
                         "Line_number":1,
                         "Bol_nature":hbl_doc.nature,
-                        "Bol_type_code":"HSB"
+                        "Bol_type_code":hbl_doc.bl_type_code
                     },
-                    "Consolidated_Cargo":0,
+                    "Consolidated_Cargo":consolidated_cargo ,
                     "Load_unload_place":{
                         "Port_of_origin_code":hbl_doc.hbl_port_of_origin,
                         "Port_of_unloading_code":hbl_doc.hbl_place_of_unloading

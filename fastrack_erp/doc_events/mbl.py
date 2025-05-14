@@ -26,9 +26,10 @@ def validate(doc, method):
     if not gr_weight == total_weight_of_container_list and doc.doctype == "Import Sea Master Bill":
         frappe.throw("Total weight of container list is not equal to gross weight")
         
-        
-    total_weight_of_hbl_list= sum(hbl.weight for hbl in hbl_info)
-    if len(hbl_info)== total_no_of_hbl and not total_weight_of_hbl_list == gr_weight:
+    # filter is_create=1 and get the weight
+    hbl_info_list= [hbl for hbl in hbl_info if hbl.is_create==1]
+    total_weight_of_hbl_list= sum(hbl.weight for hbl in hbl_info_list)
+    if len(hbl_info_list)== total_no_of_hbl and not total_weight_of_hbl_list == gr_weight:
         mismatch_value= int(gr_weight) - int(total_weight_of_hbl_list)
         frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
     if gr_weight< total_weight_of_hbl_list:
@@ -51,17 +52,20 @@ def update_child_hbl(doc, method):
     if parent_doctype == "Import Sea Master Bill":
         for hbl_info in mbl_doc.hbl_info :
             if hbl_info.name == doc.hbl_doc_name:
-                frappe.db.set_value("HBL Info", {"name": hbl_info.name,"parenttype": parent_doctype,"parentfield": "hbl_info","parent": doc.mbl_no}, {"hbl_link": doc.name,"is_create":1})
-                frappe.db.commit()
+                hbl_info.hbl_link=doc.name
+                hbl_info.is_create=1
+                hbl_info.weight=doc.hbl_weight
                 break
     if parent_doctype == "Import Air Master Bill":
         for hbl_info in mbl_doc.hbl_info:
             if hbl_info.name == doc.hbl_doc_name:
-                frappe.db.set_value("HBL Air Info", {"name": hbl_info.name,"parenttype": parent_doctype,"parentfield": "hbl_info","parent": doc.mbl_no}, {"hbl_link": doc.name,"is_create":1})
-                frappe.db.commit()
+                hbl_info.hbl_link=doc.name
+                hbl_info.is_create=1
+                hbl_info.weight=doc.hbl_weight
                 break
             
     
     validate(mbl_doc, method=None)
+    mbl_doc.save(ignore_permissions=True)
  
             

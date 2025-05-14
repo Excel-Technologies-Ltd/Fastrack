@@ -8,8 +8,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "connections_tabs_tab",
   "naming_series",
   "mbl_no",
+  "hbl_id",
+  "hbl_line_no",
   "office_code",
   "office_name",
   "voy_no",
@@ -24,7 +27,9 @@
   "carrier_address_hbl",
   "carrier_code",
   "marks_and_numbers",
+  "inco_term",
   "column_break_r8svn",
+  "bl_type_code",
   "agent",
   "agent_name",
   "agent_address_hbl",
@@ -43,6 +48,12 @@
   "consignee_address_hbl",
   "consignee_bin_no",
   "total_container_hbl",
+  "section_break_tvziq",
+  "port_of_loading",
+  "port_of_origin_code",
+  "port_of_departure",
+  "port_of_departure_code",
+  "customer",
   "section_break_0crdz",
   "container_info",
   "description_of_good",
@@ -70,7 +81,6 @@
   "ocean_freight_remarks",
   "rotation",
   "line_no",
-  "hbl_id",
   "hbl_weight",
   "hbl_doc_name",
   "mbl_doctype"
@@ -106,7 +116,8 @@
    "fieldname": "mbl_no",
    "fieldtype": "Link",
    "label": "MBL No.",
-   "options": "Import Sea Master Bill"
+   "options": "Import Sea Master Bill",
+   "reqd": 1
   },
   {
    "fieldname": "nature",
@@ -153,7 +164,7 @@
    "fieldname": "container_info",
    "fieldtype": "Table",
    "label": "Container Info",
-   "options": "Fastrack Item"
+   "options": "Fastrack Sea Item"
   },
   {
    "fieldname": "column_break_r8svn",
@@ -328,7 +339,8 @@
   {
    "fieldname": "hbl_id",
    "fieldtype": "Data",
-   "label": "HBL Id"
+   "label": "HBL No.",
+   "reqd": 1
   },
   {
    "fieldname": "hbl_weight",
@@ -453,12 +465,69 @@
    "fieldname": "consignee_name",
    "fieldtype": "Data",
    "label": " Consignee Name"
+  },
+  {
+   "fieldname": "inco_term",
+   "fieldtype": "Select",
+   "label": "Inco Term",
+   "options": "\nPrepaid\nCurrent",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hbl_line_no",
+   "fieldtype": "Data",
+   "label": "HBL Line No."
+  },
+  {
+   "fieldname": "bl_type_code",
+   "fieldtype": "Data",
+   "label": "BL Type Code"
+  },
+  {
+   "fieldname": "section_break_tvziq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading "
+  },
+  {
+   "fieldname": "port_of_origin_code",
+   "fieldtype": "Data",
+   "label": "Port of Origin Code"
+  },
+  {
+   "fieldname": "port_of_departure",
+   "fieldtype": "Data",
+   "label": "Port of Departure"
+  },
+  {
+   "fieldname": "port_of_departure_code",
+   "fieldtype": "Data",
+   "label": "Port of Departure Code"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "connections_tabs_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections Tabs"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-05-11 15:14:49.720031",
+ "links": [
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_hbl_sea_link"
+  }
+ ],
+ "modified": "2025-05-14 11:36:47.570462",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
