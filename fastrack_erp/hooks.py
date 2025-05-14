@@ -128,6 +128,9 @@ doc_events = {
  },
  "Import Air House Bill": {
 	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+ },
+ "Sales Invoice": {
+	"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
  }
 }
 

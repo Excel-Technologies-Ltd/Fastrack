@@ -56,6 +56,8 @@
   "customer",
   "section_break_0crdz",
   "container_info",
+  "invoice_list",
+  "total_invoice_amount",
   "description_of_good",
   "amended_from",
   "date_of_arrival",
@@ -517,6 +519,21 @@
    "fieldname": "connections_tabs_tab",
    "fieldtype": "Tab Break",
    "label": "Connections Tabs"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "invoice_list",
+   "fieldtype": "Table",
+   "label": "Invoice List",
+   "options": "Fastrack Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_invoice_amount",
+   "fieldtype": "Currency",
+   "label": "Total Invoice Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -527,7 +544,7 @@
    "link_fieldname": "custom_hbl_sea_link"
   }
  ],
- "modified": "2025-05-14 11:36:47.570462",
+ "modified": "2025-05-14 13:54:38.074266",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

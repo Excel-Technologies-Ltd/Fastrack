@@ -333,3 +333,12 @@ def get_container_info_for_xml(container_info_list):
                 "Gross_weight": container_info.weight
         })
     return container_info_list_for_xml
+
+
+
+
+
+
+
+
+
