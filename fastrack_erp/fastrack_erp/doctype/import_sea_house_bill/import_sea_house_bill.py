@@ -11,10 +11,16 @@ class ImportSeaHouseBill(Document):
 		self.hbl_weight= sum(item.weight for item in self.container_info)
 		self.validate_container_name()
 	def validate_container_name(self):
-		container_name_array= [item.container_no for item in self.container_info]
+		
+		mbl_doc = frappe.get_doc('Import Sea Master Bill', self.mbl_no)
+		container_name_array= [item.container_no for item in mbl_doc.container_info]
 		custom_container_name_array = [item.custom_container_no for item in self.container_info]
+		print(frappe.as_json(container_name_array))
 		# find unmatch value from custom_container_name_array and container_name_array
 		unmatch_value = [value for value in custom_container_name_array if value not in container_name_array]
+		print(container_name_array)
+		# print(custom_container_name_array)
+		# print(unmatch_value)
 		if len(unmatch_value) > 0:
 			join_unmatch_value = ', '.join(unmatch_value)
 			frappe.throw(f"Container name do not match with master bill: {join_unmatch_value}")
@@ -46,6 +52,14 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 			"item_name": item_name,
 			"weight": 0.0
 		}
+	table_name = 'tabFastrack Item'
+	item_name='container_no'
+	if parent_type == 'Import Sea House Bill':
+		table_name = 'tabFastrack Sea Item'
+		item_name='custom_container_no'
+	elif parent_type == 'Import Sea Master Bill':
+		table_name = 'tabFastrack Item'
+		item_name='container_no'
 		
 	# Ensure bill_no is a list of strings and join them properly into a string
 	bill_no_placeholder = ', '.join([f"'{doc}'" for doc in bill_no])
@@ -53,12 +67,12 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 	# Build the query with properly formatted bill_no
 	result = frappe.db.sql(f"""
 		SELECT 
-			container_no as item_name,
+			{item_name} as item_name,
 			SUM(weight) as weight
-		FROM `tabFastrack Item`
+		FROM `{table_name}`
 		WHERE parenttype = '{parent_type}'
 		AND parent IN ({bill_no_placeholder})
-		AND container_no = '{item_name}'
+		AND {item_name} = '{item_name}'
 		GROUP BY container_no
 	""", as_dict=True)
 	
