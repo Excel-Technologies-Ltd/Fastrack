@@ -6,7 +6,7 @@ frappe.ui.form.on('Import Sea House Bill', {
         if (frm.is_new()) {
             frm.trigger('mbl_no');
         }
-        frm.get_field("container_info").grid.cannot_add_rows = true;
+        
         
         // frm.fields_dict['container_info'].grid.grid_buttons.remove();
         // make a button to make sales invoice from hbl 
@@ -45,11 +45,6 @@ frappe.ui.form.on('Import Sea House Bill', {
 
 frappe.ui.form.on('Fastrack Sea Item', {
     // check if any row container_no empty throw error
-    on_load: function(frm) {
-        frm.get_field("container_info").grid.cannot_add_rows = true;
-    },
-    refresh: function(frm) {
-        frm.get_field("container_info").grid.cannot_add_rows = true;
-    }
+    
 });
 

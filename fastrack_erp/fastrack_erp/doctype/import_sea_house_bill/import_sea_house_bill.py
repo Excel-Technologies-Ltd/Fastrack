@@ -53,13 +53,13 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 			"weight": 0.0
 		}
 	table_name = 'tabFastrack Item'
-	item_name='container_no'
+	item_column='container_no'
 	if parent_type == 'Import Sea House Bill':
 		table_name = 'tabFastrack Sea Item'
-		item_name='custom_container_no'
+		item_column='custom_container_no'
 	elif parent_type == 'Import Sea Master Bill':
 		table_name = 'tabFastrack Item'
-		item_name='container_no'
+		item_column='container_no'
 		
 	# Ensure bill_no is a list of strings and join them properly into a string
 	bill_no_placeholder = ', '.join([f"'{doc}'" for doc in bill_no])
@@ -67,15 +67,15 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 	# Build the query with properly formatted bill_no
 	result = frappe.db.sql(f"""
 		SELECT 
-			{item_name} as item_name,
+			{item_column} as item_name,
 			SUM(weight) as weight
 		FROM `{table_name}`
 		WHERE parenttype = '{parent_type}'
 		AND parent IN ({bill_no_placeholder})
-		AND {item_name} = '{item_name}'
-		GROUP BY container_no
+		AND {item_column} = '{item_name}'
+		GROUP BY {item_column}
 	""", as_dict=True)
-	
+	print(result)
 	if len(result) > 0:
 		print(result[0])
 		return result[0]
