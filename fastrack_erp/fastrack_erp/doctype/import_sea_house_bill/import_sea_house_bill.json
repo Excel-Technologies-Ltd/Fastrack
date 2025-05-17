@@ -56,11 +56,14 @@
   "port_of_loading",
   "port_of_origin_code",
   "port_of_departure",
+  "column_break_2x4cp",
   "port_of_departure_code",
   "customer",
   "section_break_0crdz",
   "date_of_arrival",
+  "column_break_roivp",
   "ata_ctg",
+  "section_break_vf8zr",
   "container_info",
   "invoice_list",
   "total_invoice_amount",
@@ -240,7 +243,7 @@
   {
    "fetch_from": "mbl_no.ata_ctg",
    "fieldname": "ata_ctg",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ATA (CTG)"
   },
   {
@@ -519,7 +522,8 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer"
+   "options": "Customer",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -561,7 +565,8 @@
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "label": "Sales Person",
-   "options": "Sales Person"
+   "options": "Sales Person",
+   "reqd": 1
   },
   {
    "fieldname": "payment_entry_list",
@@ -576,6 +581,18 @@
    "fieldtype": "Float",
    "label": "Total Payable Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_vf8zr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_roivp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_2x4cp",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -586,7 +603,7 @@
    "link_fieldname": "custom_hbl_sea_link"
   }
  ],
- "modified": "2025-05-18 00:24:37.774375",
+ "modified": "2025-05-18 04:41:57.706047",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

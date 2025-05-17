@@ -305,7 +305,7 @@
   {
    "depends_on": "eval:doc.etd",
    "fieldname": "ata_ctg",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ATA (CTG)"
   }
  ],
