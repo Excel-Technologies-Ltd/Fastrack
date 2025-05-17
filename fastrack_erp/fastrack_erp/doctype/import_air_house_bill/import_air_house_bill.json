@@ -1,14 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "format:AHBL-{YYYY}-{MM}-{DD}-{####}",
  "creation": "2025-05-10 05:40:08.242840",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "mbl_no",
   "carrier",
   "carrier_address",
@@ -320,14 +319,6 @@
    "label": "Changeable Weight"
   },
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Naming Series",
-   "options": "AHBL-.YYYY.-.MM.-",
-   "reqd": 1
-  },
-  {
    "fetch_from": "notify_to.primary_address",
    "fieldname": "notify_address_hbl",
    "fieldtype": "Small Text",
@@ -352,11 +343,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-11 14:53:15.151961",
+ "modified": "2025-05-18 05:04:56.024121",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

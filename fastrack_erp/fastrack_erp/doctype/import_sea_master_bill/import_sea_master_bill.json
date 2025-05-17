@@ -317,10 +317,11 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-13 10:38:51.589787",
+ "modified": "2025-05-18 04:54:26.253333",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
+ "name_case": "Title Case",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

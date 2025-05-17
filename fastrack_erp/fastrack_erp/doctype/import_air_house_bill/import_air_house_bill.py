@@ -5,5 +5,4 @@
 from frappe.model.document import Document
 
 class ImportAirHouseBill(Document):
-	def on_update(self):
-		self.hbl_weight= sum(item.weight for item in self.container_info)
+	pass

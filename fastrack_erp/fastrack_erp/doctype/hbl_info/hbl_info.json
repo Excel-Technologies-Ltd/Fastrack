@@ -16,6 +16,7 @@
   {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "HBL No."
   },
   {
@@ -30,12 +31,14 @@
    "depends_on": "eval:doc.is_create==0",
    "fieldname": "create_hbl",
    "fieldtype": "Button",
+   "in_list_view": 1,
    "label": "Create"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_link",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "HBL Link",
    "options": "Import Sea House Bill",
    "read_only": 1
@@ -51,7 +54,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-14 10:14:41.959497",
+ "modified": "2025-05-18 04:50:23.183864",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "HBL Info",
