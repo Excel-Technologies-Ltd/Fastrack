@@ -8,7 +8,9 @@ frappe.ui.form.on('Import Sea Master Bill', {
 frappe.ui.form.on('HBL Info', {
     create_hbl: function (frm, cdt, cdn) {
         const row = locals[cdt][cdn];
-        console.log(row)
+       if(frm.doc.docstatus!=1){
+        return frappe.msgprint("MBL not submitted yet")
+       }
         if(row.is_create){
             return frappe.msgprint("HBL already created")
         }
@@ -57,10 +59,12 @@ function toggle_buttons(row) {
 }
 frappe.ui.form.on('Import Sea Master Bill', {
 	refresh(frm) {
-	  frm.add_custom_button('Download XML as PDF', function () {
-		const url = `/api/method/fastrack_erp.api.download_xml_as_pdf?doctype=${frm.doc.doctype}&docname=${frm.doc.name}`;
-		window.open(url, '_blank');
-	  });
+	  if(frm.doc.docstatus==1){
+        frm.add_custom_button('Download XML', function () {
+            const url = `/api/method/fastrack_erp.api.download_xml_as_pdf?doctype=${frm.doc.doctype}&docname=${frm.doc.name}`;
+            window.open(url, '_blank');
+          });
+      }
 	}
   });
   

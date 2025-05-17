@@ -8,7 +8,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "connections_tabs_tab",
   "naming_series",
   "mbl_no",
   "hbl_id",
@@ -29,6 +28,7 @@
   "marks_and_numbers",
   "inco_term",
   "column_break_r8svn",
+  "sales_person",
   "bl_type_code",
   "agent",
   "agent_name",
@@ -48,6 +48,10 @@
   "consignee_address_hbl",
   "consignee_bin_no",
   "total_container_hbl",
+  "gross_weight",
+  "cbm",
+  "package",
+  "actual_inco_term",
   "section_break_tvziq",
   "port_of_loading",
   "port_of_origin_code",
@@ -55,13 +59,15 @@
   "port_of_departure_code",
   "customer",
   "section_break_0crdz",
+  "date_of_arrival",
+  "ata_ctg",
   "container_info",
   "invoice_list",
   "total_invoice_amount",
+  "payment_entry_list",
+  "total_payable_amount",
   "description_of_good",
   "amended_from",
-  "date_of_arrival",
-  "ata_ctg",
   "section_break_hgk7r",
   "do_validity",
   "do_party",
@@ -472,7 +478,7 @@
    "fieldname": "inco_term",
    "fieldtype": "Select",
    "label": "Inco Term",
-   "options": "\nPrepaid\nCurrent",
+   "options": "\nPrepaid\nCollect",
    "reqd": 1
   },
   {
@@ -516,11 +522,6 @@
    "options": "Customer"
   },
   {
-   "fieldname": "connections_tabs_tab",
-   "fieldtype": "Tab Break",
-   "label": "Connections Tabs"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "invoice_list",
    "fieldtype": "Table",
@@ -534,6 +535,47 @@
    "fieldtype": "Currency",
    "label": "Total Invoice Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight"
+  },
+  {
+   "fieldname": "cbm",
+   "fieldtype": "Data",
+   "label": "CBM"
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Data",
+   "label": "Package"
+  },
+  {
+   "fieldname": "actual_inco_term",
+   "fieldtype": "Select",
+   "label": "Actual Inco Term",
+   "options": "\nPrepaid\nCollect\nEx-work"
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Link",
+   "label": "Sales Person",
+   "options": "Sales Person"
+  },
+  {
+   "fieldname": "payment_entry_list",
+   "fieldtype": "Table",
+   "label": "Payment Entry List",
+   "options": "Fastrack Payment Entry",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_payable_amount",
+   "fieldtype": "Float",
+   "label": "Total Payable Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -544,7 +586,7 @@
    "link_fieldname": "custom_hbl_sea_link"
   }
  ],
- "modified": "2025-05-14 13:54:38.074266",
+ "modified": "2025-05-18 00:24:37.774375",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

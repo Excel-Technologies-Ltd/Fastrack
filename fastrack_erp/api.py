@@ -6,12 +6,13 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Sea Master Bill")
         # 4 array
         target.mbl_no=source.name
-        target.naming_series="SHBL-.YYYY.-.MM.-"
         target.hbl_id=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
+        target.date_of_departure=source.etd
+        target.date_of_arrival=source.eta
     doclist = get_mapped_doc("Import Sea Master Bill", source_name, {
         "Import Sea Master Bill": {
             "doctype": "Import Sea House Bill",
@@ -211,11 +212,11 @@ def download_xml_as_pdf(doctype="Import Sea Master Bill", docname="MBL-2025-05-0
     pdf_content = get_pdf(html, options={"page-size": "A4"})
 
     frappe.response["type"] = "binary"
-    frappe.response["filename"] = f"{docname}.xml.pdf"
-    frappe.response["filecontent"] = pdf_content
+    frappe.response["filename"] = f"{docname}.xml"
+    frappe.response["filecontent"] = pretty_xml.encode("utf-8")
     frappe.response["headers"] = {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": f"attachment; filename={docname}.xml.pdf"
+        "Content-Type": "application/xml",
+        "Content-Disposition": f"attachment; filename={docname}.xml"
     }
 
 @frappe.whitelist()
@@ -271,27 +272,27 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Carrier":{
                             "Carrier_code":hbl_doc.carrier,
                             "Carrier_name":frappe.db.get_value("Customer",hbl_doc.carrier,"customer_name"),
-                            "Carrier_address":hbl_doc.carrier_address_hbl or ""
+                            "Carrier_address":clean_address(hbl_doc.carrier_address_hbl) or ""
                         },
                         "Shipping_agent":{
                             "Shipping_agent_code":hbl_doc.shipping_line,
                             "Shipping_agent_name":frappe.db.get_value("Customer",hbl_doc.shipping_line,"customer_name"),
-                            "Shipping_agent_address":hbl_doc.shipping_line_address_hbl or ""
+                            "Shipping_agent_address":clean_address(hbl_doc.shipping_line_address_hbl) or ""
                         },
                         "Exporter":{
                             "Exporter_code":hbl_doc.hbl_shipper,
                             "Exporter_name":frappe.db.get_value("Supplier",hbl_doc.hbl_shipper,"supplier_name"),
-                            "Exporter_address":hbl_doc.shipper_address_hbl or ""
+                            "Exporter_address":clean_address(hbl_doc.shipper_address_hbl) or ""
                         },
                         "Notify":{
                             "Notify_code":hbl_doc.notify_to,
                             "Notify_name":frappe.db.get_value("Customer",hbl_doc.notify_to,"customer_name"),
-                            "Notify_address":hbl_doc.notify_address_hbl or ""
+                            "Notify_address":clean_address(hbl_doc.notify_address_hbl) or ""
                         },
                         "Consignee":{
                             "Consignee_code":hbl_doc.hbl_consignee,
                             "Consignee_name":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"customer_name"),
-                            "Consignee_address":hbl_doc.consignee_address_hbl or ""
+                            "Consignee_address":clean_address(hbl_doc.consignee_address_hbl) or ""
                         }
                     },
                     "ctn_segment":get_container_info_for_xml(hbl_doc.container_info),
@@ -299,7 +300,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Number_of_packages": sum(item.no_of_pkg for item in hbl_doc.container_info),
                             "Package_type_code": hbl_doc.pkg_code,
                             "Gross_mass": hbl_doc.hbl_weight,
-                            "Shipping_marks": "Don't get",
+                            "Shipping_marks": "",
                             "Goods_description": hbl_doc.description_of_good,
                             "Volume_in_cubic_meters": 100,
                             "Num_of_ctn_for_this_bol": len(hbl_doc.container_info),
@@ -321,13 +322,13 @@ def get_container_info_for_xml(container_info_list):
     container_info_list_for_xml=[]
     for container_info in container_info_list:
         container_info_list_for_xml.append({
-                "Ctn_reference": container_info.container_no,
+                "Ctn_reference": container_info.custom_container_no,
                 "Number_of_packages": container_info.no_of_pkg,
                 "Type_of_container": container_info.con_type,
                 "Status": container_info.status,
                 "Seal_number": container_info.seal_no,
-                "IMCO": "",
-                "UN": "",
+                "IMCO": container_info.imco,
+                "UN": container_info.un,
                 "Ctn_location": container_info.ctn_location,
                 "Commidity_code": container_info.commodity_code,
                 "Gross_weight": container_info.weight
@@ -341,4 +342,14 @@ def get_container_info_for_xml(container_info_list):
 
 
 
-
+import html
+def clean_address(raw_html):
+    # Decode HTML entities like &lt;br&gt; -> <br>
+    decoded = html.unescape(raw_html)
+    
+    # Replace <br> tags with commas, and strip whitespace
+    cleaned = decoded.replace('<br>', ',').replace('\n', '')
+    
+    # Remove extra commas and whitespace
+    parts = [part.strip() for part in cleaned.split(',') if part.strip()]
+    return ','.join(parts)

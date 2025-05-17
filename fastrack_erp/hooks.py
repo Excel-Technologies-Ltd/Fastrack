@@ -131,6 +131,7 @@ doc_events = {
  },
  "Sales Invoice": {
 	"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
+	"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
  }
 }
 
