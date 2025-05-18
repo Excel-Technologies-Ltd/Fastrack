@@ -42,10 +42,10 @@ def update_child_hbl(doc, method):
     # create child doc in master bill
     mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_no)
     if parent_doctype == "Import Sea Master Bill":
-        get_all_weight_of_container_info= sum(container.weight for container in doc.container_info)
+        get_all_weight_of_container_info= sum(float(container.weight) for container in doc.container_info)
     else:
         get_all_weight_of_container_info= 0
-    if not get_all_weight_of_container_info == int(doc.hbl_weight) and (parent_doctype == "Import Sea Master Bill") :
+    if not get_all_weight_of_container_info == float(doc.hbl_weight) and (parent_doctype == "Import Sea Master Bill") :
         frappe.throw("Total weight of container info is not equal to hbl gross weight")
    
     # Find and update the HBLInfo row with matching hbl_no
