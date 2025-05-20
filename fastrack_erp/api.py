@@ -51,7 +51,28 @@ def make_sales_invoice_from_hbl(source_name, target_doc=None):
         },
     }, target_doc, set_missing_values)
     return doclist
-
+@frappe.whitelist()
+def make_purchase_invoice_from_hbl(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        target.custom_shbl_id=source.name
+        target.custom_hbl_type="Import Sea House Bill"
+    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
+        "Import Sea House Bill": {
+            "doctype": "Purchase Invoice",
+        },
+    }, target_doc, set_missing_values)
+    return doclist
+@frappe.whitelist()
+def make_journal_entry_from_hbl(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        target.custom_shbl_id=source.name
+        target.custom_hbl_type="Import Sea House Bill"
+    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
+        "Import Sea House Bill": {
+            "doctype": "Journal Entry",
+        },
+    }, target_doc, set_missing_values)
+    return doclist
 
 
 @frappe.whitelist()

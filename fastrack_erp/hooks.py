@@ -234,9 +234,23 @@ fixtures = [
                 [
                   "Sales Invoice-custom_hbl_sea_link",
                   "Sales Invoice-custom_hbl_type",
-                  "Sales Invoice-custom_hbl_air_link"
+                  "Sales Invoice-custom_hbl_air_link",
+                  "Customer-custom_customer_type",
+                  "Customer-custom_bin_no"
                 ],
             ],
         ]
     },
+    {
+        "dt":"Property Setter",
+        "filters":[
+            [
+                "name",
+                "in",
+                [
+                    "Customer-main-field_order",
+                ]
+            ]
+        ]
+    }
 ]

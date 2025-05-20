@@ -25,7 +25,7 @@ class ImportSeaHouseBill(Document):
 			payment_entry_doc.parentfield = "payment_entry_list"
 			payment_entry.append(payment_entry_doc)
 		self.payment_entry_list = payment_entry
-		self.total_payable_amount = sum(float(item.amount) for item in payment_entry)
+		self.total_payment = sum(float(item.amount) for item in payment_entry)
 
 	def on_update(self):
 		self.validate_container_name()
@@ -34,10 +34,8 @@ class ImportSeaHouseBill(Document):
 		self.gross_weight= self.hbl_weight
 		self.total_container_hbl= len(self.container_info)		
 
-	def get_and_set_payment_entry(self):
-		invoice_list = self.get_invoice_list()
-		gl_entry_list = get_gl_entry_from_invoice(invoice_list)
-		frappe.msgprint(frappe.as_json(gl_entry_list))
+
+
   
 		
 	def validate_container_name(self):
@@ -62,8 +60,6 @@ class ImportSeaHouseBill(Document):
 			get_master_item = get_single_fastrack_item_by_bill_no([master_bill_no], item.custom_container_no)
 			get_existing_house_doc_id = frappe.db.get_list('Import Sea House Bill', {'mbl_no': master_bill_no,'docstatus': 1}, ['name'])
 			get_existing_house_doc_id = [doc['name'] for doc in get_existing_house_doc_id]
-			
-			
 			# If this is a new document, exclude it from the existing house bills list
 			if self.name in get_existing_house_doc_id:
 				get_existing_house_doc_id.remove(self.name)

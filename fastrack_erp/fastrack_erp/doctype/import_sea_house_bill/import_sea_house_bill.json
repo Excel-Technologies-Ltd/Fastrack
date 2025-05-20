@@ -15,7 +15,6 @@
   "office_name",
   "voy_no",
   "date_of_departure",
-  "ata",
   "nature",
   "dg_status",
   "hbl_port_of_origin",
@@ -51,13 +50,17 @@
   "cbm",
   "package",
   "actual_inco_term",
+  "co_loader",
   "section_break_tvziq",
   "port_of_loading",
   "port_of_origin_code",
   "port_of_departure",
+  "port_of_delivery",
   "column_break_2x4cp",
   "port_of_departure_code",
   "customer",
+  "eta",
+  "eta_icd",
   "section_break_0crdz",
   "date_of_arrival",
   "column_break_roivp",
@@ -67,7 +70,7 @@
   "invoice_list",
   "total_invoice_amount",
   "payment_entry_list",
-  "total_payable_amount",
+  "total_payment",
   "description_of_good",
   "amended_from",
   "section_break_hgk7r",
@@ -79,14 +82,16 @@
   "column_break_tqh0h",
   "shipping_line_custom",
   "shipping_line_address_custom",
-  "shipping_line_address1",
   "bl_no",
   "bl_date",
   "man_gr_wt",
   "man_pkg",
   "remarks",
   "column_break_zkvni",
+  "generate",
+  "container_cost_info",
   "total",
+  "average_total",
   "ex_rate",
   "ocean_freight_remarks",
   "rotation",
@@ -116,11 +121,6 @@
    "fieldname": "date_of_departure",
    "fieldtype": "Date",
    "label": "Date of Departure"
-  },
-  {
-   "fieldname": "ata",
-   "fieldtype": "Data",
-   "label": "ATA"
   },
   {
    "fieldname": "mbl_no",
@@ -250,9 +250,11 @@
    "label": "DO Validity"
   },
   {
+   "default": "Deputy Traffic Manager",
    "fieldname": "do_party",
    "fieldtype": "Data",
-   "label": "DO Party"
+   "label": "DO Party",
+   "read_only": 1
   },
   {
    "fieldname": "do_party_address",
@@ -282,16 +284,12 @@
    "label": "Shipping Line Address"
   },
   {
-   "fieldname": "shipping_line_address1",
-   "fieldtype": "Data",
-   "label": "Shipping Line Address1"
-  },
-  {
    "fieldname": "bl_date",
    "fieldtype": "Date",
    "label": "B/L Date"
   },
   {
+   "fetch_from": "shipping_line.customer_name",
    "fieldname": "bl_no",
    "fieldtype": "Data",
    "label": "B/L No"
@@ -308,7 +306,7 @@
   },
   {
    "fieldname": "total",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "label": "Total"
   },
   {
@@ -387,7 +385,7 @@
   {
    "fetch_from": "carrier.primary_address",
    "fieldname": "carrier_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Data",
    "hidden": 1,
    "label": "Carrier Address",
    "read_only": 1
@@ -395,7 +393,7 @@
   {
    "fetch_from": "agent.primary_address",
    "fieldname": "agent_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Agent Address",
    "read_only": 1
@@ -403,7 +401,7 @@
   {
    "fetch_from": "shipping_line.primary_address",
    "fieldname": "shipping_line_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Shipping Line Address",
    "read_only": 1
@@ -411,7 +409,7 @@
   {
    "fetch_from": "notify_to.primary_address",
    "fieldname": "notify_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Notify Address",
    "read_only": 1
@@ -419,7 +417,7 @@
   {
    "fetch_from": "hbl_shipper.primary_address",
    "fieldname": "shipper_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Shipper Address",
    "read_only": 1
@@ -427,7 +425,7 @@
   {
    "fetch_from": "hbl_consignee.primary_address",
    "fieldname": "consignee_address_hbl",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Consignee Address",
    "read_only": 1
@@ -481,7 +479,7 @@
   {
    "fieldname": "hbl_line_no",
    "fieldtype": "Data",
-   "label": "HBL Line No."
+   "label": "Line No."
   },
   {
    "fieldname": "bl_type_code",
@@ -571,13 +569,6 @@
    "read_only": 1
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "total_payable_amount",
-   "fieldtype": "Currency",
-   "label": "Total Payable Amount",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_vf8zr",
    "fieldtype": "Section Break"
   },
@@ -588,6 +579,54 @@
   {
    "fieldname": "column_break_2x4cp",
    "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_payment",
+   "fieldtype": "Currency",
+   "label": "Total Payment Received",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "mbl_no.eta",
+   "fetch_if_empty": 1,
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "eta_icd",
+   "fieldtype": "Date",
+   "label": "ETA (ICD)"
+  },
+  {
+   "fetch_from": "mbl_no.port_of_delivery",
+   "fetch_if_empty": 1,
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port Of Delivery"
+  },
+  {
+   "fieldname": "co_loader",
+   "fieldtype": "Data",
+   "label": "Co-Loader"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "container_cost_info",
+   "fieldtype": "Table",
+   "label": "Container Cost Info",
+   "options": "Container Cost Info"
+  },
+  {
+   "fieldname": "generate",
+   "fieldtype": "Button",
+   "label": "Generate Container Info List"
+  },
+  {
+   "fieldname": "average_total",
+   "fieldtype": "Currency",
+   "label": "Average Total"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -596,9 +635,17 @@
   {
    "link_doctype": "Sales Invoice",
    "link_fieldname": "custom_hbl_sea_link"
+  },
+  {
+   "link_doctype": "Journal Entry",
+   "link_fieldname": "custom_shbl_id"
+  },
+  {
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-18 05:03:23.495260",
+ "modified": "2025-05-21 00:28:29.485487",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
