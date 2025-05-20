@@ -236,7 +236,12 @@ fixtures = [
                   "Sales Invoice-custom_hbl_type",
                   "Sales Invoice-custom_hbl_air_link",
                   "Customer-custom_customer_type",
-                  "Customer-custom_bin_no"
+                  "Customer-custom_bin_no",
+                  "Customer-custom_customer_type",
+                  "Journal Entry-custom_hbl_type",
+                  "Journal Entry-custom_shbl_id",
+                  "Purchase Invoice-custom_hbl_type",
+                  "Purchase Invoice-custom_shbl_id"
                 ],
             ],
         ]
