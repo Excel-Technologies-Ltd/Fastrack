@@ -28,13 +28,29 @@ class ImportSeaHouseBill(Document):
 		self.total_payment = sum(float(item.amount) for item in payment_entry)
 
 	def on_update(self):
+		total_price = 0
+		total_qty = 0
+
+		for row in self.container_cost_info:
+			total_price += (row.qty or 0) * (row.amount or 0)
+			total_qty += row.qty or 0
+
+		self.total = total_price
+		self.average_total = (total_price / total_qty) if total_qty else 0
 		self.validate_container_name()
 		self.validate_container_weight()
 		self.hbl_weight= sum(item.weight for item in self.container_info)
 		self.gross_weight= self.hbl_weight
 		self.total_container_hbl= len(self.container_info)		
+	def on_update_after_submit(self):
+		total_price = 0
+		total_qty = 0
 
-
+		for row in self.container_cost_info:
+			total_price += (row.qty or 0) * (row.amount or 0)
+			total_qty += row.qty or 0
+		self.total = total_price
+		self.average_total = (total_price / total_qty) if total_qty else 0
 
   
 		

@@ -293,33 +293,33 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Carrier":{
                             "Carrier_code":hbl_doc.carrier,
                             "Carrier_name":frappe.db.get_value("Customer",hbl_doc.carrier,"customer_name"),
-                            "Carrier_address":clean_address(hbl_doc.carrier_address_hbl) or ""
+                            "Carrier_address":clean_address(frappe.get_value("Customer",hbl_doc.carrier,"primary_address")) if frappe.get_value("Customer",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_agent":{
                             "Shipping_agent_code":hbl_doc.shipping_line,
                             "Shipping_agent_name":frappe.db.get_value("Customer",hbl_doc.shipping_line,"customer_name"),
-                            "Shipping_agent_address":clean_address(hbl_doc.shipping_line_address_hbl) or ""
+                            "Shipping_agent_address": clean_address(frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address") else ""
                         },
                         "Exporter":{
-                            "Exporter_code":hbl_doc.hbl_shipper,
+                           
                             "Exporter_name":frappe.db.get_value("Supplier",hbl_doc.hbl_shipper,"supplier_name"),
-                            "Exporter_address":clean_address(hbl_doc.shipper_address_hbl) or ""
+                            "Exporter_address":clean_address(frappe.get_value("Supplier",hbl_doc.hbl_shipper,"primary_address")) if frappe.get_value("Supplier",hbl_doc.hbl_shipper,"primary_address") else ""
                         },
                         "Notify":{
                             "Notify_code":hbl_doc.notify_to,
                             "Notify_name":frappe.db.get_value("Customer",hbl_doc.notify_to,"customer_name"),
-                            "Notify_address":clean_address(hbl_doc.notify_address_hbl) or ""
+                            "Notify_address": clean_address(frappe.get_value("Customer",hbl_doc.notify_to,"primary_address")) if frappe.get_value("Customer",hbl_doc.notify_to,"primary_address") else ""
                         },
                         "Consignee":{
                             "Consignee_code":hbl_doc.hbl_consignee,
                             "Consignee_name":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"customer_name"),
-                            "Consignee_address":clean_address(hbl_doc.consignee_address_hbl) or ""
+                            "Consignee_address": clean_address(frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address")) if frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address") else ""
                         }
                     },
                     "ctn_segment":get_container_info_for_xml(hbl_doc.container_info),
                     "Goods_segment": {
                             "Number_of_packages": sum(item.no_of_pkg for item in hbl_doc.container_info),
-                            "Package_type_code": hbl_doc.pkg_code,
+                            "Package_type_code": "",
                             "Gross_mass": hbl_doc.hbl_weight,
                             "Shipping_marks": "",
                             "Goods_description": hbl_doc.description_of_good,

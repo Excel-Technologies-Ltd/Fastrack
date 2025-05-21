@@ -6,13 +6,18 @@ frappe.ui.form.on('Import Sea Master Bill', {
 
 // Child Table Logic: HBL Info
 frappe.ui.form.on('HBL Info', {
+    // dynamically field change 
+   
+    
     create_hbl: function (frm, cdt, cdn) {
         const row = locals[cdt][cdn];
        if(frm.doc.docstatus!=1){
         return frappe.msgprint("MBL not submitted yet")
        }
         if(row.is_create){
-            return frappe.msgprint("HBL already created")
+            // route to view hbl
+            frappe.set_route("Form", "Import Sea House Bill", row.hbl_link);
+            return 
         }
         frappe.call({
             method: "fastrack_erp.api.get_first_uncreated_hbl_info",
@@ -71,3 +76,25 @@ frappe.ui.form.on('Import Sea Master Bill', {
   
   
   
+
+
+  function update_hbl_buttons(frm) {
+    // Make sure the grid is loaded
+    if (!frm.fields_dict.hbl_info || !frm.fields_dict.hbl_info.grid) return;
+    
+    setTimeout(function() {
+        // Process each row in the hbl_info child table
+        $.each(frm.fields_dict.hbl_info.grid.grid_rows || [], function(i, grid_row) {
+            if (!grid_row || !grid_row.doc) return;
+            
+            const btn = $(grid_row.row).find('button[data-fieldname="create_hbl"]');
+            if (btn.length) {
+                if (grid_row.doc.is_create) {
+                    btn.html("View");
+                } else {
+                    btn.html("Create");
+                }
+            }
+        });
+    }, 100); // Small delay to ensure the grid is rendered
+}

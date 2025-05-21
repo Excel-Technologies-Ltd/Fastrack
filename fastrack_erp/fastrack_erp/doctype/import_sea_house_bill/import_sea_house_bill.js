@@ -1,5 +1,5 @@
 frappe.ui.form.on('Import Sea House Bill', {
-    before_save:function(frm){
+    refresh:function(frm){
         const container_cost_info = frm.doc.container_cost_info;
         const total_price = container_cost_info.reduce((acc, item) => acc + item.qty * item.amount, 0);
         console.log(total_price)
