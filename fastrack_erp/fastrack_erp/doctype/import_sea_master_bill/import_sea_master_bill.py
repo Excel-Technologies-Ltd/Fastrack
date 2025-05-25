@@ -38,4 +38,6 @@ class ImportSeaMasterBill(Document):
 		elif isinstance(date_val, datetime):
 			return date_val.date()
 		else:
-			return date_val  # Assume it's already a date object
+			return date_val  
+	def validate_no_of_packages(self):
+		pass

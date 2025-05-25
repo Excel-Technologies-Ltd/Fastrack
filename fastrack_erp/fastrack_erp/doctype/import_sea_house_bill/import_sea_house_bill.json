@@ -13,6 +13,7 @@
   "hbl_line_no",
   "office_code",
   "customer",
+  "customer_bin_no",
   "office_name",
   "voy_no",
   "date_of_departure",
@@ -20,8 +21,16 @@
   "dg_status",
   "hbl_port_of_origin",
   "hbl_place_of_unloading",
+  "mbl_date",
+  "hbl_date",
+  "mv",
+  "mv_voyage_no",
   "column_break_r8svn",
   "carrier",
+  "status",
+  "lc",
+  "lc_date",
+  "no_of_pkg",
   "carrier_name",
   "carrier_code",
   "marks_and_numbers",
@@ -35,6 +44,7 @@
   "notify_to",
   "notify_name",
   "notify_bin_no",
+  "reference_number",
   "column_break_4tcs4",
   "hbl_shipper",
   "shipper_name",
@@ -47,12 +57,20 @@
   "package",
   "actual_inco_term",
   "co_loader",
+  "hold_instruction",
+  "fv",
+  "fv__v_no",
+  "fv_etd",
+  "etb",
+  "mbl_surrender_status",
   "section_break_tvziq",
   "port_of_loading",
   "port_of_origin_code",
   "port_of_departure",
+  "pkg_code",
   "column_break_2x4cp",
   "port_of_delivery",
+  "pod_code",
   "port_of_departure_code",
   "eta",
   "column_break_svasa",
@@ -362,7 +380,9 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "HBL No.",
-   "reqd": 1
+   "reqd": 1,
+   "set_only_once": 1,
+   "unique": 1
   },
   {
    "fieldname": "hbl_weight",
@@ -479,7 +499,7 @@
    "allow_on_submit": 1,
    "fieldname": "port_of_origin_code",
    "fieldtype": "Data",
-   "label": "Port of Origin Code"
+   "label": "POL Code"
   },
   {
    "allow_on_submit": 1,
@@ -623,6 +643,100 @@
   {
    "fieldname": "column_break_svasa",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "mbl_no.mbl_date",
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "hbl_date",
+   "fieldtype": "Date",
+   "label": "HBL Date"
+  },
+  {
+   "fieldname": "pod_code",
+   "fieldtype": "Data",
+   "label": "POD Code"
+  },
+  {
+   "fetch_from": "mbl_no.mv",
+   "fieldname": "mv",
+   "fieldtype": "Data",
+   "label": "MV"
+  },
+  {
+   "fetch_from": "mbl_no.mv_voyage_no",
+   "fieldname": "mv_voyage_no",
+   "fieldtype": "Data",
+   "label": "MV Voyage No."
+  },
+  {
+   "fieldname": "reference_number",
+   "fieldtype": "Data",
+   "label": "Reference Number"
+  },
+  {
+   "fieldname": "hold_instruction",
+   "fieldtype": "Data",
+   "label": "Hold Instruction"
+  },
+  {
+   "fetch_from": "customer.custom_bin_no",
+   "fieldname": "customer_bin_no",
+   "fieldtype": "Data",
+   "label": "Customer Bin No."
+  },
+  {
+   "fieldname": "lc",
+   "fieldtype": "Data",
+   "label": "LC"
+  },
+  {
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "label": "LC Date"
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Data",
+   "label": "No of Pkg"
+  },
+  {
+   "fieldname": "pkg_code",
+   "fieldtype": "Data",
+   "label": "Pkg Code"
+  },
+  {
+   "fieldname": "fv",
+   "fieldtype": "Data",
+   "label": "FV"
+  },
+  {
+   "fieldname": "fv__v_no",
+   "fieldtype": "Data",
+   "label": "FV  V. No."
+  },
+  {
+   "fieldname": "fv_etd",
+   "fieldtype": "Data",
+   "label": "FV ETD "
+  },
+  {
+   "fieldname": "etb",
+   "fieldtype": "Data",
+   "label": "ETB"
+  },
+  {
+   "fieldname": "mbl_surrender_status",
+   "fieldtype": "Data",
+   "label": "MBL Surrender Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -641,7 +755,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-21 12:16:35.969416",
+ "modified": "2025-05-24 17:30:52.637927",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

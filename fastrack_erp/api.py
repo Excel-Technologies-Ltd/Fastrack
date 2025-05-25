@@ -286,17 +286,16 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                     },
                     "Consolidated_Cargo":consolidated_cargo ,
                     "Load_unload_place":{
-                        "Port_of_origin_code":hbl_doc.hbl_port_of_origin,
-                        "Port_of_unloading_code":hbl_doc.hbl_place_of_unloading
+                        "Port_of_origin_code=":hbl_doc.port_of_origin_code,
+                        "Port_of_unloading_code":hbl_doc.pod_code
                     },
                     "Traders_segment":{
                         "Carrier":{
-                            "Carrier_code":hbl_doc.carrier,
+                            "Carrier_code":frappe.db.get_value("Customer",hbl_doc.carrier,"custom_ain_no"),
                             "Carrier_name":frappe.db.get_value("Customer",hbl_doc.carrier,"customer_name"),
                             "Carrier_address":clean_address(frappe.get_value("Customer",hbl_doc.carrier,"primary_address")) if frappe.get_value("Customer",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_agent":{
-                            "Shipping_agent_code":hbl_doc.shipping_line,
                             "Shipping_agent_name":frappe.db.get_value("Customer",hbl_doc.shipping_line,"customer_name"),
                             "Shipping_agent_address": clean_address(frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address") else ""
                         },
@@ -306,12 +305,12 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Exporter_address":clean_address(frappe.get_value("Supplier",hbl_doc.hbl_shipper,"primary_address")) if frappe.get_value("Supplier",hbl_doc.hbl_shipper,"primary_address") else ""
                         },
                         "Notify":{
-                            "Notify_code":hbl_doc.notify_to,
+                            "Notify_code":frappe.db.get_value("Customer",hbl_doc.notify_to,"custom_bin_no"),
                             "Notify_name":frappe.db.get_value("Customer",hbl_doc.notify_to,"customer_name"),
                             "Notify_address": clean_address(frappe.get_value("Customer",hbl_doc.notify_to,"primary_address")) if frappe.get_value("Customer",hbl_doc.notify_to,"primary_address") else ""
                         },
                         "Consignee":{
-                            "Consignee_code":hbl_doc.hbl_consignee,
+                            "Consignee_code":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"custom_ain_no"),
                             "Consignee_name":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"customer_name"),
                             "Consignee_address": clean_address(frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address")) if frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address") else ""
                         }
