@@ -57,7 +57,7 @@ class ImportSeaHouseBill(Document):
 		
 	def validate_container_name(self):
 		
-		mbl_doc = frappe.get_doc('Import Sea Master Bill', self.mbl_no)
+		mbl_doc = frappe.get_doc('Import Sea Master Bill', self.mbl_link)
 		container_name_array= [item.container_no for item in mbl_doc.container_info]
 		custom_container_name_array = [item.custom_container_no for item in self.container_info]
 		print(frappe.as_json(container_name_array))

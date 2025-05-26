@@ -40,7 +40,7 @@ def update_child_hbl(doc, method):
     name=doc.name
     parent_doctype=doc.mbl_doctype
     # create child doc in master bill
-    mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_no)
+    mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_link)
     if parent_doctype == "Import Sea Master Bill":
         get_all_weight_of_container_info= sum(float(container.weight) for container in doc.container_info)
     else:
@@ -59,7 +59,7 @@ def update_child_hbl(doc, method):
     if parent_doctype == "Import Air Master Bill":
         for hbl_info in mbl_doc.hbl_info:
             if hbl_info.name == doc.hbl_doc_name:
-                hbl_info.hbl_link=doc.name
+                hbl_info.hbl_link=doc.hbl_id
                 hbl_info.is_create=1
                 hbl_info.weight=doc.hbl_weight
                 break

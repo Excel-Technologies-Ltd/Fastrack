@@ -645,7 +645,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "mbl_no.mbl_date",
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
@@ -763,7 +762,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-26 12:29:29.658344",
+ "modified": "2025-05-26 13:21:19.107276",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
