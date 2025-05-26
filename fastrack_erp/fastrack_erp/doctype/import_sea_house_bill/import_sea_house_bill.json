@@ -9,6 +9,7 @@
  "engine": "InnoDB",
  "field_order": [
   "hbl_id",
+  "mbl_link",
   "mbl_no",
   "hbl_line_no",
   "office_code",
@@ -30,7 +31,7 @@
   "status",
   "lc",
   "lc_date",
-  "no_of_pkg",
+  "no_of_pkg_hbl",
   "carrier_name",
   "carrier_code",
   "marks_and_numbers",
@@ -140,10 +141,9 @@
   },
   {
    "fieldname": "mbl_no",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "MBL No.",
-   "options": "Import Sea Master Bill",
    "reqd": 1
   },
   {
@@ -478,7 +478,8 @@
    "allow_on_submit": 1,
    "fieldname": "hbl_line_no",
    "fieldtype": "Data",
-   "label": "Line No."
+   "label": "Line No.",
+   "reqd": 1
   },
   {
    "fieldname": "bl_type_code",
@@ -518,8 +519,7 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -699,11 +699,6 @@
    "label": "LC Date"
   },
   {
-   "fieldname": "no_of_pkg",
-   "fieldtype": "Data",
-   "label": "No of Pkg"
-  },
-  {
    "fieldname": "pkg_code",
    "fieldtype": "Data",
    "label": "Pkg Code"
@@ -737,6 +732,19 @@
    "fieldname": "status",
    "fieldtype": "Data",
    "label": "Status"
+  },
+  {
+   "fieldname": "no_of_pkg_hbl",
+   "fieldtype": "Float",
+   "label": "No of Pkg"
+  },
+  {
+   "fieldname": "mbl_link",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "MBL Link",
+   "options": "Import Sea Master Bill",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -755,7 +763,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-24 17:30:52.637927",
+ "modified": "2025-05-26 12:29:29.658344",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

@@ -26,6 +26,7 @@ class ImportSeaMasterBill(Document):
 				atb = self._parse_date(self.atb)
 				if etd > atb:
 					frappe.throw("ETD cannot be less than ATB")
+		self.validate_no_pkg_in_container()
 
 	def _parse_date(self, date_val):
 		# Convert string to datetime.date (if needed)
@@ -39,5 +40,7 @@ class ImportSeaMasterBill(Document):
 			return date_val.date()
 		else:
 			return date_val  
-	def validate_no_of_packages(self):
-		pass
+	def validate_no_pkg_in_container(self):
+		total_no_of_pkg = sum(item.no_of_pkg for item in self.container_info)
+		if total_no_of_pkg != self.no_of_pkg:
+			frappe.throw(f"Total number of package in container does not match with total package in house bill")

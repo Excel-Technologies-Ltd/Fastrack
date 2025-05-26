@@ -45,7 +45,7 @@
   },
   {
    "fieldname": "no_of_pkg",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "in_list_view": 1,
    "label": "No of Pkg"
   },
@@ -111,7 +111,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 18:32:40.278296",
+ "modified": "2025-05-26 11:24:40.110248",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Item",

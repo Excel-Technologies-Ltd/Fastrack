@@ -5,7 +5,8 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
     def set_missing_values(source, target):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Sea Master Bill")
         # 4 array
-        target.mbl_no=source.name
+        target.mbl_link=source.name
+        target.mbl_no=source.mbl_no
         target.hbl_id=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
@@ -286,7 +287,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                     },
                     "Consolidated_Cargo":consolidated_cargo ,
                     "Load_unload_place":{
-                        "Port_of_origin_code=":hbl_doc.port_of_origin_code,
+                        "Port_of_origin_code":hbl_doc.port_of_origin_code,
                         "Port_of_unloading_code":hbl_doc.pod_code
                     },
                     "Traders_segment":{
@@ -318,7 +319,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                     "ctn_segment":get_container_info_for_xml(hbl_doc.container_info),
                     "Goods_segment": {
                             "Number_of_packages": sum(item.no_of_pkg for item in hbl_doc.container_info),
-                            "Package_type_code": "",
+                            "Package_type_code": hbl_doc.pkg_code,
                             "Gross_mass": hbl_doc.hbl_weight,
                             "Shipping_marks": "",
                             "Goods_description": hbl_doc.description_of_good,

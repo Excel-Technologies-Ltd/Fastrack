@@ -39,6 +39,7 @@ class ImportSeaHouseBill(Document):
 		self.average_total = (total_price / total_qty) if total_qty else 0
 		self.validate_container_name()
 		self.validate_container_weight()
+		self.validate_no_pkg_in_container()
 		self.hbl_weight= sum(item.weight for item in self.container_info)
 		self.gross_weight= self.hbl_weight
 		self.total_container_hbl= len(self.container_info)		
@@ -71,10 +72,10 @@ class ImportSeaHouseBill(Document):
 
 
 	def validate_container_weight(self):
-		master_bill_no = self.mbl_no
+		master_bill_no = self.mbl_link
 		for item in self.container_info:
 			get_master_item = get_single_fastrack_item_by_bill_no([master_bill_no], item.custom_container_no)
-			get_existing_house_doc_id = frappe.db.get_list('Import Sea House Bill', {'mbl_no': master_bill_no,'docstatus': 1}, ['name'])
+			get_existing_house_doc_id = frappe.db.get_list('Import Sea House Bill', {'mbl_link': master_bill_no,'docstatus': 1}, ['name'])
 			get_existing_house_doc_id = [doc['name'] for doc in get_existing_house_doc_id]
 			# If this is a new document, exclude it from the existing house bills list
 			if self.name in get_existing_house_doc_id:
@@ -90,8 +91,19 @@ class ImportSeaHouseBill(Document):
 			item_weight = item.weight or 0.0
 			if master_item_weight < house_item_weight + item_weight :
 				frappe.throw(f"Weight mismatch for container: {item.custom_container_no}, should be less than or equal to {get_master_item['weight']}")
+			house_item_no_of_pkg = get_house_item['no_of_pkg'] or 0.0
+			print(get_house_item)
+			master_item_no_of_pkg = get_master_item['no_of_pkg'] or 0.0
+			item_no_of_pkg = item.no_of_pkg or 0.0
+			if master_item_no_of_pkg < house_item_no_of_pkg + item_no_of_pkg:
+				frappe.throw(f"Number of package mismatch for container: {item.custom_container_no}, should be less than or equal to {get_master_item['no_of_pkg']}")
+    
 	def get_invoice_list(self):
 		return [invoice.invoice_link for invoice in self.invoice_list if invoice.invoice_link]
+	def validate_no_pkg_in_container(self):
+		total_no_of_pkg = sum(item.no_of_pkg for item in self.container_info)
+		if total_no_of_pkg != self.no_of_pkg_hbl:
+			frappe.throw(f"Total number of package in container does not match with total package in house bill")
 
 
 @frappe.whitelist()
@@ -100,7 +112,8 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 		return {
 			"item_name": item_name,
 			"seal_no": "",
-			"weight": 0.0
+			"weight": 0.0,
+			"no_of_pkg": 0.0
 		}
 	table_name = 'tabFastrack Item'
 	item_column='container_no'
@@ -119,7 +132,8 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 		SELECT 
 			{item_column} as item_name,
 			seal_no as seal_no,
-			SUM(weight) as weight
+			SUM(weight) as weight,
+			SUM(no_of_pkg) as no_of_pkg
 		FROM `{table_name}`
 		WHERE parenttype = '{parent_type}'
 		AND parent IN ({bill_no_placeholder})
@@ -135,7 +149,8 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 		return {
 			"item_name": item_name,
 			"weight": 0.0,
-			"seal_no": ""
+			"seal_no": "",
+			"no_of_pkg": 0.0
 		}
 
 
