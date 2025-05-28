@@ -257,10 +257,13 @@ def get_first_uncreated_hbl_info(master_bill_no="MBL-2025-05-00008",doctype="Imp
 
 def get_sea_master_bill_dict_for_xml(master_bill_no="MBL-2025-05-00015"):
     doc = frappe.get_doc("Import Sea Master Bill", master_bill_no)
+    first_row=doc.hbl_info[0]
+    first_row_doc=frappe.get_doc("Import Sea House Bill", first_row.hbl_link)
+    print("first_row_doc", first_row_doc)
     return {
         "Awbolds":{
             "Master_bol":{
-                "Custom_office_code":301,
+                "Custom_office_code":first_row_doc.office_code if first_row_doc.office_code else "",
                 "Voyage_number":doc.fv_voyage_no,
                 "Date_of_departure":"2025-05-01",
                 "Reference_number":doc.mbl_no

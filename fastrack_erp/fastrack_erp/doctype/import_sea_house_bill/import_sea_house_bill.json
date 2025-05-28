@@ -43,19 +43,15 @@
   "shipping_line",
   "shippine_line_name",
   "notify_to",
-  "notify_name",
   "notify_bin_no",
   "reference_number",
   "column_break_4tcs4",
   "hbl_shipper",
-  "shipper_name",
   "hbl_consignee",
-  "consignee_name",
   "consignee_bin_no",
   "total_container_hbl",
   "gross_weight",
   "cbm",
-  "package",
   "actual_inco_term",
   "co_loader",
   "hold_instruction",
@@ -172,12 +168,14 @@
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "notify_to.custom_bin_no",
    "fieldname": "notify_bin_no",
    "fieldtype": "Data",
    "label": "Notify Bin No. "
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "hbl_consignee.custom_bin_no",
    "fieldname": "consignee_bin_no",
    "fieldtype": "Data",
    "label": "Consignee Bin No."
@@ -447,26 +445,6 @@
    "label": "Shippine Line Name"
   },
   {
-   "allow_on_submit": 1,
-   "fetch_from": "notify_to.customer_name",
-   "fieldname": "notify_name",
-   "fieldtype": "Data",
-   "label": "Notify Name"
-  },
-  {
-   "fetch_from": "hbl_shipper.supplier_name",
-   "fieldname": "shipper_name",
-   "fieldtype": "Data",
-   "label": "Shipper Name"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "hbl_consignee.customer_name",
-   "fieldname": "consignee_name",
-   "fieldtype": "Data",
-   "label": " Consignee Name"
-  },
-  {
    "fieldname": "inco_term",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -478,8 +456,7 @@
    "allow_on_submit": 1,
    "fieldname": "hbl_line_no",
    "fieldtype": "Data",
-   "label": "Line No.",
-   "reqd": 1
+   "label": "Line No."
   },
   {
    "fieldname": "bl_type_code",
@@ -546,12 +523,6 @@
    "fieldname": "cbm",
    "fieldtype": "Data",
    "label": "CBM"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "package",
-   "fieldtype": "Data",
-   "label": "Package"
   },
   {
    "allow_on_submit": 1,
@@ -735,7 +706,8 @@
   {
    "fieldname": "no_of_pkg_hbl",
    "fieldtype": "Float",
-   "label": "No of Pkg"
+   "label": "No of Pkg",
+   "reqd": 1
   },
   {
    "fieldname": "mbl_link",
@@ -762,7 +734,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-26 13:21:19.107276",
+ "modified": "2025-05-28 10:47:24.389265",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

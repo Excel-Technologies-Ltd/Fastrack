@@ -58,7 +58,7 @@
    "fieldtype": "Link",
    "label": "MBL Open By",
    "options": "User",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "serial_no",
@@ -320,7 +320,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-26 11:24:58.585115",
+ "modified": "2025-05-28 10:31:19.256015",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

@@ -3,10 +3,13 @@ from frappe.model.document import Document
 from datetime import datetime
 
 class ImportSeaMasterBill(Document):
-	# Copyright (c) 2025, Shaid Azmin and contributors
-	# For license information, please see license.txt
+	def before_save(self):
+		self.mbl_open_by= frappe.session.user
+		if not self.mbl_date:
+			self.mbl_date= datetime.now().date()
 	def on_update(self):
 		# Proceed only if ETD and at least one of ETA, ATA_CTG, or ATB are set
+  
 		if self.etd:
 			etd = self._parse_date(self.etd)
 			print(etd)
