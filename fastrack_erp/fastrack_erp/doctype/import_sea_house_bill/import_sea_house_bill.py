@@ -113,7 +113,8 @@ def get_single_fastrack_item_by_bill_no(bill_no, item_name, parent_type='Import 
 			"item_name": item_name,
 			"seal_no": "",
 			"weight": 0.0,
-			"no_of_pkg": 0.0
+			"no_of_pkg": 0.0,
+
 		}
 	table_name = 'tabFastrack Item'
 	item_column='container_no'

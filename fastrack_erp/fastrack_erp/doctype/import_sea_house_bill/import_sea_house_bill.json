@@ -59,6 +59,7 @@
   "fv__v_no",
   "fv_etd",
   "etb",
+  "mv_etd",
   "mbl_surrender_status",
   "section_break_tvziq",
   "port_of_loading",
@@ -685,12 +686,12 @@
   },
   {
    "fieldname": "fv_etd",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "FV ETD "
   },
   {
    "fieldname": "etb",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ETB"
   },
   {
@@ -716,6 +717,11 @@
    "label": "MBL Link",
    "options": "Import Sea Master Bill",
    "reqd": 1
+  },
+  {
+   "fieldname": "mv_etd",
+   "fieldtype": "Date",
+   "label": "MV ETD"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -734,7 +740,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-05-28 10:47:24.389265",
+ "modified": "2025-06-03 00:06:42.872587",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

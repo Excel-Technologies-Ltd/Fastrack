@@ -242,7 +242,9 @@ fixtures = [
                   "Journal Entry-custom_hbl_type",
                   "Journal Entry-custom_shbl_id",
                   "Purchase Invoice-custom_hbl_type",
-                  "Purchase Invoice-custom_shbl_id"
+                  "Purchase Invoice-custom_shbl_id",
+                  "Payment Entry-custom_on_behalf_of_customer"
+                 
                 ],
             ],
         ]
@@ -255,6 +257,7 @@ fixtures = [
                 "in",
                 [
                     "Customer-main-field_order",
+                    
                 ]
             ]
         ]

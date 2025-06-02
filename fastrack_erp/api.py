@@ -13,7 +13,6 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
         target.date_of_departure=source.etd
-        target.date_of_arrival=source.eta
     doclist = get_mapped_doc("Import Sea Master Bill", source_name, {
         "Import Sea Master Bill": {
             "doctype": "Import Sea House Bill",
@@ -46,6 +45,7 @@ def make_sales_invoice_from_hbl(source_name, target_doc=None):
     def set_missing_values(source, target):
         target.custom_hbl_sea_link=source.name
         target.custom_hbl_type="Import Sea House Bill"
+        target.customer=""
     doclist = get_mapped_doc("Import Sea House Bill", source_name, {
         "Import Sea House Bill": {
             "doctype": "Sales Invoice",

@@ -27,6 +27,7 @@
   "gr_weight",
   "fv_voyage_no",
   "ata_ctg",
+  "fv_etd",
   "column_break_mtgyt",
   "agent",
   "agent_address",
@@ -310,6 +311,11 @@
    "fieldname": "ata_ctg",
    "fieldtype": "Date",
    "label": "ATA (CTG)"
+  },
+  {
+   "fieldname": "fv_etd",
+   "fieldtype": "Date",
+   "label": "FV ETD"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -320,7 +326,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-05-28 10:31:19.256015",
+ "modified": "2025-06-03 00:09:12.027516",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
