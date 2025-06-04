@@ -4,7 +4,8 @@ from datetime import datetime
 
 class ImportSeaMasterBill(Document):
 	def before_save(self):
-		self.mbl_open_by= frappe.session.user
+		if not self.mbl_open_by:
+			self.mbl_open_by= frappe.session.user
 		if not self.mbl_date:
 			self.mbl_date= datetime.now().date()
 	def on_update(self):

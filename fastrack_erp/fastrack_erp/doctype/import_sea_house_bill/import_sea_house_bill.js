@@ -8,6 +8,11 @@ frappe.ui.form.on('Import Sea House Bill', {
         console.log(total_qty)
         frm.set_value("average_total", total_price/total_qty);
     },
+    onload: function(frm){
+        if(frm.is_new()){
+            frm.set_value("hbl_open_by",frappe.session.user)
+        }    
+    },
    
     refresh: function(frm) {
        if(frm.doc.docstatus==1){
