@@ -227,7 +227,7 @@
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Customer"
+   "options": "Supplier"
   },
   {
    "fieldname": "amended_from",
@@ -782,7 +782,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-04 16:06:02.059772",
+ "modified": "2025-06-16 11:05:48.641991",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
