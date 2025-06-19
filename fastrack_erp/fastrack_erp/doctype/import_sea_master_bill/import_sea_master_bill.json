@@ -79,7 +79,7 @@
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Customer",
+   "options": "Supplier",
    "reqd": 1
   },
   {
@@ -326,7 +326,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-06-04 10:33:43.423185",
+ "modified": "2025-06-19 10:33:35.699194",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
