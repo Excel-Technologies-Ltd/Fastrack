@@ -132,7 +132,15 @@ doc_events = {
  "Sales Invoice": {
 	"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
 	"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
- }
+ },
+ "Purchase Invoice": {
+	"on_submit": "fastrack_erp.doc_events.purchase_invoice.after_submit",
+	"before_cancel": "fastrack_erp.doc_events.purchase_invoice.on_cancel",
+ },
+ "Journal Entry": {
+	"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
+	"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
+ },
 }
 
 # Scheduled Tasks

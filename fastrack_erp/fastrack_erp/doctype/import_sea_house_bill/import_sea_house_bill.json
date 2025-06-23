@@ -36,7 +36,6 @@
   "port_of_delivery",
   "pod_code",
   "mv_voyage_no",
-  "voy_no",
   "hbl_consignee",
   "consignee_bin_no",
   "lc",
@@ -44,7 +43,6 @@
   "pkg_name",
   "fv__v_no",
   "etb",
-  "hbl_place_of_unloading",
   "column_break_r8svn",
   "reference_number",
   "mbl_date",
@@ -66,7 +64,6 @@
   "eta_dhaka",
   "section_break_tvziq",
   "hbl_port_of_origin",
-  "date_of_departure",
   "carrier_name",
   "bl_type_code",
   "agent_name",
@@ -85,6 +82,10 @@
   "total_invoice_amount",
   "payment_entry_list",
   "total_payment",
+  "purchase_invoice_list",
+  "total_purchase_amount",
+  "profit_share_list",
+  "total_profit_share",
   "section_break_nfgoz",
   "description_of_good",
   "column_break_za24b",
@@ -131,19 +132,6 @@
    "label": "Office Name"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "voy_no",
-   "fieldtype": "Data",
-   "label": "Voy No."
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "mbl_no.etd",
-   "fieldname": "date_of_departure",
-   "fieldtype": "Date",
-   "label": "Date of Departure"
-  },
-  {
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -163,6 +151,7 @@
    "label": "DG Status"
   },
   {
+   "fetch_from": "carrier.custom_ain_no",
    "fieldname": "carrier_code",
    "fieldtype": "Data",
    "label": "Carrier Code"
@@ -413,12 +402,6 @@
    "fieldname": "hbl_port_of_origin",
    "fieldtype": "Data",
    "label": "Port Of Origin"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_place_of_unloading",
-   "fieldtype": "Data",
-   "label": "Place Of Unloading"
   },
   {
    "allow_on_submit": 1,
@@ -764,6 +747,36 @@
    "fieldname": "hbl_remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "purchase_invoice_list",
+   "fieldtype": "Table",
+   "label": "Expense List",
+   "options": "Fastrack Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_purchase_amount",
+   "fieldtype": "Currency",
+   "label": "Total Expense Amount",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "profit_share_list",
+   "fieldtype": "Table",
+   "label": "Profit Share List",
+   "options": "Fastrack Journal Entry",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_profit_share",
+   "fieldtype": "Currency",
+   "label": "Total Profit Share",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -782,7 +795,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-19 10:34:10.370426",
+ "modified": "2025-06-23 13:39:34.096457",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

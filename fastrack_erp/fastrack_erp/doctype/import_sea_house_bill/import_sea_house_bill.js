@@ -15,6 +15,14 @@ frappe.ui.form.on('Import Sea House Bill', {
     },
    
     refresh: function(frm) {
+        const expense_list=frm.doc.purchase_invoice_list
+        const format_expense=expense_list.map(expense => {
+            return {
+                    label: __(expense.invoice_link),
+                    fieldname: expense.invoice_link,
+                    fieldtype: 'Check',
+            }
+        })
        if(frm.doc.docstatus==1){
         frm.add_custom_button(__("Sales Invoice"), function () {
             frappe.model.open_mapped_doc({
@@ -35,7 +43,79 @@ frappe.ui.form.on('Import Sea House Bill', {
             });
         },__("Create"));
     }
-    },
+    frm.add_custom_button(__('DownLoad Expense PDF'), function() {
+        let dialog = new frappe.ui.Dialog({
+            title: __('Select Options'),
+            fields: [
+                ...format_expense,
+            ],
+            primary_action_label: __('Download Selected'),
+            primary_action(values) {
+                console.log(values)
+                const filteredInvoices = Object.entries(values)
+                .filter(([key, value]) => value == 1)
+                .map(([key, value]) => key);
+                if (filteredInvoices.length===0){
+                    frappe.msgprint("Please select an option")
+                    return
+                }
+                if(filteredInvoices.length > 0){
+                    console.log(filteredInvoices)
+                    // frappe.call({
+                    //     method: "fastrack_erp.api.download_purchase_invoice_pdf",  // Path to the method
+                    //     args: {
+                    //         invoice_ids: filteredInvoices.join(',') // Send as comma-separated string
+                    //     },
+                    //     callback: function(response) {
+                    //         if (response.message) {
+                    //             console.log(response.message)
+                    //         } else {
+                    //             frappe.msgprint(__('Failed to generate PDF.'));
+                    //         }
+                    //     }
+                    // });
+                    // Create a form and submit it to trigger file download
+                const url = `/api/method/fastrack_erp.api.download_purchase_invoice_pdf`;
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                form.target = '_blank'; // Optional: open in new tab
+                
+                // Add CSRF token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrf_token';
+                csrfToken.value = frappe.csrf_token;
+                form.appendChild(csrfToken);
+                
+                // Add invoice_ids parameter
+                const invoiceInput = document.createElement('input');
+                invoiceInput.type = 'hidden';
+                invoiceInput.name = 'invoice_ids';
+                invoiceInput.value = filteredInvoices.join(',');
+                form.appendChild(invoiceInput);
+                
+                // Add form to document, submit, and remove
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+                
+                // Hide loading message after a delay
+                setTimeout(() => {
+                    frappe.show_alert({
+                        message: __('PDF download started'),
+                        indicator: 'green'
+                    });
+                }, 1000);
+                }
+
+                dialog.hide();
+            }
+        });
+
+        dialog.show();
+    });
+},
     generate:function(frm){
      
             const container_items = frm.doc.container_info;
