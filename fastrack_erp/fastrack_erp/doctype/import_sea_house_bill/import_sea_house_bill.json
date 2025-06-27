@@ -130,6 +130,7 @@
    "label": "Office Name"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -149,6 +150,7 @@
    "label": "DG Status"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "carrier.custom_ain_no",
    "fieldname": "carrier_code",
    "fieldtype": "Data",
@@ -176,6 +178,7 @@
    "label": "Consignee Bin No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "marks_and_numbers",
    "fieldtype": "Data",
    "label": "Marks and Numbers"
@@ -193,6 +196,7 @@
    "options": "Fastrack Sea Item"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "column_break_r8svn",
    "fieldtype": "Column Break"
   },
@@ -204,6 +208,7 @@
    "options": "Supplier"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "mbl_no.consignee",
    "fieldname": "carrier",
    "fieldtype": "Link",
@@ -211,6 +216,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
@@ -435,6 +441,7 @@
    "label": "Shippine Line Name"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "inco_term",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -493,6 +500,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gross_weight",
    "fieldtype": "Float",
    "label": "Gross Weight",
@@ -512,6 +520,7 @@
    "options": "\nPrepaid\nCollect\nEx-work"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -542,6 +551,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "mbl_no.eta",
    "fetch_if_empty": 1,
    "fieldname": "eta",
@@ -549,6 +559,7 @@
    "label": "ETA"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "mbl_no.port_of_delivery",
    "fetch_if_empty": 1,
    "fieldname": "port_of_delivery",
@@ -586,89 +597,106 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_date",
    "fieldtype": "Date",
    "label": "HBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pod_code",
    "fieldtype": "Data",
    "label": "POD Code"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "mbl_no.mv",
    "fieldname": "mv",
    "fieldtype": "Data",
    "label": "MV"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "mbl_no.mv_voyage_no",
    "fieldname": "mv_voyage_no",
    "fieldtype": "Data",
    "label": "MV Voyage No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "reference_number",
    "fieldtype": "Data",
    "label": "Reference Number"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "customer.custom_bin_no",
    "fieldname": "customer_bin_no",
    "fieldtype": "Data",
    "label": "Customer Bin No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc",
    "fieldtype": "Data",
    "label": "LC"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_date",
    "fieldtype": "Date",
    "label": "LC Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pkg_code",
    "fieldtype": "Data",
    "label": "Pkg Code"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "fv",
    "fieldtype": "Data",
    "label": "FV"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "fv__v_no",
    "fieldtype": "Data",
    "label": "FV Voyage No"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "fv_etd",
    "fieldtype": "Date",
    "label": "FV ETD "
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "etb",
    "fieldtype": "Date",
    "label": "ETB"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_surrender_status",
    "fieldtype": "Data",
    "label": "MBL Surrender Status"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "status",
    "fieldtype": "Data",
    "label": "Status"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "no_of_pkg_hbl",
    "fieldtype": "Float",
    "label": "No of Pkg",
@@ -690,6 +718,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_etd",
    "fieldtype": "Date",
    "label": "ETD"
@@ -699,11 +728,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pkg_name",
    "fieldtype": "Data",
    "label": "Pkg Name"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "eta_dhaka",
    "fieldtype": "Date",
    "label": "ETA DHAKA"
@@ -717,6 +748,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_remarks",
    "fieldtype": "Data",
    "label": "Remarks"
@@ -763,6 +795,7 @@
    "label": "Port of Discharge"
   },
   {
+   "allow_on_submit": 1,
    "default": "0",
    "description": "If checked delivery order details will be hide",
    "fieldname": "hbl_hold_instruction",
@@ -786,7 +819,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-27 12:02:53.433853",
+ "modified": "2025-06-28 05:13:14.256564",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

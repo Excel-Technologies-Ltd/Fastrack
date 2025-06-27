@@ -6,12 +6,13 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Sea Master Bill")
         # 4 array
         target.mbl_link=source.name
-        target.mbl_no=source.mbl_no
+        target.hbl_doc_name=hbl_info.name
+        target.mbl_doctype=hbl_info.parenttype    
         target.hbl_id=hbl_info.hbl_no
+        target.mbl_no=source.mbl_no
         target.carrier=source.consignee
         target.agent=source.agent
-        target.hbl_doc_name=hbl_info.name
-        target.mbl_doctype=hbl_info.parenttype
+
         target.hbl_etd=source.etd
         target.fv_voyage_no=source.fv_voyage_no
         target.port_of_discharge=source.port_of_discharge

@@ -8,9 +8,27 @@ class ImportSeaMasterBill(Document):
 			self.mbl_open_by= frappe.session.user
 		if not self.mbl_date:
 			self.mbl_date= datetime.now().date()
-	def on_update(self):
-		# Proceed only if ETD and at least one of ETA, ATA_CTG, or ATB are set
-  
+
+	def on_update_after_submit(self):
+		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name},pluck="name")
+		for hbl_name in hbl_docs:
+			hbl_doc = frappe.get_doc("Import Sea House Bill", hbl_name)
+			hbl_doc.mbl_no= self.mbl_no if self.mbl_no else hbl_doc.mbl_no
+			hbl_doc.mv= self.mv if self.mv else hbl_doc.mv
+			hbl_doc.port_of_loading= self.port_of_loading if self.port_of_loading else hbl_doc.port_of_loading
+			hbl_doc.fv= self.fv if self.fv else hbl_doc.fv
+			hbl_doc.mbl_date= self.mbl_date if self.mbl_date else hbl_doc.mbl_date
+			hbl_doc.mv_voyage_no= self.mv_voyage_no if self.mv_voyage_no else hbl_doc.mv_voyage_no
+			hbl_doc.port_of_discharge= self.port_of_discharge if self.port_of_discharge else hbl_doc.port_of_discharge
+			hbl_doc.fv__v_no= self.fv_voyage_no if self.fv_voyage_no else hbl_doc.fv__v_no
+			hbl_doc.agent=self.agent if self.agent else hbl_doc.agent
+			hbl_doc.shipping_line=self.shipping_line if self.shipping_line else hbl_doc.shipping_line
+			hbl_doc.carrier=self.consignee if self.consignee else hbl_doc.carrier
+			hbl_doc.port_of_delivery=self.port_of_delivery if self.port_of_delivery else hbl_doc.port_of_delivery
+			hbl_doc.fv_etd=self.fv_etd if self.fv_etd else hbl_doc.fv_etd
+			hbl_doc.save()
+		
+	def on_update(self):	
 		if self.etd:
 			etd = self._parse_date(self.etd)
 			print(etd)
