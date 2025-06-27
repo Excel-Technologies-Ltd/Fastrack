@@ -21,8 +21,7 @@ def validate(doc, method):
     if not len(hbl_info)== total_no_of_hbl:
         frappe.throw(f"HBL list should be equal to {total_no_of_hbl}")
     total_weight_of_container_list= sum(container.weight for container in container_info) or 0
-    print(total_weight_of_container_list)
-    print(gr_weight)
+
     if not gr_weight == total_weight_of_container_list and doc.doctype == "Import Sea Master Bill":
         frappe.throw("Total weight of container list is not equal to gross weight")
         
@@ -34,6 +33,11 @@ def validate(doc, method):
         frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
     if gr_weight< total_weight_of_hbl_list:
         frappe.throw("HBL weight is greater than gross weight")
+    # vaidate cbm 
+    if doc.doctype == "Import Sea Master Bill":
+        total_cbm=sum(container.cbm for container in container_info)
+        if not total_cbm == doc.vol_cbm:
+            frappe.throw("Total Vol (CBM)  is not equal to Master Vol (CBM)")
 
 
 def update_child_hbl(doc, method):

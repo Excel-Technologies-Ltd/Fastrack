@@ -32,13 +32,15 @@
   "hbl_date",
   "office_name",
   "nature",
-  "hold_instruction",
+  "hbl_hold_instruction",
   "port_of_delivery",
   "pod_code",
   "mv_voyage_no",
+  "hbl_remarks",
   "hbl_consignee",
   "consignee_bin_no",
   "lc",
+  "description_of_good",
   "gross_weight",
   "pkg_name",
   "fv__v_no",
@@ -51,7 +53,7 @@
   "inco_term",
   "actual_inco_term",
   "co_loader",
-  "port_of_departure",
+  "port_of_discharge",
   "carrier",
   "carrier_code",
   "notify_to",
@@ -65,15 +67,13 @@
   "section_break_tvziq",
   "hbl_port_of_origin",
   "carrier_name",
-  "bl_type_code",
+  "hbl_type_code",
   "agent_name",
   "shippine_line_name",
   "column_break_2x4cp",
   "total_container_hbl",
   "port_of_departure_code",
-  "mv_etd",
   "column_break_svasa",
-  "eta_icd",
   "date_of_arrival",
   "ata_ctg",
   "section_break_vf8zr",
@@ -87,9 +87,7 @@
   "profit_share_list",
   "total_profit_share",
   "section_break_nfgoz",
-  "description_of_good",
   "column_break_za24b",
-  "hbl_remarks",
   "amended_from",
   "section_break_hgk7r",
   "do_validity",
@@ -160,7 +158,7 @@
    "allow_on_submit": 1,
    "fieldname": "notify_to",
    "fieldtype": "Link",
-   "label": "Notify To",
+   "label": "Notify Party",
    "options": "Customer"
   },
   {
@@ -168,7 +166,7 @@
    "fetch_from": "notify_to.custom_bin_no",
    "fieldname": "notify_bin_no",
    "fieldtype": "Data",
-   "label": "Notify Bin No. "
+   "label": "Notify Party Bin No."
   },
   {
    "allow_on_submit": 1,
@@ -185,8 +183,8 @@
   {
    "allow_on_submit": 1,
    "fieldname": "description_of_good",
-   "fieldtype": "Small Text",
-   "label": "Description Of Good"
+   "fieldtype": "Data",
+   "label": "Goods Description"
   },
   {
    "fieldname": "container_info",
@@ -203,7 +201,7 @@
    "fieldname": "shipping_line",
    "fieldtype": "Link",
    "label": "Shipping Line",
-   "options": "Customer"
+   "options": "Supplier"
   },
   {
    "fetch_from": "mbl_no.consignee",
@@ -258,6 +256,7 @@
   {
    "allow_on_submit": 1,
    "collapsible": 1,
+   "depends_on": "eval:doc.hbl_hold_instruction==0",
    "fieldname": "section_break_hgk7r",
    "fieldtype": "Section Break",
    "label": "Delivery Order Details"
@@ -314,7 +313,7 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "shipping_line.customer_name",
+   "fetch_from": "shipping_line.supplier_name",
    "fieldname": "bl_no",
    "fieldtype": "Data",
    "label": "B/L No"
@@ -347,7 +346,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "ocean_freight_remarks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Ocean Freight Remarks"
   },
   {
@@ -406,7 +405,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "remarks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Remarks"
   },
   {
@@ -430,7 +429,7 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "shipping_line.customer_name",
+   "fetch_from": "shipping_line.supplier_name",
    "fieldname": "shippine_line_name",
    "fieldtype": "Data",
    "label": "Shippine Line Name"
@@ -450,11 +449,6 @@
    "label": "Line No."
   },
   {
-   "fieldname": "bl_type_code",
-   "fieldtype": "Data",
-   "label": "BL Type Code"
-  },
-  {
    "fieldname": "section_break_tvziq",
    "fieldtype": "Section Break"
   },
@@ -462,19 +456,13 @@
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
-   "label": "POL"
+   "label": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_origin_code",
    "fieldtype": "Data",
    "label": "POL Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "port_of_departure",
-   "fieldtype": "Data",
-   "label": "Port of Departure"
   },
   {
    "allow_on_submit": 1,
@@ -507,13 +495,14 @@
   {
    "fieldname": "gross_weight",
    "fieldtype": "Float",
-   "label": "Gross Weight"
+   "label": "Gross Weight",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "cbm",
    "fieldtype": "Data",
-   "label": "CBM"
+   "label": "VOl (CBM)"
   },
   {
    "allow_on_submit": 1,
@@ -560,17 +549,11 @@
    "label": "ETA"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "eta_icd",
-   "fieldtype": "Date",
-   "label": "ETA (ICD)"
-  },
-  {
    "fetch_from": "mbl_no.port_of_delivery",
    "fetch_if_empty": 1,
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
-   "label": "POD"
+   "label": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -635,11 +618,6 @@
    "label": "Reference Number"
   },
   {
-   "fieldname": "hold_instruction",
-   "fieldtype": "Data",
-   "label": "Hold Instruction"
-  },
-  {
    "fetch_from": "customer.custom_bin_no",
    "fieldname": "customer_bin_no",
    "fieldtype": "Data",
@@ -668,7 +646,7 @@
   {
    "fieldname": "fv__v_no",
    "fieldtype": "Data",
-   "label": "FV  V. No."
+   "label": "FV Voyage No"
   },
   {
    "fieldname": "fv_etd",
@@ -703,11 +681,6 @@
    "label": "MBL Link",
    "options": "Import Sea Master Bill",
    "reqd": 1
-  },
-  {
-   "fieldname": "mv_etd",
-   "fieldtype": "Date",
-   "label": "MV ETD"
   },
   {
    "fieldname": "hbl_open_by",
@@ -745,7 +718,7 @@
   },
   {
    "fieldname": "hbl_remarks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Remarks"
   },
   {
@@ -777,6 +750,24 @@
    "fieldtype": "Currency",
    "label": "Total Profit Share",
    "read_only": 1
+  },
+  {
+   "fieldname": "hbl_type_code",
+   "fieldtype": "Data",
+   "label": "HBL Type Code"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port of Discharge"
+  },
+  {
+   "default": "0",
+   "description": "If checked delivery order details will be hide",
+   "fieldname": "hbl_hold_instruction",
+   "fieldtype": "Check",
+   "label": "Hold Instruction"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -795,7 +786,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-23 13:39:34.096457",
+ "modified": "2025-06-27 12:02:53.433853",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

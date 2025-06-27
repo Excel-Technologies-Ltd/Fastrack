@@ -13,6 +13,13 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
         target.hbl_etd=source.etd
+        target.fv_voyage_no=source.fv_voyage_no
+        target.port_of_discharge=source.port_of_discharge
+        target.mv_voyage_no=source.mv_voyage_no
+        target.mbl_date=source.mbl_date
+        target.port_of_delivery=source.port_of_delivery
+        target.fv_etd=source.fv_etd
+        
     doclist = get_mapped_doc("Import Sea Master Bill", source_name, {
         "Import Sea Master Bill": {
             "doctype": "Import Sea House Bill",
@@ -265,7 +272,7 @@ def get_sea_master_bill_dict_for_xml(master_bill_no="MBL-2025-05-00015"):
             "Master_bol":{
                 "Custom_office_code":first_row_doc.office_code if first_row_doc.office_code else "",
                 "Voyage_number":doc.fv_voyage_no,
-                "Date_of_departure":doc.etd,
+                "Date_of_departure":doc.fv_etd,
                 "Reference_number":doc.mbl_no
             },
             # convert dict to list
@@ -286,7 +293,8 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Bol_reference":hbl_doc.hbl_id,
                         "Line_number":1,
                         "Bol_nature":hbl_doc.nature,
-                        "Bol_type_code":hbl_doc.bl_type_code
+                        "Bol_type_code":hbl_doc.bl_type_code,
+                        "DG_status":hbl_doc.dg_status
                     },
                     "Consolidated_Cargo":consolidated_cargo ,
                     "Load_unload_place":{
@@ -321,12 +329,12 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                     },
                     "ctn_segment":get_container_info_for_xml(hbl_doc.container_info),
                     "Goods_segment": {
-                            "Number_of_packages": sum(item.no_of_pkg for item in hbl_doc.container_info),
+                            "Number_of_packages": int(sum(item.no_of_pkg for item in hbl_doc.container_info)),
                             "Package_type_code": hbl_doc.pkg_code,
-                            "Gross_mass": hbl_doc.hbl_weight,
+                            "Gross_mass": int(hbl_doc.hbl_weight),
                             "Shipping_marks": "",
                             "Goods_description": hbl_doc.description_of_good,
-                            "Volume_in_cubic_meters": 100,
+                            "Volume_in_cubic_meters": hbl_doc.cbm,
                             "Num_of_ctn_for_this_bol": len(hbl_doc.container_info),
                             "Remarks": hbl_doc.remarks
                         },
@@ -347,7 +355,7 @@ def get_container_info_for_xml(container_info_list=["ACC-PINV-2025-00002"]):
     for container_info in container_info_list:
         container_info_list_for_xml.append({
                 "Ctn_reference": container_info.custom_container_no,
-                "Number_of_packages": container_info.no_of_pkg,
+                "Number_of_packages": int(container_info.no_of_pkg),
                 "Type_of_container": container_info.con_type,
                 "Status": container_info.status,
                 "Seal_number": container_info.seal_no,
@@ -355,7 +363,7 @@ def get_container_info_for_xml(container_info_list=["ACC-PINV-2025-00002"]):
                 "UN": container_info.un,
                 "Ctn_location": container_info.ctn_location,
                 "Commidity_code": container_info.commodity_code,
-                "Gross_weight": container_info.weight
+                "Gross_weight": int(container_info.weight)
         })
     return container_info_list_for_xml
 
