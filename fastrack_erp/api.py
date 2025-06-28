@@ -12,7 +12,6 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
         target.mbl_no=source.mbl_no
         target.carrier=source.consignee
         target.agent=source.agent
-
         target.hbl_etd=source.etd
         target.fv_voyage_no=source.fv_voyage_no
         target.port_of_discharge=source.port_of_discharge
@@ -335,7 +334,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Gross_mass": int(hbl_doc.hbl_weight),
                             "Shipping_marks": "",
                             "Goods_description": hbl_doc.description_of_good,
-                            "Volume_in_cubic_meters": hbl_doc.cbm,
+                            "Volume_in_cubic_meters": int(hbl_doc.cbm),
                             "Num_of_ctn_for_this_bol": len(hbl_doc.container_info),
                             "Remarks": hbl_doc.remarks
                         },
