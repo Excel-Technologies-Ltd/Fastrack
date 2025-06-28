@@ -201,6 +201,11 @@ def dict_to_xml_without_item_tags(data, root_name):
 
 @frappe.whitelist()
 def download_xml_as_pdf(doctype="Import Sea Master Bill", docname="MBL-2025-05-00015"):
+    # check exist hbl
+    hbl_dict = get_sea_master_bill_dict_for_xml(docname)
+    if not hbl_dict:
+        frappe.msgprint("No House Bill found for the Master Bill. Please create House Bill first.This is required to generate XML.")
+        return
     clean_dict = sanitize_dict(get_sea_master_bill_dict_for_xml(docname)).get("Awbolds")
 
     # Convert to XML without item tags
@@ -265,8 +270,10 @@ def get_first_uncreated_hbl_info(master_bill_no="MBL-2025-05-00008",doctype="Imp
 def get_sea_master_bill_dict_for_xml(master_bill_no="MBL-2025-05-00015"):
     doc = frappe.get_doc("Import Sea Master Bill", master_bill_no)
     first_row=doc.hbl_info[0]
+    # check exits
+    if not frappe.db.exists("Import Sea House Bill", first_row.hbl_link) or len(doc.hbl_info)==0:
+        return None
     first_row_doc=frappe.get_doc("Import Sea House Bill", first_row.hbl_link)
-    print("first_row_doc", first_row_doc)
     return {
         "Awbolds":{
             "Master_bol":{
@@ -291,7 +298,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                 hbl_dict_for_xml= {
                     "Bol_id":{
                         "Bol_reference":hbl_doc.hbl_id,
-                        "Line_number":hbl_info.hbl_line_no,
+                        "Line_number":hbl_doc.hbl_line_no,
                         "Bol_nature":hbl_doc.nature,
                         "Bol_type_code":hbl_doc.hbl_type_code,
                         "DG_status":hbl_doc.dg_status
@@ -334,7 +341,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Gross_mass": int(hbl_doc.hbl_weight),
                             "Shipping_marks": hbl_doc.marks_and_numbers,
                             "Goods_description": hbl_doc.description_of_good,
-                            "Volume_in_cubic_meters": int(hbl_doc.cbm),
+                            "Volume_in_cubic_meters": int(hbl_doc.vol_cbm),
                             "Num_of_ctn_for_this_bol": len(hbl_doc.container_info),
                             "Remarks": hbl_doc.remarks
                         },

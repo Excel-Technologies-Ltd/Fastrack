@@ -61,7 +61,7 @@
   "notify_to",
   "notify_bin_no",
   "lc_date",
-  "cbm",
+  "vol_cbm",
   "status",
   "hbl_line_no",
   "fv_etd",
@@ -481,12 +481,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "cbm",
-   "fieldtype": "Data",
-   "label": "VOl (CBM)"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "actual_inco_term",
    "fieldtype": "Select",
    "label": "Actual Inco Term",
@@ -770,6 +764,12 @@
    "fieldname": "hbl_hold_instruction",
    "fieldtype": "Check",
    "label": "Hold Instruction"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vol_cbm",
+   "fieldtype": "Int",
+   "label": "VOl (CBM)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -788,7 +788,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-28 13:38:34.934920",
+ "modified": "2025-06-28 15:56:40.663730",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
