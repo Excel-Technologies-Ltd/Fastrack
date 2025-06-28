@@ -12,6 +12,7 @@
   "mbl_no",
   "hbl_id",
   "office_code",
+  "hbl_type_code",
   "dg_status",
   "port_of_loading",
   "port_of_origin_code",
@@ -25,7 +26,7 @@
   "marks_and_numbers",
   "fv",
   "eta",
-  "hbl_line_no",
+  "mbl_surrender_status",
   "column_break_twikq",
   "sales_person",
   "mbl_link",
@@ -33,18 +34,19 @@
   "office_name",
   "nature",
   "hbl_hold_instruction",
-  "port_of_delivery",
+  "port_of_discharge",
   "pod_code",
   "mv_voyage_no",
   "hbl_remarks",
   "hbl_consignee",
   "consignee_bin_no",
   "lc",
-  "description_of_good",
   "gross_weight",
   "pkg_name",
+  "description_of_good",
   "fv__v_no",
   "etb",
+  "total_container_hbl",
   "column_break_r8svn",
   "reference_number",
   "mbl_date",
@@ -52,8 +54,8 @@
   "shipping_line",
   "inco_term",
   "actual_inco_term",
+  "port_of_delivery",
   "co_loader",
-  "port_of_discharge",
   "carrier",
   "carrier_code",
   "notify_to",
@@ -61,21 +63,14 @@
   "lc_date",
   "cbm",
   "status",
-  "mbl_surrender_status",
+  "hbl_line_no",
   "fv_etd",
   "eta_dhaka",
   "section_break_tvziq",
-  "hbl_port_of_origin",
   "carrier_name",
-  "hbl_type_code",
   "agent_name",
   "shippine_line_name",
-  "column_break_2x4cp",
-  "total_container_hbl",
-  "port_of_departure_code",
   "column_break_svasa",
-  "date_of_arrival",
-  "ata_ctg",
   "section_break_vf8zr",
   "container_info",
   "invoice_list",
@@ -248,19 +243,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "mbl_no.eta",
-   "fieldname": "date_of_arrival",
-   "fieldtype": "Date",
-   "label": "Date Of Arrival"
-  },
-  {
-   "fetch_from": "mbl_no.ata_ctg",
-   "fieldname": "ata_ctg",
-   "fieldtype": "Date",
-   "label": "ATA (CTG)"
-  },
-  {
-   "allow_on_submit": 1,
    "collapsible": 1,
    "depends_on": "eval:doc.hbl_hold_instruction==0",
    "fieldname": "section_break_hgk7r",
@@ -404,12 +386,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "hbl_port_of_origin",
-   "fieldtype": "Data",
-   "label": "Port Of Origin"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "remarks",
    "fieldtype": "Data",
    "label": "Remarks"
@@ -423,6 +399,7 @@
    "fetch_from": "carrier.customer_name",
    "fieldname": "carrier_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Carrier Name",
    "read_only": 1
   },
@@ -430,6 +407,7 @@
    "fetch_from": "agent.supplier_name",
    "fieldname": "agent_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Agent Name",
    "read_only": 1
   },
@@ -438,6 +416,7 @@
    "fetch_from": "shipping_line.supplier_name",
    "fieldname": "shippine_line_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Shippine Line Name"
   },
   {
@@ -470,12 +449,6 @@
    "fieldname": "port_of_origin_code",
    "fieldtype": "Data",
    "label": "POL Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "port_of_departure_code",
-   "fieldtype": "Data",
-   "label": "Port of Departure Code"
   },
   {
    "allow_on_submit": 1,
@@ -538,10 +511,6 @@
   {
    "fieldname": "section_break_vf8zr",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "column_break_2x4cp",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -819,7 +788,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-28 05:13:14.256564",
+ "modified": "2025-06-28 13:38:34.934920",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

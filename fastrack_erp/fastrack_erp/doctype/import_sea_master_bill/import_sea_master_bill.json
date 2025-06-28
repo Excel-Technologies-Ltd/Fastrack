@@ -10,6 +10,7 @@
  "field_order": [
   "section_break_rzyek",
   "naming_series",
+  "naming_series_2",
   "mbl_no",
   "mv",
   "etd",
@@ -251,8 +252,10 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "in_preview": 1,
    "label": "Naming Series",
    "options": "SMBL-.YYYY.-.MM.-",
    "reqd": 1
@@ -342,6 +345,12 @@
    "fieldname": "mbl",
    "fieldtype": "Read Only",
    "label": "MBL"
+  },
+  {
+   "fieldname": "naming_series_2",
+   "fieldtype": "Data",
+   "label": "Naming Series",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -352,7 +361,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-06-28 03:52:53.743828",
+ "modified": "2025-06-28 14:04:59.463230",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

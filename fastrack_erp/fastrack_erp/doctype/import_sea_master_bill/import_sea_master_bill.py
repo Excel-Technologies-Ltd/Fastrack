@@ -8,6 +8,8 @@ class ImportSeaMasterBill(Document):
 			self.mbl_open_by= frappe.session.user
 		if not self.mbl_date:
 			self.mbl_date= datetime.now().date()
+		if not self.naming_series_2:
+			self.naming_series_2= self.naming_series
 
 	def on_update_after_submit(self):
 		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name},pluck="name")
