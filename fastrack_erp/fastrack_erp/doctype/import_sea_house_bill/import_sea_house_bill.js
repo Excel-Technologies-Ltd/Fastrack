@@ -18,8 +18,8 @@ frappe.ui.form.on('Import Sea House Bill', {
         const expense_list=frm.doc.purchase_invoice_list
         const format_expense=expense_list.map(expense => {
             return {
-                    label: __(expense.invoice_link),
-                    fieldname: expense.invoice_link,
+                    label: expense.invoice_link+ "-"+ expense.item_code, 
+                    fieldname: expense.name,
                     fieldtype: 'Check',
             }
         })
@@ -93,7 +93,13 @@ frappe.ui.form.on('Import Sea House Bill', {
                 invoiceInput.type = 'hidden';
                 invoiceInput.name = 'invoice_ids';
                 invoiceInput.value = filteredInvoices.join(',');
+                const doctype_name = document.createElement('input');   
+                doctype_name.type = 'hidden';
+                doctype_name.name = 'doctype_name';
+                doctype_name.value = frm.doc.name;
                 form.appendChild(invoiceInput);
+                form.appendChild(doctype_name);
+
                 
                 // Add form to document, submit, and remove
                 document.body.appendChild(form);

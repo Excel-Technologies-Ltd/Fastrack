@@ -408,14 +408,14 @@ import frappe
 from frappe.utils.pdf import get_pdf
 
 @frappe.whitelist(allow_guest=True)
-def download_purchase_invoice_pdf(invoice_ids):
+def download_purchase_invoice_pdf(invoice_ids,doctype_name):
     try:
         # Convert string to list
         if isinstance(invoice_ids, str):
             invoice_ids = invoice_ids.split(',')
         
         # Build HTML content without Jinja
-        html_content = build_invoice_html(invoice_ids)
+        html_content = build_invoice_html(invoice_ids,doctype_name)
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
@@ -430,234 +430,128 @@ def download_purchase_invoice_pdf(invoice_ids):
         frappe.log_error(f"PDF generation error: {str(e)}")
         frappe.throw(f"Error generating PDF: {str(e)}")
 
-def build_invoice_html(invoice_ids):
-    """Build HTML content programmatically without Jinja templates"""
-    
-    # Start HTML structure
-    html_parts = [
-        """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Expense</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 20px;
-                    color: #333;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 30px;
-                    border-bottom: 2px solid #007bff;
-                    padding-bottom: 15px;
-                }
-                .invoice-section {
-                    margin-bottom: 40px;
-                    page-break-inside: avoid;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                    overflow: hidden;
-                }
-                .invoice-header {
-                    background-color: #f8f9fa;
-                    padding: 15px;
-                    border-bottom: 1px solid #ddd;
-                }
-                .invoice-title {
-                    font-size: 18px;
-                    font-weight: bold;
-                    color: #007bff;
-                    margin-bottom: 10px;
-                }
-                .invoice-details {
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                    gap: 15px;
-                }
-                .detail-item {
-                    flex: 1;
-                    min-width: 200px;
-                }
-                .detail-label {
-                    font-weight: bold;
-                    color: #666;
-                }
-                .detail-value {
-                    color: #333;
-                    margin-top: 2px;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 0;
-                }
-                th {
-                    background-color: #007bff;
-                    color: white;
-                    padding: 12px 8px;
-                    text-align: left;
-                    font-weight: bold;
-                }
-                td {
-                    padding: 10px 8px;
-                    border-bottom: 1px solid #eee;
-                }
-                tr:nth-child(even) {
-                    background-color: #f9f9f9;
-                }
-                .text-right {
-                    text-align: right;
-                }
-                .text-center {
-                    text-align: center;
-                }
-                .no-data {
-                    text-align: center;
-                    padding: 20px;
-                    color: #666;
-                    font-style: italic;
-                }
-                .total-row {
-                    font-weight: bold;
-                    background-color: #f0f8ff;
-                    border-top: 2px solid #007bff;
-                }
-                @media print {
-                    body { margin: 10px; }
-                    .invoice-section { page-break-inside: avoid; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>Expense</h1>
-                <p>Generated on: """ + str(frappe.utils.now_datetime().strftime('%Y-%m-%d %H:%M:%S')) + """</p>
-            </div>
-        """
-    ]
-    
-    valid_invoices = 0
-    
-    # Process each invoice
+def build_invoice_html(invoice_ids, doctype_name):
+    child_doctype_name = "Fastrack Purchase Invoice"
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Purchase Invoices</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }}
+            h1 {{
+                text-align: center;
+                border-bottom: 2px solid #007bff;
+                padding-bottom: 10px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12px;
+            }}
+            th, td {{
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+                font-size: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f0f0f0;
+            }}
+            .text-right {{
+                text-align: right;
+            }}
+            .no-data {{
+                text-align: center;
+                padding: 20px;
+                font-style: italic;
+                color: #777;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Expenses</h1>
+        <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
+
+    """
+
+    rows = []
+    grand_total = 0
+    currency = "BDT"
+
     for invoice_id in invoice_ids:
         invoice_id = invoice_id.strip()
-        
-        # Check if invoice exists
-        if not frappe.db.exists("Purchase Invoice", invoice_id):
+        if not frappe.db.exists(child_doctype_name, invoice_id):
             continue
-        
         try:
-            # Get invoice document
-            invoice = frappe.get_doc("Purchase Invoice", invoice_id)
-            valid_invoices += 1
-            
-            # Build invoice section
-            html_parts.append(f"""
-            <div class="invoice-section">
-                <div class="invoice-header">
-                    <div class="invoice-title">Invoice: {escape_html(invoice.name or '')}</div>
-                    <div class="invoice-details">
-                        <div class="detail-item">
-                            <div class="detail-label">Supplier:</div>
-                            <div class="detail-value">{escape_html(invoice.supplier or '')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Date:</div>
-                            <div class="detail-value">{escape_html(str(invoice.posting_date or ''))}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Status:</div>
-                            <div class="detail-value">{escape_html(invoice.status or '')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Grand Total:</div>
-                            <div class="detail-value">{frappe.utils.fmt_money(invoice.grand_total or 0, currency=invoice.currency)}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item Code</th>
-                            <th>Item Name</th>
-                            <th class="text-center">Quantity</th>
-                            <th class="text-right">Rate</th>
-                            <th class="text-right">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            invoice = frappe.get_doc(child_doctype_name, {"name": invoice_id, "parent": doctype_name})
+            currency = invoice.currency or "BDT"
+            grand_total += frappe.utils.flt(invoice.total_price or 0)
+
+            date_str = frappe.format(invoice.date, dict(fieldtype="Date")) if invoice.date else ""
+
+            rows.append(f"""
+                <tr>
+                    <td>{escape_html(invoice.invoice_link or '')}<br>{escape_html(date_str)}</td>
+                    <td>{escape_html(invoice.item_code or '')}</td>
+                    <td>{escape_html(invoice.supplier or '')}</td>
+                    <td class="text-right">{invoice.qty}</td>
+                    <td class="text-right">{str(frappe.utils.flt(invoice.rate))}</td>
+                    <td class="text-right">{str(frappe.utils.flt(invoice.amount))}</td>
+                    <td class="text-right">{ str(frappe.utils.flt(invoice.exchange_rate or 0))}</td>
+                    <td class="text-right">{ str(frappe.utils.flt(invoice.total_price or 0))}</td>
+                </tr>
             """)
-            
-            # Add invoice items
-            if invoice.items:
-                item_total = 0
-                for item in invoice.items:
-                    item_amount = frappe.utils.flt(item.amount or 0)
-                    item_total += item_amount
-                    
-                    html_parts.append(f"""
-                        <tr>
-                            <td>{escape_html(item.item_code or '')}</td>
-                            <td>{escape_html(item.item_name or '')}</td>
-                            <td class="text-center">{frappe.utils.flt(item.qty or 0, 2)}</td>
-                            <td class="text-right">{frappe.utils.fmt_money(item.rate or 0, currency=invoice.currency)}</td>
-                            <td class="text-right">{frappe.utils.fmt_money(item_amount, currency=invoice.currency)}</td>
-                        </tr>
-                    """)
-                
-                # Add total row
-                html_parts.append(f"""
-                        <tr class="total-row">
-                            <td colspan="4" class="text-right"><strong>Total Amount:</strong></td>
-                            <td class="text-right"><strong>{frappe.utils.fmt_money(item_total, currency=invoice.currency)}</strong></td>
-                        </tr>
-                """)
-            else:
-                html_parts.append("""
-                        <tr>
-                            <td colspan="5" class="no-data">No items found for this invoice</td>
-                        </tr>
-                """)
-            
-            html_parts.append("""
-                    </tbody>
-                </table>
-            </div>
-            """)
-            
         except Exception as e:
-            frappe.log_error(f"Error processing invoice {invoice_id}: {str(e)}")
-            html_parts.append(f"""
-            <div class="invoice-section">
-                <div class="invoice-header">
-                    <div class="invoice-title">Invoice: {escape_html(invoice_id)}</div>
-                    <div class="no-data">Error loading invoice data: {escape_html(str(e))}</div>
-                </div>
-            </div>
+            frappe.log_error(f"Invoice error: {invoice_id} - {str(e)}")
+            rows.append(f"""
+                <tr>
+                    <td colspan="8" class="no-data">Error loading invoice {invoice_id}: {escape_html(str(e))}</td>
+                </tr>
             """)
-    
-    # Handle case where no valid invoices found
-    if valid_invoices == 0:
-        html_parts.append("""
-        <div class="invoice-section">
-            <div class="no-data">
-                <h3>No Valid Invoices Found</h3>
-                <p>Please check the invoice IDs and try again.</p>
-            </div>
+
+    if rows:
+        html += f"""
+        <table>
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Item Code</th>
+                    <th>Supplier</th>
+                    <th>Qty</th>
+                    <th>Rate ({currency})</th>
+                    <th>Amount ({currency})</th>
+                    <th>Exchange Rate</th>
+                    <th>Total (BDT)</th> 
+                </tr>
+            </thead>
+            <tbody>
+        """ + ''.join(rows) + f"""
+                <tr>
+                    <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
+                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        """
+    else:
+        html += """
+        <div class="no-data">
+            No valid invoices found.
         </div>
-        """)
-    
-    # Close HTML structure
-    html_parts.append("""
-        </body>
-        </html>
-    """)
-    
-    return ''.join(html_parts)
+        """
+
+    html += "</body></html>"
+    return html
+
 
 def escape_html(text):
     """Escape HTML special characters to prevent XSS"""

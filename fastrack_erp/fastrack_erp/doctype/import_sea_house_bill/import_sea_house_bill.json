@@ -532,8 +532,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "co_loader",
-   "fieldtype": "Data",
-   "label": "Co-Loader"
+   "fieldtype": "Link",
+   "label": "Co-Loader",
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -768,8 +769,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "vol_cbm",
-   "fieldtype": "Int",
-   "label": "VOl (CBM)"
+   "fieldtype": "Float",
+   "label": "Vol (CBM)",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -788,7 +790,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-06-28 15:56:40.663730",
+ "modified": "2025-06-30 10:21:40.819949",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
@@ -810,5 +812,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

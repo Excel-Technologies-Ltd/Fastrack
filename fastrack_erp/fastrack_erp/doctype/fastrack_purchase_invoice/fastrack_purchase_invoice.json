@@ -8,12 +8,15 @@
  "engine": "InnoDB",
  "field_order": [
   "invoice_link",
-  "supplier",
   "date",
   "item_code",
+  "supplier",
   "qty",
   "rate",
-  "total_price"
+  "amount",
+  "exchange_rate",
+  "total_price",
+  "currency"
  ],
  "fields": [
   {
@@ -55,22 +58,38 @@
   },
   {
    "fieldname": "rate",
-   "fieldtype": "Data",
+   "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Rate"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "total_price",
-   "fieldtype": "Data",
+   "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Price"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Currency"
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Currency",
+   "label": "Exchange Rate"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-23 10:33:52.918602",
+ "modified": "2025-06-29 13:39:37.060189",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Purchase Invoice",

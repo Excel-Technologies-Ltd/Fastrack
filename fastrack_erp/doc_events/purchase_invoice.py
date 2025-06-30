@@ -13,10 +13,13 @@ def after_submit(doc, method):
             row.invoice_link = doc.name 
             row.item_code = item.item_code
             row.qty = item.qty
-            row.rate = item.rate
-            row.total_price = item.amount
-            row.date = doc.posting_date if idx == 0 else None
-            row.supplier = doc.supplier if idx == 0 else None
+            row.rate = item.net_rate
+            row.amount = item.net_amount
+            row.exchange_rate = item.custom_exchange_rate if item.custom_exchange_rate else None
+            row.total_price = item.base_amount
+            row.date = doc.posting_date 
+            row.supplier = doc.supplier
+            row.currency = doc.currency
             hbl_doc.append("purchase_invoice_list", row)
         
         hbl_doc.total_purchase_amount = sum(float(item.total_price) for item in hbl_doc.purchase_invoice_list)
