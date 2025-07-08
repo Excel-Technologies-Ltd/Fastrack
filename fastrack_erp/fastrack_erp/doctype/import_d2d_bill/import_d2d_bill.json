@@ -2,49 +2,45 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "format:AHBL-{YYYY}-{MM}-{DD}-{####}",
- "creation": "2025-05-10 05:40:08.242840",
+ "creation": "2025-07-07 17:33:55.075181",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "mbl_link",
+  "sales_person",
   "mbl_no",
   "hbl_no",
-  "reference_number",
-  "airlines",
   "shipper",
   "consignee",
   "notify_party",
   "customer",
-  "lc_number",
   "port_of_loading",
+  "lc_number",
+  "no_of_pkg",
   "cargo_description",
-  "gr_weight",
-  "declar_value_of_custom",
   "column_break_aevai",
   "hbl_open_by",
-  "sales_person",
+  "reference_number",
   "mbl_date",
   "hbl_date",
   "agent",
-  "flight_name",
-  "flight_date",
   "consignee_bin",
   "notify_party_bin",
   "customer_bin",
-  "lc_date",
   "port_of_delivery",
-  "no_of_pkg",
+  "lc_date",
+  "gr_weight",
   "chargeable_weight",
-  "inco_term",
-  "hbl_id",
-  "hbl_weight",
-  "hbl_doc_name",
-  "mbl_doctype",
-  "amended_from"
+  "declar_value_of_custom"
  ],
  "fields": [
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Link",
+   "label": "Sales Person",
+   "options": "Sales Person"
+  },
   {
    "fieldname": "mbl_no",
    "fieldtype": "Link",
@@ -52,106 +48,9 @@
    "options": "Import Air Master Bill"
   },
   {
-   "fieldname": "agent",
-   "fieldtype": "Link",
-   "label": "Agent",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "hbl_id",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "HBL Id"
-  },
-  {
-   "fieldname": "hbl_weight",
-   "fieldtype": "Float",
-   "hidden": 1,
-   "label": "HBL Weight"
-  },
-  {
-   "fieldname": "hbl_doc_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "HBL Doc Name"
-  },
-  {
-   "fieldname": "mbl_doctype",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "MBL Doctype"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Import Air House Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
-   "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
-  },
-  {
-   "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
-  },
-  {
-   "fieldname": "lc_number",
-   "fieldtype": "Data",
-   "label": "LC/TT Number"
-  },
-  {
-   "fieldname": "lc_date",
-   "fieldtype": "Date",
-   "label": "LC/TT Date"
-  },
-  {
-   "fieldname": "flight_name",
-   "fieldtype": "Data",
-   "label": "Flight Name"
-  },
-  {
-   "fieldname": "flight_date",
-   "fieldtype": "Date",
-   "label": "Flight Date"
-  },
-  {
-   "fieldname": "gr_weight",
-   "fieldtype": "Float",
-   "label": "Gr. Weight"
-  },
-  {
-   "fieldname": "column_break_aevai",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "mbl_no.consignee",
-   "fieldname": "airlines",
-   "fieldtype": "Link",
-   "label": "Carrier (Airlines)",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "mbl_link",
-   "fieldtype": "Link",
-   "label": "MBL Link",
-   "options": "Import Air Master Bill"
-  },
-  {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "label": "HBL No."
-  },
-  {
-   "fieldname": "reference_number",
-   "fieldtype": "Data",
-   "label": "Reference Number"
   },
   {
    "fieldname": "shipper",
@@ -178,9 +77,19 @@
    "options": "Customer"
   },
   {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
    "fieldname": "cargo_description",
    "fieldtype": "Data",
    "label": "Cargo Description"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "label": "Gr. Weight"
   },
   {
    "fieldname": "declar_value_of_custom",
@@ -188,16 +97,14 @@
    "label": "Declar Value Of Customs"
   },
   {
-   "fieldname": "hbl_open_by",
-   "fieldtype": "Link",
-   "label": "HBl Open By",
-   "options": "User"
+   "fieldname": "column_break_aevai",
+   "fieldtype": "Column Break"
   },
   {
-   "fieldname": "sales_person",
+   "fieldname": "hbl_open_by",
    "fieldtype": "Link",
-   "label": "Sales Person",
-   "options": "Sales Person"
+   "label": "HBL Open By",
+   "options": "User"
   },
   {
    "fieldname": "mbl_date",
@@ -208,6 +115,12 @@
    "fieldname": "hbl_date",
    "fieldtype": "Data",
    "label": "HBL Date"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer"
   },
   {
    "fetch_from": "consignee.custom_bin_no",
@@ -228,6 +141,16 @@
    "label": "Customer Bin"
   },
   {
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "label": "LC/TT Date"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
    "label": "No of Pkg"
@@ -238,19 +161,23 @@
    "label": "Chargeable Weight"
   },
   {
-   "fieldname": "inco_term",
-   "fieldtype": "Select",
-   "label": "Inco Term",
-   "options": "\nPrepaid\nCollect"
+   "fieldname": "lc_number",
+   "fieldtype": "Data",
+   "label": "LC/TT Number"
+  },
+  {
+   "fieldname": "reference_number",
+   "fieldtype": "Data",
+   "label": "Reference Number"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-07 17:08:56.315725",
+ "modified": "2025-07-07 17:54:49.558384",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
- "name": "Import Air House Bill",
+ "name": "Import D2D Bill",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [

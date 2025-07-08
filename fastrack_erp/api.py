@@ -415,7 +415,7 @@ def download_purchase_invoice_pdf(invoice_ids,doctype_name):
             invoice_ids = invoice_ids.split(',')
         
         # Build HTML content without Jinja
-        html_content = build_invoice_html(invoice_ids,doctype_name)
+        html_content = build_purchase_invoice_html(invoice_ids,doctype_name)
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
@@ -430,7 +430,7 @@ def download_purchase_invoice_pdf(invoice_ids,doctype_name):
         frappe.log_error(f"PDF generation error: {str(e)}")
         frappe.throw(f"Error generating PDF: {str(e)}")
 
-def build_invoice_html(invoice_ids, doctype_name):
+def build_purchase_invoice_html(invoice_ids, doctype_name):
     child_doctype_name = "Fastrack Purchase Invoice"
 
     html = f"""
@@ -552,6 +552,292 @@ def build_invoice_html(invoice_ids, doctype_name):
     html += "</body></html>"
     return html
 
+
+
+
+@frappe.whitelist(allow_guest=True)
+def download_profit_share_pdf(journal_ids,doctype_name):
+    try:
+        # Convert string to list
+        if isinstance(journal_ids, str):
+            journal_ids = journal_ids.split(',')
+        
+        # Build HTML content without Jinja
+        html_content = build_profit_share_html(journal_ids,doctype_name)
+        
+        # Generate PDF
+        pdf_content = get_pdf(html_content)
+        
+        # Set response for download
+        filename = f"purchase_invoices_{frappe.utils.now_datetime().strftime('%Y%m%d_%H%M%S')}.pdf"
+        frappe.local.response.filename = filename
+        frappe.local.response.filecontent = pdf_content
+        frappe.local.response.type = "download"
+        
+    except Exception as e:
+        frappe.log_error(f"PDF generation error: {str(e)}")
+        frappe.throw(f"Error generating PDF: {str(e)}")
+
+def build_profit_share_html(journal_ids,doctype_name):
+    child_doctype_name = "Fastrack Journal Entry"
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Profit Share</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }}
+            h1 {{
+                text-align: center;
+                border-bottom: 2px solid #007bff;
+                padding-bottom: 10px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12px;
+            }}
+            th, td {{
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+                font-size: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f0f0f0;
+            }}
+            .text-right {{
+                text-align: right;
+            }}
+            .no-data {{
+                text-align: center;
+                padding: 20px;
+                font-style: italic;
+                color: #777;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Profit Share</h1>
+        <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
+
+    """
+
+    rows = []
+    grand_total = 0
+    currency = "BDT"
+
+    for journal_id in journal_ids:
+        journal_id = journal_id.strip()
+        if not frappe.db.exists(child_doctype_name, journal_id):
+            continue
+        try:
+            journal_entry = frappe.get_doc(child_doctype_name, {"name": journal_id, "parent": doctype_name})
+          
+            grand_total += frappe.utils.flt(journal_entry.amount or 0)
+
+            rows.append(f"""
+                <tr>
+                    <td>{escape_html(journal_entry.journal_id or '')}</td>
+                    <td>{escape_html(journal_entry.party_type or '')}</td>
+                    <td>{escape_html(journal_entry.party or '')}</td>
+                    <td class="text-right">{journal_entry.account_name}</td>
+                    <td class="text-right">{str(frappe.utils.flt(journal_entry.credit))}</td>
+                    <td class="text-right">{str(frappe.utils.flt(journal_entry.debit))}</td>
+                </tr>
+            """)
+        except Exception as e:
+            frappe.log_error(f"Journal Entry error: {journal_id} - {str(e)}")
+            rows.append(f"""
+                <tr>
+                    <td colspan="8" class="no-data">Error loading journal entry {journal_id}: {escape_html(str(e))}</td>
+                </tr>
+            """)
+
+    if rows:
+        html += f"""
+        <table>
+            <thead>
+                <tr>
+                    <th>Journal ID</th>
+                    <th>Party Type</th>
+                    <th>Party</th>
+                    <th>Account</th>
+                    <th>Credit</th>
+                    <th>Debit</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+        """ + ''.join(rows) + f"""
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Grand Total</strong></td>
+                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        """
+    else:
+        html += """
+        <div class="no-data">
+            No valid journal entries found.
+        </div>
+        """
+
+    html += "</body></html>"
+    return html
+
+
+
+# sales invoice pdf
+@frappe.whitelist(allow_guest=True)
+def download_sales_invoice_pdf(invoice_ids,doctype_name):
+    try:
+        # Convert string to list
+        if isinstance(invoice_ids, str):
+            invoice_ids = invoice_ids.split(',')
+        
+        # Build HTML content without Jinja
+        html_content = build_sales_invoice_html(invoice_ids,doctype_name)
+        
+        # Generate PDF
+        pdf_content = get_pdf(html_content)
+        
+        # Set response for download
+        filename = f"sales_invoices_{frappe.utils.now_datetime().strftime('%Y%m%d_%H%M%S')}.pdf"
+        frappe.local.response.filename = filename
+        frappe.local.response.filecontent = pdf_content
+        frappe.local.response.type = "download"
+        
+    except Exception as e:
+        frappe.log_error(f"PDF generation error: {str(e)}")
+        frappe.throw(f"Error generating PDF: {str(e)}")
+    
+def build_sales_invoice_html(invoice_ids, doctype_name):
+    child_doctype_name = "Fastrack Sales Invoice"
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Profit Share</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }}
+            h1 {{
+                text-align: center;
+                border-bottom: 2px solid #007bff;
+                padding-bottom: 10px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12px;
+            }}
+            th, td {{
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+                font-size: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f0f0f0;
+            }}
+            .text-right {{
+                text-align: right;
+            }}
+            .no-data {{
+                text-align: center;
+                padding: 20px;
+                font-style: italic;
+                color: #777;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Sales Invoice</h1>
+        <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
+
+    """
+
+    rows = []
+    grand_total = 0
+    currency = "BDT"
+
+    for invoice_id in invoice_ids:
+        invoice_id = invoice_id.strip()
+        if not frappe.db.exists(child_doctype_name, invoice_id):
+            continue
+        try:
+            invoice = frappe.get_doc(child_doctype_name, {"name": invoice_id, "parent": doctype_name})
+          
+            grand_total += frappe.utils.flt(invoice.total_price or 0)
+
+            rows.append(f"""
+                <tr>
+                    <td>{escape_html(invoice.invoice_link or '')}</td>
+                    <td>{escape_html(invoice.customer or '')}</td>
+                    <td class="text-right">{invoice.item_code}</td>
+                    <td class="text-right">{invoice.qty}</td>
+                    <td class="text-right">{str(frappe.utils.flt(invoice.rate))}</td>
+                    <td class="text-right">{str(frappe.utils.flt(invoice.total_price or 0))}</td>
+                </tr>
+            """)
+        except Exception as e:
+            frappe.log_error(f"Sales Invoice error: {invoice_id} - {str(e)}")
+            rows.append(f"""
+                <tr>
+                    <td colspan="8" class="no-data">Error loading sales invoice {invoice_id}: {escape_html(str(e))}</td>
+                </tr>
+            """)
+
+    if rows:
+        html += f"""
+        <table>
+            <thead>
+                <tr>
+                    <th>Invoice Id</th>
+                    <th>Customer</th>
+                    <th>Item Code</th>
+                    <th>QTY</th>
+                    <th>Rate</th>
+                    <th>Total Price</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+        """ + ''.join(rows) + f"""
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Grand Total</strong></td>
+                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        """
+    else:
+        html += """
+        <div class="no-data">
+            No valid journal entries found.
+        </div>
+        """
+
+    html += "</body></html>"
+    return html
+
+    
 
 def escape_html(text):
     """Escape HTML special characters to prevent XSS"""

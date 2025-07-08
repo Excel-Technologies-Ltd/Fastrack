@@ -15,8 +15,8 @@ def after_submit(doc, method):
             row.qty = item.qty
             row.rate = item.rate
             row.total_price = item.amount
-            row.date = doc.posting_date if idx == 0 else None
-            row.customer = doc.customer if idx == 0 else None
+            row.date = doc.posting_date 
+            row.customer = doc.customer 
             hbl_doc.append("invoice_list", row)
         
         hbl_doc.total_invoice_amount = sum(float(item.total_price) for item in hbl_doc.invoice_list)

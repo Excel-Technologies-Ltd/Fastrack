@@ -33,11 +33,6 @@ def validate(doc, method):
         frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
     if gr_weight< total_weight_of_hbl_list:
         frappe.throw("HBL weight is greater than gross weight")
-    # vaidate cbm 
-    if doc.doctype == "Import Sea Master Bill":
-        total_cbm=sum(container.cbm for container in container_info)
-        if not total_cbm == doc.vol_cbm:
-            frappe.throw("Total Vol (CBM)  is not equal to Master Vol (CBM)")
 
 
 def update_child_hbl(doc, method):
