@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:AHBL-{YYYY}-{MM}-{DD}-{####}",
+ "autoname": "naming_series:",
  "creation": "2025-05-10 05:40:08.242840",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "mbl_link",
   "mbl_no",
   "hbl_no",
@@ -242,16 +243,25 @@
    "fieldtype": "Select",
    "label": "Inco Term",
    "options": "\nPrepaid\nCollect"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Naming Series",
+   "options": "AHBL-.YYYY.-.MM.-",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-07 17:08:56.315725",
+ "modified": "2025-07-08 13:33:22.168364",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",
- "naming_rule": "Expression",
+ "name_case": "Title Case",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

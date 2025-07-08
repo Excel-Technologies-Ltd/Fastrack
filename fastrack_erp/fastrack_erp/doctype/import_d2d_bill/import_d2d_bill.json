@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:AHBL-{YYYY}-{MM}-{DD}-{####}",
+ "autoname": "naming_series:",
  "creation": "2025-07-07 17:33:55.075181",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "sales_person",
   "mbl_no",
   "hbl_no",
@@ -32,7 +33,8 @@
   "lc_date",
   "gr_weight",
   "chargeable_weight",
-  "declar_value_of_custom"
+  "declar_value_of_custom",
+  "amended_from"
  ],
  "fields": [
   {
@@ -169,16 +171,33 @@
    "fieldname": "reference_number",
    "fieldtype": "Data",
    "label": "Reference Number"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "DMBL-.YYYY.-.MM.-"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Import D2D Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-07 17:54:49.558384",
+ "modified": "2025-07-08 13:35:29.194910",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
- "naming_rule": "Expression",
+ "name_case": "Title Case",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
