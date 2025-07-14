@@ -112,7 +112,7 @@ def get_columns():
         },
         {
             "label": _("Vol CBM"),
-            "fieldname": "vol_cbm",
+            "fieldname": "hbl_vol_cbm",
             "fieldtype": "Float",
             "width": 120
         },
@@ -199,7 +199,7 @@ def get_sea_data(from_date, to_date):
                 hbl.lc,
                 hbl.port_of_loading,
                 hbl.port_of_delivery,
-                hbl.vol_cbm,
+                hbl.hbl_vol_cbm,
                 hbl.hbl_etd,
                 hbl.eta,
                 hbl.do_party

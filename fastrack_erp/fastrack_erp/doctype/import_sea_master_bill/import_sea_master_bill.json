@@ -222,6 +222,7 @@
    "label": "ATB"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_no_of_hbl",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -269,7 +270,8 @@
    "fieldname": "consignee",
    "fieldtype": "Link",
    "label": "Consignee",
-   "options": "Customer"
+   "options": "Customer",
+   "reqd": 1
   },
   {
    "fetch_from": "consignee.primary_address",
@@ -365,7 +367,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-08 12:46:04.010468",
+ "modified": "2025-07-14 11:46:26.115005",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

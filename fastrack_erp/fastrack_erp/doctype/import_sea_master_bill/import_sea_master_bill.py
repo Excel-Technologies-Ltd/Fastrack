@@ -12,7 +12,10 @@ class ImportSeaMasterBill(Document):
 			self.naming_series_2= self.naming_series
 
 	def on_update_after_submit(self):
-		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name},pluck="name")
+		consignee_ain_no=frappe.db.get_value("Customer",self.consignee,"custom_ain_no")
+		if not consignee_ain_no:
+			frappe.throw(f"Set Ain No in Customer -({self.consignee})")
+		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name,"docstatus":1},pluck="name")
 		for hbl_name in hbl_docs:
 			hbl_doc = frappe.get_doc("Import Sea House Bill", hbl_name)
 			hbl_doc.mbl_no= self.mbl_no if self.mbl_no else hbl_doc.mbl_no
@@ -30,7 +33,10 @@ class ImportSeaMasterBill(Document):
 			hbl_doc.fv_etd=self.fv_etd if self.fv_etd else hbl_doc.fv_etd
 			hbl_doc.save()
 		
-	def on_update(self):	
+	def on_update(self):
+		consignee_ain_no=frappe.db.get_value("Customer",self.consignee,"custom_ain_no")
+		if not consignee_ain_no:
+			frappe.throw(f"Set Ain No in Customer -({self.consignee})")
 		if self.etd:
 			etd = self._parse_date(self.etd)
 			print(etd)

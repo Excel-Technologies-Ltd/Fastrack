@@ -119,9 +119,11 @@ app_license = "MIT"
 doc_events = {
 	"Import Sea Master Bill": {
 		"on_update": "fastrack_erp.doc_events.mbl.validate",
+		"on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
 	},
  "Import Sea House Bill": {
 	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
  },
  "Import Air Master Bill": {
 	"on_update": "fastrack_erp.doc_events.mbl.validate",

@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SHBL-{YYYY}-{MM}-{DD}-{####}",
+ "autoname": "format:SHBL-{YYYY}-{MM}-{DD}-{#######}",
  "creation": "2025-04-30 17:12:57.586828",
  "default_view": "List",
  "doctype": "DocType",
@@ -61,7 +61,7 @@
   "notify_to",
   "notify_bin_no",
   "lc_date",
-  "vol_cbm",
+  "hbl_vol_cbm",
   "status",
   "hbl_line_no",
   "fv_etd",
@@ -73,16 +73,6 @@
   "column_break_svasa",
   "section_break_vf8zr",
   "container_info",
-  "invoice_list",
-  "total_invoice_amount",
-  "payment_entry_list",
-  "total_payment",
-  "purchase_invoice_list",
-  "total_purchase_amount",
-  "profit_share_list",
-  "total_profit_share",
-  "generate",
-  "container_cost_info",
   "section_break_nfgoz",
   "column_break_za24b",
   "amended_from",
@@ -107,6 +97,17 @@
   "average_total",
   "ex_rate",
   "rotation",
+  "section_break_igwms",
+  "generate",
+  "container_cost_info",
+  "invoice_list",
+  "total_invoice_amount",
+  "payment_entry_list",
+  "total_payment",
+  "purchase_invoice_list",
+  "total_purchase_amount",
+  "profit_share_list",
+  "total_profit_share",
   "hbl_weight",
   "hbl_doc_name",
   "mbl_doctype"
@@ -115,14 +116,16 @@
   {
    "allow_on_submit": 1,
    "fieldname": "office_code",
-   "fieldtype": "Data",
-   "label": "Office Code"
+   "fieldtype": "Link",
+   "label": "Office Code",
+   "options": "Office Code"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "office_name",
-   "fieldtype": "Data",
-   "label": "Office Name"
+   "fieldtype": "Link",
+   "label": "Office Name",
+   "options": "Office Name"
   },
   {
    "allow_on_submit": 1,
@@ -135,8 +138,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "nature",
-   "fieldtype": "Data",
-   "label": "Nature"
+   "fieldtype": "Link",
+   "label": "Nature",
+   "options": "Nature"
   },
   {
    "allow_on_submit": 1,
@@ -149,7 +153,8 @@
    "fetch_from": "carrier.custom_ain_no",
    "fieldname": "carrier_code",
    "fieldtype": "Data",
-   "label": "Carrier Code"
+   "label": "Carrier Code",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -208,7 +213,8 @@
    "fieldname": "carrier",
    "fieldtype": "Link",
    "label": "Carrier",
-   "options": "Customer"
+   "options": "Customer",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -396,7 +402,8 @@
    "fieldname": "total_container_hbl",
    "fieldtype": "Float",
    "label": "Total Container",
-   "precision": "2"
+   "precision": "2",
+   "reqd": 1
   },
   {
    "fetch_from": "carrier.customer_name",
@@ -493,6 +500,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "payment_entry_list",
    "fieldtype": "Table",
    "label": "Payment Entry List",
@@ -747,8 +755,9 @@
   },
   {
    "fieldname": "hbl_type_code",
-   "fieldtype": "Data",
-   "label": "HBL Type Code"
+   "fieldtype": "Link",
+   "label": "HBL Type Code",
+   "options": "HBL Type Code"
   },
   {
    "allow_on_submit": 1,
@@ -766,17 +775,21 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "vol_cbm",
+   "fieldname": "hold_reason",
+   "fieldtype": "Data",
+   "label": "Hold Reason"
+  },
+  {
+   "fieldname": "section_break_igwms",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_vol_cbm",
    "fieldtype": "Float",
    "label": "Vol (CBM)",
    "precision": "2",
    "reqd": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hold_reason",
-   "fieldtype": "Data",
-   "label": "Hold Reason"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -795,7 +808,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-08 12:49:42.452668",
+ "modified": "2025-07-14 13:08:02.852443",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

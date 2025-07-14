@@ -21,7 +21,6 @@ def validate(doc, method):
     if not len(hbl_info)== total_no_of_hbl:
         frappe.throw(f"HBL list should be equal to {total_no_of_hbl}")
     total_weight_of_container_list= sum(container.weight for container in container_info) or 0
-
     if not gr_weight == total_weight_of_container_list and doc.doctype == "Import Sea Master Bill":
         frappe.throw("Total weight of container list is not equal to gross weight")
         
@@ -67,4 +66,22 @@ def update_child_hbl(doc, method):
     validate(mbl_doc, method=None)
     mbl_doc.save(ignore_permissions=True)
  
+ 
+def delete_child_hbl_on_cancel(doc, method):
+    name=doc.name
+    parent_doctype=doc.mbl_doctype
+    mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_link)
+    if parent_doctype == "Import Sea Master Bill":
+        for hbl_info in mbl_doc.hbl_info:
+            if hbl_info.hbl_link == doc.name:
+                hbl_info.hbl_link=None
+                hbl_info.is_create=0
+                break
+    if parent_doctype == "Import Air Master Bill":
+        for hbl_info in mbl_doc.hbl_info:
+            if hbl_info.name == doc.name:
+                hbl_info.hbl_link=None
+                hbl_info.is_create=0
+                break
+    mbl_doc.save(ignore_permissions=True)
             
