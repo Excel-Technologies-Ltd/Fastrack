@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "format:AHBL-{########}",
  "creation": "2025-05-10 05:40:08.242840",
  "default_view": "List",
  "doctype": "DocType",
@@ -49,6 +49,7 @@
   {
    "fieldname": "mbl_no",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "MBL No.",
    "options": "Import Air Master Bill"
   },
@@ -135,18 +136,21 @@
    "fetch_from": "mbl_no.consignee",
    "fieldname": "airlines",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Carrier (Airlines)",
    "options": "Customer"
   },
   {
    "fieldname": "mbl_link",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "MBL Link",
    "options": "Import Air Master Bill"
   },
   {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "HBL No."
   },
   {
@@ -157,24 +161,28 @@
   {
    "fieldname": "shipper",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Shipper",
    "options": "Supplier"
   },
   {
    "fieldname": "consignee",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Consignee",
    "options": "Customer"
   },
   {
    "fieldname": "notify_party",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Notify Party",
    "options": "Customer"
   },
   {
    "fieldname": "customer",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Customer",
    "options": "Customer"
   },
@@ -191,6 +199,7 @@
   {
    "fieldname": "hbl_open_by",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "HBl Open By",
    "options": "User"
   },
@@ -249,19 +258,19 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Naming Series",
-   "options": "AHBL-.YYYY.-.MM.-",
+   "options": "AHBL-",
    "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-08 13:33:22.168364",
+ "modified": "2025-07-17 02:00:54.792648",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",
  "name_case": "Title Case",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

@@ -27,10 +27,10 @@ def get_columns():
     """
     return [
         {
-            "label": _("Employee"),
-            "fieldname": "hbl_open_by",
+            "label": _("Sales Person"),
+            "fieldname": "sales_person",
             "fieldtype": "Link",
-            "options": "User",
+            "options": "Sales Person",
             "width": 120
         },
         {
@@ -202,7 +202,9 @@ def get_sea_data(from_date, to_date):
                 hbl.hbl_vol_cbm,
                 hbl.hbl_etd,
                 hbl.eta,
-                hbl.do_party
+                hbl.do_party,
+                hbl.sales_person
+                
             FROM 
                 `tabImport Sea House Bill` AS hbl
             WHERE 

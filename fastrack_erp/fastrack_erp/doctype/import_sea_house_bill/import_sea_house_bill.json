@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SHBL-{YYYY}-{MM}-{DD}-{#######}",
+ "autoname": "format:SHBL-{########}",
  "creation": "2025-04-30 17:12:57.586828",
  "default_view": "List",
  "doctype": "DocType",
@@ -85,6 +85,7 @@
   "line_no",
   "ocean_freight_remarks",
   "column_break_tqh0h",
+  "bill_of_entry",
   "shipping_line_custom",
   "shipping_line_address_custom",
   "bl_no",
@@ -93,13 +94,13 @@
   "man_pkg",
   "remarks",
   "column_break_zkvni",
-  "total",
-  "average_total",
   "ex_rate",
   "rotation",
   "section_break_igwms",
   "generate",
   "container_cost_info",
+  "average_total",
+  "total",
   "invoice_list",
   "total_invoice_amount",
   "payment_entry_list",
@@ -150,11 +151,10 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "carrier.custom_ain_no",
+   "fetch_from": "carrier.custom_bin_no",
    "fieldname": "carrier_code",
    "fieldtype": "Data",
-   "label": "Carrier Code",
-   "reqd": 1
+   "label": "Carrier Code"
   },
   {
    "allow_on_submit": 1,
@@ -220,6 +220,7 @@
    "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Agent",
    "options": "Supplier"
   },
@@ -258,7 +259,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "do_validity",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "DO Validity"
   },
   {
@@ -365,6 +366,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_id",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -399,6 +401,7 @@
    "label": "Remarks"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_container_hbl",
    "fieldtype": "Float",
    "label": "Total Container",
@@ -545,14 +548,14 @@
    "allow_on_submit": 1,
    "fieldname": "container_cost_info",
    "fieldtype": "Table",
-   "label": "Container Cost Info",
+   "label": "Freight Certificate",
    "options": "Container Cost Info"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "generate",
    "fieldtype": "Button",
-   "label": "Generate Container Info List"
+   "label": "Generate Freight Certificate"
   },
   {
    "allow_on_submit": 1,
@@ -569,6 +572,7 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "MBL Date"
   },
   {
@@ -673,6 +677,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_link",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -694,6 +699,7 @@
    "label": "ETD"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "column_break_twikq",
    "fieldtype": "Column Break"
   },
@@ -754,6 +760,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_type_code",
    "fieldtype": "Link",
    "label": "HBL Type Code",
@@ -788,8 +795,12 @@
    "fieldname": "hbl_vol_cbm",
    "fieldtype": "Float",
    "label": "Vol (CBM)",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
+  },
+  {
+   "fieldname": "bill_of_entry",
+   "fieldtype": "Data",
+   "label": "Bill of Entry"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -808,7 +819,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-14 13:08:02.852443",
+ "modified": "2025-07-17 02:14:24.523819",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

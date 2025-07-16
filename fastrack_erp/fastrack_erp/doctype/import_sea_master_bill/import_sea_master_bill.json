@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "format:SMBL-{########}",
  "creation": "2025-04-30 13:30:27.082899",
  "default_view": "List",
  "doctype": "DocType",
@@ -58,6 +58,8 @@
   {
    "fieldname": "mbl_open_by",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "MBL Open By",
    "options": "User",
    "read_only": 1
@@ -72,6 +74,8 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "MBL No",
    "reqd": 1,
    "unique": 1
@@ -80,6 +84,8 @@
    "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Agent",
    "options": "Supplier",
    "reqd": 1
@@ -96,6 +102,7 @@
    "allow_on_submit": 1,
    "fieldname": "shipping_line",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Shipping Line",
    "options": "Supplier"
   },
@@ -177,6 +184,7 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "MBL Date"
   },
   {
@@ -198,8 +206,7 @@
    "fieldname": "vol_cbm",
    "fieldtype": "Float",
    "label": "Vol (CBM)",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "allow_on_submit": 1,
@@ -262,13 +269,15 @@
    "fieldtype": "Select",
    "in_preview": 1,
    "label": "Naming Series",
-   "options": "SMBL-.YYYY.-.MM.-",
+   "options": "SMBL-",
    "reqd": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "consignee",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Consignee",
    "options": "Customer",
    "reqd": 1
@@ -285,6 +294,8 @@
    "allow_on_submit": 1,
    "fieldname": "shipper",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Shipper",
    "options": "Supplier"
   },
@@ -367,12 +378,12 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-14 11:46:26.115005",
+ "modified": "2025-07-17 01:55:00.365138",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
  "name_case": "Title Case",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

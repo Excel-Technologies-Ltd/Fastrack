@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "format:AMBL={########}",
  "creation": "2025-05-10 05:32:10.941431",
  "default_view": "List",
  "doctype": "DocType",
@@ -38,6 +38,7 @@
   {
    "fieldname": "mbl_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "MBL No",
    "reqd": 1
   },
@@ -48,6 +49,7 @@
   {
    "fieldname": "mbl_open_by",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "MBL Open By",
    "options": "User",
    "reqd": 1
@@ -136,7 +138,7 @@
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "AMBL-.YYYY.-.MM.-",
+   "options": "AMBL-",
    "reqd": 1
   },
   {
@@ -162,6 +164,7 @@
   {
    "fieldname": "airlines",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Carrier (Airlines)",
    "options": "Customer"
   }
@@ -174,11 +177,11 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-07 16:23:18.490675",
+ "modified": "2025-07-17 01:57:07.711914",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

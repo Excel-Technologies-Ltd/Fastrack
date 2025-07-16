@@ -318,8 +318,8 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Carrier_address":clean_address(frappe.get_value("Customer",hbl_doc.carrier,"primary_address")) if frappe.get_value("Customer",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_agent":{
-                            "Shipping_agent_name":frappe.db.get_value("Customer",hbl_doc.shipping_line,"customer_name"),
-                            "Shipping_agent_address": clean_address(frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Customer",hbl_doc.shipping_line,"primary_address") else ""
+                            "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
+                            "Shipping_agent_address": clean_address(frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address") else ""
                         },
                         "Exporter":{
                            
@@ -332,7 +332,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Notify_address": clean_address(frappe.get_value("Customer",hbl_doc.notify_to,"primary_address")) if frappe.get_value("Customer",hbl_doc.notify_to,"primary_address") else ""
                         },
                         "Consignee":{
-                            "Consignee_code":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"custom_ain_no"),
+                            "Consignee_code":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"custom_bin_no"),
                             "Consignee_name":frappe.db.get_value("Customer",hbl_doc.hbl_consignee,"customer_name"),
                             "Consignee_address": clean_address(frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address")) if frappe.get_value("Customer",hbl_doc.hbl_consignee,"primary_address") else ""
                         }
@@ -858,3 +858,48 @@ def escape_html(text):
     }
     
     return "".join(html_escape_table.get(c, c) for c in text)
+
+
+
+
+
+
+@frappe.whitelist(allow_guest=True)
+def get_customer_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea House Bill"):
+    if not frappe.db.exists(doctype,id):
+        return []
+    customer_list=[]
+    if doctype=="Import Sea House Bill":
+        
+        sea_house_bill_doc=frappe.get_doc("Import Sea House Bill",id)
+        if sea_house_bill_doc.customer:
+            customer_list.append(sea_house_bill_doc.customer)
+        if sea_house_bill_doc.hbl_consignee:
+            customer_list.append(sea_house_bill_doc.hbl_consignee)
+        if sea_house_bill_doc.co_loader:
+            customer_list.append(sea_house_bill_doc.co_loader)
+        if sea_house_bill_doc.carrier:
+            customer_list.append(sea_house_bill_doc.carrier)
+        if sea_house_bill_doc.notify_to:
+            customer_list.append(sea_house_bill_doc.notify_to)
+    remove_duplicate_customer_list=list(set(customer_list))
+    return remove_duplicate_customer_list
+
+# supplier list
+@frappe.whitelist(allow_guest=True)
+def get_supplier_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea House Bill"):
+    if not frappe.db.exists(doctype,id):
+        return []
+    supplier_list=[]
+    if doctype=="Import Sea House Bill":
+        sea_house_bill_doc=frappe.get_doc("Import Sea House Bill",id)
+        if sea_house_bill_doc.hbl_shipper:
+            supplier_list.append(sea_house_bill_doc.hbl_shipper)
+        if sea_house_bill_doc.agent:
+            supplier_list.append(sea_house_bill_doc.agent)
+        if sea_house_bill_doc.shipping_line:
+            supplier_list.append(sea_house_bill_doc.shipping_line)
+    remove_duplicate_supplier_list=list(set(supplier_list))
+    return remove_duplicate_supplier_list
+
+# agent list
