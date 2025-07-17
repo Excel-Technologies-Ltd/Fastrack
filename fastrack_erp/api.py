@@ -33,7 +33,7 @@ def make_air_house_bill(source_name, target_doc=None):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Air Master Bill")
         # 4 array
         target.mbl_no=source.name
-        target.naming_series="SAHBL-.YYYY.-.MM.-"
+        target.naming_series="AHBL-"
         target.hbl_id=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
@@ -53,6 +53,9 @@ def make_sales_invoice_from_hbl(source_name, target_doc=None):
         target.custom_hbl_sea_link=source.name
         target.custom_hbl_type="Import Sea House Bill"
         target.customer=""
+        target.customer_name=""
+        target.customer_address=""
+        
     doclist = get_mapped_doc("Import Sea House Bill", source_name, {
         "Import Sea House Bill": {
             "doctype": "Sales Invoice",

@@ -16,29 +16,29 @@ frappe.ui.form.on('Import Sea House Bill', {
    
     refresh: function(frm) {
         const expense_list=frm.doc.purchase_invoice_list
-        const format_expense=expense_list.map(expense => {
+        const format_expense= (expense_list && expense_list.length>0) ? expense_list.map(expense => {
             return {
                     label: expense.invoice_link+ "-"+ expense.item_code, 
                     fieldname: expense.name,
                     fieldtype: 'Check',
             }
-        })
+        }) : []
         const profit_share_list=frm.doc.profit_share_list
-        const format_profit_share=profit_share_list.map(profit_share => {
+        const format_profit_share= (profit_share_list && profit_share_list.length>0) ? profit_share_list.map(profit_share => {
             return {
                     label: profit_share.journal_id + " - " + profit_share.account_name, 
                     fieldname: profit_share.name,
                     fieldtype: 'Check',
             }
-        })
+        }):[]
         const sales_invoice_list=frm.doc.invoice_list
-        const format_sales_invoice=sales_invoice_list.map(sales_invoice => {
+        const format_sales_invoice= (sales_invoice_list && sales_invoice_list.length>0) ? sales_invoice_list.map(sales_invoice => {
             return {
                     label: sales_invoice.invoice_link+ "-"+ sales_invoice.item_code, 
                     fieldname: sales_invoice.name,
                     fieldtype: 'Check',
             }
-        })
+        }):[]
        if(frm.doc.docstatus==1){
         frm.add_custom_button(__("Sales Invoice"), function () {
             frappe.model.open_mapped_doc({
