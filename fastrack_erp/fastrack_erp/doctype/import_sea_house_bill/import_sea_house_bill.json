@@ -151,7 +151,7 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "carrier.custom_bin_no",
+   "fetch_from": "carrier.custom_ain_no",
    "fieldname": "carrier_code",
    "fieldtype": "Data",
    "label": "Carrier Code"
@@ -819,7 +819,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-17 02:14:24.523819",
+ "modified": "2025-07-17 14:37:26.685984",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
