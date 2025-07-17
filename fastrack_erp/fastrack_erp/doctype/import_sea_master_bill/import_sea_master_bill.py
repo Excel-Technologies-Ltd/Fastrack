@@ -12,6 +12,7 @@ class ImportSeaMasterBill(Document):
 			self.naming_series_2= self.naming_series
 
 	def on_update_after_submit(self):
+		self.validate_no_pkg_in_container()
 		consignee_ain_no=frappe.db.get_value("Customer",self.consignee,"custom_ain_no")
 		if not consignee_ain_no:
 			frappe.throw(f"Set Ain No in Customer -({self.consignee})")

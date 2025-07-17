@@ -44,6 +44,7 @@ class ImportSeaHouseBill(Document):
 		self.gross_weight= self.hbl_weight
 		self.total_container_hbl= len(self.container_info)		
 	def on_update_after_submit(self):
+		self.validate_no_pkg_in_container()
 		total_price = 0
 		total_qty = 0
 
