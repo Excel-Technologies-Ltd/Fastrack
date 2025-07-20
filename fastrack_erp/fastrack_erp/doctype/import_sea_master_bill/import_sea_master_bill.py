@@ -8,12 +8,10 @@ class ImportSeaMasterBill(Document):
 			self.mbl_open_by= frappe.session.user
 		if not self.mbl_date:
 			self.mbl_date= datetime.now().date()
-		if not self.naming_series_2:
-			self.naming_series_2= self.naming_series
 
 	def on_update_after_submit(self):
 		self.validate_no_pkg_in_container()
-		consignee_ain_no=frappe.db.get_value("Customer",self.consignee,"custom_ain_no")
+		consignee_ain_no=frappe.db.get_value("Supplier",self.consignee,"custom_ain_no")
 		if not consignee_ain_no:
 			frappe.throw(f"Set Ain No in Customer -({self.consignee})")
 		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name,"docstatus":1},pluck="name")

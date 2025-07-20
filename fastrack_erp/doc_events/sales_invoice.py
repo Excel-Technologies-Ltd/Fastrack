@@ -13,13 +13,17 @@ def after_submit(doc, method):
             row.invoice_link = doc.name 
             row.item_code = item.item_code
             row.qty = item.qty
-            row.rate = item.rate
-            row.total_price = item.amount
+            row.rate = item.net_rate
+            row.total_price = item.net_amount
             row.date = doc.posting_date 
-            row.customer = doc.customer 
+            row.customer = doc.customer
+            row.currency = doc.currency
+            row.exchange_rate = doc.conversion_rate
+            row.base_net_rate = item.base_net_rate
+            row.base_net_amount = item.base_net_amount
             hbl_doc.append("invoice_list", row)
         
-        hbl_doc.total_invoice_amount = sum(float(item.total_price) for item in hbl_doc.invoice_list)
+        hbl_doc.total_invoice_amount = sum(float(item.base_net_amount) for item in hbl_doc.invoice_list)
 
         hbl_doc.save(ignore_permissions=True)
 def on_cancel(doc, method):
@@ -28,5 +32,5 @@ def on_cancel(doc, method):
         for item in hbl_doc.invoice_list:
             if item.invoice_link == doc.name:
                 hbl_doc.invoice_list.remove(item)
-        hbl_doc.total_invoice_amount = sum(float(item.total_price) for item in hbl_doc.invoice_list)
+        hbl_doc.total_invoice_amount = sum(float(item.base_net_amount) for item in hbl_doc.invoice_list)
         hbl_doc.save()

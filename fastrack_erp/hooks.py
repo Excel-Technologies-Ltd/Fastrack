@@ -254,7 +254,9 @@ fixtures = [
                   "Purchase Invoice-custom_hbl_type",
                   "Purchase Invoice-custom_shbl_id",
                   "Payment Entry-custom_on_behalf_of_customer",
-                  "Purchase Invoice Item-custom_exchange_rate"
+                  "Purchase Invoice Item-custom_exchange_rate",
+                  "Supplier-custom_ain_no",
+                  "Supplier-custom_bin_no"
                  
                 ],
             ],

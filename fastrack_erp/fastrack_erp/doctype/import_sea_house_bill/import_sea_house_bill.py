@@ -164,7 +164,7 @@ def get_gl_entry_from_invoice(invoice_list):
     default_company = default_receivable_account[0].name
     gl_entry_list = frappe.db.get_list("GL Entry",
                                        filters=[["company","=",default_company],["account","=",bank_account],["voucher_type","=","Payment Entry"],["against_voucher_type","=","Sales Invoice"],["against_voucher","in",invoice_list],
-                                                ["credit_in_account_currency",">",0]],
+                                                ["credit_in_account_currency",">",0],["docstatus","=",1]],
                                        fields=["name",'credit_in_account_currency','party','voucher_no',"against_voucher"]
                                        )
     return gl_entry_list

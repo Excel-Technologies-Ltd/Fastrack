@@ -20,6 +20,13 @@ frappe.query_reports["Shipment Tracking"] = {
 			"fieldname": "shipment_type",
 			"label": "Shipment Type",
 			"fieldtype": "Select",
+			"options": ["Import", "Export"],
+			"default": "Import"
+		},
+		{
+			"fieldname": "docu_type",
+			"label": "DO Type",
+			"fieldtype": "Select",
 			"options": ["Air", "Sea", "Door"],
 			"default": "Sea"
 		}

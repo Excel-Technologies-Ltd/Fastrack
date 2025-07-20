@@ -50,8 +50,9 @@ def make_air_house_bill(source_name, target_doc=None):
 @frappe.whitelist()
 def make_sales_invoice_from_hbl(source_name, target_doc=None):
     def set_missing_values(source, target):
-        target.custom_hbl_sea_link=source.name
+        
         target.custom_hbl_type="Import Sea House Bill"
+        target.custom_hbl_sea_link=source.name
         target.customer=""
         target.customer_name=""
         target.customer_address=""
@@ -220,7 +221,7 @@ def download_xml_as_pdf(doctype="Import Sea Master Bill", docname="MBL-2025-05-0
     pretty_xml = parsed.toprettyxml(indent="  ")
     last_id=docname.split("-")[-1]
     mbl_doc=frappe.get_doc("Import Sea Master Bill",docname)
-    carrier_code=frappe.db.get_value("Customer",mbl_doc.consignee,"custom_ain_no")
+    carrier_code=frappe.db.get_value("Supplier",mbl_doc.consignee,"custom_ain_no")
     
     # Remove XML declaration if needed
     if pretty_xml.startswith('<?xml'):
@@ -309,16 +310,16 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                         "Bol_type_code":hbl_doc.hbl_type_code,
                         "DG_status":hbl_doc.dg_status
                     },
-                    "Consolidated_Cargo":consolidated_cargo ,
+                    "Consolidated_Cargo": 0 if hbl_doc.container_type == "FCL" else 1,
                     "Load_unload_place":{
                         "Port_of_origin_code":hbl_doc.port_of_origin_code,
                         "Port_of_unloading_code":hbl_doc.pod_code
                     },
                     "Traders_segment":{
                         "Carrier":{
-                            "Carrier_code":frappe.db.get_value("Customer",hbl_doc.carrier,"custom_ain_no"),
-                            "Carrier_name":frappe.db.get_value("Customer",hbl_doc.carrier,"customer_name"),
-                            "Carrier_address":clean_address(frappe.get_value("Customer",hbl_doc.carrier,"primary_address")) if frappe.get_value("Customer",hbl_doc.carrier,"primary_address") else ""
+                            "Carrier_code":frappe.db.get_value("Supplier",hbl_doc.carrier,"custom_ain_no"),
+                            "Carrier_name":frappe.db.get_value("Supplier",hbl_doc.carrier,"supplier_name"),
+                            "Carrier_address":clean_address(frappe.get_value("Supplier",hbl_doc.carrier,"primary_address")) if frappe.get_value("Supplier",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_agent":{
                             "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
@@ -416,11 +417,12 @@ from frappe.utils.pdf import get_pdf
 
 @frappe.whitelist(allow_guest=True)
 def download_purchase_invoice_pdf(invoice_ids,doctype_name):
+    print(invoice_ids,doctype_name)
     try:
         # Convert string to list
         if isinstance(invoice_ids, str):
             invoice_ids = invoice_ids.split(',')
-        
+        print(invoice_ids)
         # Build HTML content without Jinja
         html_content = build_purchase_invoice_html(invoice_ids,doctype_name)
         
@@ -485,6 +487,7 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
         </style>
     </head>
     <body>
+    <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 55px;" />
         <h1>Expenses</h1>
         <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
 
@@ -493,13 +496,16 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
     rows = []
     grand_total = 0
     currency = "BDT"
+    purchase_invoice_list=[]
 
     for invoice_id in invoice_ids:
         invoice_id = invoice_id.strip()
+        
         if not frappe.db.exists(child_doctype_name, invoice_id):
             continue
         try:
             invoice = frappe.get_doc(child_doctype_name, {"name": invoice_id, "parent": doctype_name})
+            purchase_invoice_list.append(invoice.invoice_link)
             currency = invoice.currency or "BDT"
             grand_total += frappe.utils.flt(invoice.total_price or 0)
 
@@ -526,6 +532,12 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
             """)
 
     if rows:
+        paid_amount=0
+        # remove duplicate invoice_id
+        if len(purchase_invoice_list)>0:
+            purchase_invoice_list=list(set(purchase_invoice_list))
+            print(purchase_invoice_list)
+            paid_amount=get_paid_amount_on_purchase_invoice(purchase_invoice_list)
         html += f"""
         <table>
             <thead>
@@ -545,6 +557,14 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
                 <tr>
                     <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
                     <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="text-right"><strong>Paid Amount</strong></td>
+                    <td class="text-right"><strong>{str(frappe.utils.flt(paid_amount))}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="text-right"><strong>Due Amount</strong></td>
+                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total - paid_amount))}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -633,6 +653,7 @@ def build_profit_share_html(journal_ids,doctype_name):
         </style>
     </head>
     <body>
+        <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 55px;" />
         <h1>Profit Share</h1>
         <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
 
@@ -775,6 +796,7 @@ def build_sales_invoice_html(invoice_ids, doctype_name):
         </style>
     </head>
     <body>
+        <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 55px;" />
         <h1>Sales Invoice</h1>
         <p>Generated on: {frappe.utils.now_datetime().strftime('%Y-%m-%d %I:%M:%S %p')}</p>
 
@@ -906,3 +928,18 @@ def get_supplier_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea Ho
     return remove_duplicate_supplier_list
 
 # agent list
+
+
+def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
+    # Ensure that each invoice ID is wrapped in single quotes
+    formatted_invoice_ids = ["'{}'".format(invoice_id) for invoice_id in invoice_id_list]
+    sql_query = f"""
+    SELECT SUM(allocated_amount * exchange_rate) as paid_amount 
+    FROM `tabPayment Entry Reference` 
+    WHERE parenttype = "Payment Entry" 
+    AND docstatus = 1
+    AND reference_doctype = "Purchase Invoice" 
+    AND reference_name IN ({','.join(formatted_invoice_ids)})
+    """
+    paid_amount = frappe.db.sql(sql_query)
+    return paid_amount[0][0] if paid_amount else 0

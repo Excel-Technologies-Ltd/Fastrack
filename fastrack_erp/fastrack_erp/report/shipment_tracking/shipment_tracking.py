@@ -151,10 +151,10 @@ def get_data(filters):
     
     shipment_type = filters.get("shipment_type")
     
-    if shipment_type == "Air":
+    if shipment_type == "Export":
         frappe.msgprint(_("coming soon."))
         return []
-    elif shipment_type == "Sea":
+    elif shipment_type == "Import":
         from_date = filters.get("from_date")
         to_date = filters.get("to_date")
         
@@ -163,16 +163,22 @@ def get_data(filters):
         
         if from_date > to_date:
             frappe.throw(_("From Date cannot be after To Date."))
-            
-        return get_sea_data(from_date, to_date)
-    elif shipment_type == "Door":
-        frappe.msgprint(_("coming soon."))
-        return []
+        if filters.get("docu_type") == "Air":
+            frappe.msgprint(_("coming soon."))
+            return []
+        if filters.get("docu_type") == "Sea":
+            return get_sea_import_data(from_date, to_date)
+        if filters.get("docu_type") == "Door":
+            frappe.msgprint(_("coming soon."))
+            return []
+        else:
+            frappe.msgprint(_("Unsupported DO Type: {0}").format(filters.get("docu_type")))
+            return []
     else:
         frappe.msgprint(_("Unsupported shipment type: {0}").format(shipment_type))
         return []
 
-def get_sea_data(from_date, to_date):
+def get_sea_import_data(from_date, to_date):
     """
     Fetch sea shipment data from the database.
     
@@ -186,6 +192,8 @@ def get_sea_data(from_date, to_date):
     try:
         data = frappe.db.sql("""
             SELECT 
+                "Import" AS shipment_type,
+                 hbl.sales_person,
                 hbl.hbl_open_by,
                 hbl.mbl_link,
                 hbl.mbl_no,
@@ -203,7 +211,7 @@ def get_sea_data(from_date, to_date):
                 hbl.hbl_etd,
                 hbl.eta,
                 hbl.do_party,
-                hbl.sales_person
+               
                 
             FROM 
                 `tabImport Sea House Bill` AS hbl

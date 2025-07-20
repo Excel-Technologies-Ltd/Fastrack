@@ -12,7 +12,11 @@
   "item_code",
   "qty",
   "rate",
-  "total_price"
+  "total_price",
+  "currency",
+  "exchange_rate",
+  "base_net_rate",
+  "base_net_amount"
  ],
  "fields": [
   {
@@ -41,7 +45,6 @@
    "allow_on_submit": 1,
    "fieldname": "total_price",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Total Price"
   },
   {
@@ -64,12 +67,37 @@
    "in_list_view": 1,
    "label": "Item Code",
    "options": "Item"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Currency"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "exchange_rate",
+   "fieldtype": "Currency",
+   "label": "Exchange Rate"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "base_net_rate",
+   "fieldtype": "Currency",
+   "in_standard_filter": 1,
+   "label": "Total"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "base_net_amount",
+   "fieldtype": "Currency",
+   "label": "Base Net Amount"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-23 10:32:28.617276",
+ "modified": "2025-07-21 02:41:52.790379",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Sales Invoice",

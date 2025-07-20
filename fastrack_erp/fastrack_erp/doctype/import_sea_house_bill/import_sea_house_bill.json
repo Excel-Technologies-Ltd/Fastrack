@@ -66,6 +66,7 @@
   "hbl_line_no",
   "fv_etd",
   "eta_dhaka",
+  "container_type",
   "section_break_tvziq",
   "carrier_name",
   "agent_name",
@@ -213,7 +214,7 @@
    "fieldname": "carrier",
    "fieldtype": "Link",
    "label": "Carrier",
-   "options": "Customer",
+   "options": "Supplier",
    "reqd": 1
   },
   {
@@ -284,8 +285,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "cf_agent",
-   "fieldtype": "Data",
-   "label": "C&F Agent"
+   "fieldtype": "Link",
+   "label": "C&F Agent",
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -409,7 +411,7 @@
    "reqd": 1
   },
   {
-   "fetch_from": "carrier.customer_name",
+   "fetch_from": "carrier.supplier_name",
    "fieldname": "carrier_name",
    "fieldtype": "Data",
    "hidden": 1,
@@ -795,12 +797,19 @@
    "fieldname": "hbl_vol_cbm",
    "fieldtype": "Float",
    "label": "Vol (CBM)",
-   "precision": "2"
+   "precision": "2",
+   "reqd": 1
   },
   {
    "fieldname": "bill_of_entry",
    "fieldtype": "Data",
    "label": "Bill of Entry"
+  },
+  {
+   "fieldname": "container_type",
+   "fieldtype": "Select",
+   "label": "Container Type",
+   "options": "\nFCL\nLCL"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -819,7 +828,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-17 14:37:26.685984",
+ "modified": "2025-07-21 03:05:36.712239",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
