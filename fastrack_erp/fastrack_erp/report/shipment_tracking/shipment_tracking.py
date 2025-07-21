@@ -31,16 +31,11 @@ def get_columns_from_data(data):
     columns = []
     # width need to be adjusted based on the field length
     for field in data[0].keys():
-        value = data[0][field]
-        if isinstance(value, str):
-            width = len(value) * 10
-        else:
-            width = 120
         columns.append({
             "label": field.replace("_", " ").title(),
             "fieldname": field,
             "fieldtype": "Data",  # You can add logic to infer type if needed
-            "width": width
+            "width": 200
         })
     return columns
 
