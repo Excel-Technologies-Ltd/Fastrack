@@ -14,127 +14,35 @@ def execute(filters=None):
     Returns:
         tuple: (columns, data)
     """
-    columns = get_columns()
+    columns = get_columns_from_data(get_data(filters or {}))
     data = get_data(filters or {})
     return columns, data
 
-def get_columns():
+def get_columns_from_data(data):
     """
-    Define the column structure for the report.
-    
+    Generate columns dynamically from data fields.
+    Args:
+        data (list): List of dictionaries (rows).
     Returns:
         list: List of column definitions.
     """
-    return [
-        {
-            "label": _("Sales Person"),
-            "fieldname": "sales_person",
-            "fieldtype": "Link",
-            "options": "Sales Person",
-            "width": 120
-        },
-        {
-            "label": _("MBL Link"),
-            "fieldname": "mbl_link",
-            "fieldtype": "Link",
-            "options": "Import Sea Master Bill",
-            "width": 120
-        },
-        {
-            "label": _("MBL No"),
-            "fieldname": "mbl_no",
-            "fieldtype": "Data",
-            "width": 120
-        },
-        {
-            "label": _("HBL No"),
-            "fieldname": "hbl_id",
-            "fieldtype": "Link",
-            "options": "Import Sea House Bill",
-            "width": 120
-        },
-        {
-            "label": _("MBL Date"),
-            "fieldname": "mbl_date",
-            "fieldtype": "Date",
-            "width": 120
-        },
-        {
-            "label": _("HBL Date"),
-            "fieldname": "hbl_date",
-            "fieldtype": "Date",
-            "width": 120
-        },
-        {
-            "label": _("Reference Number"),
-            "fieldname": "reference_number",
-            "fieldtype": "Data",
-            "width": 120
-        },
-        {
-            "label": _("Shipper"),
-            "fieldname": "hbl_shipper",
-            "fieldtype": "Link",
-            "options": "Supplier",
-            "width": 120
-        },
-        {
-            "label": _("Consignee"),
-            "fieldname": "hbl_consignee",
-            "fieldtype": "Link",
-            "options": "Customer",
-            "width": 120
-        },
-        {
-            "label": _("Agent"),
-            "fieldname": "agent",
-            "fieldtype": "Link",
-            "options": "Supplier",
-            "width": 120
-        },
-        {
-            "label": _("LC"),
-            "fieldname": "lc",
-            "fieldtype": "Data",
-            "width": 120
-        },
-        {
-            "label": _("POL"),
-            "fieldname": "port_of_loading",
-            "fieldtype": "Data",
-            "width": 120
-        },
-        {
-            "label": _("POD"),
-            "fieldname": "port_of_delivery",
-            "fieldtype": "Data",
-            "width": 120
-        },
-        {
-            "label": _("Vol CBM"),
-            "fieldname": "hbl_vol_cbm",
-            "fieldtype": "Float",
-            "width": 120
-        },
-        {
-            "label": _("ETD"),
-            "fieldname": "hbl_etd",
-            "fieldtype": "Date",
-            "width": 120
-        },
-        {
-            "label": _("ETA"),
-            "fieldname": "eta",
-            "fieldtype": "Date",
-            "width": 120
-        },
-        {
-            "label": _("DOO"),
-            "fieldname": "do_party",
-            "fieldtype": "Data",
-            "width": 120
-        }
-    ]
+    if not data:
+        return []
+    columns = []
+    # width need to be adjusted based on the field length
+    for field in data[0].keys():
+        value = data[0][field]
+        if isinstance(value, str):
+            width = len(value) * 10
+        else:
+            width = 120
+        columns.append({
+            "label": field.replace("_", " ").title(),
+            "fieldname": field,
+            "fieldtype": "Data",  # You can add logic to infer type if needed
+            "width": width
+        })
+    return columns
 
 def get_data(filters):
     """
@@ -193,31 +101,49 @@ def get_sea_import_data(from_date, to_date):
         data = frappe.db.sql("""
             SELECT 
                 "Import" AS shipment_type,
-                 hbl.sales_person,
-                hbl.hbl_open_by,
-                hbl.mbl_link,
-                hbl.mbl_no,
-                hbl.hbl_id,
-                hbl.mbl_date,
-                hbl.hbl_date,
-                hbl.reference_number,
-                hbl.hbl_shipper ,
-                hbl.hbl_consignee ,
+                hbl.sales_person,
+                hbl.carrier,
                 hbl.agent,
+                mbl.shipper,
+                hbl.mbl_no,
+                hbl.mbl_date,
+                hbl.hbl_id as hbl_no,
+                hbl.hbl_date,
+                hbl.name as hbl_link,
+                hbl.reference_number,
+                hbl.inco_term,
+                hbl.total_container_hbl,
+                hbl.hbl_shipper,
+                hbl.hbl_consignee,
+                hbl.notify_to,
+                hbl.customer,
                 hbl.lc,
+                hbl.lc_date,
+                GROUP_CONCAT(si.name ORDER BY si.posting_date) as inv_no,
+                GROUP_CONCAT(si.posting_date ORDER BY si.posting_date) as inv_date,
                 hbl.port_of_loading,
                 hbl.port_of_delivery,
-                hbl.hbl_vol_cbm,
+                hbl.port_of_discharge,
+                hbl.mv,
+                hbl.mv_voyage_no,
+                hbl.fv,
+                hbl.fv__v_no as fv_voyage_no,
                 hbl.hbl_etd,
                 hbl.eta,
-                hbl.do_party,
-               
-                
+                hbl.mbl_surrender_status,
+                hbl.do_validity as do_date,
+                hbl.total_purchase_amount as expense,
+                hbl.total_invoice_amount as income,
+                (hbl.total_invoice_amount - hbl.total_purchase_amount) as profit      
             FROM 
                 `tabImport Sea House Bill` AS hbl
+            LEFT JOIN `tabImport Sea Master Bill` as mbl ON mbl.name = hbl.mbl_link
+            LEFT JOIN `tabSales Invoice` as si ON si.custom_hbl_sea_link = hbl.name
             WHERE 
                 hbl.docstatus = 1 
                 AND hbl.mbl_date BETWEEN %s AND %s
+            GROUP BY
+                hbl.name
         """, (from_date, to_date), as_dict=1)
         return data or []
     except Exception as e:

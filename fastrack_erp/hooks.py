@@ -273,7 +273,8 @@ fixtures = [
                     "Customer-account_manager-hidden",
                     "Customer-main-quick_entry",
                     "Customer-opportunity_name-hidden",
-                    "Customer-lead_name-hidden"
+                    "Customer-lead_name-hidden",
+                    "Sales Invoice-main-field_order"
                     
                 ]
             ]

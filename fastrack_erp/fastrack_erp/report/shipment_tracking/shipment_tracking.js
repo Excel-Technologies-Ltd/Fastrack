@@ -29,6 +29,6 @@ frappe.query_reports["Shipment Tracking"] = {
 			"fieldtype": "Select",
 			"options": ["Air", "Sea", "Door"],
 			"default": "Sea"
-		}
+		},
 	]
 };
