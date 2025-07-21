@@ -538,6 +538,7 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
             purchase_invoice_list=list(set(purchase_invoice_list))
             print(purchase_invoice_list)
             paid_amount=get_paid_amount_on_purchase_invoice(purchase_invoice_list)
+        paid_amount = frappe.utils.flt(paid_amount or 0)
         html += f"""
         <table>
             <thead>
@@ -930,7 +931,12 @@ def get_supplier_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea Ho
 # agent list
 
 
+
 def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
+    # Handle empty list
+    if not invoice_id_list:
+        return 0
+    
     # Ensure that each invoice ID is wrapped in single quotes
     formatted_invoice_ids = ["'{}'".format(invoice_id) for invoice_id in invoice_id_list]
     sql_query = f"""
@@ -941,5 +947,11 @@ def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
     AND reference_doctype = "Purchase Invoice" 
     AND reference_name IN ({','.join(formatted_invoice_ids)})
     """
-    paid_amount = frappe.db.sql(sql_query)
-    return paid_amount[0][0] if paid_amount else 0
+    
+    result = frappe.db.sql(sql_query)
+    
+    # Handle None result from SUM when no rows match or all values are NULL
+    if result and result[0] and result[0][0] is not None:
+        return result[0][0]
+    else:
+        return 0
