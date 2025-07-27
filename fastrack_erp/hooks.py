@@ -256,7 +256,9 @@ fixtures = [
                   "Payment Entry-custom_on_behalf_of_customer",
                   "Purchase Invoice Item-custom_exchange_rate",
                   "Supplier-custom_ain_no",
-                  "Supplier-custom_bin_no"
+                  "Supplier-custom_bin_no",
+                  "Payment Entry Reference-custom_hbl_type",
+                  "Payment Entry Reference-custom_hbl_no"
                  
                 ],
             ],
@@ -279,5 +281,16 @@ fixtures = [
                 ]
             ]
         ]
+    },
+    {
+        "dt":"Custom HTML Block",
+        "filters":[
+            [
+                "name",
+                "in",
+                ["Report WebView"]
+            ]
+        ]
     }
 ]
+website_route_rules = [{'from_route': '/portal/<path:app_path>', 'to_route': 'portal'},]

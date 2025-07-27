@@ -1,0 +1,404 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:SMBL-E-{########}",
+ "creation": "2025-07-27 23:44:01.551991",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_rzyek",
+  "naming_series_2",
+  "mbl_no",
+  "fv",
+  "port_of_loading",
+  "no_of_pkg",
+  "mv",
+  "remarks",
+  "column_break_ibxhu",
+  "mbl_open_by",
+  "mbl_date",
+  "fv_voyage_no",
+  "port_of_discharge",
+  "gr_weight",
+  "mv_voyage_no",
+  "total_container",
+  "import_rot_no",
+  "ata_ctg",
+  "column_break_mtgyt",
+  "agent",
+  "shipping_line",
+  "etd",
+  "port_of_delivery",
+  "vol_cbm",
+  "eta",
+  "total_no_of_hbl",
+  "shipping_line_address",
+  "fv_etd",
+  "agent_address",
+  "shipper_address",
+  "consignee_address",
+  "atb",
+  "consignee",
+  "shipper",
+  "serial_no",
+  "voyage_dep_date",
+  "unit",
+  "section_break_plp8q",
+  "container_info",
+  "hbl_info",
+  "hbl_parent",
+  "connections_tab",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_rzyek",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "SMBL-E-",
+   "fieldname": "naming_series_2",
+   "fieldtype": "Data",
+   "label": "Naming Series",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mbl_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "MBL No",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fv",
+   "fieldtype": "Data",
+   "label": "FV"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Float",
+   "label": "No. of Pkg",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mv",
+   "fieldtype": "Data",
+   "label": "MV"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA "
+  },
+  {
+   "fieldname": "column_break_ibxhu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mbl_open_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "MBL Open By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "MBL Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fv_voyage_no",
+   "fieldtype": "Data",
+   "label": "FV Voyage No."
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port of Discharge"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gr. Weight",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mv_voyage_no",
+   "fieldtype": "Data",
+   "label": "MV Voyage No."
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_container",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total Container ",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "import_rot_no",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Import Rot No."
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval:doc.etd",
+   "fieldname": "ata_ctg",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "ATA (CTG)"
+  },
+  {
+   "fieldname": "column_break_mtgyt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Agent",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "shipping_line",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Shipping Line",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "shipping_line.primary_address",
+   "fieldname": "shipping_line_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipping Line Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "shipper.primary_address",
+   "fieldname": "shipper_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Consignee",
+   "options": "Supplier"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Consignee Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vol_cbm",
+   "fieldtype": "Float",
+   "label": "Vol (CBM)",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fv_etd",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "FV ETD"
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval:doc.etd",
+   "fieldname": "atb",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "ATB"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_no_of_hbl",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total  HBL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Serial No"
+  },
+  {
+   "fieldname": "voyage_dep_date",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "Voyage Dep. Date"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Unit"
+  },
+  {
+   "fieldname": "section_break_plp8q",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "container_info",
+   "fieldtype": "Table",
+   "label": "Container Info.",
+   "options": "Fastrack Export  Item"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_info",
+   "fieldtype": "Table",
+   "label": "HBL Info",
+   "options": "HBL Info"
+  },
+  {
+   "fieldname": "hbl_parent",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "HBL parent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Sea Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections Tab"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Sea Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Import Sea House Bill",
+   "link_fieldname": "mbl_no"
+  }
+ ],
+ "modified": "2025-07-28 01:54:34.003943",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp Export",
+ "name": "Export Sea Master Bill",
+ "name_case": "Title Case",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

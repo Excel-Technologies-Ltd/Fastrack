@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Custom HTML Block",
+  "html": "<div style=\"width: 100%; height: 100%; border: 1px solid #e0e6ed; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);\">\n    <iframe \n        src=\"/portal\" \n        width=\"100%\" \n        height=\"460px\" \n        frameborder=\"0\"\n        style=\"border: none; display: block;\">\n    </iframe>\n</div>",
+  "modified": "2025-07-28 01:57:43.323290",
+  "name": "Report WebView",
+  "private": 0,
+  "roles": [],
+  "script": null,
+  "style": null
+ }
+]

@@ -28,11 +28,18 @@ def get_columns_from_data(data):
     """
     if not data:
         return []
+    
     columns = []
-    # width need to be adjusted based on the field length
     for field in data[0].keys():
+        parts = field.split("_")
+        if parts[0].lower() == "mbl":
+            # Capitalize 'MBL' prefix, rest as title
+            label = "MBL " + " ".join(p.title() for p in parts[1:])
+        else:
+            label = field.replace("_", " ").title()
+
         columns.append({
-            "label": field.replace("_", " ").title(),
+            "label": label,
             "fieldname": field,
             "fieldtype": "Data",  # You can add logic to infer type if needed
             "width": 200
@@ -100,18 +107,18 @@ def get_sea_import_data(from_date, to_date):
                 hbl.carrier,
                 hbl.agent,
                 mbl.shipper,
-                hbl.mbl_no,
-                hbl.mbl_date,
+                hbl.mbl_no as mbl_no    ,
+                hbl.mbl_date as mbl_date,
                 hbl.hbl_id as hbl_no,
-                hbl.hbl_date,
-                hbl.name as hbl_link,
+                hbl.hbl_date as date,
+                hbl.name as link,
                 hbl.reference_number,
                 hbl.inco_term,
                 hbl.total_container_hbl,
-                hbl.hbl_shipper,
-                hbl.hbl_consignee,
-                hbl.notify_to,
-                hbl.customer,
+                hbl.hbl_shipper as shipper,
+                hbl.hbl_consignee as consignee,
+                hbl.notify_to as notify_party,
+                hbl.customer as customer,
                 hbl.lc,
                 hbl.lc_date,
                 GROUP_CONCAT(si.name ORDER BY si.posting_date) as inv_no,
@@ -123,7 +130,7 @@ def get_sea_import_data(from_date, to_date):
                 hbl.mv_voyage_no,
                 hbl.fv,
                 hbl.fv__v_no as fv_voyage_no,
-                hbl.hbl_etd,
+                hbl.etd,
                 hbl.eta,
                 hbl.mbl_surrender_status,
                 hbl.do_validity as do_date,

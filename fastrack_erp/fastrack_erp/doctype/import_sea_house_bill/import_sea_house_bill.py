@@ -26,6 +26,18 @@ class ImportSeaHouseBill(Document):
 			payment_entry.append(payment_entry_doc)
 		self.payment_entry_list = payment_entry
 		self.total_payment = sum(float(item.amount) for item in payment_entry)
+		draft_list=get_draft_sales_and_purchase_invoice_list(self.name)
+		draft_invoice_list=[]
+		for item in draft_list:
+			draft_invoice=frappe.new_doc("Fastrack Draft Bill")
+			draft_invoice.type=item["type"]
+			draft_invoice.invoice_id=item["id"]
+			draft_invoice.amount=item["amount"]
+			draft_invoice.parent=self.name
+			draft_invoice.parenttype="Import Sea House Bill"
+			draft_invoice.parentfield="draft_invoice_list"
+			draft_invoice_list.append(draft_invoice)
+		self.draft_invoice_list = draft_invoice_list
 
 	def on_update(self):
 		total_price = 0
@@ -169,3 +181,54 @@ def get_gl_entry_from_invoice(invoice_list):
                                        )
     return gl_entry_list
     
+    
+    
+@frappe.whitelist()
+def get_draft_sales_and_purchase_invoice_list(house_bill_no):
+    """
+    Fixed version that properly handles document objects
+    """
+    invoice_list = []
+    
+    try:
+        # Get sales invoices
+        sales_invoice_list = frappe.db.get_list(
+            "Sales Invoice",
+            filters=[
+                ["custom_hbl_sea_link", "=", house_bill_no],
+                ["docstatus", "=", 0]
+            ],
+            fields=["name","base_grand_total"]
+        )
+        
+        # Get purchase invoices  
+        purchase_invoice_list = frappe.db.get_list(
+            "Purchase Invoice",
+            filters=[
+                ["custom_shbl_id", "=", house_bill_no],
+                ["docstatus", "=", 0]
+            ],
+            fields=["name","base_grand_total"]
+        )
+        
+        # Process sales invoices
+        if sales_invoice_list:
+            for invoice in sales_invoice_list:
+                invoice_list.append({
+                    "type": "Sales Invoice",
+                    "id": invoice.name,
+                    "amount": invoice.base_grand_total
+                })
+        
+        # Process purchase invoices
+        if purchase_invoice_list:
+            for invoice in purchase_invoice_list:
+                invoice_list.append({
+                    "type": "Purchase Invoice", 
+                    "id": invoice.name,
+                    "amount": invoice.base_grand_total
+                })
+                
+    except Exception as e:
+        frappe.log_error(f"Error in get_draft_sales_and_purchase_invoice_list: {str(e)}")
+    return invoice_list

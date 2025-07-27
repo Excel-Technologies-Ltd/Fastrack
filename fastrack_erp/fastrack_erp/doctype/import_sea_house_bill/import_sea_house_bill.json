@@ -102,6 +102,7 @@
   "container_cost_info",
   "average_total",
   "total",
+  "draft_invoice_list",
   "invoice_list",
   "total_invoice_amount",
   "payment_entry_list",
@@ -118,16 +119,16 @@
   {
    "allow_on_submit": 1,
    "fieldname": "office_code",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Office Code",
-   "options": "Office Code"
+   "options": "\n301"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "office_name",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Office Name",
-   "options": "Office Name"
+   "options": "\nCHATTOGRAM CUSTOM HOUSE"
   },
   {
    "allow_on_submit": 1,
@@ -140,9 +141,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "nature",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Nature",
-   "options": "Nature"
+   "options": "\n23"
   },
   {
    "allow_on_submit": 1,
@@ -764,9 +765,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_type_code",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "HBL Type Code",
-   "options": "HBL Type Code"
+   "options": "\nHSB"
   },
   {
    "allow_on_submit": 1,
@@ -810,25 +811,31 @@
    "fieldtype": "Select",
    "label": "Container Type",
    "options": "\nFCL\nLCL"
+  },
+  {
+   "fieldname": "draft_invoice_list",
+   "fieldtype": "Table",
+   "label": "Draft Invoice List",
+   "options": "Fastrack Draft Bill"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [
   {
-   "link_doctype": "Sales Invoice",
-   "link_fieldname": "custom_hbl_sea_link"
-  },
-  {
    "link_doctype": "Journal Entry",
    "link_fieldname": "custom_shbl_id"
+  },
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_hbl_sea_link"
   },
   {
    "link_doctype": "Purchase Invoice",
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-21 03:05:36.712239",
+ "modified": "2025-07-27 11:26:09.399003",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

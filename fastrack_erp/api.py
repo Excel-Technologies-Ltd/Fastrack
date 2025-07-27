@@ -47,6 +47,17 @@ def make_air_house_bill(source_name, target_doc=None):
   
     return doclist
 
+# @frappe.whitelist()
+# def make_payment_entry(source_name, target_doc=None):
+    
+#     doclist = get_mapped_doc("Import Air Master Bill", source_name, {
+#         "Import Air Master Bill": {
+#             "doctype": "Payment Entry",
+#         },
+#     }, target_doc,)
+  
+#     return doclist
+
 @frappe.whitelist()
 def make_sales_invoice_from_hbl(source_name, target_doc=None):
     def set_missing_values(source, target):
@@ -322,8 +333,10 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Carrier_address":clean_address(frappe.get_value("Supplier",hbl_doc.carrier,"primary_address")) if frappe.get_value("Supplier",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_agent":{
-                            "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
-                            "Shipping_agent_address": clean_address(frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address") else ""
+                            # "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
+                            # "Shipping_agent_address": clean_address(frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address") else ""
+                            "Shipping_agent_name":"",
+                            "Shipping_agent_address":""
                         },
                         "Exporter":{
                            
@@ -440,6 +453,8 @@ def download_purchase_invoice_pdf(invoice_ids,doctype_name):
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 def build_purchase_invoice_html(invoice_ids, doctype_name):
+    print ("doctype_name",doctype_name)
+    print ("invoice_ids",invoice_ids)
     child_doctype_name = "Fastrack Purchase Invoice"
 
     html = f"""
@@ -500,11 +515,13 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
 
     for invoice_id in invoice_ids:
         invoice_id = invoice_id.strip()
-        
+        print("invoice_id", invoice_id)
+        print("frappe.db.exists(child_doctype_name, invoice_id)",frappe.db.exists(child_doctype_name, invoice_id))
         if not frappe.db.exists(child_doctype_name, invoice_id):
             continue
         try:
             invoice = frappe.get_doc(child_doctype_name, {"name": invoice_id, "parent": doctype_name})
+            print(invoice)
             purchase_invoice_list.append(invoice.invoice_link)
             currency = invoice.currency or "BDT"
             grand_total += frappe.utils.flt(invoice.total_price or 0)
