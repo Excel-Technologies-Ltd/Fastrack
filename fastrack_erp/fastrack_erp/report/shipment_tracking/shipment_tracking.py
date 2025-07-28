@@ -35,6 +35,20 @@ def get_columns_from_data(data):
         if parts[0].lower() == "mbl":
             # Capitalize 'MBL' prefix, rest as title
             label = "MBL " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "fv":
+            label = "FV " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "eta":
+            label = "ETA " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "etd":
+            label = "ETD " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "mv":
+            label = "MV " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "hbl":
+            label = "HBL " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "inv":
+            label = "INV " + " ".join(p.title() for p in parts[1:])
+        elif parts[0].lower() == "lc":
+            label = "LC " + " ".join(p.title() for p in parts[1:])
         else:
             label = field.replace("_", " ").title()
 
@@ -123,6 +137,7 @@ def get_sea_import_data(from_date, to_date):
                 hbl.lc_date,
                 GROUP_CONCAT(si.name ORDER BY si.posting_date) as inv_no,
                 GROUP_CONCAT(si.posting_date ORDER BY si.posting_date) as inv_date,
+                GROUP_CONCAT(cci.size, "⛌", cci.qty ORDER BY cci.size) as container_size,
                 hbl.port_of_loading,
                 hbl.port_of_delivery,
                 hbl.port_of_discharge,
@@ -130,8 +145,8 @@ def get_sea_import_data(from_date, to_date):
                 hbl.mv_voyage_no,
                 hbl.fv,
                 hbl.fv__v_no as fv_voyage_no,
-                hbl.etd,
-                hbl.eta,
+                hbl.hbl_etd as etd,
+                hbl.eta as eta,
                 hbl.mbl_surrender_status,
                 hbl.do_validity as do_date,
                 hbl.total_purchase_amount as expense,
@@ -141,6 +156,7 @@ def get_sea_import_data(from_date, to_date):
                 `tabImport Sea House Bill` AS hbl
             LEFT JOIN `tabImport Sea Master Bill` as mbl ON mbl.name = hbl.mbl_link
             LEFT JOIN `tabSales Invoice` as si ON si.custom_hbl_sea_link = hbl.name
+             LEFT JOIN `tabContainer Cost Info` as cci ON cci.parent = hbl.name
             WHERE 
                 hbl.docstatus = 1 
                 AND hbl.mbl_date BETWEEN %s AND %s
