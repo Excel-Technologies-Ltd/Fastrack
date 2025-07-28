@@ -35,6 +35,7 @@ const Select: React.FC<SelectProps> = ({
       name={name}
       required={required}
       disabled={disabled}
+      style={{fontSize: "10px"}}
     >
       <option value="" disabled hidden>Select an option</option>
       {options?.map((opt:Option) => (

@@ -291,6 +291,9 @@ fixtures = [
                 ["Report WebView"]
             ]
         ]
+    },
+    {
+        "dt":"Client Script",
     }
 ]
 website_route_rules = [{'from_route': '/portal/<path:app_path>', 'to_route': 'portal'},]

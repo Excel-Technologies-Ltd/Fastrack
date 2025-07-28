@@ -137,7 +137,7 @@ def get_sea_import_data(from_date, to_date):
                 hbl.lc_date,
                 GROUP_CONCAT(si.name ORDER BY si.posting_date) as inv_no,
                 GROUP_CONCAT(si.posting_date ORDER BY si.posting_date) as inv_date,
-                GROUP_CONCAT(cci.size, "⛌", cci.qty ORDER BY cci.size) as container_size,
+                GROUP_CONCAT(cci.qty, "⛌", cci.size ORDER BY cci.size) as container_size,
                 hbl.port_of_loading,
                 hbl.port_of_delivery,
                 hbl.port_of_discharge,

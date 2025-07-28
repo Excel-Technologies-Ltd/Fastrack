@@ -34,6 +34,7 @@ const Input: React.FC<InputProps> = ({
       required={required}
       disabled={disabled}
       className="input input-bordered w-full input-primary"
+      style={{fontSize: "10px"}}
     />
   </div>
 );

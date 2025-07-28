@@ -8,9 +8,18 @@ export const List = () => {
     const [selectAll, setSelectAll] = useState(false);
 
     // Get child data
-    const childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
+    let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         : null;
+    // if customer select then filter by customer
+    console.log("pdfFormOption", childData);
+    if(pdfPolicy.selectCustomer && pdfFormOption.customerName){
+        childData = childData.filter((row: any) => row.customer === pdfFormOption.customerName);
+    }
+    // if supplier select then filter by supplier
+    if(pdfPolicy.selectSupplier && pdfFormOption.supplierName){
+        childData = childData.filter((row: any) => row.supplier === pdfFormOption.supplierName);
+    }
 
     // Handle select all checkbox
     const handleSelectAll = (checked: boolean) => {
@@ -19,7 +28,7 @@ export const List = () => {
             // Get all invoice_link values
             const allIds = childData
                 .map((row: any) => row.name)
-                .filter((id: any) => id); // Filter out null/undefined values
+                .filter((id: any) => id); 
             setSelectedIds(allIds);
         } else {
             setSelectedIds([]);
@@ -69,7 +78,7 @@ export const List = () => {
         );
 
         return (
-            <div className="mt-10">
+            <div className="mt-10 " style={{fontSize: "10px"}}>
                 {/* Error display */}
                 {errorObj?.docNameError && pdfPolicy.CHILD_DOCTYPE && pdfFormOption.docName && (
                     <div className="text-red-500 mb-4">{errorObj?.docNameError}</div>
@@ -94,6 +103,7 @@ export const List = () => {
                                             checked={selectAll}
                                             onChange={(e) => handleSelectAll(e.target.checked)}
                                             className="mr-2"
+                                            disabled={!pdfPolicy.selectChildDoctype}
                                         />
                                         Select All
                                     </th>
@@ -115,7 +125,7 @@ export const List = () => {
                                                 type="checkbox"
                                                 checked={selectedIds.includes(row.name)}
                                                 onChange={(e) => handleSelectOne(row.name, e.target.checked)}
-                                                disabled={!row.invoice_link} // Disable if no invoice_link
+                                                disabled={!pdfPolicy.selectChildDoctype} // Disable if no invoice_link
                                             />
                                         </td>
                                         {columnMap?.map((column, colIndex) => (

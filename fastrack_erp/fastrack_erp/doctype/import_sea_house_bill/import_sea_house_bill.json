@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SHBL-{########}",
+ "autoname": "format:SHBL-{hbl_id}",
  "creation": "2025-04-30 17:12:57.586828",
  "default_view": "List",
  "doctype": "DocType",
@@ -835,7 +835,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-27 11:26:09.399003",
+ "modified": "2025-07-28 11:32:46.604090",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

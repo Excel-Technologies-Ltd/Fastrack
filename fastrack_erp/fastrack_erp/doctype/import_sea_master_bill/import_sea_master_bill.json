@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SMBL-{########}",
+ "autoname": "format:SMBL-{mbl_no}",
  "creation": "2025-04-30 13:30:27.082899",
  "default_view": "List",
  "doctype": "DocType",
@@ -371,7 +371,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-21 03:11:11.264654",
+ "modified": "2025-07-28 11:35:14.003242",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

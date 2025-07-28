@@ -9,10 +9,10 @@ import type { PdfFormOption } from "./PDFDownloadPorvider";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
 import { toast } from "react-toastify";
-import { useFrappeGetCall } from "frappe-react-sdk";
+
 
 const PdfForm = () => {
-  const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption } = usePDFDownload();
+  const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption ,docTypeData } = usePDFDownload();
   const { previewPdf } = useDownloadPDF();
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +52,9 @@ const PdfForm = () => {
       const response = await previewPdf();
       if (response.success) {
         toast.success("PDF Previewed Successfully");
+        // clear the form
+        setPdfFormOption({ pdfName: "", docName: "", customerName: "", supplierName: "" });
+        setPdfPolicy({ ...pdfPolicy, selectCustomer: false, selectSupplier: false, selectChildDoctype: false });
       } else {
         toast.error(response.errors?.[0]?.message || "Something went wrong");
       }
@@ -61,20 +64,31 @@ const PdfForm = () => {
     }
   };
 
-  const { data: customerList, mutate: mutateCustomerList } = useFrappeGetCall("fastrack_erp.api.get_customer_list_by_hbl_id", {
-    id: pdfFormOption.docName,
-    doctype_name: pdfPolicy.parentDoctype
-  });
+  // const { data: customerList, mutate: mutateCustomerList } = useFrappeGetCall("fastrack_erp.api.get_customer_list_by_hbl_id", {
+  //   id: pdfFormOption.docName,
+  //   doctype_name: pdfPolicy.parentDoctype
+  // });
 
-  console.log("customerList", customerList);
+  // get customer list from child data and must be unique
+  let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
+        ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
+        : null;
+  // get customer list from child data and must be unique
+  // check if childData is array
+  const customerList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.customer))] : [];
+  const supplierList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.supplier))] : [];
   const customerOptions =
-    customerList?.message && Array.isArray(customerList.message)
-      ? [{ value: "", label: "Select Customer" }, ...customerList.message.map((c: string) => ({ value: c, label: c }))]
+    customerList?.length > 0
+      ? [{ value: "", label: "Select Customer" }, ...customerList.map((c: any) => ({ value: c, label: c }))]
       : [{ value: "", label: "Select Customer" }];
+  const supplierOptions =
+    supplierList?.length > 0
+      ? [{ value: "", label: "Select Supplier" }, ...supplierList.map((c: any) => ({ value: c, label: c }))]
+      : [{ value: "", label: "Select Supplier" }];
 
   useEffect(() => {
     if (pdfPolicy.selectCustomer && pdfFormOption.docName) {
-      mutateCustomerList();
+      // mutateCustomerList();
     }
     if (pdfPolicy.selectSupplier && pdfFormOption.docName) {
       // setPdfFormOption((prev) => ({ ...prev, supplierName: "" }));
@@ -82,20 +96,21 @@ const PdfForm = () => {
   }, [pdfPolicy.selectCustomer, pdfFormOption.docName]);
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md p-4 space-y-4">
+    <form onSubmit={handleSubmit} className="max-w-md p-4 space-y-4 " style={{fontSize: "10px"}}>
       {/* PDF Name Checkboxes */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block  font-medium text-gray-700 mb-2">
           PDF Name <span className="text-red-500">*</span>
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
           {Object.values(PDF_NAME_LIST).map((name) => (
-            <label key={name} className="flex items-center space-x-2 cursor-pointer">
+            <label key={name} className="flex items-center space-x-2 cursor-pointer" style={{fontSize: "10px"}}>
               <input
                 type="checkbox"
                 checked={pdfFormOption.pdfName === name}
                 onChange={() => handlePdfNameChange(name)}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                style={{fontSize: "10px"}}
               />
               <span className="text-sm text-gray-700">{name}</span>
             </label>
@@ -123,17 +138,27 @@ const PdfForm = () => {
 
       <Select
         label="Supplier"
-        options={[
-          { value: "supp1", label: "Supplier 1" },
-          { value: "supp2", label: "Supplier 2" },
-        ]}
+        options={supplierOptions}
         value={pdfFormOption.supplierName}
         onChange={handleChange("supplierName")}
         required
         disabled={!pdfPolicy.selectSupplier}
       />
 
-      <Button className={`${loading ? "opacity-50 cursor-not-allowed" : ""}`} type="submit">Download PDF</Button>
+      {/* <Button className={`${loading ? "opacity-50 cursor-not-allowed" : ""}`} type="submit">Download PDF</Button> */}
+      <Button className={`${loading ? "opacity-50 cursor-not-allowed flex items-center justify-center space-x-2" : ""}`} type="submit" disabled={loading}>
+        {loading && (
+          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
+          </svg>
+        )}
+        <span>{loading ? "Processing..." : "Download PDF"}</span>
+      </Button>
     </form>
   );
 };
