@@ -32,14 +32,16 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Supplier",
-   "options": "Supplier"
+   "options": "Supplier",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "date",
    "fieldtype": "Date",
    "in_standard_filter": 1,
-   "label": "Date"
+   "label": "Date",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -47,49 +49,56 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Item Code",
-   "options": "Item"
+   "options": "Item",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "qty",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "QTY"
+   "label": "QTY",
+   "read_only": 1
   },
   {
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Rate"
+   "label": "Rate",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "total_price",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Total"
+   "label": "Total",
+   "read_only": 1
   },
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
-   "label": "Amount"
+   "label": "Amount",
+   "read_only": 1
   },
   {
    "fieldname": "currency",
    "fieldtype": "Data",
    "hidden": 1,
-   "label": "Currency"
+   "label": "Currency",
+   "read_only": 1
   },
   {
    "fieldname": "exchange_rate",
    "fieldtype": "Currency",
-   "label": "Exchange Rate"
+   "label": "Exchange Rate",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-21 02:43:16.071010",
+ "modified": "2025-07-29 13:18:36.476937",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Purchase Invoice",

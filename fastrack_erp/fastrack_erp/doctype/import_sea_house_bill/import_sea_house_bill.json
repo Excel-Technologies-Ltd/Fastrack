@@ -813,10 +813,12 @@
    "options": "\nFCL\nLCL"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "draft_invoice_list",
    "fieldtype": "Table",
    "label": "Draft Invoice List",
-   "options": "Fastrack Draft Bill"
+   "options": "Fastrack Draft Bill",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -835,7 +837,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-28 11:32:46.604090",
+ "modified": "2025-07-29 15:42:59.317396",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
