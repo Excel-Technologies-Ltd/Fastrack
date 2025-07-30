@@ -4,23 +4,25 @@ from frappe.utils import get_url
 
 
 @frappe.whitelist()
-def download_sea_import_invoice_bdt_pdf(doc_name="SHBL-00000064",invoice_ids=None):
-    
+def download_sea_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
+    print(doc_name, invoice_ids)
     """Download Sea Import Invoice BDT as PDF using HTML template"""
     
     try:
         # Get the document
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
-        invoice_list= doc.invoice_list
+        invoice_list = doc.invoice_list
         # filter if invoice_ids is not None
+        print(invoice_list)
         if invoice_ids:
             # make array of invoice_ids
             invoice_ids = invoice_ids.split(",")
+            print(invoice_ids)
             invoice_list = [invoice for invoice in invoice_list if invoice.name in invoice_ids]
+            print(invoice_list)
         doc.invoice_list = invoice_list
-        
-        
+        print(doc.invoice_list)
         
         # Get customer address
         customer_address = ""
@@ -69,13 +71,14 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 container_volume_list.append(f"{qty}x{size}")
     container_volume = ", ".join(container_volume_list)
     
-    # Get container numbers if length > 6 then show qty instead of container number
+    # Get container numbers
     container_numbers = []
     if hasattr(doc, 'container_info') and doc.container_info:
         for container in doc.container_info:
             container_no = container.get('custom_container_no', '') or ''
+            size = container.get('size', '') or ''
             if container_no:
-                container_numbers.append(container_no)
+                container_numbers.append(f"{container_no}-{size}")
     if len(container_numbers) > 6:
         container_numbers_str = "Qty: " + str(len(container_numbers))
     else:
@@ -414,107 +417,3 @@ def get_sea_import_invoice_bdt_preview(doc_name):
         
     except Exception as e:
         frappe.throw(f"Error generating preview: {str(e)}")
-
-
-@frappe.whitelist()
-def get_sea_import_invoice_data(doc_name):
-    """Get invoice data for both USD and BDT versions"""
-    
-    try:
-        doctype = "Import Sea House Bill"
-        doc = frappe.get_doc(doctype, doc_name)
-        
-        # Get customer info
-        customer_name = ""
-        customer_address = ""
-        if doc.invoice_list and len(doc.invoice_list) > 0:
-            customer = doc.invoice_list[0].customer
-            customer_name = customer or ""
-            if customer:
-                try:
-                    customer_doc = frappe.get_doc("Customer", customer)
-                    customer_address = customer_doc.primary_address or ""
-                except:
-                    customer_address = ""
-        
-        # Get container volume
-        container_volume_list = []
-        if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
-            for container in doc.container_cost_info:
-                qty = container.get('qty', '') or ''
-                size = container.get('size', '') or ''
-                if qty and size:
-                    container_volume_list.append(f"{qty}x{size}")
-        
-        # Get container numbers
-        container_numbers = []
-        if hasattr(doc, 'container_info') and doc.container_info:
-            for container in doc.container_info:
-                container_no = container.get('custom_container_no', '') or ''
-                if container_no:
-                    container_numbers.append(container_no)
-        
-        # Calculate totals
-        total_usd = 0
-        total_bdt = 0
-        invoice_items = []
-        
-        if hasattr(doc, 'invoice_list') and doc.invoice_list:
-            for item in doc.invoice_list:
-                total_price = item.get('total_price', 0) or 0
-                base_net_amount = item.get('base_net_amount', 0) or 0
-                total_usd += float(total_price) if total_price else 0
-                total_bdt += float(base_net_amount) if base_net_amount else 0
-                
-                invoice_items.append({
-                    'item_code': item.get('item_code', '') or '',
-                    'rate': item.get('rate', 0) or 0,
-                    'total_price': total_price,
-                    'exchange_rate': item.get('exchange_rate', 0) or 0,
-                    'base_net_amount': base_net_amount
-                })
-        
-        return {
-            'success': True,
-            'data': {
-                'document_info': {
-                    'hbl_id': doc.get('hbl_id', '') or '',
-                    'hbl_date': doc.get('hbl_date', '') or '',
-                    'customer_name': customer_name,
-                    'customer_address': customer_address
-                },
-                'shipping_details': {
-                    'hbl_shipper': doc.get('hbl_shipper', '') or '',
-                    'm_vsl_name': doc.get('m_vsl_name', '') or '',
-                    'mv_voyage_no': doc.get('mv_voyage_no', '') or '',
-                    'hbl_etd': doc.get('hbl_etd', '') or '',
-                    'mbl_no': doc.get('mbl_no', '') or '',
-                    'fv': doc.get('fv', '') or '',
-                    'mbl_date': doc.get('mbl_date', '') or '',
-                    'eta': doc.get('eta', '') or '',
-                    'inco_term': doc.get('inco_term', '') or '',
-                    'lc_date': doc.get('lc_date', '') or '',
-                    'port_of_loading': doc.get('port_of_loading', '') or '',
-                    'vol_cbm': doc.get('vol_cbm', '') or '',
-                    'port_of_discharge': doc.get('port_of_discharge', '') or '',
-                    'no_of_pkg_hbl': doc.get('no_of_pkg_hbl', '') or '',
-                    'port_of_delivery': doc.get('port_of_delivery', '') or '',
-                    'shipping_line': doc.get('shipping_line', '') or ''
-                },
-                'container_info': {
-                    'container_volume': ", ".join(container_volume_list),
-                    'container_numbers': ", ".join(container_numbers)
-                },
-                'invoice_items': invoice_items,
-                'totals': {
-                    'total_usd': total_usd,
-                    'total_bdt': total_bdt
-                }
-            }
-        }
-        
-    except Exception as e:
-        return {
-            'success': False,
-            'error': str(e)
-        }

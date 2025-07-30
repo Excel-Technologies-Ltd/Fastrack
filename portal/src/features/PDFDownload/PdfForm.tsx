@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 
 
 const PdfForm = () => {
-  const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption ,docTypeData } = usePDFDownload();
+  const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption, docTypeData } = usePDFDownload();
   const { previewPdf } = useDownloadPDF();
   const [loading, setLoading] = useState(false);
 
@@ -26,16 +26,45 @@ const PdfForm = () => {
     if (field === "pdfName") {
       const policy = PDF_POLICY[e.target.value];
       setPdfPolicy((prev) => ({ ...prev, ...policy }));
-      setPdfFormOption((prev) => ({ ...prev, docName: "", customerName: "", supplierName: "" }));
+      setPdfFormOption((prev) => ({ ...prev, docName: "", customerName: "", supplierName: "", selectedId: "" }));
     }
     console.log("field", field, e.target.value);
   };
 
   const handlePdfNameChange = (selectedPdfName: string) => {
-    setPdfFormOption({ ...pdfFormOption, pdfName: selectedPdfName });
-    const policy = PDF_POLICY[selectedPdfName];
-    setPdfPolicy((prev) => ({ ...prev, ...policy }));
-    setPdfFormOption((prev) => ({ ...prev, pdfName: selectedPdfName, docName: "", customerName: "", supplierName: "" }));
+    // If the clicked PDF name is already selected, uncheck it
+    if (pdfFormOption.pdfName === selectedPdfName) {
+      setPdfFormOption((prev) => ({ 
+        ...prev, 
+        pdfName: "", 
+        docName: "", 
+        customerName: "", 
+        supplierName: "", 
+        selectedId: "" 
+      }));
+      // Reset policy to default state
+      setPdfPolicy((prev) => ({ 
+        ...prev, 
+        selectDocName: false,
+        selectCustomer: false, 
+        selectSupplier: false, 
+        selectChildDoctype: false,
+        parentDoctype: "",
+        CHILD_DOCTYPE: ""
+      }));
+    } else {
+      // Select the new PDF name
+      setPdfFormOption((prev) => ({ 
+        ...prev, 
+        pdfName: selectedPdfName, 
+        docName: "", 
+        customerName: "", 
+        supplierName: "", 
+        selectedId: "" 
+      }));
+      const policy = PDF_POLICY[selectedPdfName];
+      setPdfPolicy((prev) => ({ ...prev, ...policy }));
+    }
     console.log("field", "pdfName", selectedPdfName);
   };
 
@@ -53,7 +82,7 @@ const PdfForm = () => {
       if (response.success) {
         toast.success("PDF Previewed Successfully");
         // clear the form
-        setPdfFormOption({ pdfName: "", docName: "", customerName: "", supplierName: "" });
+        setPdfFormOption({ pdfName: "", docName: "", customerName: "", supplierName: "", selectedInvoice: [], selectedId: "" });
         setPdfPolicy({ ...pdfPolicy, selectCustomer: false, selectSupplier: false, selectChildDoctype: false });
       } else {
         toast.error(response.errors?.[0]?.message || "Something went wrong");
@@ -63,11 +92,6 @@ const PdfForm = () => {
       console.log("error", error);
     }
   };
-
-  // const { data: customerList, mutate: mutateCustomerList } = useFrappeGetCall("fastrack_erp.api.get_customer_list_by_hbl_id", {
-  //   id: pdfFormOption.docName,
-  //   doctype_name: pdfPolicy.parentDoctype
-  // });
 
   // get customer list from child data and must be unique
   let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
@@ -145,7 +169,6 @@ const PdfForm = () => {
         disabled={!pdfPolicy.selectSupplier}
       />
 
-      {/* <Button className={`${loading ? "opacity-50 cursor-not-allowed" : ""}`} type="submit">Download PDF</Button> */}
       <Button className={`${loading ? "opacity-50 cursor-not-allowed flex items-center justify-center space-x-2" : ""}`} type="submit" disabled={loading}>
         {loading && (
           <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">

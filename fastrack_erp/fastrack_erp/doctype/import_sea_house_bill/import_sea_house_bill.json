@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SHBL-{hbl_id}",
+ "autoname": "field:hbl_id",
  "creation": "2025-04-30 17:12:57.586828",
  "default_view": "List",
  "doctype": "DocType",
@@ -375,7 +375,6 @@
    "in_list_view": 1,
    "label": "HBL No.",
    "reqd": 1,
-   "set_only_once": 1,
    "unique": 1
   },
   {
@@ -837,11 +836,11 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-29 15:42:59.317396",
+ "modified": "2025-07-30 13:48:44.305496",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

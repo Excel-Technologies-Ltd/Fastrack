@@ -56,7 +56,7 @@ def get_columns_from_data(data):
             "label": label,
             "fieldname": field,
             "fieldtype": "Data",  # You can add logic to infer type if needed
-            "width": 200
+            "width": 150
         })
     return columns
 
@@ -120,7 +120,7 @@ def get_sea_import_data(from_date, to_date):
                 hbl.sales_person,
                 hbl.carrier,
                 hbl.agent,
-                mbl.shipper,
+                mbl.shipper as mbl_shipper,
                 hbl.mbl_no as mbl_no    ,
                 hbl.mbl_date as mbl_date,
                 hbl.hbl_id as hbl_no,
@@ -128,16 +128,14 @@ def get_sea_import_data(from_date, to_date):
                 hbl.name as link,
                 hbl.reference_number,
                 hbl.inco_term,
-                hbl.total_container_hbl,
                 hbl.hbl_shipper as shipper,
                 hbl.hbl_consignee as consignee,
                 hbl.notify_to as notify_party,
                 hbl.customer as customer,
                 hbl.lc,
                 hbl.lc_date,
-                GROUP_CONCAT(si.name ORDER BY si.posting_date) as inv_no,
-                GROUP_CONCAT(si.posting_date ORDER BY si.posting_date) as inv_date,
-                GROUP_CONCAT(cci.qty, "⛌", cci.size ORDER BY cci.size) as container_size,
+                "" as inv_no,
+                GROUP_CONCAT(DISTINCT CONCAT(cci.qty, "⛌", cci.size) ORDER BY cci.size) as container_size,
                 hbl.port_of_loading,
                 hbl.port_of_delivery,
                 hbl.port_of_discharge,
@@ -153,10 +151,9 @@ def get_sea_import_data(from_date, to_date):
                 hbl.total_invoice_amount as income,
                 (hbl.total_invoice_amount - hbl.total_purchase_amount) as profit      
             FROM 
-                `tabImport Sea House Bill` AS hbl
+            `tabImport Sea House Bill` AS hbl
             LEFT JOIN `tabImport Sea Master Bill` as mbl ON mbl.name = hbl.mbl_link
-            LEFT JOIN `tabSales Invoice` as si ON si.custom_hbl_sea_link = hbl.name
-             LEFT JOIN `tabContainer Cost Info` as cci ON cci.parent = hbl.name
+            LEFT JOIN `tabContainer Cost Info` as cci ON cci.parent = hbl.name
             WHERE 
                 hbl.docstatus = 1 
                 AND hbl.mbl_date BETWEEN %s AND %s

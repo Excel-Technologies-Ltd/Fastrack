@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SHBL-{hbl_id}",
+ "autoname": "field:hbl_id",
  "creation": "2025-07-28 00:40:40.605194",
  "default_view": "List",
  "doctype": "DocType",
@@ -975,11 +975,11 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-28 11:35:45.214934",
+ "modified": "2025-07-30 10:25:35.229964",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

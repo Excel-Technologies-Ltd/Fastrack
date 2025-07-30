@@ -282,18 +282,5 @@ fixtures = [
             ]
         ]
     },
-    {
-        "dt":"Custom HTML Block",
-        "filters":[
-            [
-                "name",
-                "in",
-                ["Report WebView"]
-            ]
-        ]
-    },
-    {
-        "dt":"Client Script",
-    }
 ]
 website_route_rules = [{'from_route': '/portal/<path:app_path>', 'to_route': 'portal'},]

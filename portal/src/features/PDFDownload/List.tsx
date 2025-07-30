@@ -4,13 +4,14 @@ import { usePDFDownload } from "./PDFDownloadPorvider";
 
 export const List = () => {
     const { docTypeData, errorObj, pdfPolicy, pdfFormOption,setPdfFormOption } = usePDFDownload();
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    // const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
+    const selectedIds = pdfFormOption?.selectedId ? pdfFormOption?.selectedId.split(",").filter(id => id.trim()) : [];
 
     // Get child data
     let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
-        : null;
+        : [];
     // if customer select then filter by customer
     console.log("pdfFormOption", childData);
     if(pdfPolicy.selectCustomer && pdfFormOption.customerName){
@@ -25,50 +26,95 @@ export const List = () => {
     const handleSelectAll = (checked: boolean) => {
         setSelectAll(checked);
         if (checked && childData) {
-            // Get all invoice_link values
+            // Get all name values
             const allIds = childData
                 .map((row: any) => row.name)
-                .filter((id: any) => id); 
-            setSelectedIds(allIds);
+                .filter((id: any) => id);
+            setPdfFormOption((prev) => ({
+                ...prev,
+                selectedId: allIds.join(",")
+            }));
         } else {
-            setSelectedIds([]);
+            setPdfFormOption((prev) => ({
+                ...prev,
+                selectedId: ""
+            }));
         }
     };
 
     // Handle individual checkbox
     const handleSelectOne = (name: string, checked: boolean) => {
         if (checked) {
-            setSelectedIds(prev => [...prev, name]);
+            const newSelectedIds = [...selectedIds, name];
+            setPdfFormOption((prev) => ({
+                ...prev,
+                selectedId: newSelectedIds.join(",")
+            }));
         } else {
-            setSelectedIds(prev => prev.filter(id => id !== name));
+            const newSelectedIds = selectedIds.filter(id => id.trim() !== name.trim());
+            setPdfFormOption((prev) => ({
+                ...prev,
+                selectedId: newSelectedIds.length > 0 ? newSelectedIds.join(",") : ""
+            }));
             setSelectAll(false); // Uncheck select all if individual item is unchecked
         }
     };
 
-    // Update select all state when individual items change - now at top level
-    // set array as string join by comma
+    // Update select all state when selectedIds change
     useEffect(() => {
-        if (childData && Array.isArray(childData)) {
-            const allInvoiceLinks = childData
-                .map((row: any) => row.invoice_link)
+        if (childData && Array.isArray(childData) && selectedIds.length > 0) {
+            const allNames = childData
+                .map((row: any) => row.name)
                 .filter((id: any) => id);
             
-            if (allInvoiceLinks.length > 0 && selectedIds.length === allInvoiceLinks.length) {
+            if (allNames.length > 0 && selectedIds.length === allNames.length && selectedIds.length > 0) {
                 setSelectAll(true);
             } else {
                 setSelectAll(false);
             }
         }
-        if(selectedIds.length > 0){
-            setPdfFormOption((prev)=>({...prev,selectedId:selectedIds.join(",")}));
-        }
     }, [selectedIds, childData]);
 
     // Reset selected items when child data changes
     useEffect(() => {
-        setSelectedIds([]);
+        setPdfFormOption((prev) => ({
+            ...prev,
+            selectedId: ""
+        }));
         setSelectAll(false);
-    }, [pdfPolicy.CHILD_DOCTYPE]);
+    }, [pdfPolicy.CHILD_DOCTYPE,pdfFormOption.docName]);
+
+    // Update select all state when individual items change - now at top level
+    // set array as string join by comma
+    // useEffect(() => {
+    //     if (childData && Array.isArray(childData)) {
+    //         const allInvoiceLinks = childData
+    //             .map((row: any) => row.invoice_link)
+    //             .filter((id: any) => id);
+            
+    //         if (allInvoiceLinks.length > 0 && selectedIds.length === allInvoiceLinks.length) {
+    //             setSelectAll(true);
+    //         } else {
+    //             setSelectAll(false);
+    //         }
+    //     }
+    //     if(selectedIds.length > 0){
+    //         setPdfFormOption((prev)=>({...prev,selectedId:selectedIds.join(",")}));
+    //     }
+    // }, [selectedIds, childData]);
+    // if pdfFormOption.selectedId is empty clear selectedIds
+    // useEffect(() => {
+    //     if(pdfFormOption.selectedId){
+    //         setSelectedIds([]);
+    //         setSelectAll(false);
+    //     }
+    // }, [pdfFormOption.selectedId]);
+
+    // Reset selected items when child data changes
+    // useEffect(() => {
+    //     setSelectedIds([]);
+    //     setSelectAll(false);
+    // }, [pdfPolicy.CHILD_DOCTYPE]);
 
     if (pdfPolicy.CHILD_DOCTYPE && childData) {
         const columnMap = getChildDocTypeColumnMap(
@@ -142,7 +188,7 @@ export const List = () => {
                         </table>
                     </div>
                 ) : (
-                    <div className="text-gray-500">No data available</div>
+                    <div className="text-gray-500">{""}</div>
                 )}
             </div>
         );

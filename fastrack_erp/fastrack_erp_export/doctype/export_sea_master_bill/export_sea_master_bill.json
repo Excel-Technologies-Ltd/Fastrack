@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SMBL-E-{mbl_no}",
+ "autoname": "field:mbl_no",
  "creation": "2025-07-27 23:44:01.551991",
  "default_view": "List",
  "doctype": "DocType",
@@ -376,12 +376,12 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-28 11:38:21.946988",
+ "modified": "2025-07-30 10:26:07.317098",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",
  "name_case": "Title Case",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

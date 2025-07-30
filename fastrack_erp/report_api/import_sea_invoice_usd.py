@@ -4,7 +4,8 @@ from frappe.utils import get_url
 
 
 @frappe.whitelist()
-def download_sea_import_invoice_usd_pdf(doc_name="SHBL-00000064",invoice_ids=None):
+def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
+    print(doc_name,invoice_ids)
     """Download Sea Import Invoice USD as PDF using HTML template"""
     
     try:
@@ -13,11 +14,15 @@ def download_sea_import_invoice_usd_pdf(doc_name="SHBL-00000064",invoice_ids=Non
         doc = frappe.get_doc(doctype, doc_name)
         invoice_list= doc.invoice_list
         # filter if invoice_ids is not None
+        print(invoice_list)
         if invoice_ids:
             # make array of invoice_ids
             invoice_ids = invoice_ids.split(",")
+            print(invoice_ids)
             invoice_list = [invoice for invoice in invoice_list if invoice.name in invoice_ids]
+            print(invoice_list)
         doc.invoice_list = invoice_list
+        print(doc.invoice_list)
         # Get customer address
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
@@ -70,8 +75,9 @@ def get_sea_import_invoice_html(doc, customer_address):
     if hasattr(doc, 'container_info') and doc.container_info:
         for container in doc.container_info:
             container_no = container.get('custom_container_no', '') or ''
+            size = container.get('size', '') or ''
             if container_no:
-                container_numbers.append(container_no)
+                container_numbers.append(f"{container_no}-{size}")
     if len(container_numbers) > 6:
         container_numbers_str = "Qty: " + str(len(container_numbers))
     else:

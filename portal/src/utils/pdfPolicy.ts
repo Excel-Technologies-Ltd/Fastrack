@@ -107,7 +107,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doctype_name: "docName"
+            doc_name: "docName"
         }
     },
     [PDF_NAME_LIST.SEA_IMPORT_INVOICE_USD]: {
@@ -123,7 +123,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doctype_name: "docName"
+            doc_name: "docName"
         }
     }
 }

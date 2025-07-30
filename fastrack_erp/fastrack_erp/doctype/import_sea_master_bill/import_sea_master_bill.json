@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:SMBL-{mbl_no}",
+ "autoname": "field:mbl_no",
  "creation": "2025-04-30 13:30:27.082899",
  "default_view": "List",
  "doctype": "DocType",
@@ -9,7 +9,6 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_rzyek",
-  "naming_series_2",
   "mbl_no",
   "mv",
   "etd",
@@ -354,13 +353,6 @@
    "fieldname": "mbl",
    "fieldtype": "Read Only",
    "label": "MBL"
-  },
-  {
-   "default": "SMBL-",
-   "fieldname": "naming_series_2",
-   "fieldtype": "Data",
-   "label": "Naming Series",
-   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -371,12 +363,12 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-28 11:35:14.003242",
+ "modified": "2025-07-30 10:23:29.962083",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
  "name_case": "Title Case",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
