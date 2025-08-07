@@ -59,9 +59,9 @@ def update_child_hbl(doc, method):
     if parent_doctype == "Import Air Master Bill":
         for hbl_info in mbl_doc.hbl_info:
             if hbl_info.name == doc.hbl_doc_name:
-                hbl_info.hbl_link=doc.hbl_id
+                hbl_info.hbl_link=doc.hbl_no
                 hbl_info.is_create=1
-                hbl_info.weight=doc.hbl_weight
+                hbl_info.weight=doc.hbl_gr_weight
                 break
             
     

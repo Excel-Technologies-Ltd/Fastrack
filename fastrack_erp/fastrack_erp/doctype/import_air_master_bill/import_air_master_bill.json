@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:AMBL={########}",
+ "autoname": "field:mbl_no",
  "creation": "2025-05-10 05:32:10.941431",
  "default_view": "List",
  "doctype": "DocType",
@@ -9,7 +9,6 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_rzyek",
-  "naming_series",
   "mbl_no",
   "agent",
   "airlines",
@@ -20,7 +19,6 @@
   "mbl_open_by",
   "mbl_date",
   "consignee",
-  "quantity",
   "port_of_delivery",
   "chargeable_weight",
   "total_no_of_hbl",
@@ -40,7 +38,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "MBL No",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "column_break_ibxhu",
@@ -65,11 +64,6 @@
    "in_list_view": 1,
    "label": "Gross  Weight",
    "reqd": 1
-  },
-  {
-   "fieldname": "quantity",
-   "fieldtype": "Float",
-   "label": "Quantity"
   },
   {
    "fieldname": "agent",
@@ -135,13 +129,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "label": "Naming Series",
-   "options": "AMBL-",
-   "reqd": 1
-  },
-  {
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
    "label": "Port of Loading"
@@ -177,11 +164,11 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-17 01:57:07.711914",
+ "modified": "2025-08-06 11:55:01.649621",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

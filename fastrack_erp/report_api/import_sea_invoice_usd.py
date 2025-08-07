@@ -77,7 +77,7 @@ def get_sea_import_invoice_html(doc, customer_address):
             container_no = container.get('custom_container_no', '') or ''
             size = container.get('size', '') or ''
             if container_no:
-                container_numbers.append(f"{container_no}-{size}")
+                container_numbers.append(f"{container_no}/{size}")
     if len(container_numbers) > 6:
         container_numbers_str = "Qty: " + str(len(container_numbers))
     else:
@@ -105,6 +105,12 @@ def get_sea_import_invoice_html(doc, customer_address):
                         {rate}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('currency', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('exchange_rate', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
                     </td>
                 </tr>
@@ -117,6 +123,12 @@ def get_sea_import_invoice_html(doc, customer_address):
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {rate}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('currency', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('exchange_rate', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
@@ -329,13 +341,15 @@ def get_sea_import_invoice_html(doc, customer_address):
                         <th>Container Number</th>
                         <th>Particulars</th>
                         <th>Rate $</th>
+                        <th>Currency</th>
+                        <th>Ex. Rate</th>
                         <th>Total Price $</th>
                     </tr>
                 </thead>
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="3" class="total-row">
+                        <td colspan="5" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">

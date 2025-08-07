@@ -46,7 +46,6 @@
   "voyage_dep_date",
   "unit",
   "section_break_plp8q",
-  "container_info",
   "hbl_info",
   "hbl_parent",
   "connections_tab",
@@ -323,12 +322,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "container_info",
-   "fieldtype": "Table",
-   "label": "Container Info.",
-   "options": "Fastrack Export  Item"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "hbl_info",
    "fieldtype": "Table",
@@ -376,7 +369,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-30 10:26:07.317098",
+ "modified": "2025-08-06 10:06:23.026441",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

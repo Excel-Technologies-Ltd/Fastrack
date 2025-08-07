@@ -1,25 +1,39 @@
 import frappe
 from frappe.utils.pdf import get_pdf
-from frappe.utils import get_url
+from frappe.utils import get_url, format_date, today
 
 
 @frappe.whitelist()
-def download_to_whom_it_may_concern_pdf(doc_name="SHBL-00000064"):
-    """Download TO WHOM IT MAY CONCERN report as PDF using HTML template"""
+def download_to_whom_concern_pdf(doc_name):
+    """Download To Whom It May Concern certificate as PDF using HTML template"""
     
     try:
         # Get the document
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
         
+        # Get customer info
+        customer_name = ""
+        customer_address = ""
+        if doc.invoice_list and len(doc.invoice_list) > 0:
+            customer = doc.invoice_list[0].customer
+            if customer:
+                try:
+                    customer_doc = frappe.get_doc("Customer", customer)
+                    customer_name = customer_doc.customer_name or customer
+                    customer_address = customer_doc.primary_address or ""
+                except:
+                    customer_name = customer
+                    customer_address = ""
+        
         # Generate HTML content
-        html_content = get_to_whom_it_may_concern_html(doc)
+        html_content = get_to_whom_concern_html(doc, customer_name, customer_address)
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
         
         # Set filename
-        filename = f"To_Whom_It_May_Concern_{doc_name}.pdf"
+        filename = f"To_Whom_Concern_{doc_name}.pdf"
         
         # Prepare response
         frappe.local.response.filename = filename
@@ -30,49 +44,27 @@ def download_to_whom_it_may_concern_pdf(doc_name="SHBL-00000064"):
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_to_whom_it_may_concern_html(doc):
-    """Generate HTML content for TO WHOM IT MAY CONCERN report"""
+def get_to_whom_concern_html(doc, customer_name, customer_address):
+    """Generate HTML content for To Whom It May Concern certificate"""
     
-    # Get container information for the table
-    container_rows = ""
-    total_weight = 0
-    if hasattr(doc, 'container_info') and doc.container_info:
-        for container in doc.container_info:
-            weight = container.get('weight', 0) or 0
-            if weight:
-                total_weight += float(weight)
-            
-            container_rows += f"""
-            <tr>
-                <td style="border: 1px solid black; padding: 4px; text-align: center;">{container.get('custom_container_no', '') or ''}</td>
-                <td style="border: 1px solid black; padding: 4px; text-align: center;">{container.get('seal_no', '') or ''}</td>
-                <td style="border: 1px solid black; padding: 4px; text-align: center;">{container.get('size', '') or ''}</td>
-                <td style="border: 1px solid black; padding: 4px; text-align: center;">{doc.get('nature', '') or 'FCL'}</td>
-                <td style="border: 1px solid black; padding: 4px; text-align: center;">{weight}</td>
-            </tr>
-            """
-    else:
-        # Default empty row if no container data
-        container_rows = """
-        <tr>
-            <td style="border: 1px solid black; padding: 4px; text-align: center;">-</td>
-            <td style="border: 1px solid black; padding: 4px; text-align: center;">-</td>
-            <td style="border: 1px solid black; padding: 4px; text-align: center;">-</td>
-            <td style="border: 1px solid black; padding: 4px; text-align: center;">FCL</td>
-            <td style="border: 1px solid black; padding: 4px; text-align: center;">0</td>
-        </tr>
-        """
+    # Get container volume
+    container_volume_list = []
+    if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
+        for container in doc.container_cost_info:
+            qty = container.get('qty', '') or ''
+            size = container.get('size', '') or ''
+            if qty and size:
+                container_volume_list.append(f"{qty}x{size}")
+    container_volume = ", ".join(container_volume_list)
     
-    # Calculate ocean freight details
-    ocean_freight_rate = doc.get('ocean_freight_rate', '1275/CNTR') or '1275/CNTR'
-    total_containers = len(doc.container_info) if hasattr(doc, 'container_info') and doc.container_info else 0
-    container_size = doc.container_info[0].get('size', '20" GP') if hasattr(doc, 'container_info') and doc.container_info else '20" GP'
-    total_container_desc = f"{total_containers}x{container_size} CNTR" if total_containers > 0 else "0x20 GP CNTR"
     
-    ex_rate = doc.get('exchange_rate', 123.00) or 123.00
-    ocean_freight_usd = doc.get('ocean_freight_usd', 5100.00) or 5100.00
-    ocean_freight_bdt = ocean_freight_usd * ex_rate
-    taka_amount = doc.get('taka_amount', 627300.00) or 627300.00
+    # Get ocean freight rate
+    ocean_freight_rate = doc.get('average_total')
+    ocean_freight_total = doc.get('total')
+
+    
+    # Format current date
+    current_date = format_date(today(), "dd-MMM-yyyy")
     
     html_template = f"""
     <!DOCTYPE html>
@@ -80,7 +72,7 @@ def get_to_whom_it_may_concern_html(doc):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>TO WHOM IT MAY CONCERN</title>
+        <title>To Whom It May Concern</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;
@@ -97,308 +89,223 @@ def get_to_whom_it_may_concern_html(doc):
                 margin: 0 auto;
             }}
             .header {{
-                display: table;
-                width: 100%;
-                margin-bottom: 20px;
-            }}
-            .header-left {{
-                display: table-cell;
-                width: 70%;
-                vertical-align: top;
-            }}
-            .header-right {{
-                display: table-cell;
-                width: 30%;
-                text-align: right;
-                vertical-align: top;
+                text-align: center;
+                margin-bottom: 30px;
             }}
             .title-box {{
                 border: 2px solid black;
-                text-align: center;
                 padding: 8px;
                 margin: 20px auto;
                 width: 300px;
+                text-align: center;
                 font-weight: bold;
                 font-size: 14px;
             }}
             .details-section {{
-                margin-bottom: 20px;
+                margin: 20px 0;
             }}
             .details-table {{
                 width: 100%;
                 border-collapse: collapse;
+                font-size: 12px;
                 margin-bottom: 15px;
             }}
             .details-table td {{
-                padding: 3px 5px;
+                padding: 3px 8px;
                 vertical-align: top;
             }}
-            .details-table .label {{
-                width: 150px;
+            .details-table td:first-child {{
+                width: 25%;
                 font-weight: bold;
             }}
-            .details-table .colon {{
-                width: 10px;
-            }}
-            .container-table {{
-                width: 100%;
-                border-collapse: collapse;
-                margin: 15px 0;
-            }}
-            .container-table th,
-            .container-table td {{
-                border: 1px solid black;
-                padding: 4px;
+            .details-table td:nth-child(2) {{
+                width: 5%;
                 text-align: center;
             }}
-            .container-table th {{
-                background-color: #f5f5f5;
+            .details-table td:nth-child(3) {{
+                width: 25%;
+            }}
+            .details-table td:nth-child(4) {{
+                width: 20%;
                 font-weight: bold;
             }}
-            .freight-section {{
-                margin: 20px 0;
+            .details-table td:nth-child(5) {{
+                width: 5%;
+                text-align: center;
             }}
-            .freight-table {{
-                width: 100%;
-                border-collapse: collapse;
+            .details-table td:last-child {{
+                width: 20%;
             }}
-            .freight-table td {{
-                padding: 3px 0;
-                vertical-align: top;
-            }}
-            .freight-table .label {{
-                width: 200px;
-                font-weight: bold;
-            }}
-            .freight-table .colon {{
-                width: 10px;
+            .content-section {{
+                margin: 25px 0;
+                text-align: justify;
             }}
             .signature-section {{
-                margin-top: 40px;
-                position: relative;
+                margin-top: 80px;
+                text-align: center;
             }}
-            .signature-left {{
-                float: left;
-                width: 50%;
+            .stamp-area {{
+                width: 150px;
+                height: 150px;
+                border: 1px dashed #ccc;
+                margin: 20px auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-image: url('https://ftcl-portal.arcapps.org/files/fastrack_stamp.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
             }}
-            .signature-right {{
-                float: right;
-                width: 50%;
+            .to-section {{
+                margin: 20px 0;
+            }}
+            .date-section {{
                 text-align: right;
-            }}
-            .status-highlight {{
-                color: red;
-                font-weight: bold;
-            }}
-            .notify-party {{
-                color: red;
-                font-size: 10px;
-            }}
-            .eta-highlight {{
-                color: red;
-                font-weight: bold;
-            }}
-            .fc-total {{
-                color: red;
+                margin: 10px 0;
                 font-weight: bold;
             }}
         </style>
     </head>
     <body>
         <div class="container">
-            <!-- Header -->
+            <!-- Logo -->
             <div class="header">
-                <div class="header-left">
-                    <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fastrack Logo" style="height: 55px;" />
-                </div>
-                <div class="header-right">
-                    <!-- Logo space if needed -->
-                </div>
+                <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 60px;" />
             </div>
-
-            <!-- Title -->
+            
+            <!-- Title Box -->
             <div class="title-box">
                 TO WHOM IT MAY CONCERN
             </div>
 
-            <!-- Customer and Date Info -->
-            <div class="header">
-                <div class="header-left">
-                    <p style="margin: 0;"><strong>TO:</strong> <span class="notify-party">Notify party</span></p>
-                    <p style="margin: 0; font-weight: bold;">{doc.get('notify_to', 'MINISTER HI-TECH PARK ELECTRONICS LTD.') or 'MINISTER HI-TECH PARK ELECTRONICS LTD.'}</p>
-                    <p style="margin: 0;">{doc.get('notify_address', '337, NARAYANPUR, P.O.-KASHIGANJ, THANA-TRISHAL, MYMENSINGH') or '337, NARAYANPUR, P.O.-KASHIGANJ, THANA-TRISHAL, MYMENSINGH'}</p>
-                </div>
-                <div class="header-right">
-                    <p style="margin: 0;"><strong>Date:</strong> {doc.get('hbl_date', '26-Jun-2025') or '26-Jun-2025'} <span class="eta-highlight">ETA</span></p>
-                </div>
+            <!-- TO Section -->
+            <div class="to-section">
+                <p><strong>TO:</strong> &nbsp;&nbsp;{customer_name.upper()}</p>
+                <p style="margin-left: 40px;">{customer_address}</p>
+            </div>
+
+            <!-- Date -->
+            <div class="date-section">
+                <strong>Date :</strong> {current_date}
             </div>
 
             <!-- Shipping Details -->
             <div class="details-section">
-                <p style="font-weight: bold; margin: 15px 0 10px 0;">Shipping Details:</p>
-                
+                <p><strong>Shipping Details:</strong></p>
                 <table class="details-table">
                     <tr>
-                        <td class="label">Shipper</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('hbl_shipper', 'NANJING HUIKANG INDUSTRIAL CO., LIMITED') or 'NANJING HUIKANG INDUSTRIAL CO., LIMITED'}</td>
-                        <td class="label" style="padding-left: 30px;">M/Vsl. Name</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('mv', 'SAN PEDRO') or 'SAN PEDRO'}</td>
+                        <td><strong>Shipper</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('hbl_shipper', '') or ''}</td>
+                        <td><strong>M/Vsl. Name</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('m_vsl_name', '') or ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">HBL No</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('hbl_id', 'DKD250-220') or 'DKD250-220'}</td>
-                        <td class="label" style="padding-left: 30px;">Voyage</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('mv_voyage_no', '25005W') or '25005W'}</td>
+                        <td><strong>HBL No</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('hbl_id', '') or ''}</td>
+                        <td><strong>Voyage</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('mv_voyage_no', '') or ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">HBL Date</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('hbl_date', '21-Jun-2025') or '21-Jun-2025'}</td>
-                        <td class="label" style="padding-left: 30px;">ETD</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('hbl_etd', '12-Jun-2025') or '12-Jun-2025'}</td>
+                        <td><strong>HBL Date</strong></td>
+                        <td>:</td>
+                        <td>{format_date(doc.get('hbl_date'), 'dd-MMM-yyyy') if doc.get('hbl_date') else ''}</td>
+                        <td><strong>ETD</strong></td>
+                        <td>:</td>
+                        <td>{format_date(doc.get('hbl_etd'), 'dd-MMM-yyyy') if doc.get('hbl_etd') else ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">MBL No</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('mbl_no', 'A56FX15520') or 'A56FX15520'}</td>
-                        <td class="label" style="padding-left: 30px;">F/Vsl. Name</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('fv', 'SAN PEDRO') or 'SAN PEDRO'}</td>
+                        <td><strong>MBL No</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('mbl_no', '') or ''}</td>
+                        <td><strong>F/Vsl. Name</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('fv', '') or ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">MBL Date</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('mbl_date', '12-Jun-2025') or '12-Jun-2025'}</td>
-                        <td class="label" style="padding-left: 30px;">ETA</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('eta', '26-Jun-2025') or '26-Jun-2025'}</td>
+                        <td><strong>MBL Date</strong></td>
+                        <td>:</td>
+                        <td>{format_date(doc.get('mbl_date'), 'dd-MMM-yyyy') if doc.get('mbl_date') else ''}</td>
+                        <td><strong>ETA</strong></td>
+                        <td>:</td>
+                        <td>{format_date(doc.get('eta'), 'dd-MMM-yyyy') if doc.get('eta') else ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">Consignee</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('consignee', 'AL-ARAFAH ISLAMI BANK LTD') or 'AL-ARAFAH ISLAMI BANK LTD'}</td>
-                        <td class="label" style="padding-left: 30px;">Inco Terms</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('inco_term', 'Prepaid') or 'Prepaid'}</td>
+                        <td><strong>Consignee</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('consignee', '') or ''}</td>
+                        <td><strong>Inco Terms</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('inco_term', '') or ''}</td>
                     </tr>
                     <tr>
-                        <td class="label">L/C No.& Date</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('lc_date', '10742501036G / 12-Aug-2025') or '10742501036G / 12-Aug-2025'}</td>
-                        <td style="padding-left: 30px;"></td>
+                        <td><strong>L/C No.& Date</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('lc_date', '') or ''}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Port of Loading</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('port_of_loading', '') or ''}</td>
+                        <td><strong>Volume CBM</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('hbl_vol_cbm', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Port of Discharge</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('port_of_discharge', '') or ''}</td>
+                        <td><strong>Total (CTN/PKG)</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('no_of_pkg_hbl', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Port of Delivery</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('port_of_delivery', '') or ''}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shipping Line</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('shipping_line', '') or ''}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                 </table>
 
-                <table class="details-table">
-                    <tr>
-                        <td class="label">Port of Loading</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('port_of_loading', 'SHANGHAI') or 'SHANGHAI'}</td>
-                        <td class="label" style="padding-left: 30px;">Volume CBM</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('hbl_vol_cbm', '41.46') or '41.46'}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Port of Discharge</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('port_of_discharge', 'CHATTOGRAM') or 'CHATTOGRAM'}</td>
-                        <td class="label" style="padding-left: 30px;">Total (CTN/PKG)</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('no_of_pkg_hbl', '66,447.76') or '66,447.76'}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Port of Delivery</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('port_of_delivery', 'CHATTOGRAM') or 'CHATTOGRAM'}</td>
-                        <td style="padding-left: 30px;"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Shipping Line</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('shipping_line', 'BS CARGO AGENCY LTD.') or 'BS CARGO AGENCY LTD.'}</td>
-                        <td class="label" style="padding-left: 30px; color: red;">Status</td>
-                        <td class="colon" style="color: red;">:</td>
-                        <td style="color: red;"></td>
-                    </tr>
-                </table>
+                <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')}</strong></p>
+                <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
+                 <p style="margin: 5px 0;"><strong>Ocean Freight </strong>  :  <strong> (US$){ocean_freight_rate}</strong></p>
+                <p style="margin: 5px 0;"><strong>Total Container</strong>  : <strong>{container_volume}</strong></p>
+                <p style="margin: 5px 0;"><strong>So, Total Ocean Freight is</strong>  : <strong> (US$){ocean_freight_total}</strong></p>
+                <p style="margin: 5px 0;"><strong>Goods Description</strong> : <strong>{doc.get('description_of_good', '')}</strong></p>
             </div>
 
-            <!-- Container Table -->
-            <table class="container-table">
-                <thead>
-                    <tr>
-                        <th>Container No.</th>
-                        <th>Seal No.</th>
-                        <th>Size</th>
-                        <th>Mode</th>
-                        <th>Weight</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {container_rows}
-                </tbody>
-            </table>
-
-            <p style="margin: 5px 0;"><strong>Total Weight:</strong> {total_weight:,.2f}</p>
-            <p style="color: red; margin: 5px 0;">Container table</p>
-
-            <!-- Ocean Freight Details -->
-            <div class="freight-section">
-                <p style="margin-bottom: 10px;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
+            <!-- Closing and Signature Section Combined -->
+            <div style="margin: 15px 0;">
+                <p style="margin: 5px 0;">Thanks and Best Regards,</p>
+                <p style="margin: 5px 0;">Sincerely Yours,</p>
                 
-                <table class="freight-table">
-                    <tr>
-                        <td class="label">Ocean Freight (US$)</td>
-                        <td class="colon">:</td>
-                        <td>{ocean_freight_rate} <span class="fc-total">FC total</span></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Total Container</td>
-                        <td class="colon">:</td>
-                        <td>{total_container_desc}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Ex. Rate</td>
-                        <td class="colon">:</td>
-                        <td>{ex_rate}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">So, Total Ocean Freight is</td>
-                        <td class="colon">:</td>
-                        <td>US$ {ocean_freight_usd:,.2f} And BDT. Taka is {taka_amount:,.2f}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Goods Description</td>
-                        <td class="colon">:</td>
-                        <td>{doc.get('description_of_good', 'TEMPERED GLASS FOR REFRIGERATOR') or 'TEMPERED GLASS FOR REFRIGERATOR'}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- Signature Section -->
-            <div class="signature-section">
-                <div class="signature-left">
-                    <p>Thanks and Best Regards,</p>
-                    <p>Sincerely Yours,</p>
-                    <p style="margin-top: 20px;">For, Fastrack Cargo Solutions Ltd.</p>
-                </div>
-                <div class="signature-right">
-                    <div style="margin-top: 40px;">
-                        <img src="https://via.placeholder.com/80x80/0066cc/ffffff?text=SEAL" alt="Company Seal" style="width: 80px; height: 80px;" />
+                <div style="margin: 15px 0; display: table; width: 100%;">
+                    <div style="display: table-cell; width: 60%; vertical-align: top;">
+                        <p style="margin: 5px 0;"><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
+                        <p style="margin: 5px 0;"><strong>As Agent</strong></p>
                     </div>
                 </div>
-                <div style="clear: both;"></div>
-                <p style="text-align: center; margin-top: 20px;">As Agent</p>
             </div>
+
+            <!-- Footer -->
         </div>
     </body>
     </html>
@@ -408,15 +315,29 @@ def get_to_whom_it_may_concern_html(doc):
 
 
 @frappe.whitelist()
-def get_to_whom_it_may_concern_preview(doc_name):
-    """Get HTML preview of TO WHOM IT MAY CONCERN report (for testing)"""
+def get_to_whom_concern_preview(doc_name):
+    """Get HTML preview of To Whom It May Concern certificate (for testing)"""
     
     try:
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
         
+        # Get customer info
+        customer_name = ""
+        customer_address = ""
+        if doc.invoice_list and len(doc.invoice_list) > 0:
+            customer = doc.invoice_list[0].customer
+            if customer:
+                try:
+                    customer_doc = frappe.get_doc("Customer", customer)
+                    customer_name = customer_doc.customer_name or customer
+                    customer_address = customer_doc.primary_address or ""
+                except:
+                    customer_name = customer
+                    customer_address = ""
+        
         # Generate and return HTML content
-        html_content = get_to_whom_it_may_concern_html(doc)
+        html_content = get_to_whom_concern_html(doc, customer_name, customer_address)
         return {"html": html_content}
         
     except Exception as e:

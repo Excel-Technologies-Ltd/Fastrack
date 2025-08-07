@@ -1,14 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:DMBL-{#########}",
+ "autoname": "field:mbl_no",
  "creation": "2025-07-07 17:33:55.075181",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "sales_person",
   "mbl_no",
   "hbl_no",
@@ -49,7 +48,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "MBL No.",
-   "options": "Import Air Master Bill"
+   "options": "Import Air Master Bill",
+   "unique": 1
   },
   {
    "fieldname": "hbl_no",
@@ -181,12 +181,6 @@
    "label": "Reference Number"
   },
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "label": "Naming Series",
-   "options": "DMBL-"
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -200,12 +194,12 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-17 02:05:02.939898",
+ "modified": "2025-08-07 12:39:18.327711",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
  "name_case": "Title Case",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

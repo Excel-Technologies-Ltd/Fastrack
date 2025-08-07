@@ -33,8 +33,7 @@ def make_air_house_bill(source_name, target_doc=None):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Air Master Bill")
         # 4 array
         target.mbl_no=source.name
-        target.naming_series="AHBL-"
-        target.hbl_id=hbl_info.hbl_no
+        target.hbl_no=hbl_info.hbl_no
         target.carrier=source.consignee
         target.agent=source.agent
         target.hbl_doc_name=hbl_info.name

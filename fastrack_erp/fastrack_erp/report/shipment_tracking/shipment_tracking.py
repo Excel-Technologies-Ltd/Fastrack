@@ -124,7 +124,7 @@ def get_sea_import_data(from_date, to_date):
                 hbl.mbl_no as mbl_no    ,
                 hbl.mbl_date as mbl_date,
                 hbl.hbl_id as hbl_no,
-                hbl.hbl_date as date,
+                hbl.hbl_date as hbl_date,
                 hbl.name as link,
                 hbl.reference_number,
                 hbl.inco_term,

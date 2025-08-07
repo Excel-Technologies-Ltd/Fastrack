@@ -127,6 +127,7 @@ doc_events = {
  },
  "Import Air Master Bill": {
 	"on_update": "fastrack_erp.doc_events.mbl.validate",
+    "on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
  },
  "Import Air House Bill": {
 	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
@@ -264,23 +265,23 @@ fixtures = [
             ],
         ]
     },
-    {
-        "dt":"Property Setter",
-        "filters":[
-            [
-                "name",
-                "in",
-                [
-                    "Customer-main-field_order",
-                    "Customer-account_manager-hidden",
-                    "Customer-main-quick_entry",
-                    "Customer-opportunity_name-hidden",
-                    "Customer-lead_name-hidden",
-                    "Sales Invoice-main-field_order"
+    # {
+    #     "dt":"Property Setter",
+    #     "filters":[
+    #         [
+    #             "name",
+    #             "in",
+    #             [
+    #                 "Customer-main-field_order",
+    #                 "Customer-account_manager-hidden",
+    #                 "Customer-main-quick_entry",
+    #                 "Customer-opportunity_name-hidden",
+    #                 "Customer-lead_name-hidden",
+    #                 "Sales Invoice-main-field_order"
                     
-                ]
-            ]
-        ]
-    },
+    #             ]
+    #         ]
+    #     ]
+    # },
 ]
 website_route_rules = [{'from_route': '/portal/<path:app_path>', 'to_route': 'portal'},]

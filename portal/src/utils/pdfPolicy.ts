@@ -125,6 +125,20 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
             invoice_ids: "selectedId",
             doc_name: "docName"
         }
+    },
+    [PDF_NAME_LIST.TO_WHOM_CONCERN]: {
+        name: PDF_NAME_LIST.TO_WHOM_CONCERN,
+        parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_to_concern.download_to_whom_concern_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName"
+        }
     }
 }
 
