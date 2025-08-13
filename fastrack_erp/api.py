@@ -294,7 +294,7 @@ def get_sea_master_bill_dict_for_xml(master_bill_no="MBL-2025-05-00015"):
     return {
         "Awbolds":{
             "Master_bol":{
-                "Custom_office_code":first_row_doc.office_code if first_row_doc.office_code else "",
+                "Customs_office_code":first_row_doc.office_code if first_row_doc.office_code else "",
                 "Voyage_number":doc.fv_voyage_no,
                 "Date_of_departure":doc.fv_etd,
                 "Reference_number":doc.mbl_no
@@ -323,7 +323,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                     "Consolidated_Cargo": 0 if hbl_doc.container_type == "FCL" else 1,
                     "Load_unload_place":{
                         "Port_of_origin_code":hbl_doc.port_of_origin_code,
-                        "Port_of_unloading_code":hbl_doc.pod_code
+                        "Place_of_unloading_code":hbl_doc.pod_code
                     },
                     "Traders_segment":{
                         "Carrier":{
@@ -331,7 +331,7 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Carrier_name":frappe.db.get_value("Supplier",hbl_doc.carrier,"supplier_name"),
                             "Carrier_address":clean_address(frappe.get_value("Supplier",hbl_doc.carrier,"primary_address")) if frappe.get_value("Supplier",hbl_doc.carrier,"primary_address") else ""
                         },
-                        "Shipping_agent":{
+                        "Shipping_Agent":{
                             # "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
                             # "Shipping_agent_address": clean_address(frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address") else ""
                             "Shipping_agent_name":"",
@@ -388,7 +388,7 @@ def get_container_info_for_xml(container_info_list=["ACC-PINV-2025-00002"]):
                 "IMCO": container_info.imco,
                 "UN": container_info.un,
                 "Ctn_location": container_info.ctn_location,
-                "Commidity_code": container_info.commodity_code,
+                "Commodity_code": container_info.commodity_code,
                 "Gross_weight": smart_number(container_info.weight)
         })
     return container_info_list_for_xml

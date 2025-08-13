@@ -259,8 +259,14 @@ fixtures = [
                   "Supplier-custom_ain_no",
                   "Supplier-custom_bin_no",
                   "Payment Entry Reference-custom_hbl_type",
-                  "Payment Entry Reference-custom_hbl_no"
-                 
+                  "Payment Entry Reference-custom_hbl_no",
+                  "Supplier-custom_supplier_type",
+                  "Payment Entry-custom_sales_person",
+                  "Sales Order-custom_sales_person",
+                  "Stock Entry-custom_customer",
+                  "Stock Entry-custom_sales_person",
+                  "Stock Entry-custom_sales_person",
+                  "Sales Invoice-custom_sales_person"  
                 ],
             ],
         ]
