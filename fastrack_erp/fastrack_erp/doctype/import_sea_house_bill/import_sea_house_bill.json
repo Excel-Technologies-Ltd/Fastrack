@@ -440,7 +440,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Inco Term",
-   "options": "\nPrepaid\nCollect",
+   "options": "\nPrepaid\nCollect\nFree Hand",
    "reqd": 1
   },
   {
@@ -836,7 +836,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-30 13:48:44.305496",
+ "modified": "2025-08-20 12:40:28.046196",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

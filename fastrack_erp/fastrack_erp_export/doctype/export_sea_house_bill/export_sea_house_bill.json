@@ -158,7 +158,7 @@
    "fieldname": "hbl_shipper",
    "fieldtype": "Link",
    "label": "Shipper",
-   "options": "Supplier"
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -444,7 +444,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Inco Term",
-   "options": "\nPrepaid\nCollect",
+   "options": "\nPrepaid\nCollect\nFree Hand",
    "reqd": 1
   },
   {
@@ -975,7 +975,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-07-30 10:25:35.229964",
+ "modified": "2025-08-20 12:41:41.404767",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

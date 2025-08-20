@@ -13,7 +13,7 @@ export const List = () => {
         ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         : [];
     // if customer select then filter by customer
-    console.log("pdfFormOption", childData);
+    // console.log("pdfFormOption", childData);
     if(pdfPolicy.selectCustomer && pdfFormOption.customerName){
         childData = childData.filter((row: any) => row.customer === pdfFormOption.customerName);
     }

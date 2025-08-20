@@ -130,7 +130,7 @@
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Customer"
+   "options": "Supplier"
   },
   {
    "fetch_from": "consignee.custom_bin_no",
@@ -194,7 +194,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-07 12:39:18.327711",
+ "modified": "2025-08-20 12:37:00.508329",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",

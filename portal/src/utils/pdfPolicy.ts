@@ -17,51 +17,52 @@ export type PDFPolicy = {
 }
 
 export const PDF_POLICY: Record<string, PDFPolicy> = {
-    [PDF_NAME_LIST.INCOME]: {
-        name: PDF_NAME_LIST.INCOME,
-        parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
-        selectPDFNAME: true,
-        selectDocName: true,
-        selectCustomer: true,
-        selectSupplier: false,
-        selectChildDoctype: true,
-        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
-        DOWNLOAD_METHOD: "fastrack_erp.api.download_sales_invoice_pdf",
-        HAS_ARGUMENTS: true,
-        ARGUMENTS: {
-            invoice_ids: "selectedId",
-            doctype_name: "docName"
-        }
-    },
-    [PDF_NAME_LIST.EXPENSE]: {
-        name: PDF_NAME_LIST.EXPENSE,
-        parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
-        selectPDFNAME: true,
-        selectDocName: true,
-        selectCustomer: false,
-        selectSupplier: true,
-        selectChildDoctype: true,
-        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.EXPENSE_LIST.name,
-        DOWNLOAD_METHOD: "fastrack_erp.api.download_purchase_invoice_pdf",
-        HAS_ARGUMENTS: true,
-        ARGUMENTS: {
-            invoice_ids: "selectedId",
-            doctype_name: "docName"
-        }
-    },
+    // [PDF_NAME_LIST.INCOME]: {
+    //     name: PDF_NAME_LIST.INCOME,
+    //     parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
+    //     selectPDFNAME: true,
+    //     selectDocName: true,
+    //     selectCustomer: true,
+    //     selectSupplier: false,
+    //     selectChildDoctype: true,
+    //     CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+    //     DOWNLOAD_METHOD: "fastrack_erp.api.download_sales_invoice_pdf",
+    //     HAS_ARGUMENTS: true,
+    //     ARGUMENTS: {
+    //         invoice_ids: "selectedId",
+    //         doctype_name: "docName"
+    //     }
+    // },
+    // [PDF_NAME_LIST.EXPENSE]: {
+    //     name: PDF_NAME_LIST.EXPENSE,
+    //     parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
+    //     selectPDFNAME: true,
+    //     selectDocName: true,
+    //     selectCustomer: false,
+    //     selectSupplier: true,
+    //     selectChildDoctype: true,
+    //     CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.EXPENSE_LIST.name,
+    //     DOWNLOAD_METHOD: "fastrack_erp.api.download_purchase_invoice_pdf",
+    //     HAS_ARGUMENTS: true,
+    //     ARGUMENTS: {
+    //         invoice_ids: "selectedId",
+    //         doctype_name: "docName"
+    //     }
+    // },
     [PDF_NAME_LIST.ARRIVAL_NOTICE]: {
         name: PDF_NAME_LIST.ARRIVAL_NOTICE,
         parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
         selectPDFNAME: true,
         selectDocName: true,
-        selectCustomer: false,
+        selectCustomer: true,
         selectSupplier: false,
         selectChildDoctype: false,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.CONTAINER_INFO.name,
         DOWNLOAD_METHOD: "fastrack_erp.report_api.import_arrival_notice.download_arrival_notice_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
-            doc_name: "docName"
+            doc_name: "docName",
+            customer_name: "customerName"
         }
     },
     [PDF_NAME_LIST.DELIVERY_ORDER]: {

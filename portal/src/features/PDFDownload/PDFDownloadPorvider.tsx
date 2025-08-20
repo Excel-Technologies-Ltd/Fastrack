@@ -80,9 +80,10 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
 
 
 
-  const { data, error,  mutate } = useFrappeGetDoc(
+  const { data, error,  mutate,isLoading,isValidating } = useFrappeGetDoc(
     pdfPolicy.parentDoctype,
     pdfFormOption.docName,
+    
     {
         swrConfig: {
           revalidateOnMount:false,
@@ -92,9 +93,11 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
         },
       }
   )
+  console.log("data_object", data,isLoading,isValidating);
 
 // refetch data when docName changes
 useEffect(() => {
+  console.log("pdfFormOption.docName", pdfFormOption.docName);
   mutate();
 }, [pdfFormOption.docName]);
 

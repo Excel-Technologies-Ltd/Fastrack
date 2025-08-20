@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "../../components/UI/Select";
-import Input from "../../components/UI/Input";
+
 import Button from "../../components/UI/Button";
 import { PDF_NAME_LIST } from "../../constants/pdfName";
 import { usePDFDownload } from "./PDFDownloadPorvider";
@@ -9,12 +9,14 @@ import type { PdfFormOption } from "./PDFDownloadPorvider";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
 import { toast } from "react-toastify";
-
+import { useFrappeGetDocList } from "frappe-react-sdk";
+import SearchableInput from "../../components/UI/SearchableInput";
 
 const PdfForm = () => {
   const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption, docTypeData } = usePDFDownload();
   const { previewPdf } = useDownloadPDF();
   const [loading, setLoading] = useState(false);
+  const [docNameSearch, setDocNameSearch] = useState("");
 
   console.log("pdfFormOption", pdfFormOption);
 
@@ -22,14 +24,56 @@ const PdfForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setPdfFormOption({ ...pdfFormOption, [field]: e.target.value });
+    
+    // Handle docName search separately
+    if (field === "docName") {
+      setDocNameSearch(e.target.value);
+    }
+    
     // if select pdfName then reset the form without pdfName
     if (field === "pdfName") {
       const policy = PDF_POLICY[e.target.value];
       setPdfPolicy((prev) => ({ ...prev, ...policy }));
-      setPdfFormOption((prev) => ({ ...prev, docName: "", customerName: "", supplierName: "", selectedId: "" }));
+      setPdfFormOption((prev) => ({ 
+        ...prev, 
+        docName: "", 
+        customerName: "", 
+        supplierName: "", 
+        selectedId: "" 
+      }));
+      setDocNameSearch(""); // Reset search term
     }
     console.log("field", field, e.target.value);
   };
+
+
+
+  // docNameList
+  const { data: docNameList } = useFrappeGetDocList(
+    pdfPolicy.parentDoctype,
+   {
+      orFilters: [
+        ['name', 'like', `%${docNameSearch}%`]
+      ],
+      limit: 10,
+      fields: ['name'],
+      orderBy: {
+        field: 'modified',
+        order: 'desc'
+      },
+    } ,
+    {
+      swrConfig: {
+        revalidateOnMount: false,
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        shouldRetryOnError: false,
+      },
+    }
+  );
+  const docNameListArray = docNameList && docNameList.length > 0 ? docNameList : [];
+
+ 
 
   const handlePdfNameChange = (selectedPdfName: string) => {
     // If the clicked PDF name is already selected, uncheck it
@@ -42,6 +86,7 @@ const PdfForm = () => {
         supplierName: "", 
         selectedId: "" 
       }));
+      setDocNameSearch("");
       // Reset policy to default state
       setPdfPolicy((prev) => ({ 
         ...prev, 
@@ -62,6 +107,7 @@ const PdfForm = () => {
         supplierName: "", 
         selectedId: "" 
       }));
+      setDocNameSearch("");
       const policy = PDF_POLICY[selectedPdfName];
       setPdfPolicy((prev) => ({ ...prev, ...policy }));
     }
@@ -82,8 +128,21 @@ const PdfForm = () => {
       if (response.success) {
         toast.success("PDF Previewed Successfully");
         // clear the form
-        setPdfFormOption({ pdfName: "", docName: "", customerName: "", supplierName: "", selectedInvoice: [], selectedId: "" });
-        setPdfPolicy({ ...pdfPolicy, selectCustomer: false, selectSupplier: false, selectChildDoctype: false });
+        setPdfFormOption({ 
+          pdfName: "", 
+          docName: "", 
+          customerName: "", 
+          supplierName: "", 
+          selectedInvoice: [], 
+          selectedId: "" 
+        });
+        setDocNameSearch("");
+        setPdfPolicy({ 
+          ...pdfPolicy, 
+          selectCustomer: false, 
+          selectSupplier: false, 
+          selectChildDoctype: false 
+        });
       } else {
         toast.error(response.errors?.[0]?.message || "Something went wrong");
       }
@@ -97,8 +156,7 @@ const PdfForm = () => {
   let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         : null;
-  // get customer list from child data and must be unique
-  // check if childData is array
+        
   const customerList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.customer))] : [];
   const supplierList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.supplier))] : [];
   const customerOptions =
@@ -110,20 +168,20 @@ const PdfForm = () => {
       ? [{ value: "", label: "Select Supplier" }, ...supplierList.map((c: any) => ({ value: c, label: c }))]
       : [{ value: "", label: "Select Supplier" }];
 
-  useEffect(() => {
-    if (pdfPolicy.selectCustomer && pdfFormOption.docName) {
-      // mutateCustomerList();
-    }
-    if (pdfPolicy.selectSupplier && pdfFormOption.docName) {
-      // setPdfFormOption((prev) => ({ ...prev, supplierName: "" }));
-    }
-  }, [pdfPolicy.selectCustomer, pdfFormOption.docName]);
+  // useEffect(() => {
+  //   if (pdfPolicy.selectCustomer && pdfFormOption.docName) {
+  //     // mutateCustomerList();
+  //   }
+  //   if (pdfPolicy.selectSupplier && pdfFormOption.docName) {
+  //     // setPdfFormOption((prev) => ({ ...prev, supplierName: "" }));
+  //   }
+  // }, [pdfPolicy.selectCustomer, pdfFormOption.docName]);
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md p-4 space-y-4 " style={{fontSize: "10px"}}>
+    <form onSubmit={handleSubmit} className="max-w-md p-4 space-y-4" style={{fontSize: "10px"}}>
       {/* PDF Name Checkboxes */}
       <div>
-        <label className="block  font-medium text-gray-700 mb-2">
+        <label className="block font-medium text-gray-700 mb-2">
           PDF Name <span className="text-red-500">*</span>
         </label>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
@@ -142,9 +200,16 @@ const PdfForm = () => {
         </div>
       </div>
 
-      <Input
+      <SearchableInput
+      name="docName"
         label="Document Name"
         placeholder="Enter document name"
+        searchable={true}
+        options={docNameListArray?.map((doc: any) => ({ value: doc.name, label: doc.name })) || []}
+        onSelect={(value) => {
+          setPdfFormOption({ ...pdfFormOption, docName: value });
+          setDocNameSearch(value);
+        }}
         value={pdfFormOption.docName}
         onChange={handleChange("docName")}
         required={pdfPolicy.selectDocName}
@@ -169,7 +234,11 @@ const PdfForm = () => {
         disabled={!pdfPolicy.selectSupplier}
       />
 
-      <Button className={`${loading ? "opacity-50 cursor-not-allowed flex items-center justify-center space-x-2" : ""}`} type="submit" disabled={loading}>
+      <Button 
+        className={`${loading ? "opacity-50 cursor-not-allowed flex items-center justify-center space-x-2" : ""}`} 
+        type="submit" 
+        disabled={loading}
+      >
         {loading && (
           <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />

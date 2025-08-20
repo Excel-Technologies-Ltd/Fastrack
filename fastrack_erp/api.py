@@ -263,7 +263,7 @@ def download_xml_as_pdf(doctype="Import Sea Master Bill", docname="MBL-2025-05-0
     pdf_content = get_pdf(html, options={"page-size": "A4"})
 
     frappe.response["type"] = "binary"
-    frappe.response["filename"] = f"DEG{carrier_code}-{last_id}.xml"
+    frappe.response["filename"] = f"DEG{carrier_code}_{last_id}.xml"
     frappe.response["filecontent"] = pretty_xml.encode("utf-8")
     frappe.response["headers"] = {
         "Content-Type": "application/xml",
@@ -971,3 +971,6 @@ def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
         return result[0][0]
     else:
         return 0
+
+
+

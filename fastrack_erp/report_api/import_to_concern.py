@@ -59,7 +59,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
     
     
     # Get ocean freight rate
-    ocean_freight_rate = doc.get('average_total')
+    ocean_freight_rate = doc.get('total')
     ocean_freight_total = doc.get('total')
 
     
@@ -284,7 +284,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                     </tr>
                 </table>
 
-                <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')}</strong></p>
+                <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p>
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
                  <p style="margin: 5px 0;"><strong>Ocean Freight </strong>  :  <strong> (US$){ocean_freight_rate}</strong></p>
                 <p style="margin: 5px 0;"><strong>Total Container</strong>  : <strong>{container_volume}</strong></p>

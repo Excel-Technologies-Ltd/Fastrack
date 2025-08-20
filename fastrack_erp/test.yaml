@@ -1,0 +1,106 @@
+services:
+
+  api:
+    image: arcapps/rewards-api:2.0.3
+    networks:
+      - reward-app-network
+      - mongodb_replica_network
+    volumes:
+      - "dev-rewards-images:/app/uploads"
+      - "dev-rewards-logs:/app/logs"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - API_BASE_URL=https://rewards.arcapps.com
+      - CLIENT_BASE_URL=https://rewards.arcapps.com
+      - SERIAL_API=https://verify-server.arcapps.com/api/v1
+      - DOMAIN_NAME=https://rewards.arcapps.com
+      - MONGO_DB_NAME=isp-reward
+      - MONGO_USER=isp
+      - MONGO_PASS=AdgecUL7CzIKdfB
+      - MONGO1=mongodb-master
+      - MONGO_PORT1=27017
+      - MONGO2=mongodb-slave1
+      - MONGO_PORT2=27017
+      - MONGO3=mongodb-slave2
+      - MONGO_PORT3=27017
+      - MONGO_DB_REPLICA=isp-replica
+      - JWT_SECRET=W>qHVddaRT^a<:bVL6:U("{D4)IEG\8=+9'Spd&KH'%,Gg5"x)TNWf>8Dt1pPgnW
+      - JWT_EXPIRES_IN=1d
+      - JWT_ALGORITHM=HS256
+      - REFRESH_TOKEN_SECRET=CqGhgDQW2Yo3c1BeDdnQNRdCj2yVaI8cS1PG8OKvzV5dwbEbDeFSSX7o8BXxbAJXzjD4w5jnvzESrS7wNMusgmuEKB4UOc7TdeER
+      - REFRESH_TOKEN_EXPIRES_IN=7d
+      - REFRESH_TOKEN_ALGORITHM=HS256
+      - REGISTRATION_TOKEN_SECRET=vbgdGOleUU9gY0NOG8mRiDLLbJjJr9bXCD5AojSd1fnxVVkxgdu9tZgLj03ddfNeVXPsvJfKuMTRmJVSMgukLJdSCjUJyQvFuMzx
+      - REGISTRATION_TOKEN_EXPIRES_IN=7d
+      - BKASH_TOKEN_SECRET=XPkAZh59DR4odZsFRzmGLeSKkF7rTjnz1Rsmh3Fhnxc7SWgOwXOAVTJHh9XqDhYiwX6VzHgg9IPbvt8SXsXpijTZoLdd07YWJAKj
+      - BKASH_TOKEN_EXPIRES_IN=5m
+      - FRAPPE_TOKEN_SECRET=uFb5gKDWibquv6bAsaPgCAnDFy6uOcaDvRHlrZqaR8nw4rEUY348g1fTeSDbbvHngxncq5yfxgDdngyeYVSbwE0uBnsLwambvp1l
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MAIL_HOST=smtp.zoho.com
+      - MAIL_PORT=465
+      - MAIL_USER=notifications@excelbd.com
+      - MAIL_PASS=ETL&aliV$P@783
+      - MAIL_FROM=rewards-noreply@excelbd.com
+      - MAX_FILE_SIZE=1000000
+      - MULTER_DEST=./uploads
+    depends_on:
+      - redis
+
+  # # admin portal
+  web:
+    image: arcapps/rewards-web:2.0.0
+    depends_on:
+      - api
+    networks:
+      - reward-app-network
+
+  # # nginx for exposing the appliation
+  nginx:
+    restart: always
+    image: arcapps/rewards-nginx:1.0.0
+    depends_on:
+      - web
+    networks:
+      - traefik-public
+      - reward-app-network
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.constraint-label=traefik-public"
+        - "traefik.http.routers.arc-rewards-app.rule=Host(`${SITE?Variable SITE not set}`)"
+        - "traefik.http.routers.arc-rewards-app.entrypoints=http"
+        - "traefik.http.routers.arc-rewards-app.middlewares=https-redirect"
+        - "traefik.http.middlewares.arc-rewards-app.headers.contentTypeNosniff=true"
+        - "traefik.http.routers.arc-rewards-app-https.rule=Host(`${SITE?Variable SITE not set}`)"
+        - "traefik.http.routers.arc-rewards-app-https.entrypoints=https"
+        - "traefik.http.routers.arc-rewards-app-https.tls=true"
+        - "traefik.http.routers.arc-rewards-app-https.tls.certresolver=le"
+        - "traefik.http.services.arc-rewards-app.loadbalancer.server.port=80"
+
+  # redis service
+  redis:
+    image: redis:7.4.1
+    volumes:
+      - "redis-dev-reward-data:/data"
+    networks:
+      - reward-app-network
+
+networks:
+  reward-app-network:
+    attachable: true
+  traefik-public:
+    external: true
+
+volumes:
+  redis-dev-reward-data:
+  dev-reward-images:
+  dev-reward-logs:
+  dev-reward_slave_data:
+  dev-reward_master_data:
+

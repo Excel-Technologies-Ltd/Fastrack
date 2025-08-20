@@ -55,7 +55,7 @@
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Customer"
+   "options": "Supplier"
   },
   {
    "fieldname": "hbl_weight",
@@ -240,7 +240,7 @@
    "fieldname": "inco_term",
    "fieldtype": "Select",
    "label": "Inco Term",
-   "options": "\nPrepaid\nCollect",
+   "options": "\nPrepaid\nCollect\nFree Hand",
    "reqd": 1
   },
   {
@@ -253,7 +253,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-07 10:23:02.761939",
+ "modified": "2025-08-20 12:42:42.328697",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

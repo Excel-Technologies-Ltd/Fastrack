@@ -105,6 +105,9 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                         {item.get('item_code', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('qty', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
                         {rate}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
@@ -126,6 +129,9 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 <tr>
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('item_code', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('qty', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {rate}
@@ -351,6 +357,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                     <tr>
                         <th>Container Number</th>
                         <th>Particulars</th>
+                        <th>Qty</th>
                         <th>Rate $</th>
                         <th>Currency</th>
                         <th>Total Price $</th>
@@ -361,7 +368,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="6" class="total-row">
+                        <td colspan="7" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">

@@ -102,13 +102,13 @@ def get_sea_import_invoice_html(doc, customer_address):
                         {item.get('item_code', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('qty', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
                         {rate}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('currency', '') or ''}
-                    </td>
-                    <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('exchange_rate', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
@@ -122,13 +122,13 @@ def get_sea_import_invoice_html(doc, customer_address):
                         {item.get('item_code', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
+                        {item.get('qty', '') or ''}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
                         {rate}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('currency', '') or ''}
-                    </td>
-                    <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('exchange_rate', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
@@ -340,9 +340,9 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <tr>
                         <th>Container Number</th>
                         <th>Particulars</th>
+                        <th>Qty</th>
                         <th>Rate $</th>
                         <th>Currency</th>
-                        <th>Ex. Rate</th>
                         <th>Total Price $</th>
                     </tr>
                 </thead>
