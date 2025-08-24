@@ -186,6 +186,10 @@ def get_delivery_order_html(doc):
             <!-- Right Column - Details Table -->
             <div style="margin-bottom: 20px;">
                 <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 20%; font-weight: bold; padding: 2px 0;">Notify Party:</td>
+                    <td style="padding: 2px 0;">{doc.get('notify_to', '') or ''}</td>
+                </tr>
                     <tr>
                         <td style="width: 20%; font-weight: bold; padding: 2px 0;">Date:</td>
                         <td style="padding: 2px 0;">{doc.get('eta', '') or ''}</td>

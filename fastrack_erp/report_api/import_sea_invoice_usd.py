@@ -272,6 +272,10 @@ def get_sea_import_invoice_html(doc, customer_address):
             <h4>Shipping Details:</h4>
             <table class="details-table">
                 <tr>
+                    <td style="width: 20%;"><strong>Notify Party:</strong></td>
+                    <td style="width: 30%;">{doc.get('notify_to', '') or ''}</td>
+                </tr>
+                <tr>
                     <td style="width: 20%;"><strong>Shipper:</strong></td>
                     <td style="width: 30%;">{doc.get('hbl_shipper', '') or ''}</td>
                     <td style="width: 20%;"><strong>M/Vsl. Name:</strong></td>

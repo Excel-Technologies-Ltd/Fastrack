@@ -88,17 +88,20 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
         swrConfig: {
           revalidateOnMount:false,
           revalidateIfStale:false,
-          revalidateOnFocus:false,
+          revalidateOnFocus:true,
           shouldRetryOnError:false,
         },
       }
   )
+  console.log("pdfFormOption.docName-bgry", pdfFormOption.docName);
   console.log("data_object", data,isLoading,isValidating);
 
 // refetch data when docName changes
 useEffect(() => {
-  console.log("pdfFormOption.docName", pdfFormOption.docName);
-  mutate();
+  
+  if(pdfFormOption.docName){
+    mutate();
+  }
 }, [pdfFormOption.docName]);
 
 useEffect(() => {

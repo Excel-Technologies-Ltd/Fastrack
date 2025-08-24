@@ -4,7 +4,7 @@ from frappe.utils import get_url
 
 
 @frappe.whitelist()
-def download_arrival_notice_pdf(doc_name="SHBL-00000064"):
+def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack"):
     """Download Import Arrival Notice as PDF using HTML template"""
     
     try:
@@ -230,6 +230,7 @@ def get_arrival_notice_html(doc, customer_address):
                 <table class="details-table">
                     <tr>
                         <td>
+                            <div class="detail-row"><strong>Notify Party</strong>: {doc.get('notify_to', '') or ''}</div>
                             <div class="detail-row"><strong>Shipper</strong>: {doc.get('hbl_shipper', '') or ''}</div>
                             <div class="detail-row"><strong>HBL No</strong>: {doc.get('hbl_id', '') or ''}</div>
                             <div class="detail-row"><strong>HBL Date</strong>: {doc.get('hbl_date', '') or ''}</div>

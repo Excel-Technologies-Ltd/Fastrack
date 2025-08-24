@@ -7,6 +7,7 @@ export const PDF_NAME_LIST = {
     SEA_IMPORT_INVOICE_BDT: "Sea Import Invoice BDT",
     DELIVERY_ORDER: "Delivery Order",
     TO_WHOM_CONCERN: "FC",
+
 }
 
 // make here demo 20 list

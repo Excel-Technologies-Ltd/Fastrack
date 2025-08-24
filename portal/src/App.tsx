@@ -1,5 +1,6 @@
 
 import './App.css'
+import 'antd/dist/reset.css'
 import { FrappeProvider } from 'frappe-react-sdk'
 import { ToastContainer } from 'react-toastify';
 import { RouterProvider } from 'react-router-dom'

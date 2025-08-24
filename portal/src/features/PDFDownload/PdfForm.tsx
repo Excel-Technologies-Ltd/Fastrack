@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Select from "../../components/UI/Select";
-
-import Button from "../../components/UI/Button";
+import { Checkbox, Form, Space, Card, Typography, Row, Col } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { AntSelect, AntButton } from "../../components/UI";
 import { PDF_NAME_LIST } from "../../constants/pdfName";
 import { usePDFDownload } from "./PDFDownloadPorvider";
 import { PDF_POLICY } from "../../utils/pdfPolicy";
@@ -10,13 +10,14 @@ import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
 import { toast } from "react-toastify";
 import { useFrappeGetDocList } from "frappe-react-sdk";
-import SearchableInput from "../../components/UI/SearchableInput";
-
+ 
 const PdfForm = () => {
   const { pdfPolicy, setPdfPolicy, setPdfFormOption, pdfFormOption, docTypeData } = usePDFDownload();
   const { previewPdf } = useDownloadPDF();
   const [loading, setLoading] = useState(false);
-  const [docNameSearch, setDocNameSearch] = useState("");
+  
+  // Use only ONE state for document search/selection
+  const [docSearchValue, setDocSearchValue] = useState("");
 
   console.log("pdfFormOption", pdfFormOption);
 
@@ -24,12 +25,6 @@ const PdfForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setPdfFormOption({ ...pdfFormOption, [field]: e.target.value });
-    
-    // Handle docName search separately
-    if (field === "docName") {
-      setDocNameSearch(e.target.value);
-    }
-    
     // if select pdfName then reset the form without pdfName
     if (field === "pdfName") {
       const policy = PDF_POLICY[e.target.value];
@@ -41,39 +36,10 @@ const PdfForm = () => {
         supplierName: "", 
         selectedId: "" 
       }));
-      setDocNameSearch(""); // Reset search term
+      setDocSearchValue(""); // Also reset the search value
     }
     console.log("field", field, e.target.value);
   };
-
-
-
-  // docNameList
-  const { data: docNameList } = useFrappeGetDocList(
-    pdfPolicy.parentDoctype,
-   {
-      orFilters: [
-        ['name', 'like', `%${docNameSearch}%`]
-      ],
-      limit: 10,
-      fields: ['name'],
-      orderBy: {
-        field: 'modified',
-        order: 'desc'
-      },
-    } ,
-    {
-      swrConfig: {
-        revalidateOnMount: false,
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        shouldRetryOnError: false,
-      },
-    }
-  );
-  const docNameListArray = docNameList && docNameList.length > 0 ? docNameList : [];
-
- 
 
   const handlePdfNameChange = (selectedPdfName: string) => {
     // If the clicked PDF name is already selected, uncheck it
@@ -86,7 +52,7 @@ const PdfForm = () => {
         supplierName: "", 
         selectedId: "" 
       }));
-      setDocNameSearch("");
+      setDocSearchValue(""); // Reset search value
       // Reset policy to default state
       setPdfPolicy((prev) => ({ 
         ...prev, 
@@ -107,15 +73,14 @@ const PdfForm = () => {
         supplierName: "", 
         selectedId: "" 
       }));
-      setDocNameSearch("");
+      setDocSearchValue(""); // Reset search value
       const policy = PDF_POLICY[selectedPdfName];
       setPdfPolicy((prev) => ({ ...prev, ...policy }));
     }
     console.log("field", "pdfName", selectedPdfName);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       setLoading(true);
       const validateOption = validatePdfPolicy(pdfFormOption);
@@ -136,7 +101,7 @@ const PdfForm = () => {
           selectedInvoice: [], 
           selectedId: "" 
         });
-        setDocNameSearch("");
+        setDocSearchValue(""); // Clear search value
         setPdfPolicy({ 
           ...pdfPolicy, 
           selectCustomer: false, 
@@ -152,106 +117,162 @@ const PdfForm = () => {
     }
   };
 
+  // Use docSearchValue for API call
+  const { data: docNameList } = useFrappeGetDocList(pdfPolicy.parentDoctype, {
+    orFilters: [
+      ['name', 'like', `%${docSearchValue}%`]
+    ],
+    limit: 10,
+    fields: ['name']
+  });
+  
+  const doclistArray = docNameList && docNameList.length > 0 ? docNameList : [];
+  
+
+
   // get customer list from child data and must be unique
   let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
         : null;
-        
+  
+  // get customer list from child data and must be unique
   const customerList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.customer))] : [];
   const supplierList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.supplier))] : [];
+  
   const customerOptions =
     customerList?.length > 0
       ? [{ value: "", label: "Select Customer" }, ...customerList.map((c: any) => ({ value: c, label: c }))]
       : [{ value: "", label: "Select Customer" }];
+      
   const supplierOptions =
     supplierList?.length > 0
       ? [{ value: "", label: "Select Supplier" }, ...supplierList.map((c: any) => ({ value: c, label: c }))]
       : [{ value: "", label: "Select Supplier" }];
 
-  // useEffect(() => {
-  //   if (pdfPolicy.selectCustomer && pdfFormOption.docName) {
-  //     // mutateCustomerList();
-  //   }
-  //   if (pdfPolicy.selectSupplier && pdfFormOption.docName) {
-  //     // setPdfFormOption((prev) => ({ ...prev, supplierName: "" }));
-  //   }
-  // }, [pdfPolicy.selectCustomer, pdfFormOption.docName]);
+
+  // Sync docSearchValue with pdfFormOption.docName when docName is cleared from other places
+  useEffect(() => {
+    if (!pdfFormOption.docName && docSearchValue) {
+      setDocSearchValue("");
+    }
+  }, [pdfFormOption.docName]);
+
+
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md p-4 space-y-4" style={{fontSize: "10px"}}>
-      {/* PDF Name Checkboxes */}
-      <div>
-        <label className="block font-medium text-gray-700 mb-2">
-          PDF Name <span className="text-red-500">*</span>
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
-          {Object.values(PDF_NAME_LIST).map((name) => (
-            <label key={name} className="flex items-center space-x-2 cursor-pointer" style={{fontSize: "10px"}}>
-              <input
-                type="checkbox"
+    <Card style={{ maxWidth: 600, margin: '0 auto' }}>
+      <Form layout="vertical" onFinish={handleSubmit}>
+        {/* PDF Name Checkboxes */}
+      <Form.Item
+        label={
+          <Typography.Text strong>
+            PDF Name <Typography.Text type="danger">*</Typography.Text>
+          </Typography.Text>
+        }
+        required
+      >
+        {Object.values(PDF_NAME_LIST).length > 5 ? (
+          // Use grid layout if more than 5 items
+          <Row gutter={[8, 8]}>
+            {Object.values(PDF_NAME_LIST).map((name) => (
+              <Col span={12} key={name}>
+                <Checkbox
+                  checked={pdfFormOption.pdfName === name}
+                  onChange={() => handlePdfNameChange(name)}
+                  style={{ fontSize: '12px' }}
+                >
+                  {name}
+                </Checkbox>
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          // Default vertical layout
+          <Space direction="vertical" style={{ width: '100%' }}>
+            {Object.values(PDF_NAME_LIST).map((name) => (
+              <Checkbox
+                key={name}
                 checked={pdfFormOption.pdfName === name}
                 onChange={() => handlePdfNameChange(name)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                style={{fontSize: "10px"}}
-              />
-              <span className="text-sm text-gray-700">{name}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <SearchableInput
-      name="docName"
-        label="Document Name"
-        placeholder="Enter document name"
-        searchable={true}
-        options={docNameListArray?.map((doc: any) => ({ value: doc.name, label: doc.name })) || []}
-        onSelect={(value) => {
-          setPdfFormOption({ ...pdfFormOption, docName: value });
-          setDocNameSearch(value);
-        }}
-        value={pdfFormOption.docName}
-        onChange={handleChange("docName")}
-        required={pdfPolicy.selectDocName}
-        disabled={!pdfPolicy.selectDocName}
-      />
-
-      <Select
-        label="Customer"
-        options={customerOptions}
-        value={pdfFormOption.customerName}
-        onChange={handleChange("customerName")}
-        required
-        disabled={!pdfPolicy.selectCustomer}
-      />
-
-      <Select
-        label="Supplier"
-        options={supplierOptions}
-        value={pdfFormOption.supplierName}
-        onChange={handleChange("supplierName")}
-        required
-        disabled={!pdfPolicy.selectSupplier}
-      />
-
-      <Button 
-        className={`${loading ? "opacity-50 cursor-not-allowed flex items-center justify-center space-x-2" : ""}`} 
-        type="submit" 
-        disabled={loading}
-      >
-        {loading && (
-          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
+                style={{ fontSize: '12px' }}
+              >
+                {name}
+              </Checkbox>
+            ))}
+          </Space>
         )}
-        <span>{loading ? "Processing..." : "Download PDF"}</span>
-      </Button>
-    </form>
+      </Form.Item>
+
+
+        {/* Document Name Search */}
+        <AntSelect
+          label="Document Name"
+          placeholder="Enter document name"
+          value={docSearchValue}
+          onChange={(value: string) => {
+            setDocSearchValue(value);
+            setPdfFormOption({ ...pdfFormOption, docName: value });
+          }}
+          onSearch={(value: string) => {
+            setDocSearchValue(value);
+            if (pdfFormOption.docName && value !== pdfFormOption.docName) {
+              setPdfFormOption({ ...pdfFormOption, docName: "" });
+            }
+          }}
+          showSearch={true}
+          filterOption={false}
+          disabled={!pdfPolicy.selectDocName}
+          required={pdfPolicy.selectDocName}
+          options={doclistArray?.map((doc: any) => ({ 
+            value: doc.name, 
+            label: doc.name 
+          })) || []}
+          notFoundContent={docSearchValue ? "No documents found" : "Start typing to search..."}
+        />
+
+        {/* Customer Select */}
+        <AntSelect
+          label="Customer"
+          placeholder="Select Customer"
+          value={pdfFormOption.customerName}
+          onChange={(value: string) => {
+            const fakeEvent = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
+            handleChange("customerName")(fakeEvent);
+          }}
+          disabled={!pdfPolicy.selectCustomer}
+          required={pdfPolicy.selectCustomer}
+          options={customerOptions}
+        />
+
+        {/* Supplier Select */}
+        <AntSelect
+          label="Supplier"
+          placeholder="Select Supplier"
+          value={pdfFormOption.supplierName}
+          onChange={(value: string) => {
+            const fakeEvent = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
+            handleChange("supplierName")(fakeEvent);
+          }}
+          disabled={!pdfPolicy.selectSupplier}
+          required={pdfPolicy.selectSupplier}
+          options={supplierOptions}
+        />
+
+        {/* Submit Button */}
+        <Form.Item>
+          <AntButton 
+            type="primary" 
+            htmlType="submit" 
+            loading={loading}
+            icon={<DownloadOutlined />}
+            size="large"
+            style={{ width: '100%' }}
+          >
+            {loading ? "Processing..." : "Download PDF"}
+          </AntButton>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 };
 
