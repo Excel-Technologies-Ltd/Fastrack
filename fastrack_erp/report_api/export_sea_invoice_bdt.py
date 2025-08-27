@@ -4,15 +4,15 @@ from frappe.utils import get_url
 
 
 @frappe.whitelist()
-def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
-    print(doc_name,invoice_ids)
-    """Download Sea Import Invoice USD as PDF using HTML template"""
+def download_sea_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
+    print(doc_name, invoice_ids)
+    """Download Sea Import Invoice BDT as PDF using HTML template"""
     
     try:
         # Get the document
-        doctype = "Import Sea House Bill"
+        doctype = "Export Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
-        invoice_list= doc.invoice_list
+        invoice_list = doc.invoice_list
         # filter if invoice_ids is not None
         print(invoice_list)
         if invoice_ids:
@@ -23,6 +23,7 @@ def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
             print(invoice_list)
         doc.invoice_list = invoice_list
         print(doc.invoice_list)
+        
         # Get customer address
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
@@ -35,13 +36,13 @@ def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
                     customer_address = ""
         
         # Generate HTML content
-        html_content = get_sea_import_invoice_html(doc, customer_address)
+        html_content = get_sea_import_invoice_bdt_html(doc, customer_address)
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
         
         # Set filename
-        filename = f"Sea_Import_Invoice_USD_{doc_name}.pdf"
+        filename = f"Sea_Import_Invoice_BDT_{doc_name}.pdf"
         
         # Prepare response
         frappe.local.response.filename = filename
@@ -52,8 +53,8 @@ def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_sea_import_invoice_html(doc, customer_address):
-    """Generate HTML content for Sea Import Invoice USD"""
+def get_sea_import_invoice_bdt_html(doc, customer_address):
+    """Generate HTML content for Sea Import Invoice BDT"""
     
     # Get customer info
     customer_name = ""
@@ -72,6 +73,7 @@ def get_sea_import_invoice_html(doc, customer_address):
     
     # Get container numbers
     container_numbers = []
+
     if hasattr(doc, 'container_info') and doc.container_info:
         for container in doc.container_info:
             container_no = container.get('custom_container_no', '') or ''
@@ -94,12 +96,14 @@ def get_sea_import_invoice_html(doc, customer_address):
     
     # Get invoice items
     invoice_rows = ""
-    total_amount = 0
+    total_amount_bdt = 0
     if hasattr(doc, 'invoice_list') and doc.invoice_list:
         for idx, item in enumerate(doc.invoice_list):
             rate = item.get('rate', 0) or 0
             total_price = item.get('total_price', 0) or 0
-            total_amount += float(total_price) if total_price else 0
+            exchange_rate = item.get('exchange_rate', 0) or 0
+            base_net_amount = item.get('base_net_amount', 0) or 0
+            total_amount_bdt += float(base_net_amount) if base_net_amount else 0
             
             if idx == 0:  # First row with rowspan for container number
                 invoice_rows += f"""
@@ -122,6 +126,12 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
                     </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {exchange_rate}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {base_net_amount}
+                    </td>
                 </tr>
                 """
             else:  # Subsequent rows without container number column
@@ -142,6 +152,12 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
                     </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {exchange_rate}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {base_net_amount}
+                    </td>
                 </tr>
                 """
     else:
@@ -149,6 +165,8 @@ def get_sea_import_invoice_html(doc, customer_address):
         invoice_rows = """
         <tr>
             <td style="border: 1px solid black; padding: 5px; text-align: center;">-</td>
+            <td style="border: 1px solid black; padding: 5px;">-</td>
+            <td style="border: 1px solid black; padding: 5px;">-</td>
             <td style="border: 1px solid black; padding: 5px;">-</td>
             <td style="border: 1px solid black; padding: 5px;">-</td>
             <td style="border: 1px solid black; padding: 5px;">-</td>
@@ -161,7 +179,7 @@ def get_sea_import_invoice_html(doc, customer_address):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sea Import Invoice USD</title>
+        <title>Sea Import Invoice BDT</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;
@@ -271,7 +289,7 @@ def get_sea_import_invoice_html(doc, customer_address):
                 <div class="header-right">
                     <p style="margin: 0;"><strong>Invoice No:</strong> {doc.get('hbl_id', '') or ''}</p>
                     <p style="margin: 0;"><strong>Date:</strong> {doc.get('hbl_date', '') or ''}</p>
-                    <p style="margin: 0;"><strong>Currency:</strong> USD</p>
+                    <p style="margin: 0;"><strong>Currency:</strong> BDT</p>
                 </div>
             </div>
 
@@ -280,9 +298,10 @@ def get_sea_import_invoice_html(doc, customer_address):
             <!-- Shipping Details -->
             <h4>Shipping Details:</h4>
             <table class="details-table">
-                <tr>
+              <tr>
                     <td style="width: 20%;"><strong>Notify Party:</strong></td>
                     <td style="width: 30%;">{doc.get('notify_to', '') or ''}</td>
+                   
                 </tr>
                 <tr>
                     <td style="width: 20%;"><strong>Shipper:</strong></td>
@@ -357,16 +376,18 @@ def get_sea_import_invoice_html(doc, customer_address):
                         <th>Rate $</th>
                         <th>Currency</th>
                         <th>Total Price $</th>
+                        <th>Ex. Rate</th>
+                        <th>Total Price BDT</th>
                     </tr>
                 </thead>
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="5" class="total-row">
+                        <td colspan="7" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_amount:.2f}</strong>
+                            <strong>{total_amount_bdt:.2f}</strong>
                         </td>
                     </tr>
                 </tbody>
@@ -401,8 +422,8 @@ def get_sea_import_invoice_html(doc, customer_address):
 
 
 @frappe.whitelist()
-def get_sea_import_invoice_preview(doc_name):
-    """Get HTML preview of Sea Import Invoice USD (for testing)"""
+def get_sea_import_invoice_bdt_preview(doc_name):
+    """Get HTML preview of Sea Import Invoice BDT (for testing)"""
     
     try:
         doctype = "Import Sea House Bill"
@@ -420,7 +441,7 @@ def get_sea_import_invoice_preview(doc_name):
                     customer_address = ""
         
         # Generate and return HTML content
-        html_content = get_sea_import_invoice_html(doc, customer_address)
+        html_content = get_sea_import_invoice_bdt_html(doc, customer_address)
         return {"html": html_content}
         
     except Exception as e:

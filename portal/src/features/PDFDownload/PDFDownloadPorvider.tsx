@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { PDFPolicy } from "../../utils/pdfPolicy";
-import { useFrappeGetDoc } from "frappe-react-sdk";
+import { useFrappeGetCall, useFrappeGetDoc } from "frappe-react-sdk";
 
 
 // Define the structure of the form data
@@ -80,6 +80,13 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
 
 
 
+const { data :mblData  , error:mblError,  mutate:mblMutate,isLoading:mblIsLoading,isValidating:mblIsValidating } = useFrappeGetCall(
+  pdfPolicy.getMethod || "",
+  {
+    mbl_id: pdfFormOption.docName,
+  },
+)
+
   const { data, error,  mutate,isLoading,isValidating } = useFrappeGetDoc(
     pdfPolicy.parentDoctype,
     pdfFormOption.docName,
@@ -95,32 +102,53 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
   )
   console.log("pdfFormOption.docName-bgry", pdfFormOption.docName);
   console.log("data_object", data,isLoading,isValidating);
+  console.log("mblData_object", mblData,mblIsLoading,mblIsValidating);
 
 // refetch data when docName changes
 useEffect(() => {
   
-  if(pdfFormOption.docName){
+  if(pdfFormOption.docName && !pdfPolicy.isMasterBill){
     mutate();
+  }
+  if(pdfFormOption.docName && pdfPolicy.isMasterBill){
+    mblMutate();
   }
 }, [pdfFormOption.docName]);
 
 useEffect(() => {
-  if (data) {
-    if (Array.isArray(data)) {
+  // Clear error first
+  setErrorObj((prev) => ({ ...prev, docNameError: "" }));
+
+  // // Handle error states
+  // if (error || mblError) {
+  //   setDocTypeData({});
+  //   setErrorObj((prev) => ({ 
+  //     ...prev, 
+  //     docNameError: "Not Found. Enter Valid Doc Name" 
+  //   }));
+  //   return;
+  // }
+
+  // Determine which data to use based on policy
+  const targetData = pdfPolicy.isMasterBill ? mblData : data;
+  console.log("targetData_object", targetData);
+
+  // Handle data processing
+  if (targetData) {
+    // Check if data is an array (which seems to be an invalid state)
+    if (Array.isArray(targetData)) {
       setDocTypeData({});
     } else {
-      setDocTypeData(data);
+      // For master bill, use the message property, otherwise use data directly
+      const processedData = pdfPolicy.isMasterBill ? targetData?.message : targetData;
+      setDocTypeData(processedData || {});
+      console.log("doc_data",docTypeData)
     }
-    setErrorObj((prev)=>({...prev,docNameError:""}));
-  }else{
+  } else {
+    // No data available
     setDocTypeData({});
-    setErrorObj((prev)=>({...prev,docNameError:""}))
   }
-  if(error){
-    setDocTypeData({});
-    setErrorObj((prev)=>({...prev,docNameError:"Not Found Enter Valid Doc Name"}));
-  }
-}, [data,error]);
+}, [data, error, mblData, mblError, pdfPolicy.isMasterBill]);
 
 
   return (

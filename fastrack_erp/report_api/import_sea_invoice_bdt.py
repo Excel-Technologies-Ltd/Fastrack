@@ -73,16 +73,26 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
     
     # Get container numbers
     container_numbers = []
+
     if hasattr(doc, 'container_info') and doc.container_info:
         for container in doc.container_info:
             container_no = container.get('custom_container_no', '') or ''
             size = container.get('size', '') or ''
             if container_no:
-                container_numbers.append(f"{container_no}/{size}")
-    if len(container_numbers) > 6:
-        container_numbers_str = "Qty: " + str(len(container_numbers))
+                container_numbers.append((container_no, size))  # store as tuple
+
+    if len(container_numbers) > 5:
+        # Group by size
+        size_count = {}
+        for _, size in container_numbers:
+            size_count[size] = size_count.get(size, 0) + 1
+        
+        # Create grouped string like "20ft: 3, 40ft: 2"
+        grouped = [f"{size}: {qty}" for size, qty in size_count.items()]
+        container_numbers_str = "Qty: " + ", ".join(grouped)
     else:
-        container_numbers_str = ", ".join(container_numbers)
+        # List individually
+        container_numbers_str = ", ".join(f"{no}/{size}" for no, size in container_numbers)
     
     # Get invoice items
     invoice_rows = ""

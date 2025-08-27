@@ -1,0 +1,174 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:mbl_no",
+ "creation": "2025-08-27 13:05:45.467146",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_rzyek",
+  "mbl_no",
+  "flight",
+  "port_of_loading",
+  "no_of_pkg",
+  "remarks",
+  "column_break_ibxhu",
+  "mbl_date",
+  "flight_date",
+  "port_of_delivery",
+  "consignee",
+  "gr_weight",
+  "section_break_plp8q",
+  "mbl_open_by",
+  "airline",
+  "etd",
+  "shipper",
+  "chargeable_weight",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_rzyek",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mbl_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "MBL No",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "flight",
+   "fieldtype": "Link",
+   "label": "Flight",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Int",
+   "label": "No of Pkg"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gross  Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ibxhu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mbl_open_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "MBL Open By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "fieldname": "chargeable_weight",
+   "fieldtype": "Float",
+   "label": "Chargeable Weight"
+  },
+  {
+   "fieldname": "section_break_plp8q",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "flight_date",
+   "fieldtype": "Date",
+   "label": "Flight Date"
+  },
+  {
+   "fieldname": "airline",
+   "fieldtype": "Link",
+   "label": "AirLine",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Air Master Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "label": "Shipper",
+   "options": "Supplier"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Import Air House Bill",
+   "link_fieldname": "mbl_no"
+  }
+ ],
+ "modified": "2025-08-27 13:17:08.026434",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp Export",
+ "name": "Export Air Master Bill",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

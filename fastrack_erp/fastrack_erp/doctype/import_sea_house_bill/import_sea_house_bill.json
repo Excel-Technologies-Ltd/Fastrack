@@ -29,7 +29,7 @@
   "mbl_surrender_status",
   "column_break_twikq",
   "sales_person",
-  "mbl_link",
+  "mbl_date",
   "hbl_date",
   "office_name",
   "nature",
@@ -49,7 +49,6 @@
   "total_container_hbl",
   "column_break_r8svn",
   "reference_number",
-  "mbl_date",
   "agent",
   "shipping_line",
   "inco_term",
@@ -67,6 +66,7 @@
   "fv_etd",
   "eta_dhaka",
   "container_type",
+  "mbl_link",
   "section_break_tvziq",
   "carrier_name",
   "agent_name",
@@ -133,9 +133,10 @@
   {
    "allow_on_submit": 1,
    "fieldname": "mbl_no",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "MBL No.",
+   "options": "Import Sea Master Bill",
    "reqd": 1
   },
   {
@@ -682,10 +683,10 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_link",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "MBL Link",
-   "options": "Import Sea Master Bill",
-   "reqd": 1
+   "options": "Import Sea Master Bill"
   },
   {
    "fieldname": "hbl_open_by",
@@ -836,7 +837,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-08-20 12:40:28.046196",
+ "modified": "2025-08-27 13:37:36.420065",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

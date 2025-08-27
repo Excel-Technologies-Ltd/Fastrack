@@ -118,7 +118,7 @@ const PdfForm = () => {
   };
 
   // Use docSearchValue for API call
-  const { data: docNameList } = useFrappeGetDocList(pdfPolicy.parentDoctype, {
+  const { data: docNameList } = useFrappeGetDocList(pdfPolicy.parentDoctype || "", {
     orFilters: [
       ['name', 'like', `%${docSearchValue}%`]
     ],

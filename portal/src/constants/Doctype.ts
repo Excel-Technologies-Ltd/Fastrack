@@ -34,4 +34,19 @@ export const DOCTYPE_LIST = {
             },
         },
     },
+    IMPORT_SEA_MASTER_BILL: {
+        NAME: "Import Sea Master Bill",
+        CHILD_DOCTYPE: {
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
+                ],
+            },
+        },
+    },
 };

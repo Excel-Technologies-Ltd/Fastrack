@@ -16,12 +16,12 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
         customer_address = ""
         if doc.customer:
             try:
-                customer_address = frappe.get_doc("Customer", doc.customer).primary_address
+                customer_address = frappe.get_doc("Customer", {"customer_name": customer_name}).primary_address
             except:
                 customer_address = ""
         
         # Generate HTML content
-        html_content = get_arrival_notice_html(doc, customer_address)
+        html_content = get_arrival_notice_html(doc, customer_address,customer_name)
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
@@ -38,7 +38,7 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_arrival_notice_html(doc, customer_address):
+def get_arrival_notice_html(doc, customer_address,customer_name):
     """Generate HTML content for Arrival Notice"""
     
     # Get container information
@@ -212,7 +212,7 @@ def get_arrival_notice_html(doc, customer_address):
 
             <!-- Company Info -->
             <div class="company-info">
-                <div class="text-bold">TO: {doc.get('notify_to', '') or ''}</div>
+                <div class="text-bold">TO: {customer_name}</div>
                 <div class="company-address">
                     {customer_address}
                 </div>

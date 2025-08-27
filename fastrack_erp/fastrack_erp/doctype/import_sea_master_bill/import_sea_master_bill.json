@@ -9,6 +9,7 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_rzyek",
+  "mbl_open_by",
   "mbl_no",
   "mv",
   "etd",
@@ -18,7 +19,7 @@
   "eta",
   "remarks",
   "column_break_ibxhu",
-  "mbl_open_by",
+  "agent",
   "mbl_date",
   "mv_voyage_no",
   "mbl",
@@ -28,7 +29,6 @@
   "ata_ctg",
   "import_rot_no",
   "column_break_mtgyt",
-  "agent",
   "agent_address",
   "shipping_line",
   "shipping_line_address",
@@ -363,7 +363,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-07-30 10:23:29.962083",
+ "modified": "2025-08-27 10:17:00.961266",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

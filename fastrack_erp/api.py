@@ -974,3 +974,43 @@ def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
 
 
 
+
+
+
+
+@frappe.whitelist(allow_guest=True)
+def get_all_hbl_invoice_list_by_mbl_id(mbl_id="SMBL-00000063"):
+    mbl_doc = frappe.get_doc("Import Sea Master Bill", mbl_id)
+    
+    all_invoices = []
+    
+    for hbl in mbl_doc.hbl_info:
+        if hbl.is_create == 1:
+            hbl_doc = frappe.get_doc("Import Sea House Bill", hbl.hbl_link)
+            
+            if hasattr(hbl_doc, 'invoice_list') and hbl_doc.invoice_list:
+                # Add HBL reference to each invoice for tracking
+                for invoice in hbl_doc.invoice_list:
+                    # Convert Frappe document to dict using as_dict()
+                    invoice_data = invoice.as_dict() if hasattr(invoice, 'as_dict') else invoice
+                    
+                    # Ensure it's a dictionary before adding reference
+                    if isinstance(invoice_data, dict):
+                        invoice_data['hbl_reference'] = hbl.hbl_link
+                    else:
+                        # If it's still not a dict, create a simple structure
+                        invoice_data = {
+                            'invoice': str(invoice),
+                            'hbl_reference': hbl.hbl_link
+                        }
+                    
+                    all_invoices.append(invoice_data)
+    
+    return {
+        'mbl_id': mbl_id,
+        'invoice_list': all_invoices,
+        'total_invoices': len(all_invoices)
+    }
+
+
+
