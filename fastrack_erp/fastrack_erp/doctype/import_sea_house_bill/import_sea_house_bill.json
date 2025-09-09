@@ -11,6 +11,7 @@
   "hbl_open_by",
   "mbl_no",
   "hbl_id",
+  "hbl_data",
   "office_code",
   "hbl_type_code",
   "dg_status",
@@ -113,7 +114,8 @@
   "total_profit_share",
   "hbl_weight",
   "hbl_doc_name",
-  "mbl_doctype"
+  "mbl_doctype",
+  "invoice_uid"
  ],
  "fields": [
   {
@@ -819,6 +821,17 @@
    "label": "Draft Invoice List",
    "options": "Fastrack Draft Bill",
    "read_only": 1
+  },
+  {
+   "fieldname": "invoice_uid",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Invoice UID"
+  },
+  {
+   "fieldname": "hbl_data",
+   "fieldtype": "Data",
+   "label": "HBL No"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -837,7 +850,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-08-27 13:37:36.420065",
+ "modified": "2025-09-07 16:11:45.359599",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

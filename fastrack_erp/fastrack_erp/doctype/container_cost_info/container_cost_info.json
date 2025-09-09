@@ -8,7 +8,9 @@
  "field_order": [
   "size",
   "qty",
-  "amount"
+  "amount",
+  "ex_rate",
+  "amountbdt"
  ],
  "fields": [
   {
@@ -31,13 +33,26 @@
    "fieldname": "amount",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Amount"
+   "label": "Amount(USD)"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "ex_rate",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Ex. Rate"
+  },
+  {
+   "fieldname": "amountbdt",
+   "fieldtype": "Data",
+   "label": "Amount(BDT)",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-21 00:25:36.458761",
+ "modified": "2025-09-07 11:55:16.800666",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Container Cost Info",

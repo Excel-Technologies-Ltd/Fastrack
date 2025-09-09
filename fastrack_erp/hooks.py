@@ -261,12 +261,13 @@ fixtures = [
                   "Payment Entry Reference-custom_hbl_type",
                   "Payment Entry Reference-custom_hbl_no",
                   "Supplier-custom_supplier_type",
-                  "Payment Entry-custom_sales_person",
-                  "Sales Order-custom_sales_person",
                   "Stock Entry-custom_customer",
-                  "Stock Entry-custom_sales_person",
-                  "Stock Entry-custom_sales_person",
-                  "Sales Invoice-custom_sales_person"  
+                  "Purchase Invoice Item-custom_inv_rate_usd",
+                  "Purchase Invoice Item-custom_inv_exchange_rate",
+                  "Purchase Invoice Item-custom_inv_rate_company_currency",
+                  "Sales Invoice Item-custom_inv_rate_usd",
+                  "Sales Invoice Item-custom_inv_exchange_rate_",
+                  "Sales Invoice Item-custom_inv_rate_company_currency"
                 ],
             ],
         ]

@@ -348,3 +348,16 @@ frappe.ui.form.on('Fastrack Sea Item', {
 });
 
 
+
+//     Container Cost Info
+
+frappe.ui.form.on('Container Cost Info', {
+    ex_rate: function(frm, cdt, cdn) {
+        var row = locals[cdt][cdn];
+        var usd_amount = row.amount || 0;
+        var ex_rate = row.ex_rate || 0;  // Get from parent document
+        var bdt_amount = usd_amount * ex_rate;
+        
+        frappe.model.set_value(cdt, cdn, "amountbdt", bdt_amount);
+    }
+});

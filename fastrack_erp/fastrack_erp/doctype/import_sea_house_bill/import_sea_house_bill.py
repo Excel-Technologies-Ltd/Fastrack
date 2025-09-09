@@ -1,6 +1,6 @@
 # Copyright (c) 2025, Shaid Azmin and contributors
 # For license information, please see license.txt
-
+import random
 import frappe
 from frappe.model.document import Document
 #  "payment_link",
@@ -9,6 +9,7 @@ from frappe.model.document import Document
 #   "amount"
 class ImportSeaHouseBill(Document):
 	def onload(self):
+		self.hbl_data=self.name
 		
 		invoice_list = self.get_invoice_list()
 		gl_entry_list = get_gl_entry_from_invoice(invoice_list)
@@ -38,6 +39,21 @@ class ImportSeaHouseBill(Document):
 			draft_invoice.parentfield="draft_invoice_list"
 			draft_invoice_list.append(draft_invoice)
 		self.draft_invoice_list = draft_invoice_list
+
+	def before_save(self):
+    #  need 10 digit uuid
+		generate_uuid = str(random.randint(10**9, 10**10 - 1))
+		if not self.invoice_uid:
+			generate_uuid = str(random.randint(10**9, 10**10 - 1))
+		self.invoice_uid=f"INV-{generate_uuid}"
+		total_price = 0
+		total_qty = 0
+
+		for row in self.container_cost_info:
+			total_price += (row.qty or 0) * (row.amount or 0)
+			total_qty += row.qty or 0
+		self.total = total_price
+		self.average_total = (total_price / total_qty) if total_qty else 0
 
 	def on_update(self):
 		total_price = 0

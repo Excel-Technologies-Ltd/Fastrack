@@ -86,8 +86,8 @@ def get_sea_import_invoice_html(doc, customer_address):
             size_count[size] = size_count.get(size, 0) + 1
         
         # Create grouped string like "20ft: 3, 40ft: 2"
-        grouped = [f"{size}: {qty}" for size, qty in size_count.items()]
-        container_numbers_str = "Qty: " + ", ".join(grouped)
+        grouped = [f"{size}/ {qty}" for size, qty in size_count.items()]
+        container_numbers_str = "" + ", ".join(grouped)
     else:
         # List individually
         container_numbers_str = ", ".join(f"{no}/{size}" for no, size in container_numbers)
@@ -269,7 +269,7 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <p style="margin: 0;">{customer_address}</p>
                 </div>
                 <div class="header-right">
-                    <p style="margin: 0;"><strong>Invoice No:</strong> {doc.get('hbl_id', '') or ''}</p>
+                    <p style="margin: 0;"><strong>Invoice No:</strong> {doc.get('invoice_uid', '') or ''}</p>
                     <p style="margin: 0;"><strong>Date:</strong> {doc.get('hbl_date', '') or ''}</p>
                     <p style="margin: 0;"><strong>Currency:</strong> USD</p>
                 </div>

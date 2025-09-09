@@ -10,6 +10,7 @@
  "field_order": [
   "section_break_rzyek",
   "mbl_open_by",
+  "mbl_data",
   "mbl_no",
   "mv",
   "etd",
@@ -50,7 +51,8 @@
   "hbl_info",
   "hbl_parent",
   "amended_from",
-  "connections_tab"
+  "connections_tab",
+  "invoice_uid"
  ],
  "fields": [
   {
@@ -353,6 +355,17 @@
    "fieldname": "mbl",
    "fieldtype": "Read Only",
    "label": "MBL"
+  },
+  {
+   "fieldname": "invoice_uid",
+   "fieldtype": "Data",
+   "label": "Invoice UID"
+  },
+  {
+   "fetch_from": "amended_from.mbl_no",
+   "fieldname": "mbl_data",
+   "fieldtype": "Data",
+   "label": "MBL No"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -363,7 +376,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-08-27 10:17:00.961266",
+ "modified": "2025-09-07 16:06:45.802395",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
