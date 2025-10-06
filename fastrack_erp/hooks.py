@@ -267,7 +267,11 @@ fixtures = [
                   "Purchase Invoice Item-custom_inv_rate_company_currency",
                   "Sales Invoice Item-custom_inv_rate_usd",
                   "Sales Invoice Item-custom_inv_exchange_rate_",
-                  "Sales Invoice Item-custom_inv_rate_company_currency"
+                  "Sales Invoice Item-custom_inv_rate_company_currency",
+                  "Payment Entry-custom_exchange_rate",
+                  "Payment Entry Reference-custom_allocated_total_bdt",
+                  "Payment Entry Reference-custom_invoice_wise_total_bdt",
+                  "Payment Entry-custom_set_exchange_rate"
                 ],
             ],
         ]
