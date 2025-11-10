@@ -108,9 +108,9 @@ app_license = "MIT"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Payment Entry": "fastrack_erp.overide.payment_entry.CustomPaymentEntry"
+}
 
 # Document Events
 # ---------------
@@ -143,7 +143,7 @@ doc_events = {
  "Journal Entry": {
 	"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
 	"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
- },
+ }
 }
 
 # Scheduled Tasks
