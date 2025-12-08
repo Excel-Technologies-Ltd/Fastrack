@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:mbl_no",
- "creation": "2025-05-10 05:32:10.941431",
+ "creation": "2025-12-04 13:40:09.845532",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -42,6 +42,37 @@
    "unique": 1
   },
   {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "airlines",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Carrier (Airlines)",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gross  Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Int",
+   "label": "No of Pkg"
+  },
+  {
    "fieldname": "column_break_ibxhu",
    "fieldtype": "Column Break"
   },
@@ -59,24 +90,20 @@
    "label": "MBL Date"
   },
   {
-   "fieldname": "gr_weight",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Gross  Weight",
-   "reqd": 1
-  },
-  {
-   "fieldname": "agent",
-   "fieldtype": "Link",
-   "label": "Agent",
-   "options": "Customer",
-   "reqd": 1
-  },
-  {
    "fieldname": "consignee",
    "fieldtype": "Link",
    "label": "Consignee",
    "options": "Customer"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "fieldname": "chargeable_weight",
+   "fieldtype": "Float",
+   "label": "Chargeable Weight"
   },
   {
    "fieldname": "total_no_of_hbl",
@@ -104,16 +131,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Import Air Master Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
    "fieldname": "connections_tab",
    "fieldtype": "Tab Break",
    "label": "Connections Tab"
@@ -127,33 +144,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
-  },
-  {
-   "fieldname": "no_of_pkg",
-   "fieldtype": "Int",
-   "label": "No of Pkg"
-  },
-  {
-   "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
-  },
-  {
-   "fieldname": "chargeable_weight",
-   "fieldtype": "Float",
-   "label": "Chargeable Weight"
-  },
-  {
-   "fieldname": "airlines",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Carrier (Airlines)",
-   "options": "Customer"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -164,7 +154,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-08-06 11:55:01.649621",
+ "modified": "2025-12-04 13:40:09.845532",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",

@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:hbl_id",
- "creation": "2025-07-28 00:40:40.605194",
+ "creation": "2025-12-04 14:19:56.694061",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -169,6 +169,52 @@
   },
   {
    "allow_on_submit": 1,
+   "fieldname": "notify_to",
+   "fieldtype": "Link",
+   "label": "Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "also_notify_party",
+   "fieldtype": "Link",
+   "label": "Also Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "delivery_agent",
+   "fieldtype": "Link",
+   "label": "Delivery Agent",
+   "options": "Customer"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "no_of_pkg_hbl",
+   "fieldtype": "Float",
+   "label": "No of Pkg",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fv",
+   "fieldtype": "Data",
+   "label": "FV"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "mbl_no.mv",
+   "fieldname": "mv",
+   "fieldtype": "Data",
+   "label": "MV"
+  },
+  {
+   "allow_on_submit": 1,
    "fieldname": "office_code",
    "fieldtype": "Select",
    "hidden": 1,
@@ -192,23 +238,10 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "port_of_origin_code",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "POL Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "mbl_no.mv",
-   "fieldname": "mv",
-   "fieldtype": "Data",
-   "label": "MV"
   },
   {
    "allow_on_submit": 1,
@@ -235,14 +268,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "no_of_pkg_hbl",
-   "fieldtype": "Float",
-   "label": "No of Pkg",
-   "precision": "2",
-   "reqd": 1
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "pkg_code",
    "fieldtype": "Data",
    "hidden": 1,
@@ -254,18 +279,6 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Marks and Numbers"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "fv",
-   "fieldtype": "Data",
-   "label": "FV"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "eta",
-   "fieldtype": "Date",
-   "label": "ETA"
   },
   {
    "allow_on_submit": 1,
@@ -299,9 +312,69 @@
   },
   {
    "allow_on_submit": 1,
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "MBL Date"
+  },
+  {
+   "allow_on_submit": 1,
    "fieldname": "hbl_date",
    "fieldtype": "Date",
    "label": "HBL Date"
+  },
+  {
+   "fieldname": "inv_no",
+   "fieldtype": "Data",
+   "label": "Inv No."
+  },
+  {
+   "fieldname": "exp_no",
+   "fieldtype": "Data",
+   "label": "Exp No."
+  },
+  {
+   "fieldname": "sc_no",
+   "fieldtype": "Data",
+   "label": "SC No."
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "lc_no",
+   "fieldtype": "Data",
+   "label": "LC no."
+  },
+  {
+   "fieldname": "mode",
+   "fieldtype": "Data",
+   "label": "Mode"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "port_of_discharge",
+   "fieldtype": "Data",
+   "label": "Port of Discharge"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fv__v_no",
+   "fieldtype": "Data",
+   "label": "FV Voyage No"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "mbl_no.mv_voyage_no",
+   "fieldname": "mv_voyage_no",
+   "fieldtype": "Data",
+   "label": "MV Voyage No."
   },
   {
    "allow_on_submit": 1,
@@ -330,23 +403,10 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "port_of_discharge",
-   "fieldtype": "Data",
-   "label": "Port of Discharge"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "pod_code",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "POD Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "mbl_no.mv_voyage_no",
-   "fieldname": "mv_voyage_no",
-   "fieldtype": "Data",
-   "label": "MV Voyage No."
   },
   {
    "allow_on_submit": 1,
@@ -365,30 +425,10 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "gross_weight",
-   "fieldtype": "Float",
-   "label": "Gross Weight",
-   "precision": "2",
-   "reqd": 1
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "pkg_name",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Pkg Name"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "description_of_good",
-   "fieldtype": "Small Text",
-   "label": "Description of Goods"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "fv__v_no",
-   "fieldtype": "Data",
-   "label": "FV Voyage No"
   },
   {
    "allow_on_submit": 1,
@@ -418,13 +458,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "mbl_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "MBL Date"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -439,6 +472,26 @@
    "options": "Supplier"
   },
   {
+   "fieldname": "date_1",
+   "fieldtype": "Date",
+   "label": "Date 1"
+  },
+  {
+   "fieldname": "date_2",
+   "fieldtype": "Date",
+   "label": "Date 2"
+  },
+  {
+   "fieldname": "date_3",
+   "fieldtype": "Date",
+   "label": "Date 3"
+  },
+  {
+   "fieldname": "date_4",
+   "fieldtype": "Date",
+   "label": "Date 4"
+  },
+  {
    "allow_on_submit": 1,
    "fieldname": "inco_term",
    "fieldtype": "Select",
@@ -449,18 +502,38 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "hold_reason",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Hold Reason"
-  },
-  {
-   "allow_on_submit": 1,
    "fetch_from": "mbl_no.port_of_delivery",
    "fetch_if_empty": 1,
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
    "label": "Port of Delivery"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_vol_cbm",
+   "fieldtype": "Float",
+   "label": "Vol (CBM)",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD "
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hold_reason",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Hold Reason"
   },
   {
    "allow_on_submit": 1,
@@ -489,13 +562,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "notify_to",
-   "fieldtype": "Link",
-   "label": "Notify Party",
-   "options": "Customer"
-  },
-  {
-   "allow_on_submit": 1,
    "fetch_from": "notify_to.custom_bin_no",
    "fieldname": "notify_bin_no",
    "fieldtype": "Data",
@@ -508,14 +574,6 @@
    "fieldtype": "Date",
    "hidden": 1,
    "label": "LC Date"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_vol_cbm",
-   "fieldtype": "Float",
-   "label": "Vol (CBM)",
-   "precision": "2",
-   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -588,16 +646,6 @@
   {
    "fieldname": "column_break_za24b",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Export Sea House Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
   },
   {
    "allow_on_submit": 1,
@@ -872,80 +920,6 @@
    "label": "MBL Doctype"
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Export Sea House Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
-   "fieldname": "also_notify_party",
-   "fieldtype": "Link",
-   "label": "Also Notify Party",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "delivery_agent",
-   "fieldtype": "Link",
-   "label": "Delivery Agent",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "inv_no",
-   "fieldtype": "Data",
-   "label": "Inv No."
-  },
-  {
-   "fieldname": "exp_no",
-   "fieldtype": "Data",
-   "label": "Exp No."
-  },
-  {
-   "fieldname": "sc_no",
-   "fieldtype": "Data",
-   "label": "SC No."
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "lc_no",
-   "fieldtype": "Data",
-   "label": "LC no."
-  },
-  {
-   "fieldname": "mode",
-   "fieldtype": "Data",
-   "label": "Mode"
-  },
-  {
-   "fieldname": "date_1",
-   "fieldtype": "Date",
-   "label": "Date 1"
-  },
-  {
-   "fieldname": "date_2",
-   "fieldtype": "Date",
-   "label": "Date 2"
-  },
-  {
-   "fieldname": "date_3",
-   "fieldtype": "Date",
-   "label": "Date 3"
-  },
-  {
-   "fieldname": "date_4",
-   "fieldtype": "Date",
-   "label": "Date 4"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "etd",
-   "fieldtype": "Date",
-   "label": "ETD "
-  },
-  {
    "fieldname": "section_break_mlzvq",
    "fieldtype": "Section Break"
   },
@@ -957,6 +931,32 @@
   {
    "fieldname": "column_break_wodhm",
    "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "description_of_good",
+   "fieldtype": "Small Text",
+   "label": "Description of Goods"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Sea House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Sea House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -975,7 +975,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-08-20 12:41:41.404767",
+ "modified": "2025-12-04 14:20:56.215900",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

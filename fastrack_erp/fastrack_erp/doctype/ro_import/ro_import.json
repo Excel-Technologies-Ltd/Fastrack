@@ -1,0 +1,184 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-08 16:08:44.165396",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "shipper",
+  "reference_no",
+  "no_of_pkg",
+  "gross_weight",
+  "column_break_ihsxk",
+  "sales_person",
+  "customer_1",
+  "customer_2",
+  "vol",
+  "remarks",
+  "column_break_jybwy",
+  "agent",
+  "lc",
+  "pol",
+  "mbl",
+  "etd",
+  "column_break_ebzau",
+  "piorder",
+  "lc_date",
+  "pod",
+  "hbl",
+  "status",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Data",
+   "label": "Shipper"
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Data",
+   "label": "Reference No."
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Data",
+   "label": "No of PKG"
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Data",
+   "label": "Gross Weight"
+  },
+  {
+   "fieldname": "column_break_ihsxk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Data",
+   "label": "Sales Person"
+  },
+  {
+   "fieldname": "customer_1",
+   "fieldtype": "Data",
+   "label": "Customer 1"
+  },
+  {
+   "fieldname": "customer_2",
+   "fieldtype": "Data",
+   "label": "Customer 2"
+  },
+  {
+   "fieldname": "vol",
+   "fieldtype": "Data",
+   "label": "VOL"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "column_break_jybwy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Data",
+   "label": "Agent"
+  },
+  {
+   "fieldname": "lc",
+   "fieldtype": "Data",
+   "label": "LC"
+  },
+  {
+   "fieldname": "pol",
+   "fieldtype": "Data",
+   "label": "POL"
+  },
+  {
+   "fieldname": "mbl",
+   "fieldtype": "Data",
+   "label": "MBL"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "column_break_ebzau",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "piorder",
+   "fieldtype": "Data",
+   "label": "PI/Order"
+  },
+  {
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "label": "LC Date"
+  },
+  {
+   "fieldname": "pod",
+   "fieldtype": "Date",
+   "label": "POD"
+  },
+  {
+   "fieldname": "hbl",
+   "fieldtype": "Data",
+   "label": "HBL"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "RO Import",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-12-08 16:24:12.745850",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "RO Import",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

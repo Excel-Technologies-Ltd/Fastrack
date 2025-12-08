@@ -1,0 +1,184 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-08 16:19:29.451137",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shipper",
+  "place_of_receipt",
+  "invoice_no",
+  "equipment",
+  "net_weight",
+  "column_break_prwim",
+  "consignee",
+  "destination",
+  "po_no",
+  "carton_qty",
+  "gr_weight",
+  "column_break_ql0sx",
+  "cnf_agent",
+  "stuffing_date",
+  "commodity",
+  "total_pcs",
+  "cbm",
+  "column_break_vvtb4",
+  "forworder",
+  "carieer",
+  "booking_no",
+  "cfs",
+  "hbl_number",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Data",
+   "label": "Shipper"
+  },
+  {
+   "fieldname": "place_of_receipt",
+   "fieldtype": "Data",
+   "label": "Place of Receipt"
+  },
+  {
+   "fieldname": "invoice_no",
+   "fieldtype": "Data",
+   "label": "Invoice No"
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Data",
+   "label": "Equipment"
+  },
+  {
+   "fieldname": "net_weight",
+   "fieldtype": "Data",
+   "label": "Net Weight"
+  },
+  {
+   "fieldname": "column_break_prwim",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Data",
+   "label": "Consignee"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
+  },
+  {
+   "fieldname": "po_no",
+   "fieldtype": "Data",
+   "label": "PO No."
+  },
+  {
+   "fieldname": "carton_qty",
+   "fieldtype": "Data",
+   "label": "Carton QTY"
+  },
+  {
+   "fieldname": "gr_weight",
+   "fieldtype": "Data",
+   "label": "Gr. Weight"
+  },
+  {
+   "fieldname": "column_break_ql0sx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cnf_agent",
+   "fieldtype": "Data",
+   "label": "CNF Agent"
+  },
+  {
+   "fieldname": "stuffing_date",
+   "fieldtype": "Date",
+   "label": "Stuffing Date"
+  },
+  {
+   "fieldname": "commodity",
+   "fieldtype": "Data",
+   "label": "Commodity"
+  },
+  {
+   "fieldname": "total_pcs",
+   "fieldtype": "Data",
+   "label": "Total Pcs"
+  },
+  {
+   "fieldname": "cbm",
+   "fieldtype": "Data",
+   "label": "CBM"
+  },
+  {
+   "fieldname": "column_break_vvtb4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "forworder",
+   "fieldtype": "Data",
+   "label": "Forworder"
+  },
+  {
+   "fieldname": "carieer",
+   "fieldtype": "Data",
+   "label": "Carieer"
+  },
+  {
+   "fieldname": "booking_no",
+   "fieldtype": "Data",
+   "label": "Booking No."
+  },
+  {
+   "fieldname": "cfs",
+   "fieldtype": "Data",
+   "label": "CFS"
+  },
+  {
+   "fieldname": "hbl_number",
+   "fieldtype": "Data",
+   "label": "HBL Number"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Shipping Order",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-12-08 16:20:48.650226",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp Export",
+ "name": "Shipping Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:mbl_no",
- "creation": "2025-07-27 23:44:01.551991",
+ "creation": "2025-12-04 14:00:08.867754",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -106,12 +106,6 @@
    "label": "Remarks"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "eta",
-   "fieldtype": "Date",
-   "label": "ETA "
-  },
-  {
    "fieldname": "column_break_ibxhu",
    "fieldtype": "Column Break"
   },
@@ -187,12 +181,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "etd",
-   "fieldtype": "Date",
-   "label": "ETD"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -200,14 +188,6 @@
    "label": "Agent",
    "options": "Customer",
    "reqd": 1
-  },
-  {
-   "fetch_from": "agent.primary_address",
-   "fieldname": "agent_address",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Agent Address",
-   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -218,49 +198,10 @@
    "options": "Supplier"
   },
   {
-   "fetch_from": "shipping_line.primary_address",
-   "fieldname": "shipping_line_address",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Shipping Line Address",
-   "read_only": 1
-  },
-  {
    "allow_on_submit": 1,
-   "fieldname": "shipper",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Shipper",
-   "options": "Supplier"
-  },
-  {
-   "fetch_from": "shipper.primary_address",
-   "fieldname": "shipper_address",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Shipper Address",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "consignee",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Consignee",
-   "options": "Supplier"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "consignee.primary_address",
-   "fieldname": "consignee_address",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Consignee Address",
-   "read_only": 1
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
   },
   {
    "allow_on_submit": 1,
@@ -278,10 +219,57 @@
   },
   {
    "allow_on_submit": 1,
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA "
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_no_of_hbl",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total  HBL",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "shipping_line.primary_address",
+   "fieldname": "shipping_line_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipping Line Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
    "fieldname": "fv_etd",
    "fieldtype": "Date",
    "hidden": 1,
    "label": "FV ETD"
+  },
+  {
+   "fetch_from": "agent.primary_address",
+   "fieldname": "agent_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Agent Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "shipper.primary_address",
+   "fieldname": "shipper_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Shipper Address",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "consignee.primary_address",
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Consignee Address",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -293,11 +281,23 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "total_no_of_hbl",
-   "fieldtype": "Int",
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
-   "label": "Total  HBL",
-   "reqd": 1
+   "in_standard_filter": 1,
+   "label": "Consignee",
+   "options": "Supplier"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shipper",
+   "options": "Supplier"
   },
   {
    "fieldname": "serial_no",
@@ -336,6 +336,11 @@
    "read_only": 1
   },
   {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections Tab"
+  },
+  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -344,11 +349,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "connections_tab",
-   "fieldtype": "Tab Break",
-   "label": "Connections Tab"
   },
   {
    "fieldname": "amended_from",
@@ -369,7 +369,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-08-20 12:22:45.039083",
+ "modified": "2025-12-04 14:01:04.011622",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

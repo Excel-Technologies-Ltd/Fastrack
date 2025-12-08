@@ -1,0 +1,548 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:hbl_no",
+ "creation": "2025-12-08 11:59:41.959402",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "hbl_open_by",
+  "mbl_link",
+  "mbl_no",
+  "hbl_no",
+  "shipper",
+  "consignee",
+  "notify_party",
+  "also_notify_party",
+  "agents_iata_code",
+  "issuing_carriers_agent_name_and_city",
+  "port_of_loading",
+  "pol_code",
+  "no_of_pkg",
+  "ratecharge",
+  "signature",
+  "prepaid",
+  "total_prepaid",
+  "currency_conversion_rates",
+  "shipping_mark",
+  "airlines",
+  "customer",
+  "lc_number",
+  "cargo_description",
+  "declar_value_of_custom",
+  "column_break_aevai",
+  "sales_person",
+  "mbl_date",
+  "hbl_date",
+  "inv_no",
+  "exp_no",
+  "sc_no",
+  "lc_no",
+  "account_no",
+  "flight_no",
+  "currency",
+  "port_of_delivery",
+  "pod_code",
+  "hbl_gr_weight",
+  "total",
+  "date",
+  "weight_charge",
+  "valuation_charge",
+  "tax",
+  "total_other_charge_due_agent",
+  "total_other_charges_due_agent",
+  "total_other_charge_due_carrier",
+  "column_break_tecde",
+  "reference_number",
+  "agent",
+  "airline",
+  "date_1",
+  "date_2",
+  "date_3",
+  "date_4",
+  "inco_term",
+  "etd",
+  "amount_of_insurance",
+  "eta",
+  "declare_value_for_customes",
+  "chargeable_weight",
+  "other_charges",
+  "place",
+  "collect",
+  "total_collect",
+  "cc_charges_in_dest_currency",
+  "flight_name",
+  "flight_date",
+  "consignee_bin",
+  "notify_party_bin",
+  "customer_bin",
+  "lc_date",
+  "hbl_weight",
+  "hbl_doc_name",
+  "mbl_doctype",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "hbl_open_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "HBl Open By",
+   "options": "User"
+  },
+  {
+   "fieldname": "mbl_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "MBL Link",
+   "options": "Import Air Master Bill"
+  },
+  {
+   "fieldname": "mbl_no",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "MBL No.",
+   "options": "Import Air Master Bill"
+  },
+  {
+   "fieldname": "hbl_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "HBL No.",
+   "unique": 1
+  },
+  {
+   "fieldname": "shipper",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Shipper",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "consignee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Consignee",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "notify_party",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Notify Party",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "also_notify_party",
+   "fieldtype": "Data",
+   "label": "Also Notify Party"
+  },
+  {
+   "fieldname": "agents_iata_code",
+   "fieldtype": "Data",
+   "label": "Agent's IATA Code"
+  },
+  {
+   "fieldname": "issuing_carriers_agent_name_and_city",
+   "fieldtype": "Data",
+   "label": "Issuing Carrier's Agent Name and City"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port of Loading"
+  },
+  {
+   "fieldname": "pol_code",
+   "fieldtype": "Data",
+   "label": "POL Code"
+  },
+  {
+   "fieldname": "no_of_pkg",
+   "fieldtype": "Int",
+   "label": "No of Pkg",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ratecharge",
+   "fieldtype": "Data",
+   "label": "Rate/Charge"
+  },
+  {
+   "fieldname": "signature",
+   "fieldtype": "Data",
+   "label": "Signature"
+  },
+  {
+   "fieldname": "prepaid",
+   "fieldtype": "Data",
+   "label": "Prepaid"
+  },
+  {
+   "fieldname": "reference_number",
+   "fieldtype": "Data",
+   "label": "Reference Number"
+  },
+  {
+   "fetch_from": "mbl_no.consignee",
+   "fieldname": "airlines",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Carrier (Airlines)",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "lc_number",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "LC/TT Number"
+  },
+  {
+   "fieldname": "cargo_description",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Cargo Description"
+  },
+  {
+   "fieldname": "hbl_gr_weight",
+   "fieldtype": "Float",
+   "label": "Gr. Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "declar_value_of_custom",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Declar Value Of Customs"
+  },
+  {
+   "fieldname": "column_break_aevai",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Link",
+   "label": "Sales Person",
+   "options": "Sales Person"
+  },
+  {
+   "fieldname": "mbl_date",
+   "fieldtype": "Date",
+   "label": "MBL Date"
+  },
+  {
+   "fieldname": "hbl_date",
+   "fieldtype": "Data",
+   "label": "HBL Date"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "flight_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Flight Name"
+  },
+  {
+   "fieldname": "flight_date",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "Flight Date"
+  },
+  {
+   "fetch_from": "consignee.custom_bin_no",
+   "fieldname": "consignee_bin",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Consignee Bin"
+  },
+  {
+   "fetch_from": "notify_party.custom_bin_no",
+   "fieldname": "notify_party_bin",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Notify Party Bin"
+  },
+  {
+   "fetch_from": "customer.custom_bin_no",
+   "fieldname": "customer_bin",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Customer Bin"
+  },
+  {
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "LC/TT Date"
+  },
+  {
+   "fieldname": "port_of_delivery",
+   "fieldtype": "Data",
+   "label": "Port of Delivery"
+  },
+  {
+   "fieldname": "chargeable_weight",
+   "fieldtype": "Float",
+   "label": "Chargeable Weight"
+  },
+  {
+   "fieldname": "inco_term",
+   "fieldtype": "Select",
+   "label": "Inco Term",
+   "options": "\nPrepaid\nCollect\nFree Hand",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hbl_weight",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "HBL Weight"
+  },
+  {
+   "fieldname": "hbl_doc_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "HBL Doc Name"
+  },
+  {
+   "fieldname": "mbl_doctype",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "MBL Doctype"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Air House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Export Air House Bill",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "total_prepaid",
+   "fieldtype": "Data",
+   "label": "Total Prepaid"
+  },
+  {
+   "fieldname": "currency_conversion_rates",
+   "fieldtype": "Data",
+   "label": "Currency Conversion Rates"
+  },
+  {
+   "fieldname": "shipping_mark",
+   "fieldtype": "Data",
+   "label": "Shipping Mark"
+  },
+  {
+   "fieldname": "inv_no",
+   "fieldtype": "Data",
+   "label": "INV No."
+  },
+  {
+   "fieldname": "exp_no",
+   "fieldtype": "Data",
+   "label": "EXP No."
+  },
+  {
+   "fieldname": "sc_no",
+   "fieldtype": "Data",
+   "label": "SC No."
+  },
+  {
+   "fieldname": "lc_no",
+   "fieldtype": "Data",
+   "label": "LC No."
+  },
+  {
+   "fieldname": "account_no",
+   "fieldtype": "Data",
+   "label": "Account no."
+  },
+  {
+   "fieldname": "flight_no",
+   "fieldtype": "Data",
+   "label": "Flight No."
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "pod_code",
+   "fieldtype": "Data",
+   "label": "POD Code"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Data",
+   "label": "Total"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "weight_charge",
+   "fieldtype": "Data",
+   "label": "Weight Charge"
+  },
+  {
+   "fieldname": "valuation_charge",
+   "fieldtype": "Data",
+   "label": "Valuation Charge"
+  },
+  {
+   "fieldname": "tax",
+   "fieldtype": "Data",
+   "label": "TAX"
+  },
+  {
+   "fieldname": "total_other_charge_due_agent",
+   "fieldtype": "Data",
+   "label": "Total Other Charge Due Agent"
+  },
+  {
+   "fieldname": "total_other_charges_due_agent",
+   "fieldtype": "Data",
+   "label": "Total Other Charges Due Agent"
+  },
+  {
+   "fieldname": "total_other_charge_due_carrier",
+   "fieldtype": "Data",
+   "label": "Total Other Charge Due Carrier"
+  },
+  {
+   "fieldname": "column_break_tecde",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "airline",
+   "fieldtype": "Data",
+   "label": "Airline"
+  },
+  {
+   "fieldname": "date_1",
+   "fieldtype": "Date",
+   "label": "Date 1"
+  },
+  {
+   "fieldname": "date_2",
+   "fieldtype": "Date",
+   "label": "Date 2"
+  },
+  {
+   "fieldname": "date_3",
+   "fieldtype": "Date",
+   "label": "Date 3"
+  },
+  {
+   "fieldname": "date_4",
+   "fieldtype": "Date",
+   "label": "Date 4"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "amount_of_insurance",
+   "fieldtype": "Data",
+   "label": "Amount of Insurance"
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "declare_value_for_customes",
+   "fieldtype": "Data",
+   "label": "Declare Value for Customes"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Data",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "place",
+   "fieldtype": "Data",
+   "label": "Place"
+  },
+  {
+   "fieldname": "collect",
+   "fieldtype": "Data",
+   "label": "Collect"
+  },
+  {
+   "fieldname": "total_collect",
+   "fieldtype": "Data",
+   "label": "Total Collect"
+  },
+  {
+   "fieldname": "cc_charges_in_dest_currency",
+   "fieldtype": "Data",
+   "label": "CC Charges in Dest. Currency"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-12-08 15:57:00.505256",
+ "modified_by": "Administrator",
+ "module": "Fastrack Erp",
+ "name": "Export Air House Bill",
+ "name_case": "Title Case",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
