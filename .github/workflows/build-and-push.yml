@@ -40,17 +40,6 @@ jobs:
 
           export APPS_JSON_BASE64=$(echo ${APPS_JSON} | base64 -w 0)
 
-          # If you're using the Containerfile directly, you need to update it
-          # For now, let's create a temporary fix by modifying the build command
-          # or update the Containerfile in your repository
-          
-          # Option 1: Update the Containerfile directly if you have access
-          # Option 2: Use sed to fix the Containerfile during build
-          
-          # Create a temporary Containerfile with the fix
-          cp images/custom/Containerfile images/custom/Containerfile.backup
-          sed -i 's/--ignore-dependencies/--ignore-exist/g' images/custom/Containerfile
-
           docker buildx build \
           --no-cache \
           --platform linux/amd64 \
@@ -62,6 +51,3 @@ jobs:
           --tag arcapps/ftcl_adist:dev \
           --file images/custom/Containerfile \
           --push .
-
-          # Restore the original Containerfile
-          mv images/custom/Containerfile.backup images/custom/Containerfile
