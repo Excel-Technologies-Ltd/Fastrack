@@ -271,7 +271,16 @@ fixtures = [
                   "Payment Entry-custom_exchange_rate",
                   "Payment Entry Reference-custom_allocated_total_bdt",
                   "Payment Entry Reference-custom_invoice_wise_total_bdt",
-                  "Payment Entry-custom_set_exchange_rate"
+                  "Payment Entry-custom_set_exchange_rate",
+                  "Export Air Master Bill-custom_agent",
+                  "Export Air Master Bill-custom_column_break_xutqw",
+                  "Export Sea House Bill-custom_section_break_kdzvx",
+                  "Export Sea House Bill-custom_column_break_1lmar",
+                  "Export Sea Master Bill-custom_column_break_m4s8i",
+                  "Import D2D Bill-custom_shipment_mode",
+                  "Import Sea House Bill-custom_section_break_hjxl7",
+                  "Import Sea House Bill-custom_column_break_xjokd",
+                  "Import Sea Master Bill-custom_section_break_f9sms"
                 ],
             ],
         ]
