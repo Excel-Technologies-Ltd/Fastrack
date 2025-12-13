@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:hbl_id",
- "creation": "2025-12-04 14:19:56.694061",
+ "creation": "2025-12-13 16:59:26.718825",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -125,6 +125,7 @@
   "shipping_marks",
   "column_break_wodhm",
   "description_of_good",
+  "amended_from",
   "amended_from"
  ],
  "fields": [
@@ -975,7 +976,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-04 14:20:56.215900",
+ "modified": "2025-12-13 16:59:26.718825",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",
