@@ -332,10 +332,8 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
                             "Carrier_address":clean_address(frappe.get_value("Supplier",hbl_doc.carrier,"primary_address")) if frappe.get_value("Supplier",hbl_doc.carrier,"primary_address") else ""
                         },
                         "Shipping_Agent":{
-                            # "Shipping_agent_name":frappe.db.get_value("Supplier",hbl_doc.shipping_line,"supplier_name"),
-                            # "Shipping_agent_address": clean_address(frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address")) if frappe.get_value("Supplier",hbl_doc.shipping_line,"primary_address") else ""
-                            "Shipping_agent_name":"",
-                            "Shipping_agent_address":""
+                            "Shipping_Agent_code": None,
+                            "Shipping_Agent_name": None
                         },
                         "Exporter":{
                            
