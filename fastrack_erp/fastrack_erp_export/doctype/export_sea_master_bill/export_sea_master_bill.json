@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:mbl_no",
- "creation": "2025-12-04 14:00:08.867754",
+ "creation": "2025-12-20 11:36:07.998723",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -16,7 +16,6 @@
   "no_of_pkg",
   "mv",
   "remarks",
-  "column_break_ibxhu",
   "mbl_open_by",
   "mbl_date",
   "fv_voyage_no",
@@ -104,10 +103,6 @@
    "fieldname": "remarks",
    "fieldtype": "Data",
    "label": "Remarks"
-  },
-  {
-   "fieldname": "column_break_ibxhu",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "mbl_open_by",
@@ -349,16 +344,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Export Sea Master Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -369,7 +354,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-04 14:01:04.011622",
+ "modified": "2025-12-20 11:37:01.695726",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",
