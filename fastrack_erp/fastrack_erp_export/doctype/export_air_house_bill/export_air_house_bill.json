@@ -26,12 +26,6 @@
   "prepaid",
   "total_prepaid",
   "currency_conversion_rates",
-  "shipping_mark",
-  "airlines",
-  "customer",
-  "lc_number",
-  "cargo_description",
-  "declar_value_of_custom",
   "column_break_aevai",
   "sales_person",
   "mbl_date",
@@ -82,6 +76,11 @@
   "hbl_weight",
   "hbl_doc_name",
   "mbl_doctype",
+  "section_break_nvkdx",
+  "shipping_mark",
+  "column_break_h2ucx",
+  "description_of_goods",
+  "section_break_yh81t",
   "amended_from"
  ],
  "fields": [
@@ -89,8 +88,9 @@
    "fieldname": "hbl_open_by",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "HBl Open By",
-   "options": "User"
+   "label": "HBL Open By",
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "mbl_link",
@@ -119,7 +119,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Shipper",
-   "options": "Supplier"
+   "options": "Customer"
   },
   {
    "fieldname": "consignee",
@@ -137,8 +137,9 @@
   },
   {
    "fieldname": "also_notify_party",
-   "fieldtype": "Data",
-   "label": "Also Notify Party"
+   "fieldtype": "Link",
+   "label": "Also Notify Party",
+   "options": "Customer"
   },
   {
    "fieldname": "agents_iata_code",
@@ -193,43 +194,8 @@
   },
   {
    "fieldname": "shipping_mark",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Shipping Mark"
-  },
-  {
-   "fetch_from": "mbl_no.consignee",
-   "fieldname": "airlines",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Carrier (Airlines)",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Customer",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "lc_number",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "LC/TT Number"
-  },
-  {
-   "fieldname": "cargo_description",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Cargo Description"
-  },
-  {
-   "fieldname": "declar_value_of_custom",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Declar Value Of Customs"
   },
   {
    "fieldname": "column_break_aevai",
@@ -366,22 +332,22 @@
   {
    "fieldname": "date_1",
    "fieldtype": "Date",
-   "label": "Date 1"
+   "label": "INV Date"
   },
   {
    "fieldname": "date_2",
    "fieldtype": "Date",
-   "label": "Date 2"
+   "label": "EXP Date"
   },
   {
    "fieldname": "date_3",
    "fieldtype": "Date",
-   "label": "Date 3"
+   "label": "SC Date"
   },
   {
    "fieldname": "date_4",
    "fieldtype": "Date",
-   "label": "Date 4"
+   "label": "LC Date"
   },
   {
    "fieldname": "inco_term",
@@ -506,12 +472,29 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_nvkdx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_yh81t",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_h2ucx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description_of_goods",
+   "fieldtype": "Small Text",
+   "label": "Description of Goods"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-08 16:23:14.864300",
+ "modified": "2025-12-21 13:09:01.821769",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",
