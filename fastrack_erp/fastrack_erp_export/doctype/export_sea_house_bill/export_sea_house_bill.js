@@ -2,7 +2,8 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Export Sea House Bill', {
-	// refresh: function(frm) {
-
-	// }
+	refresh: function(frm) {
+		frm.doc.hbl_open_by = frappe.session.user;
+		frm.refresh_field('hbl_open_by');
+	}
 });

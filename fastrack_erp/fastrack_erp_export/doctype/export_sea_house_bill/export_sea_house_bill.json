@@ -16,20 +16,11 @@
   "notify_to",
   "also_notify_party",
   "delivery_agent",
+  "port_of_receipt",
   "port_of_loading",
   "no_of_pkg_hbl",
   "fv",
   "mv",
-  "office_code",
-  "hbl_type_code",
-  "dg_status",
-  "port_of_origin_code",
-  "hbl_etd",
-  "customer",
-  "customer_bin_no",
-  "pkg_code",
-  "marks_and_numbers",
-  "mbl_surrender_status",
   "column_break_twikq",
   "sales_person",
   "mbl_link",
@@ -40,19 +31,11 @@
   "sc_no",
   "lc_no",
   "mode",
+  "pkg_name",
   "port_of_discharge",
   "gross_weight",
   "fv__v_no",
   "mv_voyage_no",
-  "office_name",
-  "nature",
-  "hbl_hold_instruction",
-  "pod_code",
-  "hbl_remarks",
-  "consignee_bin_no",
-  "pkg_name",
-  "etb",
-  "total_container_hbl",
   "column_break_r8svn",
   "reference_number",
   "agent",
@@ -62,70 +45,17 @@
   "date_3",
   "date_4",
   "inco_term",
+  "pkg_code",
   "port_of_delivery",
   "hbl_vol_cbm",
   "etd",
   "eta",
-  "hold_reason",
-  "co_loader",
-  "carrier",
-  "carrier_code",
-  "notify_bin_no",
-  "lc_date",
-  "status",
-  "hbl_line_no",
-  "container_type",
-  "section_break_tvziq",
-  "carrier_name",
-  "agent_name",
-  "shippine_line_name",
-  "column_break_svasa",
   "section_break_vf8zr",
-  "container_info",
-  "section_break_nfgoz",
-  "column_break_za24b",
-  "section_break_hgk7r",
-  "do_validity",
-  "do_party",
-  "do_party_address",
-  "do_party_address1",
-  "cf_agent",
-  "line_no",
-  "ocean_freight_remarks",
-  "column_break_tqh0h",
-  "bill_of_entry",
-  "shipping_line_custom",
-  "shipping_line_address_custom",
-  "bl_no",
-  "bl_date",
-  "man_gr_wt",
-  "man_pkg",
-  "remarks",
-  "column_break_zkvni",
-  "ex_rate",
-  "rotation",
-  "section_break_igwms",
-  "generate",
-  "container_cost_info",
-  "average_total",
-  "total",
-  "draft_invoice_list",
-  "invoice_list",
-  "total_invoice_amount",
-  "payment_entry_list",
-  "total_payment",
-  "purchase_invoice_list",
-  "total_purchase_amount",
-  "profit_share_list",
-  "total_profit_share",
-  "hbl_weight",
-  "hbl_doc_name",
-  "mbl_doctype",
-  "section_break_mlzvq",
   "shipping_marks",
   "column_break_wodhm",
   "description_of_good",
-  "amended_from",
+  "section_break_nfgoz",
+  "container_info",
   "amended_from"
  ],
  "fields": [
@@ -215,78 +145,9 @@
    "label": "MV"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "office_code",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Office Code",
-   "options": "\n301"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_type_code",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "HBL Type Code",
-   "options": "\nHSB"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "dg_status",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "DG Status"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "port_of_origin_code",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "POL Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_etd",
-   "fieldtype": "Date",
-   "hidden": 1,
-   "label": "ETD"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Customer",
-   "options": "Customer"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "customer.custom_bin_no",
-   "fieldname": "customer_bin_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Customer Bin No."
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "pkg_code",
    "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Pkg Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "marks_and_numbers",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Marks and Numbers"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "mbl_surrender_status",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "MBL Surrender Status"
+   "label": "PKG Code"
   },
   {
    "allow_on_submit": 1,
@@ -378,73 +239,9 @@
    "label": "MV Voyage No."
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "office_name",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Office Name",
-   "options": "\nCHATTOGRAM CUSTOM HOUSE"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "nature",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Nature",
-   "options": "\n23"
-  },
-  {
-   "allow_on_submit": 1,
-   "default": "0",
-   "description": "If checked delivery order details will be hide",
-   "fieldname": "hbl_hold_instruction",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "Hold Instruction"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "pod_code",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "POD Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_remarks",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Remarks"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "hbl_consignee.custom_bin_no",
-   "fieldname": "consignee_bin_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Consignee Bin No."
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "pkg_name",
    "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Pkg Name"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "etb",
-   "fieldtype": "Date",
-   "hidden": 1,
-   "label": "ETB"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_container_hbl",
-   "fieldtype": "Float",
-   "hidden": 1,
-   "label": "Total Container",
-   "precision": "2"
+   "label": "PKG Name"
   },
   {
    "allow_on_submit": 1,
@@ -530,107 +327,6 @@
    "label": "ETA"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "hold_reason",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Hold Reason"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "co_loader",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Co-Loader",
-   "options": "Customer"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "mbl_no.consignee",
-   "fieldname": "carrier",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Carrier",
-   "options": "Supplier"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "carrier.custom_ain_no",
-   "fieldname": "carrier_code",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Carrier Code"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "notify_to.custom_bin_no",
-   "fieldname": "notify_bin_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Notify Party Bin No."
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "lc_date",
-   "fieldtype": "Date",
-   "hidden": 1,
-   "label": "LC Date"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "status",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Status"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "hbl_line_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Line No."
-  },
-  {
-   "fieldname": "container_type",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Container Type",
-   "options": "\nFCL\nLCL"
-  },
-  {
-   "fieldname": "section_break_tvziq",
-   "fieldtype": "Section Break",
-   "hidden": 1
-  },
-  {
-   "fetch_from": "carrier.supplier_name",
-   "fieldname": "carrier_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Carrier Name",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "agent.supplier_name",
-   "fieldname": "agent_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Agent Name",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "shipping_line.supplier_name",
-   "fieldname": "shippine_line_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Shippine Line Name"
-  },
-  {
-   "fieldname": "column_break_svasa",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "section_break_vf8zr",
    "fieldtype": "Section Break"
   },
@@ -642,286 +338,6 @@
   },
   {
    "fieldname": "section_break_nfgoz",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "column_break_za24b",
-   "fieldtype": "Column Break"
-  },
-  {
-   "allow_on_submit": 1,
-   "collapsible": 1,
-   "depends_on": "eval:doc.hbl_hold_instruction==0",
-   "fieldname": "section_break_hgk7r",
-   "fieldtype": "Section Break",
-   "hidden": 1,
-   "label": "Delivery Order Details"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "do_validity",
-   "fieldtype": "Date",
-   "hidden": 1,
-   "label": "DO Validity"
-  },
-  {
-   "default": "Deputy Traffic Manager",
-   "fieldname": "do_party",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "DO Party",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "do_party_address",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "DO Party Address"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "do_party_address1",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "DO Party Address1"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "cf_agent",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "C&F Agent",
-   "options": "Customer"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "line_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Line No"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "ocean_freight_remarks",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Ocean Freight Remarks"
-  },
-  {
-   "fieldname": "column_break_tqh0h",
-   "fieldtype": "Column Break",
-   "hidden": 1
-  },
-  {
-   "fieldname": "bill_of_entry",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Bill of Entry"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "shipping_line_custom",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Shipping Line"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "shipping_line.primary_address",
-   "fieldname": "shipping_line_address_custom",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Shipping Line Address"
-  },
-  {
-   "allow_on_submit": 1,
-   "fetch_from": "shipping_line.supplier_name",
-   "fieldname": "bl_no",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "B/L No"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "bl_date",
-   "fieldtype": "Date",
-   "hidden": 1,
-   "label": "B/L Date"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "man_gr_wt",
-   "fieldtype": "Float",
-   "hidden": 1,
-   "label": "Man Gr Wt",
-   "precision": "2"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "man_pkg",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Man Pkg"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "remarks",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "column_break_zkvni",
-   "fieldtype": "Column Break",
-   "hidden": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "ex_rate",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Ex. Rate"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "rotation",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Rotation"
-  },
-  {
-   "fieldname": "section_break_igwms",
-   "fieldtype": "Section Break",
-   "hidden": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "generate",
-   "fieldtype": "Button",
-   "hidden": 1,
-   "label": "Generate Freight Certificate"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "container_cost_info",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Freight Certificate",
-   "options": "Container Cost Info"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "average_total",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Average Total",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Total",
-   "read_only": 1
-  },
-  {
-   "fieldname": "draft_invoice_list",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Draft Invoice List",
-   "options": "Fastrack Draft Bill"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "invoice_list",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Invoice List",
-   "options": "Fastrack Sales Invoice",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_invoice_amount",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Total Invoice Amount",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "payment_entry_list",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Payment Entry List",
-   "options": "Fastrack Payment Entry",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_payment",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Total Payment Received",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "purchase_invoice_list",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Expense List",
-   "options": "Fastrack Purchase Invoice",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_purchase_amount",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Total Expense Amount",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "profit_share_list",
-   "fieldtype": "Table",
-   "hidden": 1,
-   "label": "Profit Share List",
-   "options": "Fastrack Journal Entry",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_profit_share",
-   "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Total Profit Share",
-   "read_only": 1
-  },
-  {
-   "fieldname": "hbl_weight",
-   "fieldtype": "Float",
-   "hidden": 1,
-   "label": "HBL Weight",
-   "precision": "2"
-  },
-  {
-   "fieldname": "hbl_doc_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "HBL Doc Name"
-  },
-  {
-   "fieldname": "mbl_doctype",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "MBL Doctype"
-  },
-  {
-   "fieldname": "section_break_mlzvq",
    "fieldtype": "Section Break"
   },
   {
@@ -950,14 +366,9 @@
    "search_index": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Export Sea House Bill",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
+   "fieldname": "port_of_receipt",
+   "fieldtype": "Data",
+   "label": "Port of Receipt"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -976,7 +387,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-13 16:59:26.718825",
+ "modified": "2025-12-21 11:38:32.070350",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",
