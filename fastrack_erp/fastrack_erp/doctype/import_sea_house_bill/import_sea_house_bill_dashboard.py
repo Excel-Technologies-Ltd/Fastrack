@@ -11,11 +11,8 @@ def get_data():
 
         "transactions": [
             {
-                
                 "items": [
                     "Payment Entry",
-                    
-                   
                 ],
             },
         ],

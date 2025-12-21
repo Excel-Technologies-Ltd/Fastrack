@@ -8,18 +8,18 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "mbl_open_by",
   "section_break_rzyek",
   "mbl_no",
   "agent",
-  "airlines",
   "port_of_loading",
+  "port_of_delivery",
   "gr_weight",
-  "no_of_pkg",
   "column_break_ibxhu",
-  "mbl_open_by",
   "mbl_date",
   "consignee",
-  "port_of_delivery",
+  "airlines",
+  "no_of_pkg",
   "chargeable_weight",
   "total_no_of_hbl",
   "section_break_plp8q",
@@ -37,7 +37,7 @@
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "MBL No",
+   "label": "MAWB",
    "reqd": 1,
    "unique": 1
   },
@@ -82,17 +82,17 @@
    "in_list_view": 1,
    "label": "MBL Open By",
    "options": "User",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "mbl_date",
    "fieldtype": "Date",
-   "label": "MBL Date"
+   "label": "Date"
   },
   {
    "fieldname": "consignee",
    "fieldtype": "Link",
-   "label": "Consignee",
+   "label": "MAWB Consignee",
    "options": "Customer"
   },
   {
@@ -154,7 +154,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-04 13:40:09.845532",
+ "modified": "2025-12-21 18:11:46.981104",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",

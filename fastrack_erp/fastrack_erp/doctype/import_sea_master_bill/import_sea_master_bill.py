@@ -22,6 +22,7 @@ class ImportSeaMasterBill(Document):
 			frappe.throw(f"Set Ain No in Supplier -({self.consignee})")
 		hbl_docs = frappe.get_all("Import Sea House Bill", filters={"mbl_link": self.name,"docstatus":1},pluck="name")
 		for hbl_name in hbl_docs:
+			print("HBL Name", self.mbl_date)
 			hbl_doc = frappe.get_doc("Import Sea House Bill", hbl_name)
 			hbl_doc.mbl_no= self.mbl_no if self.mbl_no else hbl_doc.mbl_no
 			hbl_doc.mv= self.mv if self.mv else hbl_doc.mv

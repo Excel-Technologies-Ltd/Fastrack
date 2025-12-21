@@ -235,7 +235,7 @@ doc_events = {
 # auth_hooks = [
 # 	"fastrack_erp.auth.validate"
 # ]
-fixtures = ['Custom Field', "Workspace"]
+fixtures = ['Custom Field', "Property Setter", "Workspace"]
 
 
 website_route_rules = [{'from_route': '/portal/<path:app_path>', 'to_route': 'portal'},]

@@ -8,7 +8,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "sales_person",
+  "hbl_open_by",
+  "shipment_mode",
   "mbl_no",
   "hbl_no",
   "shipper",
@@ -20,7 +21,7 @@
   "no_of_pkg",
   "cargo_description",
   "column_break_aevai",
-  "hbl_open_by",
+  "sales_person",
   "reference_number",
   "mbl_date",
   "hbl_date",
@@ -114,7 +115,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "HBL Open By",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "mbl_date",
@@ -189,12 +191,17 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "shipment_mode",
+   "fieldtype": "Data",
+   "label": "Shipment Mode"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-20 12:37:00.508329",
+ "modified": "2025-12-21 18:28:21.440803",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
