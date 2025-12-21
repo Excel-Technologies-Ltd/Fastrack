@@ -2,12 +2,15 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:mbl_no",
- "creation": "2025-08-27 13:05:45.467146",
+ "creation": "2025-12-13 14:04:32.898003",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "mbl_open_by",
+  "column_break_esafs",
+  "agent",
   "section_break_rzyek",
   "mbl_no",
   "flight",
@@ -18,10 +21,8 @@
   "mbl_date",
   "flight_date",
   "port_of_delivery",
-  "consignee",
   "gr_weight",
-  "section_break_plp8q",
-  "mbl_open_by",
+  "column_break_xgyul",
   "airline",
   "etd",
   "shipper",
@@ -88,12 +89,6 @@
    "label": "MBL Date"
   },
   {
-   "fieldname": "consignee",
-   "fieldtype": "Link",
-   "label": "Consignee",
-   "options": "Customer"
-  },
-  {
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
    "label": "Port of Delivery"
@@ -102,10 +97,6 @@
    "fieldname": "chargeable_weight",
    "fieldtype": "Float",
    "label": "Chargeable Weight"
-  },
-  {
-   "fieldname": "section_break_plp8q",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "flight_date",
@@ -138,6 +129,20 @@
    "fieldtype": "Link",
    "label": "Shipper",
    "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_esafs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "agent",
+   "fieldtype": "Link",
+   "label": "Agent",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "column_break_xgyul",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -148,7 +153,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-08-27 13:17:08.026434",
+ "modified": "2025-12-21 12:46:47.188753",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",

@@ -52,7 +52,7 @@
   "eta",
   "section_break_vf8zr",
   "shipping_marks",
-  "column_break_wodhm",
+  "column_break_uu0ul",
   "description_of_good",
   "section_break_nfgoz",
   "container_info",
@@ -346,10 +346,6 @@
    "label": "Shipping Marks"
   },
   {
-   "fieldname": "column_break_wodhm",
-   "fieldtype": "Column Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "description_of_good",
    "fieldtype": "Small Text",
@@ -369,6 +365,10 @@
    "fieldname": "port_of_receipt",
    "fieldtype": "Data",
    "label": "Port of Receipt"
+  },
+  {
+   "fieldname": "column_break_uu0ul",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -387,7 +387,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-21 11:38:32.070350",
+ "modified": "2025-12-21 11:54:32.082815",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",
