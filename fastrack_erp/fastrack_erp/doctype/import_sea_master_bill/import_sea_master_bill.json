@@ -8,24 +8,23 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "section_break_rzyek",
   "mbl_open_by",
+  "section_break_7hzdi",
   "mbl_data",
   "mbl_no",
-  "mv",
-  "etd",
+  "agent",
   "port_of_loading",
   "no_of_pkg",
+  "mv",
   "fv",
   "eta",
   "remarks",
   "column_break_ibxhu",
-  "agent",
   "mbl_date",
-  "mv_voyage_no",
-  "mbl",
+  "shipper",
   "port_of_discharge",
   "gr_weight",
+  "mv_voyage_no",
   "fv_voyage_no",
   "ata_ctg",
   "import_rot_no",
@@ -33,12 +32,12 @@
   "agent_address",
   "shipping_line",
   "shipping_line_address",
-  "shipper",
   "shipper_address",
   "consignee",
   "consignee_address",
   "port_of_delivery",
   "vol_cbm",
+  "etd",
   "fv_etd",
   "total_container",
   "atb",
@@ -213,7 +212,7 @@
    "allow_on_submit": 1,
    "fieldname": "etd",
    "fieldtype": "Date",
-   "label": "ETD"
+   "label": "MV ETD"
   },
   {
    "allow_on_submit": 1,
@@ -289,7 +288,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Shipper",
+   "label": "MBL Shipper",
    "options": "Supplier"
   },
   {
@@ -316,10 +315,6 @@
    "hidden": 1,
    "label": "HBL parent",
    "read_only": 1
-  },
-  {
-   "fieldname": "section_break_rzyek",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "connections_tab",
@@ -350,13 +345,6 @@
    "label": "FV ETD"
   },
   {
-   "allow_on_submit": 1,
-   "default": "MBL",
-   "fieldname": "mbl",
-   "fieldtype": "Read Only",
-   "label": "MBL"
-  },
-  {
    "fieldname": "invoice_uid",
    "fieldtype": "Data",
    "label": "Invoice UID"
@@ -366,6 +354,10 @@
    "fieldname": "mbl_data",
    "fieldtype": "Data",
    "label": "MBL No"
+  },
+  {
+   "fieldname": "section_break_7hzdi",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -376,7 +368,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-09-07 16:06:45.802395",
+ "modified": "2025-12-21 15:36:00.376945",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
