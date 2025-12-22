@@ -1,43 +1,7 @@
 frappe.ui.form.on('Import Sea House Bill', {
-    // onload_post_render: function(frm) {
-    //     // Add custom CSS to hide grid buttons
-    //     const style = `
-    //         <style>
-    //             [data-fieldname="container_info"] .grid-footer,
-    //             [data-fieldname="invoice_list"] .grid-footer,
-    //             [data-fieldname="payment_entry_list"] .grid-footer,
-    //             [data-fieldname="profit_share_list"] .grid-footer,
-    //             [data-fieldname="purchase_invoice_list"] .grid-footer {
-    //                 display: none !important;
-    //             }
-                
-    //             [data-fieldname="container_info"] .grid-add-row,
-    //             [data-fieldname="invoice_list"] .grid-add-row,
-    //             [data-fieldname="payment_entry_list"] .grid-add-row,
-    //             [data-fieldname="profit_share_list"] .grid-add-row,
-    //             [data-fieldname="purchase_invoice_list"] .grid-add-row,
-    //             [data-fieldname="container_info"] .btn-open-row,
-    //             [data-fieldname="invoice_list"] .btn-open-row,
-    //             [data-fieldname="payment_entry_list"] .btn-open-row,
-    //             [data-fieldname="profit_share_list"] .btn-open-row,
-    //             [data-fieldname="purchase_invoice_list"] .btn-open-row {
-    //                 display: none !important;
-    //             }
-    //         </style>
-    //     `;
-        
-    //     if (!$('#custom-grid-hide-style').length  ) {
-    //         $('head').append(style.replace('<style>', '<style id="custom-grid-hide-style">'));
-    //     }
-    // },
+    
     
     refresh:function(frm){
-        // setTimeout(function() {
-        //     frm.fields_dict['invoice_list'].grid.grid_buttons.addClass('hidden');
-        //     frm.fields_dict['payment_entry_list'].grid.grid_buttons.addClass('hidden');
-        //     frm.fields_dict['profit_share_list'].grid.grid_buttons.addClass('hidden');
-        //     frm.fields_dict['purchase_invoice_list'].grid.grid_buttons.addClass('hidden');
-        // }, 1000);
         const container_cost_info = frm.doc.container_cost_info;
         const total_price = container_cost_info.reduce((acc, item) => acc + item.qty * item.amount, 0);
         console.log(total_price)
@@ -91,14 +55,9 @@ frappe.ui.form.on('Import Sea House Bill', {
             });
         },__("Create"));
         frm.add_custom_button(__("Profit Share"), function () {
-            // frappe.model.open_mapped_doc({
-            //             method: "fastrack_erp.api.make_journal_entry_from_hbl",
-            //             frm:frm
-            //         });
             frappe.new_doc("Payment Entry");
                 },__("Create"));
         frm.add_custom_button(__("Payment Entry"), function () {
-            // frappe.set_route("Form", "Payment Entry", "New Payment Entry");
             frappe.new_doc("Payment Entry");
 
         },__("Create"));
@@ -121,20 +80,6 @@ frappe.ui.form.on('Import Sea House Bill', {
                 }
                 if(filteredInvoices.length > 0){
                     console.log(filteredInvoices)
-                    // frappe.call({
-                    //     method: "fastrack_erp.api.download_purchase_invoice_pdf",  // Path to the method
-                    //     args: {
-                    //         invoice_ids: filteredInvoices.join(',') // Send as comma-separated string
-                    //     },
-                    //     callback: function(response) {
-                    //         if (response.message) {
-                    //             console.log(response.message)
-                    //         } else {
-                    //             frappe.msgprint(__('Failed to generate PDF.'));
-                    //         }
-                    //     }
-                    // });
-                    // Create a form and submit it to trigger file download
                 const url = `/api/method/fastrack_erp.api.download_purchase_invoice_pdf`;
                 const form = document.createElement('form');
                 form.method = 'POST';

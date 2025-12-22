@@ -28,7 +28,7 @@ class ImportSeaMasterBill(Document):
 			hbl_doc.mv= self.mv if self.mv else hbl_doc.mv
 			hbl_doc.port_of_loading= self.port_of_loading if self.port_of_loading else hbl_doc.port_of_loading
 			hbl_doc.fv= self.fv if self.fv else hbl_doc.fv
-			hbl_doc.mbl_date= self.mbl_date if self.mbl_date else hbl_doc.mbl_date
+			# hbl_doc.mbl_date= self.mbl_date if self.mbl_date else hbl_doc.mbl_date
 			hbl_doc.mv_voyage_no= self.mv_voyage_no if self.mv_voyage_no else hbl_doc.mv_voyage_no
 			hbl_doc.port_of_discharge= self.port_of_discharge if self.port_of_discharge else hbl_doc.port_of_discharge
 			hbl_doc.fv__v_no= self.fv_voyage_no if self.fv_voyage_no else hbl_doc.fv__v_no

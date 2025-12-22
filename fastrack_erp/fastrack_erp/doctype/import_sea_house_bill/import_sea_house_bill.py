@@ -8,6 +8,7 @@ from frappe.model.document import Document
 #   "invoice",
 #   "amount"
 class ImportSeaHouseBill(Document):
+      
 	def onload(self):
 		self.hbl_data=self.name
 		

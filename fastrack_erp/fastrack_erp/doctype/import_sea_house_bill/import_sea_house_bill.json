@@ -86,6 +86,7 @@
   "cf_agent",
   "line_no",
   "ocean_freight_remarks",
+  "column_break_qkkhg",
   "bill_of_entry",
   "shipping_line_custom",
   "shipping_line_address_custom",
@@ -94,6 +95,7 @@
   "man_gr_wt",
   "man_pkg",
   "remarks",
+  "column_break_8kpwz",
   "ex_rate",
   "rotation",
   "section_break_igwms",
@@ -643,26 +645,26 @@
    "fetch_from": "shipping_line.supplier_name",
    "fieldname": "bl_no",
    "fieldtype": "Data",
-   "label": "B/L No"
+   "label": "HBL No"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "bl_date",
    "fieldtype": "Date",
-   "label": "B/L Date"
+   "label": "HBL Date"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "man_gr_wt",
    "fieldtype": "Float",
-   "label": "Man Gr Wt",
+   "label": "HBL Gr Wt",
    "precision": "2"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "man_pkg",
    "fieldtype": "Int",
-   "label": "Man Pkg"
+   "label": "HBL Pkg"
   },
   {
    "allow_on_submit": 1,
@@ -674,6 +676,7 @@
    "allow_on_submit": 1,
    "fieldname": "ex_rate",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Ex. Rate"
   },
   {
@@ -819,14 +822,20 @@
   {
    "fieldname": "mbl_date",
    "fieldtype": "Date",
-   "insert_after": "sales_person",
    "label": "MBL Date "
   },
   {
    "fieldname": "sheed_number",
    "fieldtype": "Data",
-   "insert_after": "total_container_hbl",
    "label": "Sheed Number"
+  },
+  {
+   "fieldname": "column_break_qkkhg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_8kpwz",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -845,7 +854,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-21 17:25:05.624970",
+ "modified": "2025-12-22 12:26:50.061483",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
