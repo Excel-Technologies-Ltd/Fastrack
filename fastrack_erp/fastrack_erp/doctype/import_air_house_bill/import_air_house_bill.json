@@ -9,7 +9,10 @@
  "engine": "InnoDB",
  "field_order": [
   "hbl_open_by",
+  "invoice_uid",
   "mbl_link",
+  "mbl_doctype",
+  "hbl_doc_name",
   "inco_term",
   "mbl_no",
   "hbl_no",
@@ -116,6 +119,20 @@
    "options": "Import Air Master Bill"
   },
   {
+   "fieldname": "mbl_doctype",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "MBL Doctype",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hbl_doc_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "HBL Doc Name",
+   "read_only": 1
+  },
+  {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -171,6 +188,13 @@
    "in_list_view": 1,
    "label": "HAWB Open By",
    "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_uid",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Invoice UID",
    "read_only": 1
   },
   {

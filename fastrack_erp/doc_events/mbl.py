@@ -41,13 +41,13 @@ def update_child_hbl(doc, method):
     parent_doctype=doc.mbl_doctype
     # create child doc in master bill
     mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_link)
+
+    # Validate container weight for Sea imports
     if parent_doctype == "Import Sea Master Bill":
         get_all_weight_of_container_info= sum(float(container.weight) for container in doc.container_info)
-    else:
-        get_all_weight_of_container_info= 0
-    if not get_all_weight_of_container_info == float(doc.hbl_weight) and (parent_doctype == "Import Sea Master Bill") :
-        frappe.throw("Total weight of container info is not equal to hbl gross weight")
-   
+        if not get_all_weight_of_container_info == float(doc.hbl_weight):
+            frappe.throw("Total weight of container info is not equal to hbl gross weight")
+
     # Find and update the HBLInfo row with matching hbl_no
     if parent_doctype == "Import Sea Master Bill":
         for hbl_info in mbl_doc.hbl_info :
@@ -56,15 +56,15 @@ def update_child_hbl(doc, method):
                 hbl_info.is_create=1
                 hbl_info.weight=doc.hbl_weight
                 break
-    if parent_doctype == "Import Air Master Bill":
+    elif parent_doctype == "Import Air Master Bill":
         for hbl_info in mbl_doc.hbl_info:
             if hbl_info.name == doc.hbl_doc_name:
-                hbl_info.hbl_link=doc.hbl_no
+                hbl_info.hbl_link=doc.name
                 hbl_info.is_create=1
                 hbl_info.weight=doc.hbl_gr_weight
                 break
-            
-    
+
+
     validate(mbl_doc, method=None)
     mbl_doc.save(ignore_permissions=True)
  
@@ -81,7 +81,7 @@ def delete_child_hbl_on_cancel(doc, method):
                 break
     if parent_doctype == "Import Air Master Bill":
         for hbl_info in mbl_doc.hbl_info:
-            if hbl_info.name == doc.name:
+            if hbl_info.hbl_link == doc.name:
                 hbl_info.hbl_link=None
                 hbl_info.is_create=0
                 break

@@ -31,19 +31,24 @@ def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
 def make_air_house_bill(source_name, target_doc=None):
     def set_missing_values(source, target):
         hbl_info=get_first_uncreated_hbl_info(source.name,"Import Air Master Bill")
-        # 4 array
-        target.mbl_no=source.name
-        target.hbl_no=hbl_info.hbl_no
-        target.carrier=source.consignee
-        target.agent=source.agent
+        # Set bidirectional references
+        target.mbl_link=source.name
         target.hbl_doc_name=hbl_info.name
         target.mbl_doctype=hbl_info.parenttype
+        target.hbl_no=hbl_info.hbl_no
+        target.mbl_no=source.mbl_no
+        target.airlines=source.consignee
+        target.agent=source.agent
+        target.mbl_date=source.mbl_date
+        target.port_of_loading=source.port_of_loading
+        target.port_of_delivery=source.port_of_delivery
+
     doclist = get_mapped_doc("Import Air Master Bill", source_name, {
         "Import Air Master Bill": {
             "doctype": "Import Air House Bill",
         },
     }, target_doc, set_missing_values)
-  
+
     return doclist
 
 # @frappe.whitelist()
