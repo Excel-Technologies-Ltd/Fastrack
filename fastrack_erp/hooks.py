@@ -7,7 +7,7 @@ app_license = "MIT"
 
 # Includes in <head>
 # ------------------
-
+app_include_css = "/assets/fastrack_erp/css/theme.css"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/fastrack_erp/css/fastrack_erp.css"
 # app_include_js = "/assets/fastrack_erp/js/fastrack_erp.js"
@@ -130,6 +130,14 @@ doc_events = {
     "on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
  },
  "Import Air House Bill": {
+	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+ },
+ "Export Sea House Bill": {
+	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+ },
+ "Export Air House Bill": {
 	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
 	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
  },

@@ -23,11 +23,14 @@
   "flight_date",
   "port_of_delivery",
   "gr_weight",
+  "total_no_of_hbl",
   "column_break_xgyul",
   "airline",
   "etd",
   "shipper",
   "chargeable_weight",
+  "section_break_hbl_info",
+  "hbl_info",
   "amended_from"
  ],
  "fields": [
@@ -95,6 +98,11 @@
    "label": "Port of Delivery"
   },
   {
+   "fieldname": "total_no_of_hbl",
+   "fieldtype": "Int",
+   "label": "Total No. of HBL"
+  },
+  {
    "fieldname": "chargeable_weight",
    "fieldtype": "Float",
    "label": "Chargeable Weight"
@@ -149,6 +157,18 @@
    "fieldname": "mbl_id",
    "fieldtype": "Data",
    "label": "MBL No"
+  },
+  {
+   "fieldname": "section_break_hbl_info",
+   "fieldtype": "Section Break",
+   "label": "HBL Info"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "hbl_info",
+   "fieldtype": "Table",
+   "label": "HBL Info",
+   "options": "Export Air HBL Info"
   }
  ],
  "index_web_pages_for_search": 1,

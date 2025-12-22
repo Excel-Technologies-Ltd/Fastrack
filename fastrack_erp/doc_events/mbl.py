@@ -63,9 +63,24 @@ def update_child_hbl(doc, method):
                 hbl_info.is_create=1
                 hbl_info.weight=doc.hbl_gr_weight
                 break
+    elif parent_doctype == "Export Sea Master Bill":
+        for hbl_info in mbl_doc.hbl_info:
+            if hbl_info.name == doc.hbl_doc_name:
+                hbl_info.hbl_link=doc.name
+                hbl_info.is_create=1
+                hbl_info.weight=doc.gross_weight
+                break
+    elif parent_doctype == "Export Air Master Bill":
+        for hbl_info in mbl_doc.hbl_info:
+            if hbl_info.name == doc.hbl_doc_name:
+                hbl_info.hbl_link=doc.name
+                hbl_info.is_create=1
+                hbl_info.weight=doc.hbl_gr_weight
+                break
 
-
-    validate(mbl_doc, method=None)
+    # Only validate if it's an import master bill
+    if parent_doctype in ["Import Sea Master Bill", "Import Air Master Bill"]:
+        validate(mbl_doc, method=None)
     mbl_doc.save(ignore_permissions=True)
  
  
@@ -73,17 +88,13 @@ def delete_child_hbl_on_cancel(doc, method):
     name=doc.name
     parent_doctype=doc.mbl_doctype
     mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_link)
-    if parent_doctype == "Import Sea Master Bill":
+
+    if parent_doctype in ["Import Sea Master Bill", "Import Air Master Bill", "Export Sea Master Bill", "Export Air Master Bill"]:
         for hbl_info in mbl_doc.hbl_info:
             if hbl_info.hbl_link == doc.name:
                 hbl_info.hbl_link=None
                 hbl_info.is_create=0
                 break
-    if parent_doctype == "Import Air Master Bill":
-        for hbl_info in mbl_doc.hbl_info:
-            if hbl_info.hbl_link == doc.name:
-                hbl_info.hbl_link=None
-                hbl_info.is_create=0
-                break
+
     mbl_doc.save(ignore_permissions=True)
             

@@ -51,6 +51,64 @@ def make_air_house_bill(source_name, target_doc=None):
 
     return doclist
 
+@frappe.whitelist()
+def make_export_sea_house_bill(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        hbl_info=get_first_uncreated_hbl_info(source.name,"Export Sea Master Bill")
+        # Set bidirectional references
+        target.mbl_link=source.name
+        target.hbl_doc_name=hbl_info.name
+        target.mbl_doctype=hbl_info.parenttype
+        target.hbl_id=hbl_info.hbl_no
+        target.mbl_no=source.mbl_no
+        target.agent=source.agent
+        target.shipping_line=source.shipping_line
+        target.mbl_date=source.mbl_date
+        target.port_of_loading=source.port_of_loading
+        target.port_of_discharge=source.port_of_discharge
+        target.port_of_delivery=source.port_of_delivery
+        target.fv=source.fv
+        target.mv=source.mv
+        target.fv__v_no=source.fv_voyage_no
+        target.mv_voyage_no=source.mv_voyage_no
+        target.etd=source.etd
+        target.eta=source.eta
+
+    doclist = get_mapped_doc("Export Sea Master Bill", source_name, {
+        "Export Sea Master Bill": {
+            "doctype": "Export Sea House Bill",
+        },
+    }, target_doc, set_missing_values)
+
+    return doclist
+
+@frappe.whitelist()
+def make_export_air_house_bill(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        hbl_info=get_first_uncreated_hbl_info(source.name,"Export Air Master Bill")
+        # Set bidirectional references
+        target.mbl_link=source.name
+        target.hbl_doc_name=hbl_info.name
+        target.mbl_doctype=hbl_info.parenttype
+        target.hbl_no=hbl_info.hbl_no
+        target.mbl_no=source.mbl_no
+        target.agent=source.agent
+        target.airline=source.airline
+        target.mbl_date=source.mbl_date
+        target.port_of_loading=source.port_of_loading
+        target.port_of_delivery=source.port_of_delivery
+        target.flight_name=source.flight
+        target.flight_date=source.flight_date
+        target.etd=source.etd
+
+    doclist = get_mapped_doc("Export Air Master Bill", source_name, {
+        "Export Air Master Bill": {
+            "doctype": "Export Air House Bill",
+        },
+    }, target_doc, set_missing_values)
+
+    return doclist
+
 # @frappe.whitelist()
 # def make_payment_entry(source_name, target_doc=None):
     

@@ -99,14 +99,14 @@
    "hidden": 1,
    "in_list_view": 1,
    "label": "MBL Link",
-   "options": "Import Air Master Bill"
+   "options": "Export Air Master Bill"
   },
   {
    "fieldname": "mbl_no",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "MBL No.",
-   "options": "Import Air Master Bill"
+   "options": "Export Air Master Bill"
   },
   {
    "fieldname": "hbl_no",
