@@ -13,6 +13,7 @@
   "agent",
   "section_break_rzyek",
   "mbl_no",
+  "mbl_id",
   "flight",
   "port_of_loading",
   "no_of_pkg",
@@ -38,7 +39,7 @@
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "MBL No",
+   "label": "MBL No.",
    "reqd": 1,
    "unique": 1
   },
@@ -143,6 +144,11 @@
   {
    "fieldname": "column_break_xgyul",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mbl_id",
+   "fieldtype": "Data",
+   "label": "MBL No"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -153,7 +159,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-21 12:51:55.622516",
+ "modified": "2025-12-22 17:36:01.799722",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",

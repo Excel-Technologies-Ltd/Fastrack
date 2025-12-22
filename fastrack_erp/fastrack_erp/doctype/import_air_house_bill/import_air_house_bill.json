@@ -13,6 +13,7 @@
   "inco_term",
   "mbl_no",
   "hbl_no",
+  "hawb_no",
   "airlines",
   "flight_name",
   "shipper",
@@ -229,12 +230,17 @@
    "fieldtype": "Float",
    "label": "Gr. Weight",
    "reqd": 1
+  },
+  {
+   "fieldname": "hawb_no",
+   "fieldtype": "Data",
+   "label": "HAWB No."
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-21 18:24:45.793868",
+ "modified": "2025-12-22 17:08:33.190910",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

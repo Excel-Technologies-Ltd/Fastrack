@@ -12,6 +12,7 @@
   "agent",
   "section_break_ci54m",
   "mbl_no",
+  "mbl_id",
   "fv",
   "port_of_loading",
   "no_of_pkg",
@@ -57,7 +58,9 @@
   {
    "fieldname": "mbl_no",
    "fieldtype": "Data",
-   "label": "MBL No"
+   "in_list_view": 1,
+   "label": "MBL No.",
+   "reqd": 1
   },
   {
    "fieldname": "fv",
@@ -162,12 +165,17 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "mbl_id",
+   "fieldtype": "Data",
+   "label": "MBL No"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-20 14:15:15.532725",
+ "modified": "2025-12-22 17:30:37.189060",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

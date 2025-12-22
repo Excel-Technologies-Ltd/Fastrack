@@ -10,8 +10,8 @@
  "field_order": [
   "mbl_open_by",
   "section_break_7hzdi",
-  "mbl_data",
   "mbl_no",
+  "mbl_data",
   "agent",
   "port_of_loading",
   "no_of_pkg",
@@ -368,7 +368,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-21 15:36:00.376945",
+ "modified": "2025-12-22 17:43:54.724028",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",
