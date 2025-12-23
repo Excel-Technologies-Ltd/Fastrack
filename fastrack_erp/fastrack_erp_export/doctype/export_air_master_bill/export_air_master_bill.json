@@ -48,9 +48,8 @@
   },
   {
    "fieldname": "flight",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Flight",
-   "options": "Customer",
    "reqd": 1
   },
   {
@@ -115,7 +114,7 @@
   {
    "fieldname": "airline",
    "fieldtype": "Link",
-   "label": "AirLine",
+   "label": "Airline",
    "options": "Customer"
   },
   {
@@ -179,7 +178,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-22 17:36:01.799722",
+ "modified": "2025-12-23 10:41:42.285490",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",

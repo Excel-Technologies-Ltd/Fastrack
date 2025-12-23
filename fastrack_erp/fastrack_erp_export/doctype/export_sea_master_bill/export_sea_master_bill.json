@@ -32,6 +32,8 @@
   "vol_cbm",
   "eta",
   "total__hbl",
+  "section_break_j1exs",
+  "container_info",
   "section_break_hbl_info",
   "hbl_info",
   "amended_from"
@@ -135,7 +137,7 @@
   },
   {
    "fieldname": "etd",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ETD"
   },
   {
@@ -184,12 +186,22 @@
    "fieldname": "mbl_id",
    "fieldtype": "Data",
    "label": "MBL No"
+  },
+  {
+   "fieldname": "section_break_j1exs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "container_info",
+   "fieldtype": "Table",
+   "label": "Container Info.",
+   "options": "Fastrack Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-22 22:56:41.651379",
+ "modified": "2025-12-23 10:31:09.364888",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",
