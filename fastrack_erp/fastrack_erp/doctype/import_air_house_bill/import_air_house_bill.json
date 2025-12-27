@@ -42,6 +42,20 @@
   "port_of_delivery",
   "hbl_gr_weight",
   "chargeable_weight",
+  "billing_section",
+  "invoice_list",
+  "total_invoice_amount",
+  "column_break_billing",
+  "purchase_invoice_list",
+  "total_purchase_amount",
+  "profit_share_section",
+  "profit_share_list",
+  "total_profit_share",
+  "payment_section",
+  "payment_entry_list",
+  "total_payment",
+  "draft_section",
+  "draft_invoice_list",
   "amended_from"
  ],
  "fields": [
@@ -259,6 +273,84 @@
    "fieldname": "hawb_no",
    "fieldtype": "Data",
    "label": "HAWB No."
+  },
+  {
+   "fieldname": "billing_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Information"
+  },
+  {
+   "fieldname": "invoice_list",
+   "fieldtype": "Table",
+   "label": "Sales Invoice List",
+   "options": "Fastrack Sales Invoice"
+  },
+  {
+   "fieldname": "total_invoice_amount",
+   "fieldtype": "Float",
+   "label": "Total Invoice Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_billing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_invoice_list",
+   "fieldtype": "Table",
+   "label": "Purchase Invoice List",
+   "options": "Fastrack Purchase Invoice"
+  },
+  {
+   "fieldname": "total_purchase_amount",
+   "fieldtype": "Float",
+   "label": "Total Purchase Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "profit_share_section",
+   "fieldtype": "Section Break",
+   "label": "Profit Share"
+  },
+  {
+   "fieldname": "profit_share_list",
+   "fieldtype": "Table",
+   "label": "Profit Share List",
+   "options": "Profit Share List"
+  },
+  {
+   "fieldname": "total_profit_share",
+   "fieldtype": "Float",
+   "label": "Total Profit Share",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Information"
+  },
+  {
+   "fieldname": "payment_entry_list",
+   "fieldtype": "Table",
+   "label": "Payment Entry List",
+   "options": "Fastrack Payment Entry"
+  },
+  {
+   "fieldname": "total_payment",
+   "fieldtype": "Float",
+   "label": "Total Payment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "draft_section",
+   "fieldtype": "Section Break",
+   "label": "Draft Invoices"
+  },
+  {
+   "fieldname": "draft_invoice_list",
+   "fieldtype": "Table",
+   "label": "Draft Invoice List",
+   "options": "Fastrack Draft Bill"
   }
  ],
  "index_web_pages_for_search": 1,
