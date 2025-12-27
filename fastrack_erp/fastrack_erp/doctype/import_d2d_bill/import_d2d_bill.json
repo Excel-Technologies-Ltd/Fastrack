@@ -144,9 +144,7 @@
    "read_only": 1
   },
   {
-<<<<<<< HEAD
    "allow_on_submit": 1,
-=======
    "fieldname": "invoice_uid",
    "fieldtype": "Data",
    "hidden": 1,
@@ -154,7 +152,6 @@
    "read_only": 1
   },
   {
->>>>>>> origin/sohan
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
@@ -327,11 +324,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
-<<<<<<< HEAD
  "modified": "2025-12-27 11:12:35.947204",
-=======
- "modified": "2025-12-26 22:20:21.674095",
->>>>>>> origin/sohan
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
