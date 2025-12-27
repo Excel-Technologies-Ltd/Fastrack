@@ -43,10 +43,10 @@
   "reference_number",
   "agent",
   "shipping_line",
-  "date_1",
-  "date_2",
-  "date_3",
-  "date_4",
+  "inv_date",
+  "exp_date",
+  "sc_date",
+  "lc_date",
   "inco_term",
   "pkg_code",
   "port_of_delivery",
@@ -115,6 +115,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "delivery_agent",
    "fieldtype": "Link",
    "label": "Delivery Agent",
@@ -148,6 +149,7 @@
    "label": "MV"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pkg_code",
    "fieldtype": "Data",
    "label": "PKG Code"
@@ -203,16 +205,19 @@
    "label": "HBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "inv_no",
    "fieldtype": "Data",
-   "label": "Inv No."
+   "label": "INV No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "exp_no",
    "fieldtype": "Data",
    "label": "Exp No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sc_no",
    "fieldtype": "Data",
    "label": "SC No."
@@ -224,6 +229,7 @@
    "label": "LC no."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mode",
    "fieldtype": "Data",
    "label": "Mode"
@@ -256,6 +262,7 @@
    "label": "MV Voyage No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pkg_name",
    "fieldtype": "Data",
    "label": "PKG Name"
@@ -285,26 +292,6 @@
    "fieldtype": "Link",
    "label": "Shipping Line",
    "options": "Supplier"
-  },
-  {
-   "fieldname": "date_1",
-   "fieldtype": "Date",
-   "label": "Date 1"
-  },
-  {
-   "fieldname": "date_2",
-   "fieldtype": "Date",
-   "label": "Date 2"
-  },
-  {
-   "fieldname": "date_3",
-   "fieldtype": "Date",
-   "label": "Date 3"
-  },
-  {
-   "fieldname": "date_4",
-   "fieldtype": "Date",
-   "label": "Date 4"
   },
   {
    "allow_on_submit": 1,
@@ -358,6 +345,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipping_marks",
    "fieldtype": "Small Text",
    "label": "Shipping Marks"
@@ -379,6 +367,7 @@
    "search_index": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_receipt",
    "fieldtype": "Data",
    "label": "Port of Receipt"
@@ -391,6 +380,30 @@
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "label": "HBL No"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "inv_date",
+   "fieldtype": "Date",
+   "label": "INV Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "exp_date",
+   "fieldtype": "Date",
+   "label": "Exp Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "sc_date",
+   "fieldtype": "Date",
+   "label": "SC Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "lc_date",
+   "fieldtype": "Date",
+   "label": "LC Date"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -409,7 +422,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-22 17:33:35.591187",
+ "modified": "2025-12-27 11:33:27.133849",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

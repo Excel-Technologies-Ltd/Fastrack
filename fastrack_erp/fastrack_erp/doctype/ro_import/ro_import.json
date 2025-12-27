@@ -34,26 +34,31 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipper",
    "fieldtype": "Data",
    "label": "Shipper"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "reference_no",
    "fieldtype": "Data",
    "label": "Reference No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "no_of_pkg",
    "fieldtype": "Data",
    "label": "No of PKG"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gross_weight",
    "fieldtype": "Data",
    "label": "Gross Weight"
@@ -63,26 +68,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sales_person",
    "fieldtype": "Data",
    "label": "Sales Person"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "customer_1",
    "fieldtype": "Data",
    "label": "Customer 1"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "customer_2",
    "fieldtype": "Data",
    "label": "Customer 2"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "vol",
    "fieldtype": "Data",
    "label": "VOL"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "remarks",
    "fieldtype": "Data",
    "label": "Remarks"
@@ -92,26 +102,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Data",
    "label": "Agent"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc",
    "fieldtype": "Data",
    "label": "LC"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pol",
    "fieldtype": "Data",
    "label": "POL"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl",
    "fieldtype": "Data",
    "label": "MBL"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "etd",
    "fieldtype": "Date",
    "label": "ETD"
@@ -121,26 +136,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "piorder",
    "fieldtype": "Data",
    "label": "PI/Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_date",
    "fieldtype": "Date",
    "label": "LC Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pod",
    "fieldtype": "Date",
    "label": "POD"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl",
    "fieldtype": "Data",
    "label": "HBL"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "status",
    "fieldtype": "Data",
    "label": "Status"
@@ -159,7 +179,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-08 16:24:12.745850",
+ "modified": "2025-12-27 11:57:20.964147",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "RO Import",

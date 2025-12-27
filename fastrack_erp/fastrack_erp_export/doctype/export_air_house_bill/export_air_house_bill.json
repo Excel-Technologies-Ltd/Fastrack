@@ -116,6 +116,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipper",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -123,6 +124,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "consignee",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -130,6 +132,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "notify_party",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -137,63 +140,75 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "also_notify_party",
    "fieldtype": "Link",
    "label": "Also Notify Party",
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agents_iata_code",
    "fieldtype": "Data",
    "label": "Agent's IATA Code"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "issuing_carriers_agent_name_and_city",
    "fieldtype": "Data",
    "label": "Issuing Carrier's Agent Name and City"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
    "label": "Port of Loading"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pol_code",
    "fieldtype": "Data",
    "label": "POL Code"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
    "label": "No of Pkg",
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "ratecharge",
    "fieldtype": "Data",
    "label": "Rate/Charge"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "signature",
    "fieldtype": "Data",
    "label": "Signature"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "prepaid",
    "fieldtype": "Data",
    "label": "Prepaid"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_prepaid",
    "fieldtype": "Data",
    "label": "Total Prepaid"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "currency_conversion_rates",
    "fieldtype": "Data",
    "label": "Currency Conversion Rates"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipping_mark",
    "fieldtype": "Small Text",
    "label": "Shipping Mark"
@@ -203,109 +218,130 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "label": "Sales Person",
    "options": "Sales Person"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_date",
    "fieldtype": "Date",
    "label": "HBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "inv_no",
    "fieldtype": "Data",
    "label": "INV No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "exp_no",
    "fieldtype": "Data",
    "label": "EXP No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sc_no",
    "fieldtype": "Data",
    "label": "SC No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_no",
    "fieldtype": "Data",
    "label": "LC No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "account_no",
    "fieldtype": "Data",
    "label": "Account no."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "flight_no",
    "fieldtype": "Data",
    "label": "Flight No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
    "label": "Port of Delivery"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pod_code",
    "fieldtype": "Data",
    "label": "POD Code"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_gr_weight",
    "fieldtype": "Float",
    "label": "Gr. Weight",
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total",
    "fieldtype": "Data",
    "label": "Total"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "weight_charge",
    "fieldtype": "Data",
    "label": "Weight Charge"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "valuation_charge",
    "fieldtype": "Data",
    "label": "Valuation Charge"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "tax",
    "fieldtype": "Data",
    "label": "TAX"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_other_charge_due_agent",
    "fieldtype": "Data",
    "label": "Total Other Charge Due Agent"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_other_charges_due_agent",
    "fieldtype": "Data",
    "label": "Total Other Charges Due Agent"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_other_charge_due_carrier",
    "fieldtype": "Data",
    "label": "Total Other Charge Due Carrier"
@@ -315,42 +351,50 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "reference_number",
    "fieldtype": "Data",
    "label": "Reference Number"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
    "options": "Supplier"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "airline",
    "fieldtype": "Data",
    "label": "Airline"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date_1",
    "fieldtype": "Date",
    "label": "INV Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date_2",
    "fieldtype": "Date",
    "label": "EXP Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date_3",
    "fieldtype": "Date",
    "label": "SC Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date_4",
    "fieldtype": "Date",
    "label": "LC Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "inco_term",
    "fieldtype": "Select",
    "label": "Inco Term",
@@ -358,51 +402,61 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "etd",
    "fieldtype": "Date",
    "label": "ETD"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "amount_of_insurance",
    "fieldtype": "Data",
    "label": "Amount of Insurance"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "eta",
    "fieldtype": "Date",
    "label": "ETA"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "declare_value_for_customes",
    "fieldtype": "Data",
    "label": "Declare Value for Customes"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "chargeable_weight",
    "fieldtype": "Float",
    "label": "Chargeable Weight"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "other_charges",
    "fieldtype": "Data",
    "label": "Other Charges"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "place",
    "fieldtype": "Data",
    "label": "Place"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "collect",
    "fieldtype": "Data",
    "label": "Collect"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_collect",
    "fieldtype": "Data",
    "label": "Total Collect"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cc_charges_in_dest_currency",
    "fieldtype": "Data",
    "label": "CC Charges in Dest. Currency"
@@ -487,6 +541,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "description_of_goods",
    "fieldtype": "Small Text",
    "label": "Description of Goods"
@@ -500,7 +555,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-22 17:37:49.485294",
+ "modified": "2025-12-27 11:51:07.269963",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",

@@ -43,6 +43,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
@@ -50,6 +51,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "airlines",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -57,11 +59,13 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
    "label": "Port of Loading"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gr_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -78,6 +82,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_open_by",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -86,27 +91,32 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "consignee",
    "fieldtype": "Link",
    "label": "MAWB Consignee",
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
    "label": "Port of Delivery"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "chargeable_weight",
    "fieldtype": "Float",
    "label": "Chargeable Weight"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_no_of_hbl",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -160,7 +170,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-22 17:10:39.038658",
+ "modified": "2025-12-27 11:19:35.529213",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",

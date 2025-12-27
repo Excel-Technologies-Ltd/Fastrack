@@ -34,26 +34,31 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "fieldname": "shipper",
    "fieldtype": "Data",
    "label": "Shipper"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "place_of_receipt",
    "fieldtype": "Data",
    "label": "Place of Receipt"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "invoice_no",
    "fieldtype": "Data",
    "label": "Invoice No"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "equipment",
    "fieldtype": "Data",
    "label": "Equipment"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "net_weight",
    "fieldtype": "Data",
    "label": "Net Weight"
@@ -63,26 +68,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "consignee",
    "fieldtype": "Data",
    "label": "Consignee"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "destination",
    "fieldtype": "Data",
    "label": "Destination"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "po_no",
    "fieldtype": "Data",
    "label": "PO No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "carton_qty",
    "fieldtype": "Data",
    "label": "Carton QTY"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gr_weight",
    "fieldtype": "Data",
    "label": "Gr. Weight"
@@ -92,26 +102,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cnf_agent",
    "fieldtype": "Data",
    "label": "CNF Agent"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "stuffing_date",
    "fieldtype": "Date",
    "label": "Stuffing Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "commodity",
    "fieldtype": "Data",
    "label": "Commodity"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_pcs",
    "fieldtype": "Data",
    "label": "Total Pcs"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cbm",
    "fieldtype": "Data",
    "label": "CBM"
@@ -121,26 +136,31 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "forworder",
    "fieldtype": "Data",
    "label": "Forworder"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "carieer",
    "fieldtype": "Data",
    "label": "Carieer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "booking_no",
    "fieldtype": "Data",
    "label": "Booking No."
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cfs",
    "fieldtype": "Data",
    "label": "CFS"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_number",
    "fieldtype": "Data",
    "label": "HBL Number"
@@ -159,7 +179,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-08 16:20:48.650226",
+ "modified": "2025-12-27 11:54:12.784845",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Shipping Order",

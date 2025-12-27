@@ -38,6 +38,7 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -60,6 +61,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipper",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -67,6 +69,7 @@
    "options": "Supplier"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "consignee",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -74,6 +77,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "notify_party",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -81,6 +85,7 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "customer",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -88,21 +93,25 @@
    "options": "Customer"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_loading",
    "fieldtype": "Data",
    "label": "Port of Loading"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cargo_description",
    "fieldtype": "Data",
    "label": "Cargo Description"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gr_weight",
    "fieldtype": "Float",
    "label": "Gr. Weight"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "declar_value_of_custom",
    "fieldtype": "Data",
    "label": "Declar Value Of Customs"
@@ -120,65 +129,77 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_date",
    "fieldtype": "Data",
    "label": "HBL Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
    "options": "Supplier"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "consignee.custom_bin_no",
    "fieldname": "consignee_bin",
    "fieldtype": "Data",
    "label": "Consignee Bin"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "notify_party.custom_bin_no",
    "fieldname": "notify_party_bin",
    "fieldtype": "Data",
    "label": "Notify Party Bin"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "customer.custom_bin_no",
    "fieldname": "customer_bin",
    "fieldtype": "Data",
    "label": "Customer Bin"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_date",
    "fieldtype": "Date",
    "label": "LC/TT Date"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
    "fieldtype": "Data",
    "label": "Port of Delivery"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
    "label": "No of Pkg"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "chargeable_weight",
    "fieldtype": "Float",
    "label": "Chargeable Weight"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_number",
    "fieldtype": "Data",
    "label": "LC/TT Number"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "reference_number",
    "fieldtype": "Data",
    "label": "Reference Number"
@@ -194,6 +215,7 @@
    "search_index": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "shipment_mode",
    "fieldtype": "Data",
    "label": "Shipment Mode"
@@ -202,7 +224,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-22 17:32:47.545931",
+ "modified": "2025-12-27 11:12:35.947204",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
