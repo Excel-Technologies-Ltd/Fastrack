@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-26 16:15:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "journal_id",
+  "account_name",
+  "amount",
+  "currency"
+ ],
+ "fields": [
+  {
+   "fieldname": "journal_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Journal ID",
+   "options": "Journal Entry",
+   "reqd": 1
+  },
+  {
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Account Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Currency",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "module": "Fastrack Erp Export",
+ "name": "Profit Share List",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

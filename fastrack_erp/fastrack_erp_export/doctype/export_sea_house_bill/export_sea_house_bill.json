@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:hbl_id",
@@ -446,4 +447,541 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+=======
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "field:hbl_id",
+    "creation": "2025-12-13 16:59:26.718825",
+    "default_view": "List",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "hbl_open_by",
+        "invoice_uid",
+        "mbl_no",
+        "mbl_link",
+        "mbl_doctype",
+        "hbl_doc_name",
+        "hbl_id",
+        "hbl_no",
+        "hbl_shipper",
+        "hbl_consignee",
+        "notify_to",
+        "also_notify_party",
+        "delivery_agent",
+        "port_of_receipt",
+        "port_of_loading",
+        "no_of_pkg_hbl",
+        "fv",
+        "mv",
+        "column_break_twikq",
+        "sales_person",
+        "mbl_date",
+        "hbl_date",
+        "inv_no",
+        "exp_no",
+        "sc_no",
+        "lc_no",
+        "mode",
+        "pkg_name",
+        "port_of_discharge",
+        "gross_weight",
+        "fv__v_no",
+        "mv_voyage_no",
+        "column_break_r8svn",
+        "reference_number",
+        "agent",
+        "shipping_line",
+        "date_1",
+        "date_2",
+        "date_3",
+        "date_4",
+        "inco_term",
+        "pkg_code",
+        "port_of_delivery",
+        "hbl_vol_cbm",
+        "etd",
+        "eta",
+        "section_break_vf8zr",
+        "shipping_marks",
+        "column_break_uu0ul",
+        "description_of_good",
+        "section_break_nfgoz",
+        "container_info",
+        "billing_section",
+        "invoice_list",
+        "total_invoice_amount",
+        "column_break_billing",
+        "purchase_invoice_list",
+        "total_purchase_amount",
+        "profit_share_section",
+        "profit_share_list",
+        "total_profit_share",
+        "payment_section",
+        "payment_entry_list",
+        "total_payment",
+        "draft_section",
+        "draft_invoice_list",
+        "amended_from"
+    ],
+    "fields": [
+        {
+            "fieldname": "hbl_open_by",
+            "fieldtype": "Link",
+            "label": "HBL Open By",
+            "options": "User",
+            "read_only": 1
+        },
+        {
+            "fieldname": "invoice_uid",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Invoice UID",
+            "read_only": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "mbl_no",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "MBL No.",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "hbl_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "HBL No.",
+            "reqd": 1,
+            "set_only_once": 1,
+            "unique": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "hbl_shipper",
+            "fieldtype": "Link",
+            "label": "Shipper",
+            "options": "Customer"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "hbl_consignee",
+            "fieldtype": "Link",
+            "label": "Consignee",
+            "options": "Customer"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "notify_to",
+            "fieldtype": "Link",
+            "label": "Notify Party",
+            "options": "Customer"
+        },
+        {
+            "fieldname": "also_notify_party",
+            "fieldtype": "Link",
+            "label": "Also Notify Party",
+            "options": "Customer"
+        },
+        {
+            "fieldname": "delivery_agent",
+            "fieldtype": "Link",
+            "label": "Delivery Agent",
+            "options": "Customer"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "port_of_loading",
+            "fieldtype": "Data",
+            "label": "Port of Loading"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "no_of_pkg_hbl",
+            "fieldtype": "Float",
+            "label": "No of Pkg",
+            "precision": "2",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "fv",
+            "fieldtype": "Data",
+            "label": "FV"
+        },
+        {
+            "allow_on_submit": 1,
+            "fetch_from": "mbl_no.mv",
+            "fieldname": "mv",
+            "fieldtype": "Data",
+            "label": "MV"
+        },
+        {
+            "fieldname": "pkg_code",
+            "fieldtype": "Data",
+            "label": "PKG Code"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "column_break_twikq",
+            "fieldtype": "Column Break"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "sales_person",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Sales Person",
+            "options": "Sales Person",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "mbl_link",
+            "fieldtype": "Link",
+            "hidden": 1,
+            "in_list_view": 1,
+            "label": "MBL Link",
+            "options": "Export Sea Master Bill"
+        },
+        {
+            "fieldname": "mbl_doctype",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "MBL Doctype",
+            "read_only": 1
+        },
+        {
+            "fieldname": "hbl_doc_name",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "HBL Doc Name",
+            "read_only": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "mbl_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "MBL Date"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "hbl_date",
+            "fieldtype": "Date",
+            "label": "HBL Date"
+        },
+        {
+            "fieldname": "inv_no",
+            "fieldtype": "Data",
+            "label": "Inv No."
+        },
+        {
+            "fieldname": "exp_no",
+            "fieldtype": "Data",
+            "label": "Exp No."
+        },
+        {
+            "fieldname": "sc_no",
+            "fieldtype": "Data",
+            "label": "SC No."
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "lc_no",
+            "fieldtype": "Data",
+            "label": "LC no."
+        },
+        {
+            "fieldname": "mode",
+            "fieldtype": "Data",
+            "label": "Mode"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "port_of_discharge",
+            "fieldtype": "Data",
+            "label": "Port of Discharge"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "gross_weight",
+            "fieldtype": "Float",
+            "label": "Gross Weight",
+            "precision": "2",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "fv__v_no",
+            "fieldtype": "Data",
+            "label": "FV Voyage No"
+        },
+        {
+            "allow_on_submit": 1,
+            "fetch_from": "mbl_no.mv_voyage_no",
+            "fieldname": "mv_voyage_no",
+            "fieldtype": "Data",
+            "label": "MV Voyage No."
+        },
+        {
+            "fieldname": "pkg_name",
+            "fieldtype": "Data",
+            "label": "PKG Name"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "column_break_r8svn",
+            "fieldtype": "Column Break"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "reference_number",
+            "fieldtype": "Data",
+            "label": "Reference Number"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "agent",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Agent",
+            "options": "Supplier"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "shipping_line",
+            "fieldtype": "Link",
+            "label": "Shipping Line",
+            "options": "Supplier"
+        },
+        {
+            "fieldname": "date_1",
+            "fieldtype": "Date",
+            "label": "Date 1"
+        },
+        {
+            "fieldname": "date_2",
+            "fieldtype": "Date",
+            "label": "Date 2"
+        },
+        {
+            "fieldname": "date_3",
+            "fieldtype": "Date",
+            "label": "Date 3"
+        },
+        {
+            "fieldname": "date_4",
+            "fieldtype": "Date",
+            "label": "Date 4"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "inco_term",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Inco Term",
+            "options": "\nPrepaid\nCollect\nFree Hand",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fetch_from": "mbl_no.port_of_delivery",
+            "fetch_if_empty": 1,
+            "fieldname": "port_of_delivery",
+            "fieldtype": "Data",
+            "label": "Port of Delivery"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "hbl_vol_cbm",
+            "fieldtype": "Float",
+            "label": "Vol (CBM)",
+            "precision": "2",
+            "reqd": 1
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "etd",
+            "fieldtype": "Date",
+            "label": "ETD "
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "eta",
+            "fieldtype": "Date",
+            "label": "ETA"
+        },
+        {
+            "fieldname": "section_break_vf8zr",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "container_info",
+            "fieldtype": "Table",
+            "label": "Container Info",
+            "options": "Fastrack Export Sea Item"
+        },
+        {
+            "fieldname": "section_break_nfgoz",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "shipping_marks",
+            "fieldtype": "Small Text",
+            "label": "Shipping Marks"
+        },
+        {
+            "allow_on_submit": 1,
+            "fieldname": "description_of_good",
+            "fieldtype": "Small Text",
+            "label": "Description of Goods"
+        },
+        {
+            "fieldname": "amended_from",
+            "fieldtype": "Link",
+            "label": "Amended From",
+            "no_copy": 1,
+            "options": "Export Sea House Bill",
+            "print_hide": 1,
+            "read_only": 1,
+            "search_index": 1
+        },
+        {
+            "fieldname": "port_of_receipt",
+            "fieldtype": "Data",
+            "label": "Port of Receipt"
+        },
+        {
+            "fieldname": "column_break_uu0ul",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "hbl_no",
+            "fieldtype": "Data",
+            "label": "HBL No"
+        },
+        {
+            "fieldname": "billing_section",
+            "fieldtype": "Section Break",
+            "label": "Billing Information"
+        },
+        {
+            "fieldname": "invoice_list",
+            "fieldtype": "Table",
+            "label": "Sales Invoice List",
+            "options": "Fastrack Sales Invoice"
+        },
+        {
+            "fieldname": "total_invoice_amount",
+            "fieldtype": "Float",
+            "label": "Total Invoice Amount",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_billing",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "purchase_invoice_list",
+            "fieldtype": "Table",
+            "label": "Purchase Invoice List",
+            "options": "Fastrack Purchase Invoice"
+        },
+        {
+            "fieldname": "total_purchase_amount",
+            "fieldtype": "Float",
+            "label": "Total Purchase Amount",
+            "read_only": 1
+        },
+        {
+            "fieldname": "profit_share_section",
+            "fieldtype": "Section Break",
+            "label": "Profit Share"
+        },
+        {
+            "fieldname": "profit_share_list",
+            "fieldtype": "Table",
+            "label": "Profit Share List",
+            "options": "Profit Share List"
+        },
+        {
+            "fieldname": "total_profit_share",
+            "fieldtype": "Float",
+            "label": "Total Profit Share",
+            "read_only": 1
+        },
+        {
+            "fieldname": "payment_section",
+            "fieldtype": "Section Break",
+            "label": "Payment Information"
+        },
+        {
+            "fieldname": "payment_entry_list",
+            "fieldtype": "Table",
+            "label": "Payment Entry List",
+            "options": "Fastrack Payment Entry"
+        },
+        {
+            "fieldname": "total_payment",
+            "fieldtype": "Float",
+            "label": "Total Payment",
+            "read_only": 1
+        },
+        {
+            "fieldname": "draft_section",
+            "fieldtype": "Section Break",
+            "label": "Draft Invoices"
+        },
+        {
+            "fieldname": "draft_invoice_list",
+            "fieldtype": "Table",
+            "label": "Draft Invoice List",
+            "options": "Fastrack Draft Bill"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "is_submittable": 1,
+    "links": [
+        {
+            "link_doctype": "Journal Entry",
+            "link_fieldname": "custom_shbl_id"
+        },
+        {
+            "link_doctype": "Sales Invoice",
+            "link_fieldname": "custom_hbl_sea_link"
+        },
+        {
+            "link_doctype": "Purchase Invoice",
+            "link_fieldname": "custom_shbl_id"
+        }
+    ],
+    "modified": "2025-12-22 17:33:35.591187",
+    "modified_by": "Administrator",
+    "module": "Fastrack Erp Export",
+    "name": "Export Sea House Bill",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "submit": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+>>>>>>> origin/sohan
 }

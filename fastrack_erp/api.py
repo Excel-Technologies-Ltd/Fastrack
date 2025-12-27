@@ -120,44 +120,93 @@ def make_export_air_house_bill(source_name, target_doc=None):
   
 #     return doclist
 
+# Map of HBL types to their link field names for invoices
+HBL_SALES_INVOICE_FIELD_MAP = {
+    "Import Sea House Bill": "custom_hbl_sea_link",
+    "Import Air House Bill": "custom_hbl_air_link",
+    "Import D2D Bill": "custom_hbl_d2d_link",
+    "Export Sea House Bill": "custom_hbl_export_sea_link",
+    "Export Air House Bill": "custom_hbl_export_air_link",
+}
+
+HBL_PURCHASE_INVOICE_FIELD_MAP = {
+    "Import Sea House Bill": "custom_shbl_id",
+    "Import Air House Bill": "custom_ahbl_id",
+    "Import D2D Bill": "custom_dhbl_id",
+    "Export Sea House Bill": "custom_eshbl_id",
+    "Export Air House Bill": "custom_eahbl_id",
+}
+
 @frappe.whitelist()
 def make_sales_invoice_from_hbl(source_name, target_doc=None):
-    def set_missing_values(source, target):
-        
-        target.custom_hbl_type="Import Sea House Bill"
-        target.custom_hbl_sea_link=source.name
-        target.customer=""
-        target.customer_name=""
-        target.customer_address=""
-        
-    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
-        "Import Sea House Bill": {
-            "doctype": "Sales Invoice",
-        },
-    }, target_doc, set_missing_values)
-    return doclist
+    """Generic method to create Sales Invoice from any House Bill type"""
+    # Determine the HBL doctype from the source document
+    for hbl_type in HBL_SALES_INVOICE_FIELD_MAP.keys():
+        if frappe.db.exists(hbl_type, source_name):
+            link_field = HBL_SALES_INVOICE_FIELD_MAP.get(hbl_type)
+
+            def set_missing_values(source, target):
+                target.custom_hbl_type = hbl_type
+                if link_field:
+                    target.set(link_field, source.name)
+                target.customer = ""
+                target.customer_name = ""
+                target.customer_address = ""
+
+            doclist = get_mapped_doc(hbl_type, source_name, {
+                hbl_type: {
+                    "doctype": "Sales Invoice",
+                },
+            }, target_doc, set_missing_values)
+            return doclist
+
+    frappe.throw("House Bill not found")
+
+
 @frappe.whitelist()
 def make_purchase_invoice_from_hbl(source_name, target_doc=None):
-    def set_missing_values(source, target):
-        target.custom_shbl_id=source.name
-        target.custom_hbl_type="Import Sea House Bill"
-    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
-        "Import Sea House Bill": {
-            "doctype": "Purchase Invoice",
-        },
-    }, target_doc, set_missing_values)
-    return doclist
+    """Generic method to create Purchase Invoice from any House Bill type"""
+    # Determine the HBL doctype from the source document
+    for hbl_type in HBL_PURCHASE_INVOICE_FIELD_MAP.keys():
+        if frappe.db.exists(hbl_type, source_name):
+            link_field = HBL_PURCHASE_INVOICE_FIELD_MAP.get(hbl_type)
+
+            def set_missing_values(source, target):
+                target.custom_hbl_type = hbl_type
+                if link_field:
+                    target.set(link_field, source.name)
+
+            doclist = get_mapped_doc(hbl_type, source_name, {
+                hbl_type: {
+                    "doctype": "Purchase Invoice",
+                },
+            }, target_doc, set_missing_values)
+            return doclist
+
+    frappe.throw("House Bill not found")
+
+
 @frappe.whitelist()
 def make_journal_entry_from_hbl(source_name, target_doc=None):
-    def set_missing_values(source, target):
-        target.custom_shbl_id=source.name
-        target.custom_hbl_type="Import Sea House Bill"
-    doclist = get_mapped_doc("Import Sea House Bill", source_name, {
-        "Import Sea House Bill": {
-            "doctype": "Journal Entry",
-        },
-    }, target_doc, set_missing_values)
-    return doclist
+    """Generic method to create Journal Entry from any House Bill type"""
+    # Determine the HBL doctype from the source document
+    for hbl_type in HBL_PURCHASE_INVOICE_FIELD_MAP.keys():
+        if frappe.db.exists(hbl_type, source_name):
+            link_field = HBL_PURCHASE_INVOICE_FIELD_MAP.get(hbl_type)
+
+            def set_missing_values(source, target):
+                target.custom_hbl_type = hbl_type
+                if link_field:
+                    target.set(link_field, source.name)
+
+            doclist = get_mapped_doc(hbl_type, source_name, {
+                hbl_type: {
+                    "doctype": "Journal Entry",
+                },
+            }, target_doc, set_missing_values)
+            return doclist
+
+    frappe.throw("House Bill not found")
 
 
 @frappe.whitelist()
