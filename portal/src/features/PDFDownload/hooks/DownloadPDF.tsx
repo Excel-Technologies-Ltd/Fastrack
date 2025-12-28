@@ -42,9 +42,14 @@ export const useDownloadPDF = () => {
     }
 
     try {
-      const queryString = new URLSearchParams(argsMap).toString();
+      console.log("PDF Policy:", pdfPolicy);
+      console.log("Arguments Map:", argsMap);
 
+      const queryString = new URLSearchParams(argsMap).toString();
       const url = `/api/method/${pdfPolicy.DOWNLOAD_METHOD}?${queryString}`;
+
+      console.log("Download URL:", url);
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -53,7 +58,9 @@ export const useDownloadPDF = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error("API Error Response:", errorText);
+        throw new Error(`API error: ${response.statusText} - ${errorText}`);
       }
 
       const blob = await response.blob();
@@ -69,9 +76,11 @@ export const useDownloadPDF = () => {
 
       return { success: true };
     } catch (err) {
-      const errorMessage = (err as FrappeCallError)?.message || "Failed to preview PDF";
+      console.error("PDF Download Error:", err);
+      const errorMessage = (err as Error)?.message || "Failed to preview PDF";
       return {
         success: false,
+        errors: [{ field: "api", message: errorMessage }],
         apiError: errorMessage,
       };
     }

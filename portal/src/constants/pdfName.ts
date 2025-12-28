@@ -8,6 +8,8 @@ export const PDF_NAME_LIST = {
     DELIVERY_ORDER: "Delivery Order",
     TO_WHOM_CONCERN: "FC",
     INVOICE_FROM_MBL: "Invoice from MBL",
+    SEA_BILL_OF_LADING_DRAFT: "Sea Bill of Lading Draft",
+    SEA_BILL_OF_LADING_ORIGINAL: "Sea Bill of Lading Original",
 
 }
 

@@ -81,10 +81,18 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
 
 
 const { data :mblData  , error:mblError,  mutate:mblMutate,isLoading:mblIsLoading,isValidating:mblIsValidating } = useFrappeGetCall(
-  pdfPolicy.getMethod || "",
-  {
+  pdfPolicy.getMethod || "frappe.client.get",
+  pdfPolicy.getMethod ? {
     mbl_id: pdfFormOption.docName,
-  },
+  } : undefined,
+  {
+    swrConfig: {
+      revalidateOnMount: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    }
+  }
 )
 
   const { data, error,  mutate,isLoading,isValidating } = useFrappeGetDoc(

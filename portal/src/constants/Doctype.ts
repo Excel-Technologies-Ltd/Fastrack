@@ -49,4 +49,18 @@ export const DOCTYPE_LIST = {
             },
         },
     },
+    EXPORT_SEA_HOUSE_BILL: {
+        NAME: "Export Sea House Bill",
+        CHILD_DOCTYPE: {
+            CONTAINER_INFO: {
+                name: "container_info",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "custom_container_no", label: "Container No" },
+                    { name: "size", label: "Size" },
+                    { name: "no_of_pkg", label: "No of Pkg" },
+                ],
+            },
+        },
+    },
 };

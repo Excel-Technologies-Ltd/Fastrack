@@ -165,7 +165,37 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
             invoice_ids: "selectedId",
             doc_name: "docName"
         }
-    }
+    },
+    [PDF_NAME_LIST.SEA_BILL_OF_LADING_DRAFT]: {
+        name: PDF_NAME_LIST.SEA_BILL_OF_LADING_DRAFT,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        DOWNLOAD_METHOD: "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_draft_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName"
+        }
+    },
+    [PDF_NAME_LIST.SEA_BILL_OF_LADING_ORIGINAL]: {
+        name: PDF_NAME_LIST.SEA_BILL_OF_LADING_ORIGINAL,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        DOWNLOAD_METHOD: "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_original_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName"
+        }
+    },
 }
 
 
