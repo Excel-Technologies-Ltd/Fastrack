@@ -117,42 +117,51 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+     "Export Sea Master Bill": {
+		"on_update": "fastrack_erp.doc_events.mbl.validate",
+		"on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
+	},
+   
+    "Export Air Master Bill": {
+		"on_update": "fastrack_erp.doc_events.mbl.validate",
+		"on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
+	},
 	"Import Sea Master Bill": {
 		"on_update": "fastrack_erp.doc_events.mbl.validate",
 		"on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
 	},
- "Import Sea House Bill": {
-	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
-	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
- },
- "Import Air Master Bill": {
-	"on_update": "fastrack_erp.doc_events.mbl.validate",
-    "on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
- },
- "Import Air House Bill": {
-	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
-	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
- },
- "Export Sea House Bill": {
-	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
-	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
- },
- "Export Air House Bill": {
-	"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
-	"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
- },
- "Sales Invoice": {
-	"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
-	"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
- },
- "Purchase Invoice": {
-	"on_submit": "fastrack_erp.doc_events.purchase_invoice.after_submit",
-	"before_cancel": "fastrack_erp.doc_events.purchase_invoice.on_cancel",
- },
- "Journal Entry": {
-	"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
-	"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
- }
+	"Import Sea House Bill": {
+		"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+		"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+	},
+	"Import Air Master Bill": {
+		"on_update": "fastrack_erp.doc_events.mbl.validate",
+		"on_update_after_submit": "fastrack_erp.doc_events.mbl.validate",
+	},
+	"Import Air House Bill": {
+		"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+		"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+	},
+	"Export Sea House Bill": {
+		"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+		"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+	},
+	"Export Air House Bill": {
+		"on_submit": "fastrack_erp.doc_events.mbl.update_child_hbl",
+		"before_cancel": "fastrack_erp.doc_events.mbl.delete_child_hbl_on_cancel",
+	},
+	"Sales Invoice": {
+		"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
+		"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
+	},
+	"Purchase Invoice": {
+		"on_submit": "fastrack_erp.doc_events.purchase_invoice.after_submit",
+		"before_cancel": "fastrack_erp.doc_events.purchase_invoice.on_cancel",
+	},
+	"Journal Entry": {
+		"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
+		"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
+	}
 }
 
 # Scheduled Tasks
