@@ -119,7 +119,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "gr_weight",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Gr. Weight"
   },
   {
@@ -131,7 +131,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "total_container",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Total Container "
   },
   {
@@ -148,7 +148,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "etd",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "ETD"
   },
   {
@@ -206,7 +206,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-27 17:24:47.985094",
+ "modified": "2025-12-29 11:26:11.073583",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",
