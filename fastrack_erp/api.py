@@ -39,6 +39,7 @@ def make_air_house_bill(source_name, target_doc=None):
         target.mbl_no=source.mbl_no
         target.airlines=source.airlines
         target.consignee=''
+        target.no_of_pkg=''
         target.chargeable_weight=0
         target.agent=source.agent
         target.mbl_date=source.mbl_date
