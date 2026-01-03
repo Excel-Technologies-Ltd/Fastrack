@@ -769,22 +769,6 @@
  },
  {
   "default_value": null,
-  "doc_type": "Import Sea House Bill",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "is_system_generated": 0,
-  "modified": "2025-08-13 10:12:35.771078",
-  "module": null,
-  "name": "Import Sea House Bill-main-field_order",
-  "property": "field_order",
-  "property_type": "Data",
-  "row_name": null,
-  "value": "[\"hbl_open_by\", \"mbl_no\", \"hbl_id\", \"office_code\", \"hbl_type_code\", \"dg_status\", \"port_of_loading\", \"port_of_origin_code\", \"mv\", \"hbl_etd\", \"hbl_shipper\", \"customer\", \"customer_bin_no\", \"no_of_pkg_hbl\", \"pkg_code\", \"marks_and_numbers\", \"fv\", \"eta\", \"mbl_surrender_status\", \"column_break_twikq\", \"sales_person\", \"mbl_link\", \"hbl_date\", \"office_name\", \"nature\", \"hbl_hold_instruction\", \"port_of_discharge\", \"pod_code\", \"mv_voyage_no\", \"hbl_remarks\", \"hbl_consignee\", \"consignee_bin_no\", \"lc\", \"gross_weight\", \"pkg_name\", \"description_of_good\", \"fv__v_no\", \"etb\", \"total_container_hbl\", \"column_break_r8svn\", \"reference_number\", \"mbl_date\", \"agent\", \"shipping_line\", \"inco_term\", \"hold_reason\", \"port_of_delivery\", \"co_loader\", \"carrier\", \"carrier_code\", \"notify_to\", \"notify_bin_no\", \"lc_date\", \"hbl_vol_cbm\", \"status\", \"hbl_line_no\", \"fv_etd\", \"eta_dhaka\", \"container_type\", \"section_break_tvziq\", \"carrier_name\", \"agent_name\", \"shippine_line_name\", \"column_break_svasa\", \"section_break_vf8zr\", \"container_info\", \"section_break_nfgoz\", \"column_break_za24b\", \"amended_from\", \"section_break_hgk7r\", \"do_validity\", \"do_party\", \"do_party_address\", \"do_party_address1\", \"cf_agent\", \"line_no\", \"ocean_freight_remarks\", \"column_break_tqh0h\", \"bill_of_entry\", \"shipping_line_custom\", \"shipping_line_address_custom\", \"bl_no\", \"bl_date\", \"man_gr_wt\", \"man_pkg\", \"remarks\", \"column_break_zkvni\", \"ex_rate\", \"rotation\", \"section_break_igwms\", \"generate\", \"container_cost_info\", \"total\", \"average_total\", \"draft_invoice_list\", \"invoice_list\", \"total_invoice_amount\", \"payment_entry_list\", \"total_payment\", \"purchase_invoice_list\", \"total_purchase_amount\", \"profit_share_list\", \"total_profit_share\", \"hbl_weight\", \"hbl_doc_name\", \"mbl_doctype\"]"
- },
- {
-  "default_value": null,
   "doc_type": "Customer",
   "docstatus": 0,
   "doctype": "Property Setter",
@@ -4046,5 +4030,21 @@
   "property_type": "Data",
   "row_name": null,
   "value": "[\"custom_full_name\", null, \"phone\", \"is_primary_phone\", \"is_primary_mobile_no\"]"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Import Sea House Bill",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocType",
+  "field_name": null,
+  "is_system_generated": 0,
+  "modified": "2026-01-03 13:40:24.773863",
+  "module": null,
+  "name": "Import Sea House Bill-main-field_order",
+  "property": "field_order",
+  "property_type": "Data",
+  "row_name": null,
+  "value": "[\"hbl_open_by\", \"mbl_no\", \"hbl_id\", \"hbl_data\", \"office_code\", \"hbl_type_code\", \"dg_status\", \"port_of_loading\", \"port_of_origin_code\", \"mv\", \"hbl_etd\", \"hbl_shipper\", \"customer\", \"customer_bin_no\", \"no_of_pkg_hbl\", \"pkg_code\", \"marks_and_numbers\", \"fv\", \"eta\", \"mbl_surrender_status\", \"column_break_ewerg\", \"sales_person\", \"mbl_date\", \"hbl_date\", \"mbl_link\", \"office_name\", \"nature\", \"hbl_hold_instruction\", \"port_of_discharge\", \"pod_code\", \"mv_voyage_no\", \"hbl_remarks\", \"hbl_consignee\", \"consignee_bin_no\", \"lc\", \"gross_weight\", \"pkg_name\", \"description_of_good\", \"fv__v_no\", \"etb\", \"total_container_hbl\", \"free_time\", \"unstuffing_date\", \"column_break_ehoms\", \"sheed_number\", \"reference_number\", \"agent\", \"shipping_line\", \"inco_term\", \"hold_reason\", \"port_of_delivery\", \"co_loader\", \"carrier\", \"carrier_code\", \"notify_to\", \"notify_bin_no\", \"lc_date\", \"hbl_vol_cbm\", \"status\", \"hbl_line_no\", \"fv_etd\", \"eta_dhaka\", \"container_type\", \"section_break_tvziq\", \"carrier_name\", \"agent_name\", \"shippine_line_name\", \"section_break_vf8zr\", \"container_info\", \"section_break_nfgoz\", \"amended_from\", \"section_break_hgk7r\", \"do_validity\", \"do_party\", \"do_party_address\", \"do_party_address1\", \"cf_agent\", \"line_no\", \"ocean_freight_remarks\", \"column_break_qkkhg\", \"bill_of_entry\", \"shipping_line_custom\", \"shipping_line_address_custom\", \"bl_no\", \"bl_date\", \"man_gr_wt\", \"man_pkg\", \"remarks\", \"column_break_8kpwz\", \"ex_rate\", \"rotation\", \"section_break_igwms\", \"generate\", \"container_cost_info\", \"total\", \"average_total\", \"draft_invoice_list\", \"invoice_list\", \"total_invoice_amount\", \"payment_entry_list\", \"total_payment\", \"purchase_invoice_list\", \"total_purchase_amount\", \"profit_share_list\", \"total_profit_share\", \"hbl_weight\", \"hbl_doc_name\", \"mbl_doctype\", \"invoice_uid\"]"
  }
 ]
