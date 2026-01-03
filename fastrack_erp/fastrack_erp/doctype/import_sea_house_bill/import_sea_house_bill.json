@@ -69,8 +69,8 @@
   "eta_dhaka",
   "container_type",
   "total_container_hbl",
-  "sheed_number",
   "mbl_link",
+  "sheed_number",
   "section_break_tvziq",
   "carrier_name",
   "agent_name",
@@ -390,6 +390,7 @@
   {
    "fieldname": "reference_number",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Reference Number"
   },
   {
@@ -854,7 +855,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2025-12-22 12:26:50.061483",
+ "modified": "2026-01-03 16:03:07.492197",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
