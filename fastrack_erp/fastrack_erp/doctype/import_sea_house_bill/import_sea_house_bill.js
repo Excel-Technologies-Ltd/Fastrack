@@ -1,6 +1,6 @@
 frappe.ui.form.on('Import Sea House Bill', {
-    
-    
+
+
     refresh:function(frm){
         const container_cost_info = frm.doc.container_cost_info;
         const total_price = container_cost_info.reduce((acc, item) => acc + item.qty * item.amount, 0);
@@ -9,6 +9,14 @@ frappe.ui.form.on('Import Sea House Bill', {
         const total_qty = container_cost_info.reduce((acc, item) => acc + item.qty, 0);
         console.log(total_qty)
         frm.set_value("average_total", total_price/total_qty);
+
+        // Hide/show container_info based on total_container_hbl
+        toggle_container_info_visibility(frm);
+    },
+
+    total_container_hbl: function(frm) {
+        // Toggle visibility when total_container_hbl changes
+        toggle_container_info_visibility(frm);
     },
     onload: function(frm){
         if(frm.is_new()){
@@ -255,8 +263,29 @@ frappe.ui.form.on('Import Sea House Bill', {
 });
 
 frappe.ui.form.on('Fastrack Sea Item', {
-    // check if any row container_no empty throw error
-    
+    // Validate before adding a new row
+    before_container_info_add: function(frm) {
+        const total_containers = frm.doc.total_container_hbl || 0;
+        const actual_containers = (frm.doc.container_info || []).length;
+
+        if (actual_containers >= total_containers) {
+            frappe.msgprint({
+                title: __('Container Limit Reached'),
+                message: __('Cannot add more than {0} container(s). Please update "Total Container HBL" field to add more containers.', [total_containers]),
+                indicator: 'red'
+            });
+            return false; // Prevent adding the row
+        }
+    },
+
+    container_info_add: function(frm, cdt, cdn) {
+        // Validate after row is added
+        if (!validate_container_limit(frm)) {
+            // Remove the last added row if limit exceeded
+            const row = frappe.get_doc(cdt, cdn);
+            frm.get_field('container_info').grid.grid_rows_by_docname[cdn].remove();
+        }
+    }
 });
 
 
@@ -302,7 +331,37 @@ frappe.ui.form.on('Container Cost Info', {
         var usd_amount = row.amount || 0;
         var ex_rate = row.ex_rate || 0;  // Get from parent document
         var bdt_amount = usd_amount * ex_rate;
-        
+
         frappe.model.set_value(cdt, cdn, "amountbdt", bdt_amount);
     }
 });
+
+// Helper function to toggle container_info visibility
+function toggle_container_info_visibility(frm) {
+    const total_containers = frm.doc.total_container_hbl || 0;
+
+    if (total_containers === 0) {
+        // Hide container_info field when total is 0 or null
+        frm.set_df_property('container_info', 'hidden', 1);
+    } else {
+        // Show container_info field
+        frm.set_df_property('container_info', 'hidden', 0);
+    }
+}
+
+// Helper function to validate and control container_info row limit
+function validate_container_limit(frm) {
+    const total_containers = frm.doc.total_container_hbl || 0;
+    const actual_containers = (frm.doc.container_info || []).length;
+
+    // If limit exceeded, prevent adding and show message
+    if (actual_containers > total_containers) {
+        frappe.msgprint({
+            title: __('Container Limit Exceeded'),
+            message: __('Cannot add more than {0} container(s). Please update "Total Container HBL" field to add more containers.', [total_containers]),
+            indicator: 'red'
+        });
+        return false;
+    }
+    return true;
+}

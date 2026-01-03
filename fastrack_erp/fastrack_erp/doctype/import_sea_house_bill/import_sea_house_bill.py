@@ -56,6 +56,9 @@ class ImportSeaHouseBill(Document):
 		self.total = total_price
 		self.average_total = (total_price / total_qty) if total_qty else 0
 
+		# Validate container count
+		self.validate_container_count()
+
 	def on_update(self):
 		total_price = 0
 		total_qty = 0
@@ -66,12 +69,12 @@ class ImportSeaHouseBill(Document):
 
 		self.total = total_price
 		self.average_total = (total_price / total_qty) if total_qty else 0
+		self.validate_container_count()
 		self.validate_container_name()
 		self.validate_container_weight()
 		self.validate_no_pkg_in_container()
 		self.hbl_weight= sum(item.weight for item in self.container_info)
-		self.gross_weight= self.hbl_weight
-		self.total_container_hbl= len(self.container_info)		
+		self.gross_weight= self.hbl_weight		
 	def on_update_after_submit(self):
 		self.validate_no_pkg_in_container()
 		total_price = 0
@@ -134,6 +137,18 @@ class ImportSeaHouseBill(Document):
 		total_no_of_pkg = sum(item.no_of_pkg for item in self.container_info)
 		if total_no_of_pkg != self.no_of_pkg_hbl:
 			frappe.throw(f"Total number of package in container does not match with total package in house bill")
+
+	def validate_container_count(self):
+		"""Validate that container_info rows don't exceed total_container_hbl"""
+		total_containers = self.total_container_hbl or 0
+		actual_containers = len(self.container_info) if self.container_info else 0
+
+		if actual_containers > total_containers:
+			frappe.throw(
+				f"Cannot add more than {total_containers} container(s). "
+				f"You currently have {actual_containers} containers. "
+				f"Please update 'Total Container HBL' field to add more containers."
+			)
 
 
 @frappe.whitelist()

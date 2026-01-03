@@ -427,14 +427,20 @@ def get_sea_hbl_list_for_xml(master_bill_no="MBL-2025-05-00015"):
         for hbl_info in doc.hbl_info:
             if hbl_info.is_create:
                 hbl_doc = frappe.get_doc("Import Sea House Bill", hbl_info.hbl_link)
+                # Build Bol_id dict, only include DG_status if it has data
+                bol_id_dict = {
+                    "Bol_reference":hbl_doc.hbl_id,
+                    "Line_number":hbl_doc.hbl_line_no,
+                    "Bol_nature":hbl_doc.nature,
+                    "Bol_type_code":hbl_doc.hbl_type_code,
+                }
+
+                # Only add DG_status if it has a value
+                if hbl_doc.dg_status:
+                    bol_id_dict["DG_status"] = hbl_doc.dg_status
+
                 hbl_dict_for_xml= {
-                    "Bol_id":{
-                        "Bol_reference":hbl_doc.hbl_id,
-                        "Line_number":hbl_doc.hbl_line_no,
-                        "Bol_nature":hbl_doc.nature,
-                        "Bol_type_code":hbl_doc.hbl_type_code,
-                        "DG_status":hbl_doc.dg_status
-                    },
+                    "Bol_id": bol_id_dict,
                     "Consolidated_Cargo": 0 if hbl_doc.container_type == "FCL" else 1,
                     "Load_unload_place":{
                         "Port_of_origin_code":hbl_doc.port_of_origin_code,
@@ -517,13 +523,26 @@ import html
 def clean_address(raw_html):
     # Decode HTML entities like &lt;br&gt; -> <br>
     decoded = html.unescape(raw_html)
-    
+
     # Replace <br> tags with commas, and strip whitespace
     cleaned = decoded.replace('<br>', ',').replace('\n', '')
-    
+
     # Remove extra commas and whitespace
     parts = [part.strip() for part in cleaned.split(',') if part.strip()]
-    return ','.join(parts)
+    full_address = ','.join(parts)
+
+    # Split by # and take only the first part (data before #)
+    return full_address.split('#')[0].strip()
+
+def get_address_line1(address_name):
+    """Get only address_line1 from Address document"""
+    if not address_name:
+        return ""
+    try:
+        address_line1 = frappe.db.get_value("Address", address_name, "address_line1")
+        return address_line1 or ""
+    except:
+        return ""
 
 def smart_number(value):
     return int(value) if value == int(value) else float(value)

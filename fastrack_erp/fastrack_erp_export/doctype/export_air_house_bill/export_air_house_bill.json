@@ -383,7 +383,7 @@
    "fieldname": "agent",
    "fieldtype": "Link",
    "label": "Agent",
-   "options": "Supplier"
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -655,7 +655,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-27 11:51:07.269963",
+ "modified": "2026-01-03 18:42:34.424147",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",
