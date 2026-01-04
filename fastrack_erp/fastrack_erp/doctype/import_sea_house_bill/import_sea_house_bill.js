@@ -15,6 +15,23 @@ frappe.ui.form.on('Import Sea House Bill', {
     },
 
     total_container_hbl: function(frm) {
+        // Validate against Master Bill total containers
+        if (frm.doc.mbl_link && frm.doc.total_container_hbl) {
+            frappe.db.get_value('Import Sea Master Bill', frm.doc.mbl_link, 'total_container')
+                .then(r => {
+                    const mbl_total_containers = r.message.total_container || 0;
+                    if (frm.doc.total_container_hbl > mbl_total_containers) {
+                        frappe.msgprint({
+                            title: __('Invalid Container Count'),
+                            message: __('Total Container HBL ({0}) cannot exceed Master Bill\'s total containers ({1}). Please set it to {2} or less.',
+                                [frm.doc.total_container_hbl, mbl_total_containers, mbl_total_containers]),
+                            indicator: 'red'
+                        });
+                        frm.set_value('total_container_hbl', mbl_total_containers);
+                    }
+                });
+        }
+
         // Toggle visibility when total_container_hbl changes
         toggle_container_info_visibility(frm);
     },

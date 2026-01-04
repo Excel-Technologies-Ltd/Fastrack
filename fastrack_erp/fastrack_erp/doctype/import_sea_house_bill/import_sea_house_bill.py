@@ -139,15 +139,30 @@ class ImportSeaHouseBill(Document):
 			frappe.throw(f"Total number of package in container does not match with total package in house bill")
 
 	def validate_container_count(self):
-		"""Validate that container_info rows don't exceed total_container_hbl"""
+		"""Validate that container_info rows match total_container_hbl"""
 		total_containers = self.total_container_hbl or 0
 		actual_containers = len(self.container_info) if self.container_info else 0
+
+		# Validate against Master Bill total containers
+		if self.mbl_link:
+			mbl_total_containers = frappe.db.get_value('Import Sea Master Bill', self.mbl_link, 'total_container') or 0
+			if total_containers > mbl_total_containers:
+				frappe.throw(
+					f"Total Container HBL ({total_containers}) cannot exceed Master Bill's total containers ({mbl_total_containers}). "
+					f"Please set Total Container HBL to {mbl_total_containers} or less."
+				)
 
 		if actual_containers > total_containers:
 			frappe.throw(
 				f"Cannot add more than {total_containers} container(s). "
 				f"You currently have {actual_containers} containers. "
 				f"Please update 'Total Container HBL' field to add more containers."
+			)
+
+		if total_containers > 0 and actual_containers < total_containers:
+			frappe.throw(
+				f"Total Container HBL is set to {total_containers} but you only have {actual_containers} container(s). "
+				f"Please add {total_containers - actual_containers} more container row(s) in Container Info."
 			)
 
 
