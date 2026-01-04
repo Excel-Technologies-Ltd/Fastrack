@@ -10,6 +10,6 @@ class CustomPaymentEntry(PaymentEntry):
 		self.make_gl_entries()
 		self.update_outstanding_amounts()
 		self.update_payment_schedule()
-		self.update_payment_requests()
+		# self.update_payment_requests()
 		self.update_advance_paid()  
 		self.set_status()
