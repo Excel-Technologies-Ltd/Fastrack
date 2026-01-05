@@ -237,6 +237,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "container_info",
    "fieldtype": "Table",
    "label": "Container Info.",
@@ -368,7 +369,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-22 17:43:54.724028",
+ "modified": "2026-01-05 12:13:30.509931",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

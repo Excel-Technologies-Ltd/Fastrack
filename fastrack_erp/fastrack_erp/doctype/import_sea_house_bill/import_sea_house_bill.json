@@ -374,13 +374,17 @@
    "label": "ETB"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "free_time",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Free Time"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "unstuffing_date",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Unstuffing Date"
   },
   {
@@ -388,6 +392,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "reference_number",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -562,6 +567,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "container_info",
    "fieldtype": "Table",
    "label": "Container Info",
@@ -826,8 +832,10 @@
    "label": "MBL Date "
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sheed_number",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Sheed Number"
   },
   {
@@ -855,7 +863,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-03 16:03:07.492197",
+ "modified": "2026-01-05 12:14:00.378796",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

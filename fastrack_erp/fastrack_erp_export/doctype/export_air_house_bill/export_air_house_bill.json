@@ -20,14 +20,17 @@
   "also_notify_party",
   "agents_iata_code",
   "issuing_carriers_agent_name_and_city",
+  "currency",
   "port_of_loading",
   "pol_code",
   "no_of_pkg",
   "ratecharge",
-  "signature",
+  "handling_information",
   "prepaid",
+  "valuation_charge",
   "total_prepaid",
   "currency_conversion_rates",
+  "signature",
   "column_break_aevai",
   "sales_person",
   "mbl_date",
@@ -38,18 +41,18 @@
   "lc_no",
   "account_no",
   "flight_no",
-  "currency",
+  "amount_of_insurance",
   "port_of_delivery",
   "pod_code",
   "hbl_gr_weight",
   "total",
   "date",
   "weight_charge",
-  "valuation_charge",
   "tax",
+  "total_collect",
+  "cc_charges_in_dest_currency",
+  "date_of_issue",
   "total_other_charge_due_agent",
-  "total_other_charges_due_agent",
-  "total_other_charge_due_carrier",
   "column_break_tecde",
   "reference_number",
   "agent",
@@ -59,18 +62,19 @@
   "date_3",
   "date_4",
   "inco_term",
+  "flight_date",
   "etd",
-  "amount_of_insurance",
   "eta",
   "declare_value_for_customes",
   "chargeable_weight",
   "other_charges",
-  "place",
+  "sci",
   "collect",
-  "total_collect",
-  "cc_charges_in_dest_currency",
+  "total_other_charges_due_agent",
+  "total_other_charge_due_carrier",
+  "export_air_house_bill",
+  "place_of_issue",
   "flight_name",
-  "flight_date",
   "consignee_bin",
   "notify_party_bin",
   "customer_bin",
@@ -104,7 +108,7 @@
    "fieldname": "hbl_open_by",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "HBL Open By",
+   "label": "HAWB Open By",
    "options": "User",
    "read_only": 1
   },
@@ -127,14 +131,14 @@
    "fieldname": "mbl_no",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "MBL No.",
+   "label": "MAWB No.",
    "options": "Export Air Master Bill"
   },
   {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "HBL No.",
+   "label": "HAWB No.",
    "unique": 1
   },
   {
@@ -250,13 +254,13 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
-   "label": "MBL Date"
+   "label": "MAWB Date"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_date",
    "fieldtype": "Date",
-   "label": "HBL Date"
+   "label": "HAWB Date"
   },
   {
    "allow_on_submit": 1,
@@ -328,9 +332,11 @@
   },
   {
    "allow_on_submit": 1,
+   "default": "Export Air House Bill",
    "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
+   "fieldtype": "Data",
+   "label": "Export Air House Bill",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -351,9 +357,9 @@
    "label": "TAX"
   },
   {
-   "allow_on_submit": 1,
    "fieldname": "total_other_charge_due_agent",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Total Other Charge Due Agent"
   },
   {
@@ -461,12 +467,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "place",
-   "fieldtype": "Data",
-   "label": "Place"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "collect",
    "fieldtype": "Data",
    "label": "Collect"
@@ -492,7 +492,6 @@
   {
    "fieldname": "flight_date",
    "fieldtype": "Date",
-   "hidden": 1,
    "label": "Flight Date"
   },
   {
@@ -571,7 +570,7 @@
   {
    "fieldname": "hbl_id",
    "fieldtype": "Data",
-   "label": "HBL No"
+   "label": "HAWB No"
   },
   {
    "fieldname": "billing_section",
@@ -650,12 +649,43 @@
    "fieldtype": "Table",
    "label": "Draft Invoice List",
    "options": "Fastrack Draft Bill"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "handling_information",
+   "fieldtype": "Data",
+   "label": "Handling Information"
+  },
+  {
+   "fieldname": "date_of_issue",
+   "fieldtype": "Date",
+   "label": "Date of Issue"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "sci",
+   "fieldtype": "Data",
+   "label": "SCI"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Export Air House Bill",
+   "fieldname": "export_air_house_bill",
+   "fieldtype": "Data",
+   "label": "Export Air House Bill",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "place_of_issue",
+   "fieldtype": "Data",
+   "label": "Place of Issue"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-03 18:42:34.424147",
+ "modified": "2026-01-05 18:04:26.840891",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",

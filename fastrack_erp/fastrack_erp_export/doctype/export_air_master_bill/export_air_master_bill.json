@@ -42,7 +42,7 @@
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "MBL No.",
+   "label": "MAWB No.",
    "reqd": 1,
    "unique": 1
   },
@@ -87,7 +87,7 @@
    "fieldname": "mbl_open_by",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "MBL Open By",
+   "label": "MAWB Open By",
    "options": "User",
    "read_only": 1
   },
@@ -95,7 +95,7 @@
    "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
-   "label": "MBL Date"
+   "label": "MAWB Date"
   },
   {
    "allow_on_submit": 1,
@@ -169,12 +169,12 @@
   {
    "fieldname": "mbl_id",
    "fieldtype": "Data",
-   "label": "MBL No"
+   "label": "MAWB No"
   },
   {
    "fieldname": "section_break_hbl_info",
    "fieldtype": "Section Break",
-   "label": "HBL Info"
+   "label": "HAWB Info"
   },
   {
    "allow_on_submit": 1,
@@ -192,7 +192,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2025-12-27 11:40:37.951616",
+ "modified": "2026-01-05 17:20:14.637550",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",
