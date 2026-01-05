@@ -99,6 +99,7 @@ def make_export_air_house_bill(source_name, target_doc=None):
         target.airline=source.airline
         target.shipper=''
         target.no_of_pkg=''
+        target.flight_no=source.flight
         target.chargeable_weight=''
         target.mbl_date=source.mbl_date
         target.port_of_loading=source.port_of_loading
