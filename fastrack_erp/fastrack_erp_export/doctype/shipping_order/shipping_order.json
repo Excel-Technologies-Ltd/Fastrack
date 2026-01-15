@@ -60,7 +60,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "net_weight",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Net Weight"
   },
   {
@@ -88,13 +88,13 @@
   {
    "allow_on_submit": 1,
    "fieldname": "carton_qty",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Carton QTY"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "gr_weight",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Gr. Weight"
   },
   {
@@ -122,13 +122,13 @@
   {
    "allow_on_submit": 1,
    "fieldname": "total_pcs",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Total Pcs"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "cbm",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "CBM"
   },
   {
@@ -179,7 +179,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-27 11:54:12.784845",
+ "modified": "2026-01-15 14:00:34.778544",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Shipping Order",

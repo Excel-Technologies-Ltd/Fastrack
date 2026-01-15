@@ -9,6 +9,9 @@
  "engine": "InnoDB",
  "field_order": [
   "hbl_open_by",
+  "column_break_glyss",
+  "sales_person",
+  "section_break_oc7zg",
   "mbl_no",
   "hbl_id",
   "hbl_data",
@@ -29,7 +32,6 @@
   "eta",
   "mbl_surrender_status",
   "column_break_ewerg",
-  "sales_person",
   "mbl_date",
   "hbl_date",
   "office_name",
@@ -172,8 +174,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
+   "fieldtype": "Link",
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -299,8 +302,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_discharge",
-   "fieldtype": "Data",
-   "label": "Port of Discharge"
+   "fieldtype": "Link",
+   "label": "Port of Discharge",
+   "options": "Port of Discharge"
   },
   {
    "allow_on_submit": 1,
@@ -433,8 +437,9 @@
    "fetch_from": "mbl_no.port_of_delivery",
    "fetch_if_empty": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -845,6 +850,14 @@
   {
    "fieldname": "column_break_8kpwz",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_glyss",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_oc7zg",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -863,7 +876,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-05 12:14:00.378796",
+ "modified": "2026-01-15 13:31:35.651322",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

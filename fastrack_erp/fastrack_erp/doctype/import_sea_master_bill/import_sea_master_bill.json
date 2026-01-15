@@ -122,8 +122,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port Of Loading"
+   "fieldtype": "Link",
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -189,8 +190,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_discharge",
-   "fieldtype": "Data",
-   "label": "Port of Discharge"
+   "fieldtype": "Link",
+   "label": "Port of Discharge",
+   "options": "Port of Discharge"
   },
   {
    "allow_on_submit": 1,
@@ -253,8 +255,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "fieldname": "section_break_plp8q",
@@ -369,7 +372,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-01-05 12:13:30.509931",
+ "modified": "2026-01-15 13:30:05.766820",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

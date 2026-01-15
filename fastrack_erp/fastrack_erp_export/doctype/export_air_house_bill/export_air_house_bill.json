@@ -46,7 +46,7 @@
   "pod_code",
   "hbl_gr_weight",
   "total",
-  "date",
+  "vendor",
   "weight_charge",
   "tax",
   "total_collect",
@@ -187,8 +187,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
+   "fieldtype": "Link",
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -308,8 +309,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -329,14 +331,6 @@
    "fieldname": "total",
    "fieldtype": "Data",
    "label": "Total"
-  },
-  {
-   "allow_on_submit": 1,
-   "default": "Export Air House Bill",
-   "fieldname": "date",
-   "fieldtype": "Data",
-   "label": "Export Air House Bill",
-   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -680,12 +674,19 @@
    "fieldname": "place_of_issue",
    "fieldtype": "Data",
    "label": "Place of Issue"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vendor",
+   "fieldtype": "Link",
+   "label": "Vendor",
+   "options": "Supplier"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-05 18:04:26.840891",
+ "modified": "2026-01-15 14:11:17.300992",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",

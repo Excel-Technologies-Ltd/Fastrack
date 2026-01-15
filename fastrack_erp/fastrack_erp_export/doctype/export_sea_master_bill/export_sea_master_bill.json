@@ -75,9 +75,10 @@
   },
   {
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Port Of Loading"
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -116,8 +117,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_discharge",
-   "fieldtype": "Data",
-   "label": "Port of Discharge"
+   "fieldtype": "Link",
+   "label": "Port of Discharge",
+   "options": "Port of Discharge"
   },
   {
    "allow_on_submit": 1,
@@ -157,8 +159,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -209,7 +212,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-03 18:43:07.051730",
+ "modified": "2026-01-15 13:44:55.296435",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

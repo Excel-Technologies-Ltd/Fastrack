@@ -147,8 +147,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
+   "fieldtype": "Link",
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -260,8 +261,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_discharge",
-   "fieldtype": "Data",
-   "label": "Port of Discharge"
+   "fieldtype": "Link",
+   "label": "Port of Discharge",
+   "options": "Port of Discharge"
   },
   {
    "allow_on_submit": 1,
@@ -353,8 +355,9 @@
    "fetch_from": "mbl_no.port_of_delivery",
    "fetch_if_empty": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -415,9 +418,10 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_receipt",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Port of Receipt"
+   "label": "Port of Receipt",
+   "options": "Port of Receipt"
   },
   {
    "fieldname": "column_break_uu0ul",
@@ -523,7 +527,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-03 18:42:14.473688",
+ "modified": "2026-01-15 13:48:32.221921",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

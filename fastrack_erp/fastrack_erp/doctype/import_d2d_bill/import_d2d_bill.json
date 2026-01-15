@@ -110,8 +110,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_loading",
-   "fieldtype": "Data",
-   "label": "Port of Loading"
+   "fieldtype": "Link",
+   "label": "Port of Loading",
+   "options": "Port of Loading"
   },
   {
    "allow_on_submit": 1,
@@ -199,8 +200,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "port_of_delivery",
-   "fieldtype": "Data",
-   "label": "Port of Delivery"
+   "fieldtype": "Link",
+   "label": "Port of Delivery",
+   "options": "Port of Delivery"
   },
   {
    "allow_on_submit": 1,
@@ -239,8 +241,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "shipment_mode",
-   "fieldtype": "Data",
-   "label": "Shipment Mode"
+   "fieldtype": "Select",
+   "label": "Shipment Mode",
+   "options": "\nSea\nAir"
   },
   {
    "fieldname": "billing_section",
@@ -324,7 +327,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-27 11:12:35.947204",
+ "modified": "2026-01-15 13:43:35.657561",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
