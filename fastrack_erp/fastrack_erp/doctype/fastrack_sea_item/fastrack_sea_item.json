@@ -14,6 +14,7 @@
   "con_type",
   "status",
   "seal_no",
+  "wagon_no",
   "imco",
   "un",
   "ctn_location",
@@ -119,12 +120,17 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Vol (CBM)"
+  },
+  {
+   "fieldname": "wagon_no",
+   "fieldtype": "Data",
+   "label": "Wagon No"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-21 00:24:50.015546",
+ "modified": "2026-01-25 16:41:27.949077",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Sea Item",
