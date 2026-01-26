@@ -229,7 +229,7 @@ frappe.ui.form.on('Export Sea House Bill', {
     }
 });
 
-// Container Info child table validation
+// Container Info child table validation and calculations
 frappe.ui.form.on('Fastrack Export Sea Item', {
     before_container_info_add: function(frm) {
         const total_containers = frm.doc.total_container || 0;
@@ -249,6 +249,22 @@ frappe.ui.form.on('Fastrack Export Sea Item', {
         if (!validate_export_sea_container_limit(frm)) {
             frm.get_field('container_info').grid.grid_rows_by_docname[cdn].remove();
         }
+    },
+
+    container_info_remove: function(frm) {
+        calculate_container_totals(frm);
+    },
+
+    no_of_pkg: function(frm) {
+        calculate_container_totals(frm);
+    },
+
+    weight: function(frm) {
+        calculate_container_totals(frm);
+    },
+
+    cbm: function(frm) {
+        calculate_container_totals(frm);
     }
 });
 
@@ -266,4 +282,23 @@ function validate_export_sea_container_limit(frm) {
         return false;
     }
     return true;
+}
+
+// Helper function to calculate container totals
+function calculate_container_totals(frm) {
+    const container_info = frm.doc.container_info || [];
+
+    let total_pkg = 0;
+    let total_weight = 0;
+    let total_cbm = 0;
+
+    container_info.forEach(row => {
+        total_pkg += row.no_of_pkg || 0;
+        total_weight += row.weight || 0;
+        total_cbm += row.cbm || 0;
+    });
+
+    frm.set_value('no_of_pkg_hbl', total_pkg);
+    frm.set_value('gross_weight', total_weight);
+    frm.set_value('hbl_vol_cbm', total_cbm);
 }
