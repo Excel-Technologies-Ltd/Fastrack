@@ -15,6 +15,26 @@ frappe.ui.form.on('Export Sea Master Bill', {
 
 // Child Table Logic: Export Sea HBL Info
 frappe.ui.form.on('Export Sea HBL Info', {
+	before_hbl_info_add: function(frm) {
+		const total_hbl = frm.doc.total__hbl || 0;
+		const actual_hbl = (frm.doc.hbl_info || []).length;
+
+		if (actual_hbl >= total_hbl) {
+			frappe.msgprint({
+				title: __('HBL Limit Reached'),
+				message: __('Cannot add more than {0} HBL(s). Please increase "Total HBL" field to add more.', [total_hbl]),
+				indicator: 'red'
+			});
+			return false;
+		}
+	},
+
+	hbl_info_add: function(frm, cdt, cdn) {
+		if (!validate_export_sea_hbl_limit(frm)) {
+			frm.get_field('hbl_info').grid.grid_rows_by_docname[cdn].remove();
+		}
+	},
+
 	create_hbl: function (frm, cdt, cdn) {
 		const row = locals[cdt][cdn];
 
@@ -51,3 +71,19 @@ frappe.ui.form.on('Export Sea HBL Info', {
 		});
 	},
 });
+
+// Helper function to validate HBL limit
+function validate_export_sea_hbl_limit(frm) {
+	const total_hbl = frm.doc.total__hbl || 0;
+	const actual_hbl = (frm.doc.hbl_info || []).length;
+
+	if (actual_hbl > total_hbl) {
+		frappe.msgprint({
+			title: __('HBL Limit Exceeded'),
+			message: __('Cannot add more than {0} HBL(s). Please increase "Total HBL" field to add more.', [total_hbl]),
+			indicator: 'red'
+		});
+		return false;
+	}
+	return true;
+}

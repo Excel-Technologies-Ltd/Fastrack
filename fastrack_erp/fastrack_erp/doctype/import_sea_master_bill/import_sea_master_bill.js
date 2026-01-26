@@ -8,6 +8,7 @@ frappe.ui.form.on('Import Sea Master Bill', {
             });
         }
     },
+
     onload: function(frm){
         if(frm.is_new()){
             frm.set_value("mbl_open_by",frappe.session.user)
@@ -15,11 +16,52 @@ frappe.ui.form.on('Import Sea Master Bill', {
     }
 });
 
+// Container Info child table validation (Fastrack Item is the child DocType)
+frappe.ui.form.on('Fastrack Item', {
+    before_container_info_add: function(frm) {
+        const total_containers = frm.doc.total_container || 0;
+        const actual_containers = (frm.doc.container_info || []).length;
+
+        if (actual_containers >= total_containers) {
+            frappe.msgprint({
+                title: __('Container Limit Reached'),
+                message: __('Cannot add more than {0} container(s). Please increase "Total Container" field to add more.', [total_containers]),
+                indicator: 'red'
+            });
+            return false;
+        }
+    },
+
+    container_info_add: function(frm, cdt, cdn) {
+        if (!validate_container_limit(frm)) {
+            const row = frappe.get_doc(cdt, cdn);
+            frm.get_field('container_info').grid.grid_rows_by_docname[cdn].remove();
+        }
+    }
+});
+
 // Child Table Logic: HBL Info
 frappe.ui.form.on('HBL Info', {
-    // dynamically field change 
-   
-    
+    before_hbl_info_add: function(frm) {
+        const total_hbl = frm.doc.total_no_of_hbl || 0;
+        const actual_hbl = (frm.doc.hbl_info || []).length;
+
+        if (actual_hbl >= total_hbl) {
+            frappe.msgprint({
+                title: __('HBL Limit Reached'),
+                message: __('Cannot add more than {0} HBL(s). Please increase "Total No. of HBL" field to add more.', [total_hbl]),
+                indicator: 'red'
+            });
+            return false;
+        }
+    },
+
+    hbl_info_add: function(frm, cdt, cdn) {
+        if (!validate_hbl_limit(frm)) {
+            frm.get_field('hbl_info').grid.grid_rows_by_docname[cdn].remove();
+        }
+    },
+
     create_hbl: function (frm, cdt, cdn) {
         const row = locals[cdt][cdn];
        if(frm.doc.docstatus!=1){
@@ -98,4 +140,36 @@ function toggle_buttons(row) {
             }
         });
     }, 100); // Small delay to ensure the grid is rendered
+}
+
+// Helper function to validate container limit
+function validate_container_limit(frm) {
+    const total_containers = frm.doc.total_container || 0;
+    const actual_containers = (frm.doc.container_info || []).length;
+
+    if (actual_containers > total_containers) {
+        frappe.msgprint({
+            title: __('Container Limit Exceeded'),
+            message: __('Cannot add more than {0} container(s). Please increase "Total Container" field to add more.', [total_containers]),
+            indicator: 'red'
+        });
+        return false;
+    }
+    return true;
+}
+
+// Helper function to validate HBL limit
+function validate_hbl_limit(frm) {
+    const total_hbl = frm.doc.total_no_of_hbl || 0;
+    const actual_hbl = (frm.doc.hbl_info || []).length;
+
+    if (actual_hbl > total_hbl) {
+        frappe.msgprint({
+            title: __('HBL Limit Exceeded'),
+            message: __('Cannot add more than {0} HBL(s). Please increase "Total No. of HBL" field to add more.', [total_hbl]),
+            indicator: 'red'
+        });
+        return false;
+    }
+    return true;
 }

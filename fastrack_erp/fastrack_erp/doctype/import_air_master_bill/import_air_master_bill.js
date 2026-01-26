@@ -15,6 +15,26 @@ frappe.ui.form.on('Import Air Master Bill', {
 
 // Child Table Logic: HBL Info
 frappe.ui.form.on('HBL Air Info', {
+	before_hbl_info_add: function(frm) {
+		const total_hbl = frm.doc.total_no_of_hbl || 0;
+		const actual_hbl = (frm.doc.hbl_info || []).length;
+
+		if (actual_hbl >= total_hbl) {
+			frappe.msgprint({
+				title: __('HBL Limit Reached'),
+				message: __('Cannot add more than {0} HBL(s). Please increase "Total No. of HBL" field to add more.', [total_hbl]),
+				indicator: 'red'
+			});
+			return false;
+		}
+	},
+
+	hbl_info_add: function(frm, cdt, cdn) {
+		if (!validate_air_hbl_limit(frm)) {
+			frm.get_field('hbl_info').grid.grid_rows_by_docname[cdn].remove();
+		}
+	},
+
 	create_hbl: function (frm, cdt, cdn) {
 		console.log("clicked");
 		const row = locals[cdt][cdn];
@@ -49,3 +69,19 @@ frappe.ui.form.on('HBL Air Info', {
 		});
 	},
 });
+
+// Helper function to validate HBL limit
+function validate_air_hbl_limit(frm) {
+	const total_hbl = frm.doc.total_no_of_hbl || 0;
+	const actual_hbl = (frm.doc.hbl_info || []).length;
+
+	if (actual_hbl > total_hbl) {
+		frappe.msgprint({
+			title: __('HBL Limit Exceeded'),
+			message: __('Cannot add more than {0} HBL(s). Please increase "Total No. of HBL" field to add more.', [total_hbl]),
+			indicator: 'red'
+		});
+		return false;
+	}
+	return true;
+}
