@@ -26,6 +26,7 @@
   "no_of_pkg_hbl",
   "fv",
   "mv",
+  "total_container",
   "column_break_twikq",
   "sales_person",
   "mbl_date",
@@ -384,6 +385,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "container_info",
    "fieldtype": "Table",
    "label": "Container Info",
@@ -509,6 +511,13 @@
    "fieldtype": "Table",
    "label": "Draft Invoice List",
    "options": "Fastrack Draft Bill"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_container",
+   "fieldtype": "Int",
+   "label": "Total Container",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -527,7 +536,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-15 13:48:32.221921",
+ "modified": "2026-01-26 12:22:52.397184",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

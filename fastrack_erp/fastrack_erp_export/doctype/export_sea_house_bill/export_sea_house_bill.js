@@ -228,3 +228,42 @@ frappe.ui.form.on('Export Sea House Bill', {
         }, __("Download"));
     }
 });
+
+// Container Info child table validation
+frappe.ui.form.on('Fastrack Export Sea Item', {
+    before_container_info_add: function(frm) {
+        const total_containers = frm.doc.total_container || 0;
+        const actual_containers = (frm.doc.container_info || []).length;
+
+        if (actual_containers >= total_containers) {
+            frappe.msgprint({
+                title: __('Container Limit Reached'),
+                message: __('Cannot add more than {0} container(s). Please increase "Total Container" field to add more.', [total_containers]),
+                indicator: 'red'
+            });
+            return false;
+        }
+    },
+
+    container_info_add: function(frm, cdt, cdn) {
+        if (!validate_export_sea_container_limit(frm)) {
+            frm.get_field('container_info').grid.grid_rows_by_docname[cdn].remove();
+        }
+    }
+});
+
+// Helper function to validate container limit
+function validate_export_sea_container_limit(frm) {
+    const total_containers = frm.doc.total_container || 0;
+    const actual_containers = (frm.doc.container_info || []).length;
+
+    if (actual_containers > total_containers) {
+        frappe.msgprint({
+            title: __('Container Limit Exceeded'),
+            message: __('Cannot add more than {0} container(s). Please increase "Total Container" field to add more.', [total_containers]),
+            indicator: 'red'
+        });
+        return false;
+    }
+    return true;
+}
