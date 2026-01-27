@@ -1044,47 +1044,127 @@ def escape_html(text):
 
 
 
-@frappe.whitelist(allow_guest=True)
-def get_customer_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea House Bill"):
-    if not frappe.db.exists(doctype,id):
+@frappe.whitelist()
+def get_customer_list_by_hbl_id(id=None, doctype=None):
+    if not id or not doctype:
         return []
-    customer_list=[]
-    if doctype=="Import Sea House Bill":
-        
-        sea_house_bill_doc=frappe.get_doc("Import Sea House Bill",id)
-        if sea_house_bill_doc.customer:
-            customer_list.append(sea_house_bill_doc.customer)
-        if sea_house_bill_doc.hbl_consignee:
-            customer_list.append(sea_house_bill_doc.hbl_consignee)
-        if sea_house_bill_doc.co_loader:
-            customer_list.append(sea_house_bill_doc.co_loader)
-        if sea_house_bill_doc.carrier:
-            customer_list.append(sea_house_bill_doc.carrier)
-        if sea_house_bill_doc.notify_to:
-            customer_list.append(sea_house_bill_doc.notify_to)
-    remove_duplicate_customer_list=list(set(customer_list))
-    return remove_duplicate_customer_list
+
+    if not frappe.db.exists(doctype, id):
+        return []
+
+    doc = frappe.get_doc(doctype, id)
+    customer_list = []
+    if doctype == "Import Sea House Bill":
+        fields = [
+            "customer",
+            "hbl_consignee",
+            "co_loader",
+            "carrier",
+            "notify_to",
+            "delivery_agent"
+        ]
+    elif doctype == "Import Air House Bill":
+        fields = [
+            "customer",
+            "consignee",
+            "notify_party",
+            "also_notify_party",
+            "agent"
+        ]
+    elif doctype == "Import D2D Bill":
+        fields = [
+            "customer",
+            "consignee",
+            "notify_party",
+            "also_notify_party",
+            "delivery_agent"
+        ]
+    elif doctype == "Export Air House Bill":
+        fields = [
+            "shipper",
+            "consignee",
+            "notify_party",
+            "also_notify_party",
+            "agent"
+        ]
+    elif doctype == "Export Sea House Bill":
+        fields = [
+            "hbl_shipper",
+            "hbl_consignee",
+            "notify_to",
+            "also_notify_party",
+            "delivery_agent",
+            "agent"
+        ]
+    elif doctype == "Export D2D Bill":
+        fields = [
+            "customer",
+            "consignee",
+            "notify_party"
+        ]
+
+    else:
+        return []
+    for field in fields:
+        if hasattr(doc, field) and doc.get(field):
+            customer_list.append(doc.get(field))
+
+    return list(set(customer_list))
+
+
 
 # supplier list
-@frappe.whitelist(allow_guest=True)
-def get_supplier_list_by_hbl_id(id='SHBL-2025-07-08-0011',doctype="Import Sea House Bill"):
-    if not frappe.db.exists(doctype,id):
+@frappe.whitelist()
+def get_supplier_list_by_hbl_id(id=None, doctype=None):
+    if not id or not doctype:
         return []
-    supplier_list=[]
-    if doctype=="Import Sea House Bill":
-        sea_house_bill_doc=frappe.get_doc("Import Sea House Bill",id)
-        if sea_house_bill_doc.hbl_shipper:
-            supplier_list.append(sea_house_bill_doc.hbl_shipper)
-        if sea_house_bill_doc.agent:
-            supplier_list.append(sea_house_bill_doc.agent)
-        if sea_house_bill_doc.shipping_line:
-            supplier_list.append(sea_house_bill_doc.shipping_line)
-    remove_duplicate_supplier_list=list(set(supplier_list))
-    return remove_duplicate_supplier_list
+
+    if not frappe.db.exists(doctype, id):
+        return []
+
+    doc = frappe.get_doc(doctype, id)
+    supplier_list = []
+    if doctype == "Import Sea House Bill":
+        fields = [
+            "hbl_shipper",
+            "agent",
+            "shipping_line"
+        ]
+    elif doctype == "Import Air House Bill":
+        fields = [
+            "shipper",
+            "agent",
+            "airline"
+        ]
+    elif doctype == "Import D2D Bill":
+        fields = [
+            "shipper",
+            "agent"
+        ]
+    elif doctype == "Export Air House Bill":
+        fields = [
+            "vendor"
+        ]
+    elif doctype == "Export Sea House Bill":
+        fields = [
+            "shipping_line"
+        ]
+    elif doctype == "Export D2D Bill":
+        fields = [
+            "shipper",
+            "agent"
+        ]
+
+    else:
+        return []
+    for field in fields:
+        if hasattr(doc, field) and doc.get(field):
+            supplier_list.append(doc.get(field))
+
+    return list(set(supplier_list))
+
 
 # agent list
-
-
 
 def get_paid_amount_on_purchase_invoice(invoice_id_list: []):
     # Handle empty list
