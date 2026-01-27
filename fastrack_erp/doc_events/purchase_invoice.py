@@ -7,6 +7,7 @@ HBL_TYPE_FIELD_MAP = {
     "Import D2D Bill": "custom_dhbl_id",
     "Export Sea House Bill": "custom_eshbl_id",
     "Export Air House Bill": "custom_eahbl_id",
+    "Export D2D Bill": "custom_edhbl_id",
 }
 
 def after_submit(doc, method):

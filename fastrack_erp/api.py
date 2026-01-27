@@ -134,6 +134,7 @@ HBL_SALES_INVOICE_FIELD_MAP = {
     "Import D2D Bill": "custom_hbl_d2d_link",
     "Export Sea House Bill": "custom_hbl_export_sea_link",
     "Export Air House Bill": "custom_hbl_export_air_link",
+    "Export D2D Bill": "custom_hbl_export_d2d_link",
 }
 
 HBL_PURCHASE_INVOICE_FIELD_MAP = {
@@ -142,6 +143,7 @@ HBL_PURCHASE_INVOICE_FIELD_MAP = {
     "Import D2D Bill": "custom_dhbl_id",
     "Export Sea House Bill": "custom_eshbl_id",
     "Export Air House Bill": "custom_eahbl_id",
+    "Export D2D Bill": "custom_edhbl_id",
 }
 
 @frappe.whitelist()
