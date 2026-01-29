@@ -57,293 +57,450 @@ def download_sea_bill_of_lading_original_pdf(doc_name):
 def get_sea_bill_of_lading_html(doc, is_original=False):
     """Generate HTML content for Sea Bill of Lading matching the exact reference format"""
 
-    # Page title based on version
-    page_title = "BILL OF LADING - ORIGINAL" if is_original else "BILL OF LADING - DRAFT"
+    # Footer title based on version
+    footer_title = "Original" if is_original else "Draft"
 
-    # Build container detail table rows
-    container_detail_rows = ""
-    if hasattr(doc, 'container_info') and doc.container_info:
-        for container in doc.container_info:
-            container_detail_rows += f"""
-            <tr>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; text-align: center;">{container.get('custom_container_no', '') or ''}</td>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; border-left: none; text-align: center;">{container.get('seal_no', '') or ''}</td>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; border-left: none; text-align: center;">{container.get('size', '') or ''}</td>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; border-left: none; text-align: center;">{container.get('no_of_pkg', '') or ''}</td>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; border-left: none; text-align: center;">{container.get('weight', '') or ''} KGS</td>
-                <td style="padding: 3px; font-size: 7px; border: 1px solid #000; border-top: none; border-left: none; text-align: center;">{container.get('volume', '') or ''} CBM</td>
-            </tr>
-            """
+    # Get dynamic values with defaults
+    hbl_shipper = doc.get('hbl_shipper', '') or ''
+    hbl_id = doc.get('hbl_id', '') or ''
+    hbl_consignee = doc.get('hbl_consignee', '') or ''
+    notify_to = doc.get('notify_to', '') or ''
+    also_notify = doc.get('also_notify_party', '') or notify_to
+    delivery_apply_to = doc.get('delivery_agent', '') or notify_to
+
+    # Export references
+    invoice_no = doc.get('inv_no', '') or ''
+    invoice_date = doc.get('date_1', '') or ''  # INV Date
+    exp_no = doc.get('exp_no', '') or ''
+    exp_date = doc.get('date_2', '') or ''  # Exp Date
+    sc_no = doc.get('sc_no', '') or ''
+    sc_date = doc.get('date_3', '') or ''  # SC Date
+
+    # Vessel and routing
+    mv = doc.get('mv', '') or ''
+    mv_voyage_no = doc.get('mv_voyage_no', '') or ''
+    vessel_voyage = f"{mv} V. {mv_voyage_no}" if mv and mv_voyage_no else mv or mv_voyage_no
+    pre_carriage_by = doc.get('pre_carriage_by', '') or vessel_voyage
+    place_of_receipt = doc.get('port_of_receipt', '') or doc.get('port_of_loading', '') or ''
+    port_of_loading = doc.get('port_of_loading', '') or ''
+    port_of_discharge = doc.get('port_of_discharge', '') or ''
+    port_of_delivery = doc.get('port_of_delivery', '') or ''
+
+    # Cargo details
+    shipping_marks = doc.get('shipping_marks', '') or ''
+    no_of_pkg_hbl = doc.get('no_of_pkg_hbl', '') or ''
+    description_of_good = doc.get('description_of_good', '') or ''
+    gross_weight = doc.get('gross_weight', '') or ''
+    hbl_vol_cbm = doc.get('hbl_vol_cbm', '') or ''
+
+    # Footer section
+    freight_payable_at = doc.get('freight_payable_at', '') or 'AS Arranged'
+    no_of_original_bl = doc.get('no_of_original_bl', '') or '3 (Three)'
+    total_no_of_cartons = doc.get('total_no_of_cartons', '') or no_of_pkg_hbl
+    hbl_date = doc.get('hbl_date', '') or ''
+    place_of_issue = doc.get('place_of_issue', '') or 'Bangladesh'
+    shipped_on_board = f"SHIPPED ON BOARD: {hbl_date}, {place_of_issue}" if hbl_date else ''
 
     html_template = f"""
-    <!DOCTYPE html>
+    <!doctype html>
     <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{page_title}</title>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bill of Lading</title>
         <style>
-            @page {{ size: A4; margin: 8mm; }}
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+          @page {{
+            size: A4;
+            margin: 5mm;
+          }}
+          body {{
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            -webkit-print-color-adjust: exact;
+          }}
+          * {{
+            box-sizing: border-box;
+          }}
+          .page {{
+            width: 100%;
+            max-width: 200mm;
+            background: white;
+            margin: 0 auto;
+            padding: 2mm 5mm;
+            box-sizing: border-box;
+            position: relative;
+          }}
+          @media print {{
             body {{
-                font-family: Arial, sans-serif;
-                font-size: 10px;
-                line-height: 1.3;
-                position: relative;
+              background: none;
             }}
-            .container {{
-                position: relative;
+            .page {{
+              margin: 0;
+              padding: 0;
+              border: none;
+              box-shadow: none;
+              max-width: 100%;
             }}
-            .page-title {{
-                text-align: center;
-                font-size: 18px;
-                font-weight: bold;
-                margin-bottom: 10px;
-                color: #000;
-            }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            .border {{ border: 1px solid #000; }}
-            .border-top {{ border-top: 1px solid #000; }}
-            .border-bottom {{ border-bottom: 1px solid #000; }}
-            .border-left {{ border-left: 1px solid #000; }}
-            .border-right {{ border-right: 1px solid #000; }}
-            .no-border-top {{ border-top: none; }}
-            .table-cell {{
-                border: 1px solid #000;
-                padding: 3px;
-                font-size: 9px;
-                text-align: center;
-                border-top: none;
-            }}
-            .section-title {{ font-weight: normal; font-size: 9px; margin-bottom: 2px; }}
-            .field-value {{
-                font-size: 10px;
-                min-height: 20px;
-                padding: 3px 0;
-            }}
-            .text-center {{ text-align: center; }}
-            .text-bold {{ font-weight: bold; }}
-            .small-text {{ font-size: 8px; }}
-            .tiny-text {{ font-size: 7px; line-height: 1.3; }}
+          }}
+          p {{
+            margin: 0;
+            padding: 0;
+          }}
+          table {{
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }}
+          td, th {{
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }}
+          .bold {{
+            font-weight: bold;
+          }}
+          ._text_center {{
+            text-align: center;
+          }}
+          ._header_title {{
+            color: #7bbf24;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+          }}
+          ._footer_title {{
+            color: #7bbf24;
+            font-size: 17px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+          }}
+          ._sub_header {{
+            font-size: 10px;
+            margin-bottom: 1px;
+          }}
+          ._container_label_text {{
+            font-size: 9px;
+            margin-bottom: 2px;
+            display: block;
+            color: #d35400;
+          }}
+          ._container_content_text {{
+            font-size: 9px;
+            line-height: 1.3;
+          }}
+          ._text_normal {{
+            font-size: 9px;
+            line-height: 1.2;
+          }}
+          ._height_value_5 {{
+            padding-top: 5px;
+            padding-bottom: 5px;
+            font-weight: bold;
+          }}
         </style>
-    </head>
-    <body>
-        <div class="container">
-            <!-- Page Title -->
-            <div class="page-title">{page_title}</div>
+      </head>
+      <body>
+        <div class="page">
+          <div class="_header_title">BILL OF LADING</div>
 
-            <!-- Main Table -->
-            <table style="width: 100%; border: 1px solid #000; border-collapse: collapse;">
-                <!-- Header Row -->
-                <tr>
-                    <td colspan="2" style="padding: 5px; font-size: 8px; text-align: center; border-bottom: 1px solid #000;">
-                        (COMBINED TRANSPORT BILL OF LADING OR PORT TO PORT)
-                    </td>
-                    <td colspan="2" style="padding: 5px; font-size: 8px; text-align: right; border-bottom: 1px solid #000; border-left: 1px solid #000;">
-                        (NOT NEGOTIABLE UNLESS CONSIGNED TO ORDER)
-                    </td>
-                </tr>
+          <table style="width: 100%; margin-bottom: 1px; table-layout: fixed;">
+            <tr>
+              <td style="font-size: 10px; width: 50%;">(COMBINED TRANSPORT BILL OF LADING OR PORT TO PORT)</td>
+              <td style="font-size: 10px; text-align: right; width: 50%;">(NOT NEGOTIABLE UNLESS CONSIGNED TO ORDER)</td>
+            </tr>
+          </table>
 
-                <!-- Shipper Row -->
-                <tr>
-                    <td colspan="2" style="width: 50%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Shipper / Exporter:</div>
-                        <div class="field-value">{doc.get('hbl_shipper', '') or ''}</div>
+          <!-- Main Content Table -->
+          <table style="width: 100%; border: 1px solid black; border-collapse: collapse; table-layout: fixed;">
+            <!-- ROW 1: Shipper & Carrier Info -->
+            <tr>
+              <td style="width: 47%; border: 1px solid black; border-top: none; border-left: none; padding: 3px; vertical-align: top;">
+                <span class="_container_label_text">Shipper / Exporter:</span>
+                <div class="_container_content_text" style="padding-left: 5px;">
+                  {hbl_shipper}
+                </div>
+              </td>
+              <td style="width: 53%; border-bottom: 1px solid black; padding: 0; vertical-align: top;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="width: 45%; text-align: center; vertical-align: middle; padding: 5px;">
+                      <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" style="max-width: 100%; height: auto; max-height: 100px;" />
                     </td>
-                    <td colspan="2" style="width: 50%; padding: 0; border-bottom: 1px solid #000; border-left: 1px solid #000;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="width: 30%; padding: 5px; text-align: center; border-right: 1px solid #000; vertical-align: middle;">
-                                    <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" style="max-width: 100%; height: auto; max-height: 60px;" />
-                                </td>
-                                <td style="width: 70%; padding: 5px; vertical-align: top;">
-                                    <div class="section-title">Bill of Lading No.:</div>
-                                    <div class="field-value text-bold">{doc.get('hbl_id', '') or ''}</div>
-                                    <div style="margin-top: 5px; font-weight: bold; font-size: 9px; color: #7CB342;">Fastrack Cargo Solutions, Ltd.</div>
-                                    <div style="font-size: 7px; margin-top: 2px;">
-                                        Tel: +880-2-48336368<br>
-                                        Fax: +880-2-48336374<br>
-                                        Email: sales@fastrackcargo.com.bd<br>
-                                        Customs License No.: 101-163-04841
-                                    </div>
-                                </td>
-                            </tr>
+                    <td style="width: 55%; border-left: 1px solid black; vertical-align: top;">
+                      <div style="border-bottom: 1px solid black; padding: 3px;">
+                        <span class="_container_label_text">Bill of Lading No.:</span>
+                        <div class="_container_content_text bold _text_center" style="margin-top: 3px; padding: 2px 0;">
+                          {hbl_id}
+                        </div>
+                      </div>
+                      <div style="padding: 3px; overflow: hidden;">
+                        <span style="font-size: 11px; font-weight: bold; color: #7bbf24;">Fasttrack Cargo Solutions Ltd.</span>
+                        <table style="margin-top: 2px; table-layout: auto; width: 100%;">
+                          <tr>
+                            <td class="_text_normal" style="white-space: nowrap;">Tel</td>
+                            <td class="_text_normal" style="width: 8px;">:</td>
+                            <td class="_text_normal">+880-2-8836368</td>
+                          </tr>
+                          <tr>
+                            <td class="_text_normal" style="white-space: nowrap;">Fax</td>
+                            <td class="_text_normal">:</td>
+                            <td class="_text_normal">+880-2-8836374</td>
+                          </tr>
+                          <tr>
+                            <td class="_text_normal" style="white-space: nowrap;">Email</td>
+                            <td class="_text_normal">:</td>
+                            <td class="_text_normal" style="word-break: break-all;">sales@fastrackcargo.com.bd</td>
+                          </tr>
                         </table>
+                        <table style="margin-top: 2px; table-layout: auto; width: 100%;">
+                          <tr>
+                            <td class="_text_normal" style="white-space: nowrap;">Customs License No</td>
+                            <td class="_text_normal" style="width: 8px;">:</td>
+                            <td class="_text_normal">101-16-3-0841</td>
+                          </tr>
+                        </table>
+                      </div>
                     </td>
-                </tr>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-                <!-- Consignee and Export Reference Row -->
-                <tr>
-                    <td colspan="2" style="padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Consignee (if 'To Order' so indicate):</div>
-                        <div class="field-value">{doc.get('hbl_consignee', '') or ''}</div>
-                    </td>
-                    <td colspan="2" style="padding: 5px; border-bottom: 1px solid #000; border-left: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Export Reference:</div>
-                        <div class="field-value" style="font-size: 8px;">
-                            INV No.: {doc.get('invoice_no', '') or ''}<br>
-                            EXP No.: {doc.get('exp_no', '') or ''}<br>
-                            S/C No.: {doc.get('sc_no', '') or ''}<br>
-                            Date: {doc.get('hbl_date', '') or ''}
-                        </div>
-                    </td>
-                </tr>
+            <!-- ROW 2: Consignee & Export References -->
+            <tr>
+              <td style="border: 1px solid black; border-top: none; border-left: none; padding: 3px; vertical-align: top;">
+                <span class="_container_label_text">Consignee (if 'To Order' so indicate):</span>
+                <div class="_container_content_text" style="padding-left: 5px;">
+                  {hbl_consignee}
+                </div>
+              </td>
+              <td style="border-bottom: 1px solid black; padding: 3px; vertical-align: top; overflow: hidden;">
+                <span class="_container_label_text">Export References:</span>
+                <div style="margin-top: 5px;">
+                  <strong>
+                    <table style="width: 100%; table-layout: fixed;">
+                      <tr>
+                        <td class="_text_normal" style="width: 60%;">INV No.: {invoice_no}</td>
+                        <td class="_text_normal" style="text-align: right; width: 40%;">Date: {invoice_date}</td>
+                      </tr>
+                      <tr>
+                        <td class="_text_normal">EXP No.: {exp_no}</td>
+                        <td class="_text_normal" style="text-align: right;">Date: {exp_date}</td>
+                      </tr>
+                      <tr>
+                        <td class="_text_normal">S/C No.: {sc_no}</td>
+                        <td class="_text_normal" style="text-align: right;">Date: {sc_date}</td>
+                      </tr>
+                    </table>
+                  </strong>
+                </div>
+              </td>
+            </tr>
 
-                <!-- Notify Party Row -->
-                <tr>
-                    <td colspan="4" style="padding: 5px; border-bottom: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Notify Party (No claim shall attach for failure to notify):</div>
-                        <div class="field-value">{doc.get('notify_to', '') or ''}</div>
+            <!-- ROW 3: Notify Party, Also Notify, For Delivery -->
+            <tr>
+              <td style="border: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td colspan="2" style="padding: 3px; vertical-align: top;">
+                      <span class="_container_label_text">Notify Party (No claim shall attach for failure to notify):</span>
+                      <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
+                        {notify_to}
+                      </div>
                     </td>
-                </tr>
+                  </tr>
+                  <tr>
+                    <td style="width: 50%; border-top: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
+                      <strong>Pre-carriage by</strong>
+                      <div class="_height_value_5" style="word-wrap: break-word;">{pre_carriage_by}</div>
+                    </td>
+                    <td style="width: 50%; border-top: 1px solid black; border-left: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
+                      <strong>Place of Receipt</strong>
+                      <div class="_height_value_5" style="word-wrap: break-word;">{place_of_receipt}</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td style="border-bottom: 1px solid black; padding: 0; vertical-align: top; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="border-bottom: 1px solid black; padding: 3px; vertical-align: top;">
+                      <span class="_container_label_text">Also Notify:</span>
+                      <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
+                        {also_notify}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 3px; vertical-align: top;">
+                      <span class="_container_label_text">For delivery please apply to:</span>
+                      <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
+                        {delivery_apply_to}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-                <!-- Also Notify and For Delivery Row -->
-                <tr>
-                    <td style="padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Also Notify:</div>
-                        <div class="field-value"></div>
+            <!-- ROW 4: Vessel, Port of Loading, Port of Discharge, Place of Delivery -->
+            <tr>
+              <td style="border: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="width: 50%; padding: 3px; vertical-align: top;">
+                      <span class="_container_label_text">Vessel / Voyage:</span>
+                      <div class="_height_value_5 _text_center" style="word-wrap: break-word;">{vessel_voyage}</div>
                     </td>
-                    <td colspan="3" style="padding: 5px; border-bottom: 1px solid #000; border-left: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">For delivery please apply to:</div>
-                        <div class="field-value"></div>
+                    <td style="width: 50%; border-left: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
+                      <strong>Port of Loading</strong>
+                      <div class="_height_value_5" style="word-wrap: break-word;">{port_of_loading}</div>
                     </td>
-                </tr>
+                  </tr>
+                </table>
+              </td>
+              <td style="padding: 0; vertical-align: top; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="width: 50%; padding: 3px; text-align: center; vertical-align: top;">
+                      <strong>Port of Discharge</strong>
+                      <div class="_height_value_5" style="word-wrap: break-word;">{port_of_discharge}</div>
+                    </td>
+                    <td style="width: 50%; border-left: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
+                      <strong>Place of Delivery</strong>
+                      <div class="_height_value_5" style="word-wrap: break-word;">{port_of_delivery}</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
 
-                <!-- Pre-carriage and Place of Receipt Row -->
-                <tr>
-                    <td style="width: 17.5%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Pre-carriage by</div>
-                        <div class="field-value"></div>
-                    </td>
-                    <td style="width: 17.5%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Place of Receipt</div>
-                        <div class="field-value"></div>
-                    </td>
-                    <td colspan="2" style="padding: 5px; border-bottom: 1px solid #000; border-left: 1px solid #000; vertical-align: top;">
-                    </td>
-                </tr>
+          <!-- Goods Table -->
+          <table style="width: 100%; border: 1px solid black; border-collapse: collapse; margin-top: 0; table-layout: fixed;">
+            <tr style="font-size: 9px;">
+              <th style="width: 20%; border: 1px solid black; padding: 8px;">Shipping Marks</th>
+              <th style="width: 15%; border: 1px solid black; padding: 8px;">No. of Packages<br/>or Shipping Units</th>
+              <th style="width: 35%; border: 1px solid black; padding: 8px;">Description of Packages or Goods</th>
+              <th style="width: 15%; border: 1px solid black; padding: 8px;">Gross Weight</th>
+              <th style="width: 15%; border: 1px solid black; padding: 8px;">Measurement<br/>(Volume)</th>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
+                <div class="_text_center" style="min-height: 250px;">
+                  <strong>{shipping_marks}</strong>
+                </div>
+              </td>
+              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+                <strong style="font-size: 10px;">{no_of_pkg_hbl}</strong>
+              </td>
+              <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
+                {description_of_good}
+              </td>
+              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+                <strong>{gross_weight} kg</strong>
+              </td>
+              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+                <strong>{hbl_vol_cbm} CBM</strong>
+              </td>
+            </tr>
+          </table>
 
-                <!-- Vessel, Port of Loading, Port of Discharge, Place of Delivery Row -->
-                <tr>
-                    <td style="padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Vessel / Voyage</div>
-                        <div class="field-value">{doc.get('mv', '') or ''} / {doc.get('mv_voyage_no', '') or ''}</div>
-                    </td>
-                    <td style="padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Port of Loading</div>
-                        <div class="field-value">{doc.get('port_of_loading', '') or ''}</div>
-                    </td>
-                    <td style="width: 32.5%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; border-left: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Port of Discharge</div>
-                        <div class="field-value">{doc.get('port_of_discharge', '') or ''}</div>
-                    </td>
-                    <td style="width: 32.5%; padding: 5px; border-bottom: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Place of Delivery</div>
-                        <div class="field-value">{doc.get('port_of_delivery', '') or ''}</div>
-                    </td>
-                </tr>
+          <!-- Freight Payable Row -->
+          <table style="width: 100%; border: 1px solid black; border-top: none; border-collapse: collapse; table-layout: fixed;">
+            <tr>
+              <td style="width: 50%; border-right: 1px solid black; padding: 3px; height: 30px; vertical-align: middle;">
+                <table style="width: 100%; table-layout: fixed;">
+                  <tr>
+                    <td style="width: 50%;">Freight Payable at:</td>
+                    <td style="width: 50%; text-align: center;"><strong>{freight_payable_at}</strong></td>
+                  </tr>
+                </table>
+              </td>
+              <td style="width: 50%; padding: 3px; text-align: center; vertical-align: middle; word-wrap: break-word;">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, autem.
+              </td>
+            </tr>
+          </table>
 
-                <!-- Cargo Details Headers -->
-                <tr>
-                    <td style="width: 15%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; text-align: center; font-size: 8px; font-weight: normal;">
-                        Shipping Marks
-                    </td>
-                    <td style="width: 15%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; text-align: center; font-size: 8px; font-weight: normal;">
-                        No. of Packages<br>or Shipping Units
-                    </td>
-                    <td style="width: 40%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; border-left: 1px solid #000; text-align: center; font-size: 8px; font-weight: normal;">
-                        Description of Packages or Goods
-                    </td>
-                    <td style="width: 15%; padding: 5px; border-bottom: 1px solid #000; border-right: 1px solid #000; text-align: center; font-size: 8px; font-weight: normal;">
-                        Gross Weight
-                    </td>
-                    <td style="width: 15%; padding: 5px; border-bottom: 1px solid #000; text-align: center; font-size: 8px; font-weight: normal;">
-                        Measurement<br>(Volume)
-                    </td>
-                </tr>
+          <!-- Terms and Conditions -->
+          <div style="padding: 8px; border: 1px solid black; border-top: none;">
+            <p style="margin-bottom: 5px;">
+              <strong>RECEIVED</strong> by the Carrier the Goods as specified above in apparent good order and condition unless otherwise stated, to be transported to such place as agreed, authorized or permitted herein and subject to all the terms and conditions appearing on the front and reverse of this Bill of Lading to which the Merchant agrees by accepting this Bill of Lading, any local privileges and customs notwithstanding.
+            </p>
+            <p style="margin-bottom: 5px;">
+              <strong>THE PARTICULARS GIVEN ABOVE AS DECLARED BY THE SHIPPER</strong> and the weight, measure, quantity, condition, contents and value of the Goods are unknown to the Carrier.
+            </p>
+            <p>
+              <strong>IN WITNESS</strong> whereof one (1) original Bill of Lading has been signed if not otherwise stated above, the same being accomplished the other(s), if any, to be void. If required by the Carrier, one (1) original Bill of Lading must be surrendered duly endorsed in exchange for the Goods or delivery order.
+            </p>
+          </div>
 
-                <!-- Cargo Details Content -->
-                <tr>
-                    <td style="padding: 8px; border-right: 1px solid #000; border-bottom: 1px solid #000; vertical-align: top; min-height: 200px;">
-                        <div style="font-size: 9px;">{doc.get('shipping_marks', '') or ''}</div>
+          <!-- Footer Section -->
+          <table style="width: 100%; border: 1px solid black; border-top: none; border-collapse: collapse; table-layout: fixed;">
+            <tr>
+              <td style="width: 50%; border-right: 1px solid black; padding: 0; vertical-align: top;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="padding: 3px; height: 30px; vertical-align: middle;">
+                      <table style="width: 100%; table-layout: fixed;">
+                        <tr>
+                          <td style="width: 60%;">Number of Original Bill of Lading:</td>
+                          <td style="width: 40%; text-align: center;"><strong>{no_of_original_bl}</strong></td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding: 8px; border-right: 1px solid #000; border-bottom: 1px solid #000; vertical-align: top; text-align: center;">
-                        <div style="font-size: 9px;">{doc.get('no_of_pkg_hbl', '') or ''}</div>
+                  </tr>
+                  <tr>
+                    <td style="border-top: 1px solid black; padding: 3px; height: 30px; vertical-align: middle;">
+                      <table style="width: 100%; table-layout: fixed;">
+                        <tr>
+                          <td style="width: 60%;">Total Number of Cartons:</td>
+                          <td style="width: 40%; text-align: center;"><strong>{total_no_of_cartons} CTN</strong></td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding: 8px; border-right: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; vertical-align: top;">
-                        <div style="font-size: 9px;">{doc.get('description_of_good', '') or ''}</div>
+                  </tr>
+                </table>
+              </td>
+              <td style="width: 50%; padding: 0; vertical-align: top; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr>
+                    <td style="padding: 3px; height: 30px; vertical-align: middle;">
+                      <table style="width: 100%; table-layout: fixed;">
+                        <tr>
+                          <td style="width: 40%;">Place and Date of Issue</td>
+                          <td style="width: 60%; text-align: center; word-wrap: break-word; font-size: 8px;"><strong>{shipped_on_board}</strong></td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding: 8px; border-right: 1px solid #000; border-bottom: 1px solid #000; vertical-align: top; text-align: center;">
-                        <div style="font-size: 10px; font-weight: bold;">{doc.get('gross_weight', '') or ''} KG</div>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <table style="width: 100%; table-layout: fixed;">
+                        <tr>
+                          <td style="width: 50%; vertical-align: top;">Signed on behalf of By</td>
+                          <td style="width: 50%; text-align: right; vertical-align: bottom; padding-top: 40px;">
+                            Authorized Signatory
+                          </td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding: 8px; border-bottom: 1px solid #000; vertical-align: top; text-align: center;">
-                        <div style="font-size: 10px; font-weight: bold;">{doc.get('hbl_vol_cbm', '') or ''} CBM</div>
-                    </td>
-                </tr>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
 
-                <!-- Blank Gap Row -->
-                <tr>
-                    <td colspan="5" style="padding: 100px 5px; border-top: none; border-left: none; border-right: none; border-bottom: none; position: relative;">
-                        <!-- Empty gap space with watermark logo -->
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; text-align: center;">
-                            <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" style="max-width: 200px; height: auto;" />
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Footer Section -->
-                <tr>
-                    <td colspan="2" style="padding: 5px; border-top: 1px solid #000; border-left: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Freight payable at:</div>
-                        <div class="field-value"></div>
-                    </td>
-                    <td colspan="3" style="padding: 5px; border-top: 1px solid #000; border-right: 1px solid #000; vertical-align: top; text-align: center;">
-                        <div style="font-size: 7px;">Excess Value Declaration: Refer to Clause 6 (4) (B)+(C) on reverse side</div>
-                    </td>
-                </tr>
-
-                <!-- Terms and Conditions -->
-                <tr>
-                    <td colspan="5" style="padding: 8px; border-top: 1px solid #000; border-left: 1px solid #000; border-right: 1px solid #000; font-size: 7px; line-height: 1.4;">
-                        <p style="margin: 0 0 5px 0;"><strong>RECEIVED</strong> by the Carrier the Goods as specified above in apparent good order and condition unless otherwise stated, to be transported to such place as agreed, authorized or permitted herein and subject to all the terms and conditions appearing on the front and reverse of this Bill of Lading to which the Merchant agrees by accepting this Bill of Lading, any local privileges and customs notwithstanding.</p>
-                        <p style="margin: 0 0 5px 0;"><strong>THE PARTICULARS GIVEN ABOVE AS DECLARED BY THE SHIPPER</strong> and the weight, measure, quantity, condition, contents and value of the Goods are unknown to the Carrier.</p>
-                        <p style="margin: 0;"><strong>IN WITNESS</strong> whereof one (1) original Bill of Lading has been signed if not otherwise stated above, the same being accomplished the other(s), if any, to be void. If required by the Carrier, one (1) original Bill of Lading must be surrendered duly endorsed in exchange for the Goods or delivery order.</p>
-                    </td>
-                </tr>
-
-                <!-- Signature Section -->
-                <tr>
-                    <td style="width: 20%; padding: 5px; border-top: 1px solid #000; border-left: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Number of Original Bill of Lading:</div>
-                        <div class="field-value"></div>
-                    </td>
-                    <td style="width: 20%; padding: 5px; border-top: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Place and date of issue</div>
-                        <div class="field-value"></div>
-                    </td>
-                    <td colspan="3" style="width: 60%; padding: 5px; border-top: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Signed on behalf of By</div>
-                        <div class="field-value"></div>
-                    </td>
-                </tr>
-
-                <!-- Total Number of Carton -->
-                <tr>
-                    <td colspan="5" style="padding: 5px; border-top: 1px solid #000; border-left: 1px solid #000; border-right: 1px solid #000; vertical-align: top;">
-                        <div class="section-title">Total Number of Carton:</div>
-                        <div class="field-value"></div>
-                    </td>
-                </tr>
-
-                <!-- Footer Text -->
-                <tr>
-                    <td colspan="5" style="padding: 8px; border-top: 1px solid #000; border-left: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; text-align: center;">
-                        <div style="font-size: 14px; font-weight: bold; color: #7CB342;">(ORIGINAL)</div>
-                    </td>
-                </tr>
-            </table>
-
+          <div class="_footer_title">{footer_title}</div>
         </div>
-    </body>
+      </body>
     </html>
     """
 
