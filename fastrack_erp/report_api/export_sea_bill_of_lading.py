@@ -58,7 +58,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     """Generate HTML content for Sea Bill of Lading matching the exact reference format"""
 
     # Footer title based on version
-    footer_title = "Original" if is_original else "Draft"
+    footer_title = "Original" if is_original else "(ORIGINAL)"
 
     # Get dynamic values with defaults
     hbl_shipper = doc.get('hbl_shipper', '') or ''
@@ -188,7 +188,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             font-size: 9px;
             margin-bottom: 2px;
             display: block;
-            color: #d35400;
+            color: #000000;
           }}
           ._container_content_text {{
             font-size: 9px;
