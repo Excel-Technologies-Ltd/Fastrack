@@ -12,6 +12,7 @@
   "invoice_uid",
   "shipment_mode",
   "mbl_no",
+  "mbl_id",
   "hbl_no",
   "shipper",
   "consignee",
@@ -49,7 +50,6 @@
   "total_payment",
   "draft_section",
   "draft_invoice_list",
-  "amended_from",
   "amended_from"
  ],
  "fields": [
@@ -329,16 +329,21 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Export D2D Bill",
+   "options": "Import D2D Bill",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "mbl_id",
+   "fieldtype": "Data",
+   "label": "MBL No."
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-15 14:03:27.733247",
+ "modified": "2026-02-03 17:30:47.775300",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export D2D Bill",

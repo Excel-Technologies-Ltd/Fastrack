@@ -75,8 +75,6 @@
   "export_air_house_bill",
   "place_of_issue",
   "flight_name",
-  "consignee_bin",
-  "notify_party_bin",
   "customer_bin",
   "lc_date",
   "hbl_weight",
@@ -201,8 +199,7 @@
    "allow_on_submit": 1,
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
-   "label": "No of Pkg",
-   "reqd": 1
+   "label": "No of Pkg"
   },
   {
    "allow_on_submit": 1,
@@ -323,8 +320,7 @@
    "allow_on_submit": 1,
    "fieldname": "hbl_gr_weight",
    "fieldtype": "Float",
-   "label": "Gr. Weight",
-   "reqd": 1
+   "label": "Gr. Weight"
   },
   {
    "allow_on_submit": 1,
@@ -388,8 +384,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "airline",
-   "fieldtype": "Data",
-   "label": "Airline"
+   "fieldtype": "Link",
+   "label": "Airline",
+   "options": "Supplier"
   },
   {
    "allow_on_submit": 1,
@@ -487,20 +484,6 @@
    "fieldname": "flight_date",
    "fieldtype": "Date",
    "label": "Flight Date"
-  },
-  {
-   "fetch_from": "consignee.custom_bin_no",
-   "fieldname": "consignee_bin",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Consignee Bin"
-  },
-  {
-   "fetch_from": "notify_party.custom_bin_no",
-   "fieldname": "notify_party_bin",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Notify Party Bin"
   },
   {
    "fetch_from": "customer.custom_bin_no",
@@ -686,7 +669,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-15 14:11:17.300992",
+ "modified": "2026-02-03 18:04:21.892283",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",

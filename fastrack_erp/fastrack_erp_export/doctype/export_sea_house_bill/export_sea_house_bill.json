@@ -157,8 +157,7 @@
    "fieldname": "no_of_pkg_hbl",
    "fieldtype": "Float",
    "label": "No of Pkg",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "allow_on_submit": 1,
@@ -271,8 +270,7 @@
    "fieldname": "gross_weight",
    "fieldtype": "Float",
    "label": "Gross Weight",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "allow_on_submit": 1,
@@ -365,8 +363,7 @@
    "fieldname": "hbl_vol_cbm",
    "fieldtype": "Float",
    "label": "Vol (CBM)",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "allow_on_submit": 1,
@@ -536,7 +533,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-26 12:22:52.397184",
+ "modified": "2026-02-03 17:41:04.020388",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

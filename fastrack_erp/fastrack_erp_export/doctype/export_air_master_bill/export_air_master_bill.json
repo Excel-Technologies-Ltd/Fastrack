@@ -73,6 +73,7 @@
   },
   {
    "allow_on_submit": 1,
+   "default": "0",
    "fieldname": "gr_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -106,7 +107,8 @@
   {
    "fieldname": "total_no_of_hbl",
    "fieldtype": "Int",
-   "label": "Total No. of HBL"
+   "label": "Total No. of HBL",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -192,7 +194,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-01-15 14:07:47.465331",
+ "modified": "2026-02-03 17:47:53.277805",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",

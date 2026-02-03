@@ -12,6 +12,7 @@
   "invoice_uid",
   "shipment_mode",
   "mbl_no",
+  "mbl_id",
   "hbl_no",
   "shipper",
   "consignee",
@@ -322,12 +323,17 @@
    "fieldtype": "Table",
    "label": "Draft Invoice List",
    "options": "Fastrack Draft Bill"
+  },
+  {
+   "fieldname": "mbl_id",
+   "fieldtype": "Data",
+   "label": "MBL No."
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-15 13:43:35.657561",
+ "modified": "2026-02-03 17:29:14.564318",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",
