@@ -146,6 +146,15 @@ HBL_PURCHASE_INVOICE_FIELD_MAP = {
     "Export D2D Bill": "custom_edhbl_id",
 }
 
+HBL_PAYMENT_ENTRY_FIELD_MAP = {
+    "Import Sea House Bill": "custom_hbl_sea_link",
+    "Import Air House Bill": "custom_hbl_air_link",
+    "Import D2D Bill": "custom_import_d2d_link",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
+}
+
 @frappe.whitelist()
 def make_sales_invoice_from_hbl(source_name, target_doc=None):
     """Generic method to create Sales Invoice from any House Bill type"""
@@ -188,6 +197,25 @@ def make_purchase_invoice_from_hbl(source_name, target_doc=None):
             doclist = get_mapped_doc(hbl_type, source_name, {
                 hbl_type: {
                     "doctype": "Purchase Invoice",
+                },
+            }, target_doc, set_missing_values)
+            return doclist
+
+    frappe.throw("House Bill not found")
+
+
+@frappe.whitelist()
+def make_payment_entry_from_hbl(source_name, target_doc=None):
+    """Generic method to create Payment Entry from any House Bill type"""
+    for hbl_type, link_field in HBL_PAYMENT_ENTRY_FIELD_MAP.items():
+        if frappe.db.exists(hbl_type, source_name):
+            def set_missing_values(source, target, _hbl_type=hbl_type, _link_field=link_field):
+                target.custom_hbl_type = _hbl_type
+                target.set(_link_field, source.name)
+
+            doclist = get_mapped_doc(hbl_type, source_name, {
+                hbl_type: {
+                    "doctype": "Payment Entry",
                 },
             }, target_doc, set_missing_values)
             return doclist

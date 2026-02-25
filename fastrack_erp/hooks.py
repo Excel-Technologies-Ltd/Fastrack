@@ -28,7 +28,10 @@ app_include_css = "/assets/fastrack_erp/css/theme.css"
 
 # include js in doctype views
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
-doctype_js = {"Sales Invoice": "public/js/sales_invoice.js"}
+doctype_js = {
+    "Sales Invoice": "public/js/sales_invoice.js",
+    "Payment Entry": "public/js/payment_entry.js",
+}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 

@@ -54,7 +54,10 @@ frappe.ui.form.on('Import Air House Bill', {
             }, __("Create"));
 
             frm.add_custom_button(__("Payment Entry"), function () {
-                frappe.new_doc("Payment Entry");
+                frappe.model.open_mapped_doc({
+                    method: "fastrack_erp.api.make_payment_entry_from_hbl",
+                    frm: frm
+                });
             }, __("Create"));
         }
 
