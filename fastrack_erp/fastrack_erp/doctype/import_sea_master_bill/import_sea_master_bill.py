@@ -9,7 +9,7 @@ class ImportSeaMasterBill(Document):
 	def before_save(self):
 		if not self.invoice_uid:
 			generate_uuid = str(random.randint(10**9, 10**10 - 1))
-		self.invoice_uid=f"INV-{generate_uuid}"
+			self.invoice_uid=f"INV-{generate_uuid}"
 		if not self.mbl_open_by:
 			self.mbl_open_by= frappe.session.user
 		if not self.mbl_date:

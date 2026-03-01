@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import frappe
 
 
@@ -20,15 +22,14 @@ def validate(doc, method):
         frappe.throw(f"Container list should be equal to {total_container}")
     if not len(hbl_info)== total_no_of_hbl:
         frappe.throw(f"HBL list should be equal to {total_no_of_hbl}")
-    total_weight_of_container_list= sum(container.weight for container in container_info) or 0
+    total_weight_of_container_list= sum(Decimal(str(container.weight)) for container in container_info) or 0
     if not gr_weight == total_weight_of_container_list and doc.doctype == "Import Sea Master Bill":
         frappe.throw("Total weight of container list is not equal to gross weight")
         
     # filter is_create=1 and get the weight
     hbl_info_list= [hbl for hbl in hbl_info if hbl.is_create==1]
-    total_weight_of_hbl_list= sum(hbl.weight for hbl in hbl_info_list)
-    print(total_weight_of_hbl_list)
-    print(gr_weight)
+    total_weight_of_hbl_list = sum((Decimal(str(hbl.weight)) for hbl in hbl_info_list), Decimal('0'))
+    total_weight_of_hbl_list = total_weight_of_hbl_list.quantize(Decimal('0.1'))
     if len(hbl_info_list)== total_no_of_hbl and not round(total_weight_of_hbl_list,2) == round(gr_weight,2):
         mismatch_value= round(gr_weight,2) - round(total_weight_of_hbl_list,2)
         frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
