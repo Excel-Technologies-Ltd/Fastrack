@@ -3,11 +3,13 @@ from frappe.utils.pdf import get_pdf
 
 
 def get_customer_address(customer_name):
-    """Return a <br>-separated address string for a Customer, or '' if not found."""
+    """Return a <br>-separated address + contact info string for a Customer, or '' if not found."""
     if not customer_name:
         return ''
+    lines = []
     try:
-        rows = frappe.db.sql("""
+        # --- Address ---
+        addr_rows = frappe.db.sql("""
             SELECT addr.address_line1, addr.address_line2, addr.city, addr.state, addr.country
             FROM `tabAddress` addr
             INNER JOIN `tabDynamic Link` dl ON dl.parent = addr.name
@@ -15,19 +17,34 @@ def get_customer_address(customer_name):
             ORDER BY addr.is_primary_address DESC
             LIMIT 1
         """, (customer_name,), as_dict=True)
-        if rows:
-            addr = rows[0]
-            parts = [addr.address_line1, addr.address_line2, addr.city, addr.state, addr.country]
-            valid = []
-            for p in parts:
+        if addr_rows:
+            addr = addr_rows[0]
+            for p in [addr.address_line1, addr.address_line2, addr.city, addr.state, addr.country]:
                 if p:
                     if p.strip() == '#':
-                        break  # stop here; discard # and everything after
-                    valid.append(p)
-            return '<br>'.join(valid)
+                        break  # discard # and everything after
+                    lines.append(p)
+
+        # --- Contact (mobile & email) ---
+        contact_rows = frappe.db.sql("""
+            SELECT c.mobile_no, c.phone, c.email_id
+            FROM `tabContact` c
+            INNER JOIN `tabDynamic Link` dl ON dl.parent = c.name
+            WHERE dl.link_doctype = 'Customer' AND dl.link_name = %s
+            ORDER BY c.is_primary_contact DESC
+            LIMIT 1
+        """, (customer_name,), as_dict=True)
+        if contact_rows:
+            contact = contact_rows[0]
+            mobile = contact.mobile_no or contact.phone or ''
+            email = contact.email_id or ''
+            if mobile:
+                lines.append(f'Mobile: {mobile}')
+            if email:
+                lines.append(f'Email: {email}')
     except Exception:
         pass
-    return ''
+    return '<br>'.join(lines)
 
 
 @frappe.whitelist()
@@ -470,7 +487,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
               <th style="width: 15%; border: 1px solid black; padding: 8px;">Measurement<br/>(Volume)</th>
             </tr>
             <tr>
-              <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
+              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">
                 <div style="display: flex; flex-direction: column; min-height: 250px;">
                   <div class="_text_center" style="flex: 1;">
                     <strong>{shipping_marks}</strong>
@@ -481,17 +498,17 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                   </div>
                 </div>
               </td>
-              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
                 <strong style="font-size: 10px;">{no_of_pkg_hbl}</strong>
               </td>
-              <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
+              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">
                 {description_of_good}
                 {container_table_html}
               </td>
-              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
                 <strong>{gross_weight} KG</strong>
               </td>
-              <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
+              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
                 <strong>{hbl_vol_cbm} CBM</strong>
               </td>
             </tr>

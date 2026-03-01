@@ -10,8 +10,8 @@ def validate(doc, method):
     if doc.doctype == "Import Sea Master Bill":
         total_container=doc.total_container
         container_info=doc.container_info
-    gr_weight=doc.gr_weight
-    total_no_of_hbl= doc.get("total_no_of_hbl") or doc.get("total__hbl")
+    gr_weight = Decimal(str(doc.gr_weight)) if doc.gr_weight else Decimal('0')
+    total_no_of_hbl = doc.get("total_no_of_hbl") or doc.get("total__hbl") or 0
     
     hbl_info=doc.hbl_info
     if len(container_info)> total_container and doc.doctype == "Import Sea Master Bill":
