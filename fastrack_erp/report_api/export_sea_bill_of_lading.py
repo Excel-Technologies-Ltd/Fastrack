@@ -2,6 +2,34 @@ import frappe
 from frappe.utils.pdf import get_pdf
 
 
+def get_customer_address(customer_name):
+    """Return a <br>-separated address string for a Customer, or '' if not found."""
+    if not customer_name:
+        return ''
+    try:
+        rows = frappe.db.sql("""
+            SELECT addr.address_line1, addr.address_line2, addr.city, addr.state, addr.country
+            FROM `tabAddress` addr
+            INNER JOIN `tabDynamic Link` dl ON dl.parent = addr.name
+            WHERE dl.link_doctype = 'Customer' AND dl.link_name = %s
+            ORDER BY addr.is_primary_address DESC
+            LIMIT 1
+        """, (customer_name,), as_dict=True)
+        if rows:
+            addr = rows[0]
+            parts = [addr.address_line1, addr.address_line2, addr.city, addr.state, addr.country]
+            valid = []
+            for p in parts:
+                if p:
+                    if p.strip() == '#':
+                        break  # stop here; discard # and everything after
+                    valid.append(p)
+            return '<br>'.join(valid)
+    except Exception:
+        pass
+    return ''
+
+
 @frappe.whitelist()
 def download_sea_bill_of_lading_draft_pdf(doc_name):
     """Download Sea Bill of Lading Draft as PDF"""
@@ -58,15 +86,20 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     """Generate HTML content for Sea Bill of Lading matching the exact reference format"""
 
     # Footer title based on version
-    footer_title = "Original" if is_original else "(ORIGINAL)"
+    footer_title = "ORIGINAL" if is_original else "DRAFT"
 
     # Get dynamic values with defaults
     hbl_shipper = doc.get('hbl_shipper', '') or ''
+    hbl_shipper_address = get_customer_address(hbl_shipper)
     hbl_id = doc.get('hbl_id', '') or ''
     hbl_consignee = doc.get('hbl_consignee', '') or ''
+    hbl_consignee_address = get_customer_address(hbl_consignee)
     notify_to = doc.get('notify_to', '') or ''
-    also_notify = doc.get('also_notify_party', '') or notify_to
-    delivery_apply_to = doc.get('delivery_agent', '') or notify_to
+    notify_to_address = get_customer_address(notify_to)
+    also_notify = doc.get('also_notify_party', '') or ''
+    also_notify_address = get_customer_address(also_notify)
+    delivery_apply_to = doc.get('delivery_agent', '') or ''
+    delivery_apply_to_address = get_customer_address(delivery_apply_to)
 
     # Export references
     invoice_no = doc.get('inv_no', '') or ''
@@ -75,12 +108,16 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     exp_date = doc.get('date_2', '') or ''  # Exp Date
     sc_no = doc.get('sc_no', '') or ''
     sc_date = doc.get('date_3', '') or ''  # SC Date
+    lc_no = doc.get('lc_no', '') or ''
+    lc_date = doc.get('date_4', '') or ''  # LC Date
 
     # Vessel and routing
+    fv = doc.get('fv', '') or ''
+    fv_voyage_no = doc.get('fv__v_no', '') or ''
+    pre_carriage_by = f"{fv} V. {fv_voyage_no}" if fv and fv_voyage_no else fv or fv_voyage_no
     mv = doc.get('mv', '') or ''
     mv_voyage_no = doc.get('mv_voyage_no', '') or ''
     vessel_voyage = f"{mv} V. {mv_voyage_no}" if mv and mv_voyage_no else mv or mv_voyage_no
-    pre_carriage_by = doc.get('pre_carriage_by', '') or vessel_voyage
     place_of_receipt = doc.get('port_of_receipt', '') or doc.get('port_of_loading', '') or ''
     port_of_loading = doc.get('port_of_loading', '') or ''
     port_of_discharge = doc.get('port_of_discharge', '') or ''
@@ -88,18 +125,50 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
 
     # Cargo details
     shipping_marks = doc.get('shipping_marks', '') or ''
+    inco_term = doc.get('inco_term', '') or ''
+    mode = doc.get('mode', '') or ''
     no_of_pkg_hbl = doc.get('no_of_pkg_hbl', '') or ''
     description_of_good = doc.get('description_of_good', '') or ''
     gross_weight = doc.get('gross_weight', '') or ''
     hbl_vol_cbm = doc.get('hbl_vol_cbm', '') or ''
 
+    # Build container table HTML (done in Python to avoid nested f-string issues)
+    container_info = doc.get('container_info', []) or []
+    container_table_html = ''
+    if container_info:
+        rows_html = ''
+        for c in container_info:
+            rows_html += (
+                f'<tr style="font-size: 8px;">'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("custom_container_no", "") or ""}</td>'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("seal_no", "") or ""}</td>'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("size", "") or ""}</td>'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("no_of_pkg", "") or ""} CTN</td>'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("weight", "") or ""} KGS</td>'
+                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("cbm", "") or ""} CBM</td>'
+                f'</tr>'
+            )
+        container_table_html = (
+            '<table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px;">'
+            '<tr style="font-size: 8px; font-weight: bold;">'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Container No.</td>'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Seal No.</td>'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Type</td>'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">PKG</td>'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Gross Weight</td>'
+            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Volume</td>'
+            '</tr>'
+            + rows_html +
+            '</table>'
+        )
+
     # Footer section
     freight_payable_at = doc.get('freight_payable_at', '') or 'AS Arranged'
-    no_of_original_bl = doc.get('no_of_original_bl', '') or '3 (Three)'
+    no_of_original_bl = str(doc.get('no_of_original_bl', '') or '3 (Three)').upper()
     total_no_of_cartons = doc.get('total_no_of_cartons', '') or no_of_pkg_hbl
     hbl_date = doc.get('hbl_date', '') or ''
     place_of_issue = doc.get('place_of_issue', '') or 'Bangladesh'
-    shipped_on_board = f"SHIPPED ON BOARD: {hbl_date}, {place_of_issue}" if hbl_date else ''
+    place_and_date = f"Place and Date of Issue: {hbl_date}, {place_of_issue}" if hbl_date else f"Place and Date of Issue: {place_of_issue}"
 
     html_template = f"""
     <!doctype html>
@@ -223,7 +292,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
               <td style="width: 47%; border: 1px solid black; border-top: none; border-left: none; padding: 3px; vertical-align: top;">
                 <span class="_container_label_text">Shipper / Exporter:</span>
                 <div class="_container_content_text" style="padding-left: 5px;">
-                  {hbl_shipper}
+                  <strong>{hbl_shipper}</strong>
+                  {"<br>" + hbl_shipper_address if hbl_shipper_address else ""}
                 </div>
               </td>
               <td style="width: 53%; border-bottom: 1px solid black; padding: 0; vertical-align: top;">
@@ -277,7 +347,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
               <td style="border: 1px solid black; border-top: none; border-left: none; padding: 3px; vertical-align: top;">
                 <span class="_container_label_text">Consignee (if 'To Order' so indicate):</span>
                 <div class="_container_content_text" style="padding-left: 5px;">
-                  {hbl_consignee}
+                  <strong>{hbl_consignee}</strong>
+                  {"<br>" + hbl_consignee_address if hbl_consignee_address else ""}
                 </div>
               </td>
               <td style="border-bottom: 1px solid black; padding: 3px; vertical-align: top; overflow: hidden;">
@@ -297,6 +368,10 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                         <td class="_text_normal">S/C No.: {sc_no}</td>
                         <td class="_text_normal" style="text-align: right;">Date: {sc_date}</td>
                       </tr>
+                      <tr>
+                        <td class="_text_normal">LC No.: {lc_no}</td>
+                        <td class="_text_normal" style="text-align: right;">Date: {lc_date}</td>
+                      </tr>
                     </table>
                   </strong>
                 </div>
@@ -311,7 +386,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                     <td colspan="2" style="padding: 3px; vertical-align: top;">
                       <span class="_container_label_text">Notify Party (No claim shall attach for failure to notify):</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
-                        {notify_to}
+                        <strong>{notify_to}</strong>
+                        {"<br>" + notify_to_address if notify_to_address else ""}
                       </div>
                     </td>
                   </tr>
@@ -333,7 +409,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                     <td style="border-bottom: 1px solid black; padding: 3px; vertical-align: top;">
                       <span class="_container_label_text">Also Notify:</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
-                        {also_notify}
+                        <strong>{also_notify}</strong>
+                        {"<br>" + also_notify_address if also_notify_address else ""}
                       </div>
                     </td>
                   </tr>
@@ -341,7 +418,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                     <td style="padding: 3px; vertical-align: top;">
                       <span class="_container_label_text">For delivery please apply to:</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
-                        {delivery_apply_to}
+                        <strong>{delivery_apply_to}</strong>
+                        {"<br>" + delivery_apply_to_address if delivery_apply_to_address else ""}
                       </div>
                     </td>
                   </tr>
@@ -393,8 +471,14 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             </tr>
             <tr>
               <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
-                <div class="_text_center" style="min-height: 250px;">
-                  <strong>{shipping_marks}</strong>
+                <div style="display: flex; flex-direction: column; min-height: 250px;">
+                  <div class="_text_center" style="flex: 1;">
+                    <strong>{shipping_marks}</strong>
+                  </div>
+                  <div style="margin-top: 8px; font-size: 9px;">
+                    {"<div><strong>Inco Term</strong></div><div>" + inco_term + "</div>" if inco_term else ""}
+                    {"<div style='margin-top:4px;'><strong>Mode</strong></div><div>" + mode + "</div>" if mode else ""}
+                  </div>
                 </div>
               </td>
               <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
@@ -402,9 +486,10 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
               </td>
               <td style="border: 1px solid black; padding: 8px; vertical-align: top;">
                 {description_of_good}
+                {container_table_html}
               </td>
               <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
-                <strong>{gross_weight} kg</strong>
+                <strong>{gross_weight} KG</strong>
               </td>
               <td style="border: 1px solid black; padding: 8px; vertical-align: top; text-align: center;">
                 <strong>{hbl_vol_cbm} CBM</strong>
@@ -473,12 +558,9 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                   <tr>
                     <td style="padding: 3px; height: 30px; vertical-align: middle;">
-                      <table style="width: 100%; table-layout: fixed;">
-                        <tr>
-                          <td style="width: 40%;">Place and Date of Issue</td>
-                          <td style="width: 60%; text-align: center; word-wrap: break-word; font-size: 8px;"><strong>{shipped_on_board}</strong></td>
-                        </tr>
-                      </table>
+                      <div style="font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <strong>{place_and_date}</strong>
+                      </div>
                     </td>
                   </tr>
                   <tr>
