@@ -24,7 +24,7 @@ def validate(doc, method):
         frappe.throw(f"HBL list should be equal to {total_no_of_hbl}")
     total_weight_of_container_list= sum(Decimal(str(container.weight)) for container in container_info) or 0
     if not gr_weight == total_weight_of_container_list and doc.doctype == "Import Sea Master Bill":
-        frappe.throw("Total weight of container list is not equal to gross weight")
+        frappe.throw(f"Weight missmatch Gr Weight: {gr_weight} - Total Weight : {total_weight_of_container_list} =  {gr_weight - total_weight_of_container_list}")
         
     # filter is_create=1 and get the weight
     hbl_info_list= [hbl for hbl in hbl_info if hbl.is_create==1]
@@ -34,7 +34,7 @@ def validate(doc, method):
         mismatch_value= round(gr_weight,2) - round(total_weight_of_hbl_list,2)
         frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
     if gr_weight< total_weight_of_hbl_list:
-        frappe.throw("HBL weight is greater than gross weight")
+        frappe.throw(f"Weight missmatch Gr Weight: {gr_weight} - Total Weight : {total_weight_of_hbl_list} =  {gr_weight - total_weight_of_hbl_list}")
 
 
 def update_child_hbl(doc, method):

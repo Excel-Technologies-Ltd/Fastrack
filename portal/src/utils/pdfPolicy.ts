@@ -13,6 +13,7 @@ export type PDFPolicy = {
     selectSupplier: boolean
     selectChildDoctype: boolean
     CHILD_DOCTYPE?: string
+    CUSTOMER_FIELDS?: string[]
     DOWNLOAD_METHOD: string
     HAS_ARGUMENTS?: boolean
     ARGUMENTS?: Record<string, string>
@@ -61,6 +62,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectSupplier: false,
         selectChildDoctype: false,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
         DOWNLOAD_METHOD: "fastrack_erp.report_api.import_arrival_notice.download_arrival_notice_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
@@ -109,6 +111,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectSupplier: false,
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
         DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_bdt.download_sea_import_invoice_bdt_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
@@ -126,6 +129,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectSupplier: false,
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
         DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
@@ -159,6 +163,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectSupplier: false,
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_MASTER_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee"],
         DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {

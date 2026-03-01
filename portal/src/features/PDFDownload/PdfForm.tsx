@@ -130,20 +130,27 @@ const PdfForm = () => {
   
 
 
-  // get customer list from child data and must be unique
-  let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
-        ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
+  // Build customer options from Customer-linked fields defined in CUSTOMER_FIELDS policy
+  const customerOptions = (() => {
+    const fields = pdfPolicy.CUSTOMER_FIELDS;
+    if (!fields || fields.length === 0 || Object.keys(docTypeData).length === 0) return [];
+    const values = [
+      ...new Set(
+        fields
+          .map((field) => (docTypeData as any)[field])
+          .filter(Boolean)
+      ),
+    ];
+    return values.map((v: string) => ({ value: v, label: v }));
+  })();
+
+  // get supplier list from child data and must be unique
+  let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData]
+        ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData]
         : null;
-  
-  // get customer list from child data and must be unique
-  const customerList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.customer))] : [];
+
   const supplierList = childData && Array.isArray(childData) ? [...new Set(childData.map((c: any) => c.supplier))] : [];
-  
-  const customerOptions =
-    customerList?.length > 0
-      ? [{ value: "", label: "Select Customer" }, ...customerList.map((c: any) => ({ value: c, label: c }))]
-      : [{ value: "", label: "Select Customer" }];
-      
+
   const supplierOptions =
     supplierList?.length > 0
       ? [{ value: "", label: "Select Supplier" }, ...supplierList.map((c: any) => ({ value: c, label: c }))]
