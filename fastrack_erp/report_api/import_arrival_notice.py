@@ -52,7 +52,6 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 <td class="table-cell-data">{container.get('size', '') or ''}</td>
                 <td class="table-cell-data">{doc.get('nature', '') or ''}</td>
                 <td class="table-cell-data">{container.get('weight', '') or ''}</td>
-                <td class="table-cell-data">{doc.get('description_of_good', '') or ''}</td>
             </tr>
             """
     else:
@@ -136,6 +135,16 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 margin-bottom: 20px;
                 border: 1px solid #000;
             }}
+             .details-table {{
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 12px;
+                
+            }}
+            .details-table td {{
+                padding: 3px 5px;
+                vertical-align: top;
+            }}
             .table-header {{
                 background-color: #f0f0f0;
             }}
@@ -196,19 +205,28 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
     </head>
     <body>
         <div class="document-container">
-            <!-- Header -->
-            <div class="header">
-                <div class="logo">
-                    <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 55px;" />
-                </div>
-            </div>
+        
 
-            <!-- Title -->
-            <div class="center">
-                <div class="title-box">
-                    ARRIVAL NOTICE
-                </div>
-            </div>
+             <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
+                <tr>
+                    <!-- Left: Logo -->
+                    <td style="width:25%; vertical-align:middle;">
+                        <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg"
+                            alt="Fasttrack Logo"
+                            style="height:55px;">
+                    </td>
+
+                    <!-- Center: Title -->
+                    <td style="width:50%; text-align:center; vertical-align:middle;">
+                       <div class="title-box">
+                            ARRIVAL NOTICE
+                        </div>
+                    </td>
+
+                    <!-- Right: Empty (for balance) -->
+                    <td style="width:25%;"></td>
+                </tr>
+            </table>
 
             <!-- Company Info -->
             <div class="company-info">
@@ -227,33 +245,130 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
 
             <!-- Details Container -->
             <div class="details-container">
-                <table class="details-table">
+                <table class="details-table" >
                     <tr>
+                        <td style="width: 20%;"><strong>Notify Party</strong></td>
+                        <td style="width: 80%;"><strong>: </strong>{doc.get('notify_to', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><strong>Consignee</strong></td>
+                        <td style="width: 80%;"><strong>: </strong>{doc.get('hbl_consignee', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><strong>Shipper</strong></td>
+                        <td style="width: 80%;"><strong>: </strong>{doc.get('hbl_shipper', '') or ''}</td>
+                    </tr>
+
+                 </table>
+                <table class="details-table" style="margin-bottom: 20px;">
+                    
+                    <tr>
+                        <td style="width: 20%;"><strong>HBL No</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_id', '') or ''}</td>
+                        <td style="width: 20%;"><strong>M/Vsl. Name</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('mv', '') or ''}</td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><strong>HBL Date</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_date', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Voyage</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('mv_voyage_no', '') or ''}</td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><strong>MBL No</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('mbl_no', '') or ''}</td>
+                        <td style="width: 20%;"><strong>ETD</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_etd', '') or ''}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"><strong>MBL Date</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('mbl_date', '') or ''}</td>
+                        <td style="width: 20%;"><strong>ETA</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('eta', '') or ''}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"><strong>L/C No.& Date</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('lc_date', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Inco Terms</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"><strong>Port of Loading</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('port_of_loading', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Volume CBM</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_vol_cbm', '') or ''}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"><strong>Port of Discharge</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('port_of_discharge', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Total Weight</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('gross_weight', '') or ''}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"><strong>Port of Delivery</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('port_of_delivery', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Total (CTN/PKG)</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('no_of_pkg_hbl', '') or ''}</td>
+    
+                    </tr>
+
+
+                    <tr>
+                        <td style="width: 20%;"><strong>Shipping Line</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('shipping_line', '') or ''}</td>
+                        <td style="width: 20%;"><strong>Total Container</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('total_container_hbl', '') or ''}</td>
+                     
+                     
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><strong>Goods Description</strong></td>
+                        <td style="width: 30%;"><strong>: </strong>{doc.get('description_of_good', '') or ''}</td>
+                     
+                    </tr>
+
+                   <!--  <tr>
                         <td>
-                            <div class="detail-row"><strong>Notify Party</strong>: {doc.get('notify_to', '') or ''}</div>
-                            <div class="detail-row"><strong>Consignee</strong>: {doc.get('hbl_consignee', '') or ''}</div>
-                            <div class="detail-row"><strong>Shipper</strong>: {doc.get('hbl_shipper', '') or ''}</div>
-                            <div class="detail-row"><strong>HBL No</strong>: {doc.get('hbl_id', '') or ''}</div>
-                            <div class="detail-row"><strong>HBL Date</strong>: {doc.get('hbl_date', '') or ''}</div>
-                            <div class="detail-row"><strong>MBL No</strong>: {doc.get('mbl_no', '') or ''}</div>
-                            <div class="detail-row"><strong>MBL Date</strong>: {doc.get('mbl_date', '') or ''}</div>
-                            <div class="detail-row"><strong>L/C No.& Date</strong>: {doc.get('lc_date', '') or ''}</div>
-                            <div class="detail-row"><strong>Port of Loading</strong>: {doc.get('port_of_loading', '') or ''}</div>
-                            <div class="detail-row"><strong>Port of Discharge</strong>: {doc.get('port_of_discharge', '') or ''}</div>
-                            <div class="detail-row"><strong>Port of Delivery</strong>: {doc.get('port_of_delivery', '') or ''}</div>
-                            <div class="detail-row"><strong>Shipping Line</strong>: {doc.get('shipping_line', '') or ''}</div>
+                            //<div class="detail-row"><strong>Notify Party</strong>: {doc.get('notify_to', '') or ''}</div>
+                            //<div class="detail-row"><strong>Consignee</strong>: {doc.get('hbl_consignee', '') or ''}</div>
+                            //<div class="detail-row"><strong>Shipper</strong>: {doc.get('hbl_shipper', '') or ''}</div>
+                            //<div class="detail-row"><strong>HBL No</strong>: {doc.get('hbl_id', '') or ''}</div>
+                           //<div class="detail-row"><strong>HBL Date</strong>: {doc.get('hbl_date', '') or ''}</div>
+                            //<div class="detail-row"><strong>MBL No</strong>: {doc.get('mbl_no', '') or ''}</div>
+                            //<div class="detail-row"><strong>MBL Date</strong>: {doc.get('mbl_date', '') or ''}</div>
+                            //<div class="detail-row"><strong>L/C No.& Date</strong>: {doc.get('lc_date', '') or ''}</div>
+                            //<div class="detail-row"><strong>Port of Loading</strong>: {doc.get('port_of_loading', '') or ''}</div>
+                            //<div class="detail-row"><strong>Port of Discharge</strong>: {doc.get('port_of_discharge', '') or ''}</div>
+                            //<div class="detail-row"><strong>Port of Delivery</strong>: {doc.get('port_of_delivery', '') or ''}</div>
+                            //<div class="detail-row"><strong>Shipping Line</strong>: {doc.get('shipping_line', '') or ''}</div>
+                           // <div class="detail-row"><strong>Goods Description</strong>: {doc.get('description_of_good', '') or ''}</div>
                         </td>
                         <td>
-                            <div class="detail-row"><strong>M/Vsl. Name</strong>: {doc.get('mv', '') or ''}</div>
-                            <div class="detail-row"><strong>Voyage</strong>: {doc.get('mv_voyage_no', '') or ''}</div>
-                            <div class="detail-row"><strong>ETD</strong>: {doc.get('hbl_etd', '') or ''}</div>
-                            <div class="detail-row"><strong>F/Vsl. Name</strong>: {doc.get('fv', '') or ''}</div>
-                            <div class="detail-row"><strong>ETA</strong>: {doc.get('eta', '') or ''}</div>
-                            <div class="detail-row"><strong>Inco Terms</strong>: {doc.get('inco_term', '') or ''}</div>
-                            <div class="detail-row"><strong>Volume CBM</strong>: {doc.get('hbl_vol_cbm', '') or ''}</div>
-                            <div class="detail-row"><strong>Total (CTN/PKG)</strong>: {doc.get('no_of_pkg_hbl', '') or ''}</div>
+                            //<div class="detail-row"><strong>M/Vsl. Name</strong>: {doc.get('mv', '') or ''}</div>
+                           // <div class="detail-row"><strong>Voyage</strong>: {doc.get('mv_voyage_no', '') or ''}</div>
+                            //<div class="detail-row"><strong>ETD</strong>: {doc.get('hbl_etd', '') or ''}</div>
+                           // <div class="detail-row"><strong>F/Vsl. Name</strong>: {doc.get('fv', '') or ''}</div>
+                           // <div class="detail-row"><strong>ETA</strong>: {doc.get('eta', '') or ''}</div>
+                            //<div class="detail-row"><strong>Inco Terms</strong>: {doc.get('inco_term', '') or ''}</div>
+                            //<div class="detail-row"><strong>Volume CBM</strong>: {doc.get('hbl_vol_cbm', '') or ''}</div>
+                            //<div class="detail-row"><strong>Total Weight</strong>: {doc.get('gross_weight', '') or ''}</div>
+                            // <div class="detail-row"><strong>Total (CTN/PKG)</strong>: {doc.get('no_of_pkg_hbl', '') or ''}</div>
+                            //<div class="detail-row"><strong>Total Container</strong>: {doc.get('total_container_hbl', '') or ''}</div>
                         </td>
                     </tr>
+                    --!>
                 </table>
             </div>
 
@@ -266,7 +381,6 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                         <th class="table-cell">Size</th>
                         <th class="table-cell">Mode</th>
                         <th class="table-cell">Weight</th>
-                        <th class="table-cell">Goods Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -275,9 +389,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
             </table>
 
             <!-- Total Weight -->
-            <div class="total-weight">
-                <strong>Total Weight:</strong> {doc.get('gross_weight', '') or ''}
-            </div>
+            
 
             <!-- Terms and Conditions -->
             <div class="terms-conditions">
