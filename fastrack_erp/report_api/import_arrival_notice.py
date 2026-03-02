@@ -231,6 +231,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                     <tr>
                         <td>
                             <div class="detail-row"><strong>Notify Party</strong>: {doc.get('notify_to', '') or ''}</div>
+                            <div class="detail-row"><strong>Consignee</strong>: {doc.get('hbl_consignee', '') or ''}</div>
                             <div class="detail-row"><strong>Shipper</strong>: {doc.get('hbl_shipper', '') or ''}</div>
                             <div class="detail-row"><strong>HBL No</strong>: {doc.get('hbl_id', '') or ''}</div>
                             <div class="detail-row"><strong>HBL Date</strong>: {doc.get('hbl_date', '') or ''}</div>
