@@ -144,7 +144,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     shipping_marks = doc.get('shipping_marks', '') or ''
     inco_term = doc.get('inco_term', '') or ''
     mode = doc.get('mode', '') or ''
-    no_of_pkg_hbl = doc.get('no_of_pkg_hbl', '') or ''
+    _no_of_pkg_hbl_raw = doc.get('no_of_pkg_hbl') or 0
+    no_of_pkg_hbl = int(_no_of_pkg_hbl_raw) if _no_of_pkg_hbl_raw == int(_no_of_pkg_hbl_raw) else _no_of_pkg_hbl_raw
     description_of_good = doc.get('description_of_good', '') or ''
     gross_weight = doc.get('gross_weight', '') or ''
     hbl_vol_cbm = doc.get('hbl_vol_cbm', '') or ''
@@ -153,30 +154,103 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     container_info = doc.get('container_info', []) or []
     container_table_html = ''
     if container_info:
+        def _fmt(v):
+            """Strip trailing .0 from whole-number floats; return '' for empty."""
+            if v is None or v == '':
+                return ''
+            try:
+                f = float(v)
+                return int(f) if f == int(f) else f
+            except (TypeError, ValueError):
+                return v
+
+        cell_style = 'border: 1px solid transparent; padding: 2px 4px; text-align: center; vertical-align: middle; word-break: break-word; overflow: hidden;'
         rows_html = ''
         for c in container_info:
             rows_html += (
                 f'<tr style="font-size: 8px;">'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("custom_container_no", "") or ""}</td>'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("seal_no", "") or ""}</td>'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("size", "") or ""}</td>'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("no_of_pkg", "") or ""} CTN</td>'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("weight", "") or ""} KGS</td>'
-                f'<td style="border: 1px solid black; padding: 2px; text-align: center;">{c.get("cbm", "") or ""} CBM</td>'
+                f'<td style="{cell_style}">{c.get("custom_container_no", "") or ""}</td>'
+                f'<td style="{cell_style}">{c.get("seal_no", "") or ""}</td>'
+                f'<td style="{cell_style}">{c.get("size", "") or ""}</td>'
+                f'<td style="{cell_style}">{_fmt(c.get("no_of_pkg"))}</td>'
+                f'<td style="{cell_style}">{c.get("weight", "") or ""} KGS</td>'
+                f'<td style="{cell_style}">{c.get("cbm", "") or ""} CBM</td>'
+                f'</tr>'
+                f'<tr style="font-size: 8px; height:10px">'
+                f'</tr>'
+                f'<tr style="font-size: 8px; height:10px">'
                 f'</tr>'
             )
+        hdr_style = 'border: 1px solid transparent; padding: 2px 4px; text-align: center; vertical-align: middle; white-space: nowrap;'
         container_table_html = (
-            '<table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px;">'
+            '<table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px; table-layout: fixed;">'
+            '<colgroup>'
+            '<col style="width: 23%;" />'
+            '<col style="width: 20%;" />'
+            '<col style="width: 9%;" />'
+            '<col style="width: 12%;" />'
+            '<col style="width: 20%;" />'
+            '<col style="width: 16%;" />'
+            '</colgroup>'
             '<tr style="font-size: 8px; font-weight: bold;">'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Container No.</td>'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Seal No.</td>'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Type</td>'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">PKG</td>'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Gross Weight</td>'
-            '<td style="border: 1px solid black; padding: 2px; text-align: center;">Volume</td>'
+            f'<td style="{hdr_style}">Container No.</td>'
+            f'<td style="{hdr_style}">|| Seal No.</td>'
+            f'<td style="{hdr_style}">|| Type </td>'
+            f'<td style="{hdr_style}">|| PKG</td>'
+            f'<td style="{hdr_style}">|| Gross Wt.</td>'
+            f'<td style="{hdr_style}">|| Volume</td>'
             '</tr>'
             + rows_html +
             '</table>'
+        )
+
+    # Pre-compute conditional HTML snippets for goods table
+    inco_term_html = f'<div><strong>Inco Term</strong></div><div>{inco_term}</div>' if inco_term else ''
+    mode_html = f"<div style='margin-top:4px;'><strong>Mode</strong></div><div>{mode}</div>" if mode else ''
+
+    # Build goods table data rows.
+    # When container_info exists, the container table spans both
+    # "No. of Packages" and "Description" columns via colspan=2 in a second row.
+    # Outer columns (Shipping Marks, Gross Weight, Volume) use rowspan=2.
+    if container_info:
+        goods_data_rows_html = (
+            '<tr style="height: 160px;" >'
+            f'<td rowspan="2" style="border: 1px solid transparent;  padding: 8px; vertical-align: top;">'
+            f'<div style="display: flex; flex-direction: column;">'
+            f'<div class="_text_center" style="flex: 1;"><strong>{shipping_marks}</strong></div>'
+            f'<div style="margin-top: 8px; font-size: 9px;">{inco_term_html}{mode_html}</div>'
+            f'</div></td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong style="font-size: 10px;">{no_of_pkg_hbl}</strong></td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
+            f'{description_of_good}</td>'
+            f'<td rowspan="2" style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong>{gross_weight} KG</strong></td>'
+            f'<td rowspan="2" style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong>{hbl_vol_cbm} CBM</strong></td>'
+            '</tr>'
+            '<tr>'
+            f'<td colspan="2" style="border: 1px solid transparent; padding: 4px 8px; vertical-align: top;">'
+            f'{container_table_html}'
+            '</td></tr>'
+        )
+    else:
+        goods_data_rows_html = (
+            '<tr>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
+            f'<div style="display: flex; flex-direction: column; min-height: 250px;">'
+            f'<div class="_text_center" style="flex: 1;"><strong>{shipping_marks}</strong></div>'
+            f'<div style="margin-top: 8px; font-size: 9px;">{inco_term_html}{mode_html}</div>'
+            f'</div></td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong style="font-size: 10px;">{no_of_pkg_hbl}</strong></td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
+            f'{description_of_good}</td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong>{gross_weight} KG</strong></td>'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<strong>{hbl_vol_cbm} CBM</strong></td>'
+            '</tr>'
         )
 
     # Footer section
@@ -303,7 +377,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           </table>
 
           <!-- Main Content Table -->
-          <table style="width: 100%; border: 1px solid black; border-collapse: collapse; table-layout: fixed;">
+          <table style="width: 100%; border: 1px solid black; border-left: none; border-right: none; border-collapse: collapse; table-layout: fixed;">
             <!-- ROW 1: Shipper & Carrier Info -->
             <tr>
               <td style="width: 47%; border: 1px solid black; border-top: none; border-left: none; padding: 3px; vertical-align: top;">
@@ -396,11 +470,11 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             </tr>
 
             <!-- ROW 3: Notify Party, Also Notify, For Delivery -->
-            <tr>
-              <td style="border: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
-                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                  <tr>
-                    <td colspan="2" style="padding: 3px; vertical-align: top;">
+            <tr style="">
+              <td style="height: 100%; border: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
+                <table style="height: 100%;  width: 100%; border-collapse: collapse; table-layout: fixed;">
+                  <tr style="height: 80px;">
+                    <td colspan="2" style="height: 60px; vertical-align: top; ">
                       <span class="_container_label_text">Notify Party (No claim shall attach for failure to notify):</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
                         <strong>{notify_to}</strong>
@@ -408,8 +482,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                    <td style="width: 50%; border-top: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
+                  <tr style="height: 70px;">
+                    <td style="width: 50%;  border-right: 1px solid black; border-top: 1px solid black; padding: 3px; text-align: center; vertical-align: top;">
                       <strong>Pre-carriage by</strong>
                       <div class="_height_value_5" style="word-wrap: break-word;">{pre_carriage_by}</div>
                     </td>
@@ -422,7 +496,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
               </td>
               <td style="border-bottom: 1px solid black; padding: 0; vertical-align: top; overflow: hidden;">
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                  <tr>
+                  <tr style="height: 70px;">
                     <td style="border-bottom: 1px solid black; padding: 3px; vertical-align: top;">
                       <span class="_container_label_text">Also Notify:</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
@@ -431,7 +505,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr style="height: 80px;">
                     <td style="padding: 3px; vertical-align: top;">
                       <span class="_container_label_text">For delivery please apply to:</span>
                       <div class="_container_content_text" style="padding-left: 5px; word-wrap: break-word;">
@@ -446,7 +520,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
 
             <!-- ROW 4: Vessel, Port of Loading, Port of Discharge, Place of Delivery -->
             <tr>
-              <td style="border: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
+              <td style="border-bottom: 1px solid black; border-top: none; border-left: none; padding: 0; vertical-align: top;">
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                   <tr>
                     <td style="width: 50%; padding: 3px; vertical-align: top;">
@@ -478,44 +552,20 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           </table>
 
           <!-- Goods Table -->
-          <table style="width: 100%; border: 1px solid black; border-collapse: collapse; margin-top: 0; table-layout: fixed;">
-            <tr style="font-size: 9px;">
-              <th style="width: 20%; border: 1px solid black; padding: 8px;">Shipping Marks</th>
-              <th style="width: 15%; border: 1px solid black; padding: 8px;">No. of Packages<br/>or Shipping Units</th>
-              <th style="width: 35%; border: 1px solid black; padding: 8px;">Description of Packages or Goods</th>
-              <th style="width: 15%; border: 1px solid black; padding: 8px;">Gross Weight</th>
-              <th style="width: 15%; border: 1px solid black; padding: 8px;">Measurement<br/>(Volume)</th>
+          <table style="border-left: none; width: 100%;   margin-top: 0; table-layout: fixed;">
+            <tr style="font-size: 9px; ">
+              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 20%; padding: 8px;">Shipping Marks</th>
+              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 15%; padding: 8px;">No. of Packages<br/>or Shipping Units</th>
+              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 35%; padding: 8px;">Description of Packages or Goods</th>
+              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 15%; padding: 8px;">Gross Weight</th>
+              <th style=" border-bottom: 1px solid black; width: 15%; padding: 8px;">Measurement<br/>(Volume)</th>
             </tr>
-            <tr>
-              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">
-                <div style="display: flex; flex-direction: column; min-height: 250px;">
-                  <div class="_text_center" style="flex: 1;">
-                    <strong>{shipping_marks}</strong>
-                  </div>
-                  <div style="margin-top: 8px; font-size: 9px;">
-                    {"<div><strong>Inco Term</strong></div><div>" + inco_term + "</div>" if inco_term else ""}
-                    {"<div style='margin-top:4px;'><strong>Mode</strong></div><div>" + mode + "</div>" if mode else ""}
-                  </div>
-                </div>
-              </td>
-              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
-                <strong style="font-size: 10px;">{no_of_pkg_hbl}</strong>
-              </td>
-              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">
-                {description_of_good}
-                {container_table_html}
-              </td>
-              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
-                <strong>{gross_weight} KG</strong>
-              </td>
-              <td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">
-                <strong>{hbl_vol_cbm} CBM</strong>
-              </td>
-            </tr>
+            {goods_data_rows_html}
           </table>
+          
 
           <!-- Freight Payable Row -->
-          <table style="width: 100%; border: 1px solid black; border-top: none; border-collapse: collapse; table-layout: fixed;">
+          <table style="border-left: none !; border-right: none; width: 100%; border-top: 1px solid black; border-bottom: 1px solid black; border-collapse: collapse; table-layout: fixed;">
             <tr>
               <td style="width: 50%; border-right: 1px solid black; padding: 3px; height: 30px; vertical-align: middle;">
                 <table style="width: 100%; table-layout: fixed;">
@@ -532,11 +582,11 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           </table>
 
           <!-- Terms and Conditions -->
-          <div style="padding: 8px; border: 1px solid black; border-top: none;">
-            <p style="margin-bottom: 5px;">
+          <div style="font-size:8px; padding: 8px; border-bottom: 1px solid black; border-top: none;">
+            <p style="margin-bottom: 2px;">
               <strong>RECEIVED</strong> by the Carrier the Goods as specified above in apparent good order and condition unless otherwise stated, to be transported to such place as agreed, authorized or permitted herein and subject to all the terms and conditions appearing on the front and reverse of this Bill of Lading to which the Merchant agrees by accepting this Bill of Lading, any local privileges and customs notwithstanding.
             </p>
-            <p style="margin-bottom: 5px;">
+            <p style="margin-bottom: 2px;">
               <strong>THE PARTICULARS GIVEN ABOVE AS DECLARED BY THE SHIPPER</strong> and the weight, measure, quantity, condition, contents and value of the Goods are unknown to the Carrier.
             </p>
             <p>
@@ -545,10 +595,10 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           </div>
 
           <!-- Footer Section -->
-          <table style="width: 100%; border: 1px solid black; border-top: none; border-collapse: collapse; table-layout: fixed;">
+          <table style="border-bottom: 1px solid black; table-layout: fixed;">
             <tr>
               <td style="width: 50%; border-right: 1px solid black; padding: 0; vertical-align: top;">
-                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <table style=" width: 100%; border-collapse: collapse; table-layout: fixed;">
                   <tr>
                     <td style="padding: 3px; height: 30px; vertical-align: middle;">
                       <table style="width: 100%; table-layout: fixed;">
@@ -572,7 +622,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                 </table>
               </td>
               <td style="width: 50%; padding: 0; vertical-align: top; overflow: hidden;">
-                <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <table style=" width: 100%; border-collapse: collapse; table-layout: fixed;">
                   <tr>
                     <td style="padding: 3px; height: 30px; vertical-align: middle;">
                       <div style="font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -580,7 +630,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr >
                     <td style="padding: 8px;">
                       <table style="width: 100%; table-layout: fixed;">
                         <tr>
