@@ -32,6 +32,16 @@ def download_delivery_order_pdf(doc_name="SHBL-00000064"):
 
 def get_delivery_order_html(doc):
     """Generate HTML content for Delivery Order"""
+
+    container_volume_list = []
+    if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
+        for container in doc.container_cost_info:
+            qty = container.get('qty', '') or ''
+            size = container.get('size', '') or ''
+            if qty and size:
+                container_volume_list.append(f"{qty}x{size}")
+            
+    container_volume = ", ".join(container_volume_list)
     
     # Get container information
     container_rows = ""
@@ -175,7 +185,7 @@ def get_delivery_order_html(doc):
             <div class="row mb-3">
                 <!-- Left Column - Party Info -->
                 <div class="col-6">
-                    <p><strong>TO:</strong> {doc.get('do_party', '') or ''}</p>
+                    <p><strong>TO:</strong> {doc.get('do_party', '') or ''}, <br>{doc.get('port_of_delivery', '') or ''}</p>
                     {f'<p>{doc.get("do_party_address", "")}</p>' if doc.get('do_party_address') else ''}
                     {f'<p>{doc.get("do_party_address1", "")}</p>' if doc.get('do_party_address1') else ''}
                 </div>
@@ -186,10 +196,7 @@ def get_delivery_order_html(doc):
             <!-- Right Column - Details Table -->
             <div style="margin-bottom: 20px;">
                 <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                    <td style="width: 20%; font-weight: bold; padding: 2px 0;">Notify Party:</td>
-                    <td style="padding: 2px 0;">{doc.get('notify_to', '') or ''}</td>
-                </tr>
+               
                     <tr>
                         <td style="width: 20%; font-weight: bold; padding: 2px 0;">Date:</td>
                         <td style="padding: 2px 0;">{doc.get('eta', '') or ''}</td>
@@ -220,11 +227,11 @@ def get_delivery_order_html(doc):
                     </tr>
                     <tr>
                         <td style="font-weight: bold; padding: 2px 0;">Date:</td>
-                        <td style="padding: 2px 0;">{doc.get('bl_date', '') or ''}</td>
+                        <td style="padding: 2px 0;">{doc.get('bill_of_entry_date', '') or ''}</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; padding: 2px 0;">Volume:</td>
-                        <td style="padding: 2px 0;">{doc.get('hbl_vol_cbm', '') or ''}</td>
+                        <td style="padding: 2px 0;">{container_volume}</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; padding: 2px 0;">Total Quantity:</td>
@@ -259,7 +266,7 @@ def get_delivery_order_html(doc):
 
             <!-- Total Weight and Validity -->
             <p class="mt-3"><strong>Total Weight:</strong> {doc.get('gross_weight', '') or ''}</p>
-            <p><strong>THIS DELIVERY ORDER IS VALID UP TO:</strong> {doc.get('validity_date', '30-Apr-2025') or '30-Apr-2025'}</p>
+            <p><strong>THIS DELIVERY ORDER IS VALID UP TO:</strong> {doc.get('validity_date', '') or ''}</p>
 
             <!-- Signature Section -->
             <div class="text-right mt-5">

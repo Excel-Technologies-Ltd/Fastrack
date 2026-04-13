@@ -395,13 +395,13 @@
   {
    "allow_on_submit": 1,
    "fieldname": "shipping_marks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text Editor",
    "label": "Shipping Marks"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "description_of_good",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text Editor",
    "label": "Description of Goods"
   },
   {
@@ -533,7 +533,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-02-03 17:41:04.020388",
+ "modified": "2026-04-13 18:12:23.745178",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

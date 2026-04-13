@@ -90,7 +90,6 @@
   "line_no",
   "ocean_freight_remarks",
   "column_break_qkkhg",
-  "bill_of_entry",
   "shipping_line_custom",
   "shipping_line_address_custom",
   "bl_no",
@@ -101,6 +100,8 @@
   "column_break_8kpwz",
   "ex_rate",
   "rotation",
+  "bill_of_entry",
+  "bill_of_entry_date",
   "section_break_igwms",
   "generate",
   "container_cost_info",
@@ -641,6 +642,7 @@
   {
    "fieldname": "bill_of_entry",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Bill of Entry"
   },
   {
@@ -869,6 +871,12 @@
    "in_list_view": 1,
    "label": "Container Mode",
    "options": "Container Mode"
+  },
+  {
+   "fieldname": "bill_of_entry_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Bill of Entry Date"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -887,7 +895,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-04-13 15:32:33.432919",
+ "modified": "2026-04-13 18:01:16.245324",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
