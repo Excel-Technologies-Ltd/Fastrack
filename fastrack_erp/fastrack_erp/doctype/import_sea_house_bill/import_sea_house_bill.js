@@ -398,7 +398,7 @@ function validate_date_sequence(frm) {
         const current_val = frm.doc[filled[i].fieldname];
         const next_val    = frm.doc[filled[i + 1].fieldname];
 
-        if (current_val >= next_val) {
+        if (current_val > next_val) {
             frappe.msgprint({
                 title: __('Invalid Date Sequence'),
                 message: __(

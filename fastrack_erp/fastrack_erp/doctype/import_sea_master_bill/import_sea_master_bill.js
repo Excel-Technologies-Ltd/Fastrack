@@ -1,7 +1,19 @@
 frappe.ui.form.on('Import Sea Master Bill', {
     refresh: function (frm) {
-               // Show Download XML button when document is submitted
-        if(frm.doc.docstatus==1){
+        // Show Submit button after save (docstatus == 0, not a new doc)
+        // if (frm.doc.docstatus == 0 && !frm.is_new()) {
+        //     frm.add_custom_button(__('Submit'), function () {
+        //         frappe.confirm(
+        //             __('Are you sure you want to submit this document?'),
+        //             function () {
+        //                 frm.savesubmit();
+        //             }
+        //         );
+        //     }).addClass('btn-primary');
+        // }
+
+        // Show Download XML button when document is submitted
+        if (frm.doc.docstatus == 1) {
             frm.add_custom_button('Download XML', function () {
                 const url = `/api/method/fastrack_erp.api.download_xml_as_pdf?doctype=${frm.doc.doctype}&docname=${frm.doc.name}`;
                 window.open(url, '_blank');

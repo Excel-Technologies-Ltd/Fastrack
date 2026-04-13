@@ -296,6 +296,10 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                     <tr>
                         <td style="width: 20%;"><strong>L/C No.& Date</strong></td>
                         <td style="width: 30%;"><strong>: </strong> {doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
+                        <td><strong>F/Vsl. Name</strong></td>
+                        <td><strong>: </strong>{doc.get('fv', '') or ''}</td>
+                        <td><strong>FV Voyage No</strong></td>
+                        <td><strong>: </strong>{doc.get('fv__v_no', '') or ''}</td>
                         <td style="width: 20%;"><strong>Inco Terms</strong></td>
                         <td style="width: 30%;"><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
                         
@@ -330,7 +334,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                         <td style="width: 20%;"><strong>Shipping Line</strong></td>
                         <td style="width: 30%;"><strong>: </strong>{doc.get('shipping_line', '') or ''}</td>
                         <td style="width: 20%;"><strong>Total Container</strong></td>
-                        <td style="width: 30%;"><strong>: </strong>{doc.get('total_container_hbl', '') or ''}</td>
+                        <td style="width: 30%;"><strong>: </strong>{int(doc.get('total_container_hbl', '') or 0)}</td>
                      
                      
                     </tr>
@@ -362,6 +366,8 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                             //<div class="detail-row"><strong>ETD</strong>: {doc.get('hbl_etd', '') or ''}</div>
                            // <div class="detail-row"><strong>F/Vsl. Name</strong>: {doc.get('fv', '') or ''}</div>
                            // <div class="detail-row"><strong>ETA</strong>: {doc.get('eta', '') or ''}</div>
+                           // <div class="detail-row"><strong>F/Vsl. Name</strong>: {doc.get('fv', '') or ''}</div>
+                           // <div class="detail-row"><strong>V Voyage No</strong>: {doc.get('fv__v_no', '') or ''}</div>
                             //<div class="detail-row"><strong>Inco Terms</strong>: {doc.get('inco_term', '') or ''}</div>
                             //<div class="detail-row"><strong>Volume CBM</strong>: {doc.get('hbl_vol_cbm', '') or ''}</div>
                             //<div class="detail-row"><strong>Total Weight</strong>: {doc.get('gross_weight', '') or ''}</div>

@@ -49,18 +49,28 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
     
     # Get container volume
     container_volume_list = []
+    ocean_freight_rate = 0
+    ocean_freight_total = 0
+    ocean_freight_total_bdt = 0
     if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
         for container in doc.container_cost_info:
             qty = container.get('qty', '') or ''
             size = container.get('size', '') or ''
+            ocean_freight_rate += container.get('amount', 0) or 0
             if qty and size:
                 container_volume_list.append(f"{qty}x{size}")
+                ocean_freight_total += ocean_freight_rate * int(qty)
+            if container.get('amountbdt') and int(qty):
+                ocean_freight_total_bdt += int(container.get('amountbdt')) * int(qty)
+                
     container_volume = ", ".join(container_volume_list)
+    
+    # amountbdt
     
     
     # Get ocean freight rate
-    ocean_freight_rate = doc.get('total')
-    ocean_freight_total = doc.get('total')
+    # ocean_freight_rate = doc.get('total')
+    # ocean_freight_total = doc.get('total')
 
     
     # Format current date
@@ -182,7 +192,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             <!-- TO Section -->
             <div class="to-section">
                 <p><strong>TO:</strong> &nbsp;&nbsp;{customer_name.upper()}</p>
-                <p style="margin-left: 40px;">{customer_address}</p>
+                <p style="margin-left: 40px;"> {customer_address.split('#')[0] if customer_address else ''} </p>
             </div>
 
             <!-- Date -->
@@ -200,7 +210,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                         <td>{doc.get('hbl_shipper', '') or ''}</td>
                         <td><strong>M/Vsl. Name</strong></td>
                         <td>:</td>
-                        <td>{doc.get('m_vsl_name', '') or ''}</td>
+                        <td>{doc.get('mv', '') or ''}</td>
                     </tr>
                     <tr>
                         <td><strong>HBL No</strong></td>
@@ -225,6 +235,9 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                         <td><strong>F/Vsl. Name</strong></td>
                         <td>:</td>
                         <td>{doc.get('fv', '') or ''}</td>
+                        <td><strong>FV Voyage No</strong></td>
+                        <td>:</td>
+                        <td>{doc.get('fv__v_no', '') or ''}</td>
                     </tr>
                     <tr>
                         <td><strong>MBL Date</strong></td>
@@ -237,7 +250,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                     <tr>
                         <td><strong>Consignee</strong></td>
                         <td>:</td>
-                        <td>{doc.get('consignee', '') or ''}</td>
+                        <td>{doc.get('hbl_consignee', '') or ''}</td>
                         <td><strong>Inco Terms</strong></td>
                         <td>:</td>
                         <td>{doc.get('inco_term', '') or ''}</td>
@@ -245,7 +258,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                     <tr>
                         <td><strong>L/C No.& Date</strong></td>
                         <td>:</td>
-                        <td>{doc.get('lc_date', '') or ''}</td>
+                        <td> {doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -288,7 +301,8 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
                  <p style="margin: 5px 0;"><strong>Ocean Freight </strong>  :  <strong> (US$){ocean_freight_rate}</strong></p>
                 <p style="margin: 5px 0;"><strong>Total Container</strong>  : <strong>{container_volume}</strong></p>
-                <p style="margin: 5px 0;"><strong>So, Total Ocean Freight is</strong>  : <strong> (US$){ocean_freight_total}</strong></p>
+                <p style="margin: 5px 0;"><strong>So, Total Ocean Freight is</strong>  : <strong> (US$) {ocean_freight_total}{f' and BDT is {ocean_freight_total_bdt}' if ocean_freight_total_bdt else ''}</strong></p>
+                
                 <p style="margin: 5px 0;"><strong>Goods Description</strong> : <strong>{doc.get('description_of_good', '')}</strong></p>
             </div>
 

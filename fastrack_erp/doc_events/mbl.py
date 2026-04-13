@@ -29,10 +29,10 @@ def validate(doc, method):
     # filter is_create=1 and get the weight
     hbl_info_list= [hbl for hbl in hbl_info if hbl.is_create==1]
     total_weight_of_hbl_list = sum((Decimal(str(hbl.weight)) for hbl in hbl_info_list), Decimal('0'))
-    total_weight_of_hbl_list = total_weight_of_hbl_list.quantize(Decimal('0.1'))
+    total_weight_of_hbl_list = total_weight_of_hbl_list.quantize(Decimal('0.01'))
     if len(hbl_info_list)== total_no_of_hbl and not round(total_weight_of_hbl_list,2) == round(gr_weight,2):
         mismatch_value= round(gr_weight,2) - round(total_weight_of_hbl_list,2)
-        frappe.throw(f"Total weight of HBL list is not equal to gross weight mismatch value is {str(mismatch_value)}")
+        frappe.throw(f"Total weight {str(gr_weight)} of HBL list {str(total_weight_of_hbl_list)} is not equal to gross weight mismatch value is {str(mismatch_value)}")
     if gr_weight< total_weight_of_hbl_list:
         frappe.throw(f"Weight missmatch Gr Weight: {gr_weight} - Total Weight : {total_weight_of_hbl_list} =  {gr_weight - total_weight_of_hbl_list}")
 

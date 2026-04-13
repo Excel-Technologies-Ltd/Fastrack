@@ -278,7 +278,7 @@ def get_sea_import_invoice_html(doc, customer_address):
             <div class="header-section">
                 <div class="header-left">
                     <p style="margin: 0;"><strong>TO:</strong> {customer_name}</p>
-                    <p style="margin: 0;">{customer_address}</p>
+                    <p style="margin: 0;"> {customer_address.split('#')[0] if customer_address else ''}</p>
                 </div>
             
                 <table style="width:100%; border-collapse:collapse; font-size:12px;">
@@ -328,10 +328,14 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <td style="width: 30%;"><strong>: </strong>{doc.get('notify_to', '') or ''}</td>
                 </tr>
                 <tr>
+                    <td style="width: 20%;"><strong>Consignee</strong></td>
+                    <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_consignee', '') or ''}</td>
+                </tr>
+                <tr>
                     <td style="width: 20%;"><strong>Shipper</strong></td>
                     <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_shipper', '') or ''}</td>
-                    <td style="width: 20%;"><strong>M/Vsl. Name:</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('m_vsl_name', '') or ''}</td>
+                    <td style="width: 20%;"><strong>M/Vsl. Name</strong></td>
+                    <td style="width: 30%;"><strong>: </strong>{doc.get('mv', '') or ''}</td>
                 </tr>
                 <tr>
                     <td><strong>HBL No</strong></td>
@@ -350,42 +354,50 @@ def get_sea_import_invoice_html(doc, customer_address):
                     <td><strong>: </strong>{doc.get('mbl_no', '') or ''}</td>
                     <td><strong>F/Vsl. Name</strong></td>
                     <td><strong>: </strong>{doc.get('fv', '') or ''}</td>
+                    <td><strong>FV Voyage No</strong></td>
+                    <td><strong>: </strong>{doc.get('fv__v_no', '') or ''}</td>
                 </tr>
                 <tr>
                     <td><strong>MBL Date</strong></td>
                     <td><strong>: </strong>{doc.get('mbl_date', '') or ''}</td>
                     <td><strong>ETA</strong></td>
                     <td><strong>: </strong>{doc.get('eta', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>Bank</strong></td>
-                    <td><strong>: </strong>MODHUMOTI BANK LIMITED</td>
                     <td><strong>Inco Terms</strong></td>
                     <td><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
                 </tr>
                 <tr>
                     <td><strong>L/C No & Date</strong></td>
-                    <td><strong>: </strong>{doc.get('lc_date', '') or ''}</td>
-                    <td><strong>Container Volume</strong></td>
-                    <td><strong>: </strong>{container_volume}</td>
+                    <td><strong>: </strong>{doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
+                    <td><strong>Total Container</strong></td>
+                    <td><strong>: </strong>{int(doc.get('total_container_hbl', '') or 0)}</td>
                 </tr>
                 <tr>
                     <td><strong>Port of Loading</strong></td>
                     <td><strong>: </strong>{doc.get('port_of_loading', '') or ''}</td>
                     <td><strong>Volume CBM</strong></td>
-                    <td><strong>: </strong>{doc.get('vol_cbm', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get('hbl_vol_cbm', '') or ''}</td>
+                    
                 </tr>
                 <tr>
                     <td><strong>Port of Discharge</strong></td>
                     <td><strong>: </strong>{doc.get('port_of_discharge', '') or ''}</td>
-                    <td><strong>Quantity</strong></td>
+                    <td><strong>Total (CTN/PKG)</strong></td>
                     <td><strong>: </strong>{doc.get('no_of_pkg_hbl', '') or ''}</td>
+                    <td><strong>Total Weight</strong></td>
+                    <td><strong>: </strong>{doc.get('gross_weight', '') or ''}</td>
                 </tr>
                 <tr>
                     <td><strong>Port of Delivery</strong></td>
                     <td><strong>: </strong>{doc.get('port_of_delivery', '') or ''}</td>
-                    <td><strong>Shipping Line:</strong></td>
+                    
+                </tr>
+                <tr>
+                    <td><strong>Shipping Line</strong></td>
                     <td><strong>: </strong>{doc.get('shipping_line', '') or ''}</td>
+                </tr>
+                <tr>
+                    <td><strong>Goods Description</strong></td>
+                    <td><strong>: </strong>{doc.get('description_of_good', '') or ''}</td>
                 </tr>
             </table>
 
@@ -427,11 +439,11 @@ def get_sea_import_invoice_html(doc, customer_address):
             <!-- Footer -->
             <div class="footer">
                 <p style="margin: 4px 0;">
-                    <strong>DHAKA OFFICE :</strong> HOUSE # 14 (2nd Floor), ROAD#13/C, BLOCK # E, BANANI, DHAKA-1213, BANGLADESH<br />
+                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213<br />
                     Tel: +880-2-8836386, Fax: +880-2-8836374
                 </p>
                 <p style="margin: 4px 0;">
-                    <strong>CHITTAGONG OFFICE :</strong> 259/A, HARUN BHABON (1st Floor), BADAMTOLI, SK.MUJIB ROAD, AGRABAD C/A, CHATTOGRAM<br />
+                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM<br />
                     Tel: +880-31-2527634
                 </p>
             </div>
