@@ -9,6 +9,17 @@ frappe.ui.form.on('Export Sea House Bill', {
         }
     },
 
+    eta: function(frm) {
+        if (frm.doc.eta && frm.doc.etd && frm.doc.eta < frm.doc.etd) {
+                frappe.msgprint({
+                    title: __('Invalid ETA Date'),
+                    message: __('ETA date cannot be before ETD Date.'),
+                    indicator: 'red'
+                });
+                frm.set_value('eta', null);
+            }
+    },
+
     refresh: function(frm) {
         const expense_list = frm.doc.purchase_invoice_list
         const format_expense = (expense_list && expense_list.length > 0) ? expense_list.map(expense => {

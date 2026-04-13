@@ -43,6 +43,7 @@
   "hbl_gr_weight",
   "chargeable_weight",
   "billing_section",
+  "arrival_date",
   "invoice_list",
   "total_invoice_amount",
   "column_break_billing",
@@ -379,12 +380,18 @@
    "fieldtype": "Table",
    "label": "Draft Invoice List",
    "options": "Fastrack Draft Bill"
+  },
+  {
+   "fieldname": "arrival_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Arrival Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-27 12:14:38.187590",
+ "modified": "2026-04-13 12:18:56.999564",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

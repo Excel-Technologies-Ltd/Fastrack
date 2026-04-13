@@ -50,7 +50,8 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 <td class="table-cell-data">{container.get('custom_container_no', '') or ''}</td>
                 <td class="table-cell-data">{container.get('seal_no', '') or ''}</td>
                 <td class="table-cell-data">{container.get('size', '') or ''}</td>
-                <td class="table-cell-data">{doc.get('nature', '') or ''}</td>
+                <td class="table-cell-data">{container.get('status', '') or ''}</td>
+                <td class="table-cell-data">{ int(container.get('no_of_pkg', '') or 0)}</td>
                 <td class="table-cell-data">{container.get('weight', '') or ''}</td>
             </tr>
             """
@@ -232,7 +233,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
             <div class="company-info">
                 <div class="text-bold">TO: {customer_name}</div>
                 <div class="company-address">
-                    {customer_address}
+                    {customer_address.split('#')[0] if customer_address else ''}
                 </div>
             </div>
 
@@ -294,7 +295,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
 
                     <tr>
                         <td style="width: 20%;"><strong>L/C No.& Date</strong></td>
-                        <td style="width: 30%;"><strong>: </strong>{doc.get('lc_date', '') or ''}</td>
+                        <td style="width: 30%;"><strong>: </strong> {doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
                         <td style="width: 20%;"><strong>Inco Terms</strong></td>
                         <td style="width: 30%;"><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
                         
@@ -380,6 +381,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                         <th class="table-cell">Seal No.</th>
                         <th class="table-cell">Size</th>
                         <th class="table-cell">Mode</th>
+                        <th class="table-cell">No of Pkg</th>
                         <th class="table-cell">Weight</th>
                     </tr>
                 </thead>

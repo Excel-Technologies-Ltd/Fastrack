@@ -2,6 +2,17 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Export Air Master Bill', {
+	eta: function(frm) {
+        if (frm.doc.eta && frm.doc.flight_date && frm.doc.eta < frm.doc.flight_date) {
+                frappe.msgprint({
+                    title: __('Invalid ETA Date'),
+                    message: __('ETA date cannot be before Flight Date.'),
+                    indicator: 'red'
+                });
+                frm.set_value('eta', null);
+            }
+    },
+
 	refresh: function(frm) {
 		frm.doc.mbl_open_by = frappe.session.user;
 		frm.refresh_field('mbl_open_by');

@@ -22,6 +22,8 @@
   "lc_number",
   "no_of_pkg",
   "cargo_description",
+  "etd",
+  "eta",
   "column_break_aevai",
   "sales_person",
   "reference_number",
@@ -338,12 +340,22 @@
    "fieldname": "mbl_id",
    "fieldtype": "Data",
    "label": "MBL No."
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-03 17:30:47.775300",
+ "modified": "2026-04-13 11:48:32.145596",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export D2D Bill",

@@ -195,7 +195,8 @@
    "allow_on_submit": 1,
    "fieldname": "hbl_etd",
    "fieldtype": "Date",
-   "label": "ETD"
+   "label": "ETD",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -876,7 +877,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-01-15 13:31:35.651322",
+ "modified": "2026-04-13 11:42:34.724108",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

@@ -1,6 +1,6 @@
 frappe.ui.form.on('Import Sea Master Bill', {
     refresh: function (frm) {
-        // Show Download XML button when document is submitted
+               // Show Download XML button when document is submitted
         if(frm.doc.docstatus==1){
             frm.add_custom_button('Download XML', function () {
                 const url = `/api/method/fastrack_erp.api.download_xml_as_pdf?doctype=${frm.doc.doctype}&docname=${frm.doc.name}`;
@@ -12,6 +12,17 @@ frappe.ui.form.on('Import Sea Master Bill', {
     onload: function(frm){
         if(frm.is_new()){
             frm.set_value("mbl_open_by",frappe.session.user)
+        }
+    },
+
+    fv_etd: function(frm) {
+        if (frm.doc.fv_etd && frm.doc.fv_etd < frm.doc.etd) {
+            frappe.msgprint({
+                title: __('Invalid ETD Date'),
+                message: __('ETD cannot be in the past. Please select a valid date.'),
+                indicator: 'red'
+            });
+            frm.set_value('fv_etd', null);
         }
     }
 });

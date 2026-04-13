@@ -6,6 +6,18 @@ frappe.ui.form.on('Export Sea Master Bill', {
 		frm.doc.mbl_open_by = frappe.session.user;
 		frm.refresh_field('mbl_open_by');
 	},
+
+	eta: function(frm) {
+        if (frm.doc.eta && frm.doc.etd && frm.doc.eta < frm.doc.etd) {
+                frappe.msgprint({
+                    title: __('Invalid ETA Date'),
+                    message: __('ETA date cannot be before ETD Date.'),
+                    indicator: 'red'
+                });
+                frm.set_value('eta', null);
+            }
+    },
+	
 	onload: function(frm){
 		if(frm.is_new()){
 			frm.set_value("mbl_open_by",frappe.session.user)

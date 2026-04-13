@@ -133,7 +133,7 @@
    "allow_on_submit": 1,
    "fieldname": "etd",
    "fieldtype": "Date",
-   "label": "ETD"
+   "label": "Arrival Date."
   },
   {
    "fieldname": "amended_from",
@@ -194,7 +194,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-02-03 17:47:53.277805",
+ "modified": "2026-04-13 11:56:32.148511",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",

@@ -266,7 +266,7 @@ frappe.ui.form.on('Import Sea House Bill', {
     },__("Download"));
 },
     generate:function(frm){
-     
+
             const container_items = frm.doc.container_info;
             if(container_items.length>0){
                 const sizeQtySummary = getSizeQtySummary(container_items);
@@ -274,9 +274,18 @@ frappe.ui.form.on('Import Sea House Bill', {
             }else{
                 frappe.throw("Please add container info first");
             }
-        
-    }
-    
+
+    },
+
+    validate: function(frm) {
+        validate_date_sequence(frm);
+    },
+
+    hbl_etd: function(frm) { validate_date_sequence(frm); },
+    fv_etd:  function(frm) { validate_date_sequence(frm); },
+    eta:     function(frm) { validate_date_sequence(frm); },
+    etb:     function(frm) { validate_date_sequence(frm); },
+    eta_dhaka: function(frm) { validate_date_sequence(frm); },
 
 
 });
@@ -365,6 +374,42 @@ function toggle_container_info_visibility(frm) {
     } else {
         // Show container_info field
         frm.set_df_property('container_info', 'hidden', 0);
+    }
+}
+
+// Date sequence validation: hbl_etd < fv_etd < eta < etb < eta_dhaka
+// Fields with no data are skipped; only filled fields are compared in order.
+function validate_date_sequence(frm) {
+    const all_fields = [
+        { fieldname: 'hbl_etd',   label: 'HBL ETD' },
+        { fieldname: 'fv_etd',    label: 'FV ETD' },
+        { fieldname: 'eta',       label: 'ETA' },
+        { fieldname: 'etb',       label: 'ETB' },
+        { fieldname: 'eta_dhaka', label: 'ETA Dhaka' },
+    ];
+
+    // Keep only fields that have a value
+    const filled = all_fields.filter(f => frm.doc[f.fieldname]);
+
+    // Need at least 2 filled dates to compare
+    if (filled.length < 2) return;
+
+    for (let i = 0; i < filled.length - 1; i++) {
+        const current_val = frm.doc[filled[i].fieldname];
+        const next_val    = frm.doc[filled[i + 1].fieldname];
+
+        if (current_val >= next_val) {
+            frappe.msgprint({
+                title: __('Invalid Date Sequence'),
+                message: __(
+                    '{0} must be earlier than {1}. Required order: HBL ETD < FV ETD < ETA < ETB < ETA Dhaka.',
+                    [filled[i].label, filled[i + 1].label]
+                ),
+                indicator: 'red'
+            });
+            frappe.validated = false;
+            return;
+        }
     }
 }
 

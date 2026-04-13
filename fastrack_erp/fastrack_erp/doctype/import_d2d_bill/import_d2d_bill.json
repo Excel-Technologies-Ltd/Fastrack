@@ -22,6 +22,7 @@
   "lc_number",
   "no_of_pkg",
   "cargo_description",
+  "declar_value_of_custom",
   "column_break_aevai",
   "sales_person",
   "reference_number",
@@ -35,7 +36,8 @@
   "lc_date",
   "gr_weight",
   "chargeable_weight",
-  "declar_value_of_custom",
+  "etd",
+  "eta",
   "billing_section",
   "invoice_list",
   "total_invoice_amount",
@@ -328,12 +330,22 @@
    "fieldname": "mbl_id",
    "fieldtype": "Data",
    "label": "MBL No."
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-03 17:29:14.564318",
+ "modified": "2026-04-13 12:31:31.081491",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",

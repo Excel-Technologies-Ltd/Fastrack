@@ -6,7 +6,20 @@ frappe.ui.form.on('Import Air House Bill', {
         }
     },
 
+    arrival_date: function(frm) {
+        if (frm.doc.arrival_date && frm.doc.flight_date && frm.doc.arrival_date < frm.doc.flight_date) {
+                frappe.msgprint({
+                    title: __('Invalid Arrival Date'),
+                    message: __('Arrival date cannot be before Flight Date.'),
+                    indicator: 'red'
+                });
+                frm.set_value('arrival_date', null);
+            }
+    },
+
     refresh: function(frm) {
+
+        
         const expense_list = frm.doc.purchase_invoice_list
         const format_expense = (expense_list && expense_list.length > 0) ? expense_list.map(expense => {
             return {
@@ -226,5 +239,7 @@ frappe.ui.form.on('Import Air House Bill', {
             });
             dialog.show();
         }, __("Download"));
+
+        
     }
 });
