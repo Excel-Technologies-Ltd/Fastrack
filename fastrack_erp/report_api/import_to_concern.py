@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url, format_date, today
+from fastrack_erp.report_api.report_helpers import get_shipping_details_html
 
 
 @frappe.whitelist()
@@ -203,99 +204,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             <!-- Shipping Details -->
             <div class="details-section">
                 <p><strong>Shipping Details:</strong></p>
-                <table class="details-table">
-                    <tr>
-                        <td><strong>Shipper</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('hbl_shipper', '') or ''}</td>
-                        <td><strong>M/Vsl. Name</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('mv', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>HBL No</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('hbl_id', '') or ''}</td>
-                        <td><strong>Voyage</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('mv_voyage_no', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>HBL Date</strong></td>
-                        <td>:</td>
-                        <td>{format_date(doc.get('hbl_date'), 'dd-MMM-yyyy') if doc.get('hbl_date') else ''}</td>
-                        <td><strong>ETD</strong></td>
-                        <td>:</td>
-                        <td>{format_date(doc.get('hbl_etd'), 'dd-MMM-yyyy') if doc.get('hbl_etd') else ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>MBL No</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('mbl_no', '') or ''}</td>
-                        <td><strong>F/Vsl. Name</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('fv', '') or ''}</td>
-                        <td><strong>FV Voyage No</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('fv__v_no', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>MBL Date</strong></td>
-                        <td>:</td>
-                        <td>{format_date(doc.get('mbl_date'), 'dd-MMM-yyyy') if doc.get('mbl_date') else ''}</td>
-                        <td><strong>ETA</strong></td>
-                        <td>:</td>
-                        <td>{format_date(doc.get('eta'), 'dd-MMM-yyyy') if doc.get('eta') else ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Consignee</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('hbl_consignee', '') or ''}</td>
-                        <td><strong>Inco Terms</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('inco_term', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>L/C No.& Date</strong></td>
-                        <td>:</td>
-                        <td> {doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Port of Loading</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('port_of_loading', '') or ''}</td>
-                        <td><strong>Volume CBM</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('hbl_vol_cbm', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Port of Discharge</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('port_of_discharge', '') or ''}</td>
-                        <td><strong>Total (CTN/PKG)</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('no_of_pkg_hbl', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Port of Delivery</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('port_of_delivery', '') or ''}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Shipping Line</strong></td>
-                        <td>:</td>
-                        <td>{doc.get('shipping_line', '') or ''}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
+                {get_shipping_details_html(doc, format_date_fn=format_date)}
 
                 <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p>
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>

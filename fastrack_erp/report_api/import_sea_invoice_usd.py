@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
+from fastrack_erp.report_api.report_helpers import get_shipping_details_html
 
 
 @frappe.whitelist()
@@ -324,82 +325,19 @@ def get_sea_import_invoice_html(doc, customer_address):
             <h4>Shipping Details:</h4>
             <table class="details-table">
                 <tr>
-                    <td style="width: 20%;"><strong>Notify Party</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('notify_to', '') or ''}</td>
+                    <td style="width:20%;"><strong>Notify Party</strong></td>
+                    <td style="width:80%;">: {doc.get('notify_to', '') or ''}</td>
                 </tr>
                 <tr>
-                    <td style="width: 20%;"><strong>Consignee</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_consignee', '') or ''}</td>
+                    <td><strong>Consignee</strong></td>
+                    <td>: {doc.get('hbl_consignee', '') or ''}</td>
                 </tr>
                 <tr>
-                    <td style="width: 20%;"><strong>Shipper</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_shipper', '') or ''}</td>
-                    <td style="width: 20%;"><strong>M/Vsl. Name</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('mv', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>HBL No</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_id', '') or ''}</td>
-                    <td><strong>Voyage</strong></td>
-                    <td><strong>: </strong>{doc.get('mv_voyage_no', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>HBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_date', '') or ''}</td>
-                    <td><strong>ETD</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_etd', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>MBL No</strong></td>
-                    <td><strong>: </strong>{doc.get('mbl_no', '') or ''}</td>
-                    <td><strong>F/Vsl. Name</strong></td>
-                    <td><strong>: </strong>{doc.get('fv', '') or ''}</td>
-                    <td><strong>FV Voyage No</strong></td>
-                    <td><strong>: </strong>{doc.get('fv__v_no', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>MBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get('mbl_date', '') or ''}</td>
-                    <td><strong>ETA</strong></td>
-                    <td><strong>: </strong>{doc.get('eta', '') or ''}</td>
-                    <td><strong>Inco Terms</strong></td>
-                    <td><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>L/C No & Date</strong></td>
-                    <td><strong>: </strong>{doc.get('lc', '') or ''} & {doc.get('lc_date', '') or ''}</td>
-                    <td><strong>Total Container</strong></td>
-                    <td><strong>: </strong>{int(doc.get('total_container_hbl', '') or 0)}</td>
-                </tr>
-                <tr>
-                    <td><strong>Port of Loading</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_loading', '') or ''}</td>
-                    <td><strong>Volume CBM</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_vol_cbm', '') or ''}</td>
-                    
-                </tr>
-                <tr>
-                    <td><strong>Port of Discharge</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_discharge', '') or ''}</td>
-                    <td><strong>Total (CTN/PKG)</strong></td>
-                    <td><strong>: </strong>{doc.get('no_of_pkg_hbl', '') or ''}</td>
-                    <td><strong>Total Weight</strong></td>
-                    <td><strong>: </strong>{doc.get('gross_weight', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>Port of Delivery</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_delivery', '') or ''}</td>
-                    
-                </tr>
-                <tr>
-                    <td><strong>Shipping Line</strong></td>
-                    <td><strong>: </strong>{doc.get('shipping_line', '') or ''}</td>
-                </tr>
-                <tr>
-                    <td><strong>Goods Description</strong></td>
-                    <td><strong>: </strong>{doc.get('description_of_good', '') or ''}</td>
+                    <td><strong>Shipper</strong></td>
+                    <td>: {doc.get('hbl_shipper', '') or ''}</td>
                 </tr>
             </table>
+            {get_shipping_details_html(doc)}
 
             <!-- Charges Table -->
             <h4 style="margin-top: 20px;">Charges</h4>
