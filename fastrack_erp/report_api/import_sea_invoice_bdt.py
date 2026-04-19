@@ -7,7 +7,7 @@ from frappe.utils import get_url
 def download_sea_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
     print(doc_name, invoice_ids)
     """Download Sea Import Invoice BDT as PDF using HTML template"""
-    
+
     try:
         # Get the document
         doctype = "Import Sea House Bill"
@@ -19,11 +19,13 @@ def download_sea_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
             # make array of invoice_ids
             invoice_ids = invoice_ids.split(",")
             print(invoice_ids)
-            invoice_list = [invoice for invoice in invoice_list if invoice.name in invoice_ids]
+            invoice_list = [
+                invoice for invoice in invoice_list if invoice.name in invoice_ids
+            ]
             print(invoice_list)
         doc.invoice_list = invoice_list
         print(doc.invoice_list)
-        
+
         # Get customer address
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
@@ -34,50 +36,50 @@ def download_sea_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
                     customer_address = customer_doc.primary_address or ""
                 except:
                     customer_address = ""
-        
+
         # Generate HTML content
         html_content = get_sea_import_invoice_bdt_html(doc, customer_address)
-        
+
         # Generate PDF
         pdf_content = get_pdf(html_content)
-        
+
         # Set filename
         filename = f"Sea_Import_Invoice_BDT_{doc_name}.pdf"
-        
+
         # Prepare response
         frappe.local.response.filename = filename
         frappe.local.response.filecontent = pdf_content
         frappe.local.response.type = "download"
-        
+
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
 def get_sea_import_invoice_bdt_html(doc, customer_address):
     """Generate HTML content for Sea Import Invoice BDT"""
-    
+
     # Get customer info
     customer_name = ""
     if doc.invoice_list and len(doc.invoice_list) > 0:
         customer_name = doc.invoice_list[0].customer or ""
-    
+
     # Get container volume
     container_volume_list = []
-    if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
+    if hasattr(doc, "container_cost_info") and doc.container_cost_info:
         for container in doc.container_cost_info:
-            qty = container.get('qty', '') or ''
-            size = container.get('size', '') or ''
+            qty = container.get("qty", "") or ""
+            size = container.get("size", "") or ""
             if qty and size:
                 container_volume_list.append(f"{qty}x{size}")
     container_volume = ", ".join(container_volume_list)
-    
+
     # Get container numbers
     container_numbers = []
 
-    if hasattr(doc, 'container_info') and doc.container_info:
+    if hasattr(doc, "container_info") and doc.container_info:
         for container in doc.container_info:
-            container_no = container.get('custom_container_no', '') or ''
-            size = container.get('size', '') or ''
+            container_no = container.get("custom_container_no", "") or ""
+            size = container.get("size", "") or ""
             if container_no:
                 container_numbers.append((container_no, size))  # store as tuple
 
@@ -86,25 +88,27 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
         size_count = {}
         for _, size in container_numbers:
             size_count[size] = size_count.get(size, 0) + 1
-        
+
         # Create grouped string like "20ft: 3, 40ft: 2"
         grouped = [f"{size}/ {qty}" for size, qty in size_count.items()]
         container_numbers_str = "" + ", ".join(grouped)
     else:
         # List individually
-        container_numbers_str = ", ".join(f"{no}/{size}" for no, size in container_numbers)
-    
+        container_numbers_str = ", ".join(
+            f"{no}/{size}" for no, size in container_numbers
+        )
+
     # Get invoice items
     invoice_rows = ""
     total_amount_bdt = 0
-    if hasattr(doc, 'invoice_list') and doc.invoice_list:
+    if hasattr(doc, "invoice_list") and doc.invoice_list:
         for idx, item in enumerate(doc.invoice_list):
-            rate = item.get('rate', 0) or 0
-            total_price = item.get('total_price', 0) or 0
-            exchange_rate = item.get('exchange_rate', 0) or 0
-            base_net_amount = item.get('base_net_amount', 0) or 0
+            rate = round(float(item.get("rate", 0) or 0), 2)
+            total_price = round(float(item.get("total_price", 0) or 0), 2)
+            exchange_rate = item.get("exchange_rate", 0) or 0
+            base_net_amount = item.get("base_net_amount", 0) or 0
             total_amount_bdt += float(base_net_amount) if base_net_amount else 0
-            
+
             if idx == 0:  # First row with rowspan for container number
                 invoice_rows += f"""
                 <tr>
@@ -112,16 +116,13 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                         {container_numbers_str}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('item_code', '') or ''}
+                        {item.get("item_code", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('qty', '') or ''}
+                        {item.get("qty", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {rate}
-                    </td>
-                    <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('currency', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
@@ -138,16 +139,13 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 invoice_rows += f"""
                 <tr>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('item_code', '') or ''}
+                        {item.get("item_code", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('qty', '') or ''}
+                        {item.get("qty", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {rate}
-                    </td>
-                    <td style="border: 1px solid black; padding: 5px;">
-                        {item.get('currency', '') or ''}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {total_price}
@@ -172,7 +170,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
             <td style="border: 1px solid black; padding: 5px;">-</td>
         </tr>
         """
-    
+
     html_template = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -260,7 +258,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 margin-bottom: 4px;
             }}
             .footer {{
-                font-size: 11px;
+                font-size: 8px;
                 line-height: 1.4;
                 text-align: center;
                 color: black;
@@ -296,7 +294,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
             <div class="header-section">
                 <div class="header-left">
                     <p style="margin: 0;"><strong>TO:</strong> {customer_name}</p>
-                    <p style="margin: 0;">{customer_address}</p>
+                    <p style="margin: 0;">{customer_address.split("#")[0]}</p>
                 </div>
             
                 <table style="width:100%; border-collapse:collapse; font-size:12px;">
@@ -308,7 +306,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                             <strong>:</strong>
                         </td>
                         <td style="width:60%; padding:2px 6px; text-align:right;">
-                            {doc.get('invoice_uid', '') or ''}
+                            {doc.get("invoice_uid", "") or ""}
                         </td>
                     </tr>
                     <tr>
@@ -319,7 +317,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                             <strong>:</strong>
                         </td>
                         <td style="padding:2px 6px; text-align:right;">
-                            {doc.get('hbl_date', '') or ''}
+                            {doc.get("hbl_date", "") or ""}
                         </td>
                     </tr>
                     <tr>
@@ -343,68 +341,79 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
             <table class="details-table">
               <tr>
                     <td style="width: 20%;"><strong>Notify Party</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('notify_to', '') or ''}</td>
+                    <td style="width: 30%;"><strong>: </strong>{doc.get("notify_to", "") or ""}</td>
                    
                 </tr>
                 <tr>
                     <td style="width: 20%;"><strong>Shipper</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('hbl_shipper', '') or ''}</td>
+                    <td style="width: 30%;"><strong>: </strong>{doc.get("hbl_shipper", "") or ""}</td>
                     <td style="width: 20%;"><strong>M/Vsl. Name</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get('m_vsl_name', '') or ''}</td>
+                    <td style="width: 30%;"><strong>: </strong>{doc.get("mv", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>HBL No</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_id', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("hbl_id", "") or ""}</td>
                     <td><strong>Voyage</strong></td>
-                    <td><strong>: </strong>{doc.get('mv_voyage_no', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("mv_voyage_no", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>HBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_date', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("hbl_date", "") or ""}</td>
                     <td><strong>ETD</strong></td>
-                    <td><strong>: </strong>{doc.get('hbl_etd', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("hbl_etd", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>MBL No</strong></td>
-                    <td><strong>: </strong>{doc.get('mbl_no', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("mbl_no", "") or ""}</td>
                     <td><strong>F/Vsl. Name</strong></td>
-                    <td><strong>: </strong>{doc.get('fv', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("fv", "") or ""}</td>
+                </tr>
+                 <tr>
+                    <td><strong>FV Voyage No</strong></td>
+                    <td><strong>: </strong>{doc.get("fv__v_no", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>MBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get('mbl_date', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("mbl_date", "") or ""}</td>
                     <td><strong>ETA</strong></td>
-                    <td><strong>: </strong>{doc.get('eta', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("eta", "") or ""}</td>
                 </tr>
                 <tr>
-                    <td><strong>Bank</strong></td>
+                    <td><strong>Consignee</strong></td>
                     <td><strong>: </strong>MODHUMOTI BANK LIMITED</td>
                     <td><strong>Inco Terms</strong></td>
-                    <td><strong>: </strong>{doc.get('inco_term', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("inco_term", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>L/C No & Date</strong></td>
-                    <td><strong>: </strong>{doc.get('lc_date', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("lc", "") or ""} & {doc.get("lc_date", "") or ""}</td>
                     <td><strong>Container Volume</strong></td>
                     <td><strong>: </strong>{container_volume}</td>
                 </tr>
                 <tr>
                     <td><strong>Port of Loading</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_loading', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("port_of_loading", "") or ""}</td>
                     <td><strong>Volume CBM</strong></td>
-                    <td><strong>: </strong>{doc.get('vol_cbm', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("hbl_vol_cbm", "") or ""}</td>
                 </tr>
                 <tr>
                     <td><strong>Port of Discharge</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_discharge', '') or ''}</td>
-                    <td><strong>Quantity</strong></td>
-                    <td><strong>: </strong>{doc.get('no_of_pkg_hbl', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("port_of_discharge", "") or ""}</td>
+                    <td><strong>Total (CTN/PKG)</strong></td>
+                    <td><strong>: </strong>{int(doc.get("no_of_pkg_hbl", "")) or 0}</td>
                 </tr>
                 <tr>
                     <td><strong>Port of Delivery</strong></td>
-                    <td><strong>: </strong>{doc.get('port_of_delivery', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("port_of_delivery", "") or ""}</td>
                     <td><strong>Shipping Line</strong></td>
-                    <td><strong>: </strong>{doc.get('shipping_line', '') or ''}</td>
+                    <td><strong>: </strong>{doc.get("shipping_line", "") or ""}</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Shipment Mode</strong></td>
+                    <td><strong>: </strong>{doc.get("custom_shipment_mode", "") or ""}</td>
+                    <td><strong>Goods Description</strong></td>
+                    <td><strong>: </strong>{doc.get("description_of_good", "") or ""}</td>
                 </tr>
             </table>
 
@@ -417,7 +426,6 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                         <th>Particulars</th>
                         <th>Qty</th>
                         <th>Rate $</th>
-                        <th>Currency</th>
                         <th>Total Price $</th>
                         <th>Ex. Rate</th>
                         <th>Total Price BDT</th>
@@ -426,7 +434,7 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="7" class="total-row">
+                        <td colspan="6" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">
@@ -447,31 +455,29 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
 
             <!-- Footer -->
             <div class="footer">
-                <p style="margin: 4px 0;">
-                    <strong>DHAKA OFFICE :</strong> HOUSE # 14 (2nd Floor), ROAD#13/C, BLOCK # E, BANANI, DHAKA-1213, BANGLADESH<br />
-                    Tel: +880-2-8836386, Fax: +880-2-8836374
+                 <p style="margin: 4px 0;">
+                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213 Tel: +880-2-8836386, Fax: +880-2-8836374
                 </p>
                 <p style="margin: 4px 0;">
-                    <strong>CHITTAGONG OFFICE :</strong> 259/A, HARUN BHABON (1st Floor), BADAMTOLI, SK.MUJIB ROAD, AGRABAD C/A, CHATTOGRAM<br />
-                    Tel: +880-31-2527634
+                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM Tel: +880-31-2527634
                 </p>
             </div>
         </div>
     </body>
     </html>
     """
-    
+
     return html_template
 
 
 @frappe.whitelist()
 def get_sea_import_invoice_bdt_preview(doc_name):
     """Get HTML preview of Sea Import Invoice BDT (for testing)"""
-    
+
     try:
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
-        
+
         # Get customer address
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
@@ -482,10 +488,10 @@ def get_sea_import_invoice_bdt_preview(doc_name):
                     customer_address = customer_doc.primary_address or ""
                 except:
                     customer_address = ""
-        
+
         # Generate and return HTML content
         html_content = get_sea_import_invoice_bdt_html(doc, customer_address)
         return {"html": html_content}
-        
+
     except Exception as e:
         frappe.throw(f"Error generating preview: {str(e)}")

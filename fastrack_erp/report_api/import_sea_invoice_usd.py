@@ -98,8 +98,8 @@ def get_sea_import_invoice_html(doc, customer_address):
     total_amount = 0
     if hasattr(doc, 'invoice_list') and doc.invoice_list:
         for idx, item in enumerate(doc.invoice_list):
-            rate = item.get('rate', 0) or 0
-            total_price = item.get('total_price', 0) or 0
+            rate = round(float(item.get('rate', 0) or 0), 2)
+            total_price = round(float(item.get('total_price', 0) or 0), 2)
             total_amount += float(total_price) if total_price else 0
             
             if idx == 0:  # First row with rowspan for container number
@@ -243,7 +243,7 @@ def get_sea_import_invoice_html(doc, customer_address):
                 margin-bottom: 4px;
             }}
             .footer {{
-                font-size: 11px;
+                font-size: 8px;
                 line-height: 1.4;
                 text-align: center;
                 color: black;
@@ -339,6 +339,10 @@ def get_sea_import_invoice_html(doc, customer_address):
             </table>
             {get_shipping_details_html(doc)}
 
+            <p><strong>Shipment Mode:</strong>  <strong>{doc.get('custom_shipment_mode') or ''} </strong></p> </br>
+            <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p> </br>
+            <p style="margin: 5px 0;"><strong>Goods Description</strong> : <strong>{doc.get('description_of_good', '')}</strong></p>
+
             <!-- Charges Table -->
             <h4 style="margin-top: 20px;">Charges</h4>
             <table class="charges-table">
@@ -377,12 +381,11 @@ def get_sea_import_invoice_html(doc, customer_address):
             <!-- Footer -->
             <div class="footer">
                 <p style="margin: 4px 0;">
-                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213<br />
-                    Tel: +880-2-8836386, Fax: +880-2-8836374
+                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213 Tel: +880-2-8836386, Fax: +880-2-8836374
                 </p>
                 <p style="margin: 4px 0;">
-                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM<br />
-                    Tel: +880-31-2527634
+                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM Tel: +880-31-2527634
+                    
                 </p>
             </div>
         </div>
