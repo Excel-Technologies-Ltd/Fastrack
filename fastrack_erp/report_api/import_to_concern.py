@@ -98,6 +98,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                 width: 100%;
                 max-width: 800px;
                 margin: 0 auto;
+                padding-bottom: 80px;
             }}
             .header {{
                 text-align: center;
@@ -176,19 +177,41 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                 margin: 10px 0;
                 font-weight: bold;
             }}
+            .footer {{
+                font-size: 8px;
+                line-height: 1.4;
+                text-align: center;
+                color: black;
+                border-top: 1px solid black;
+                padding-top: 10px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding-left: 20px;
+                padding-right: 20px;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
-            <!-- Logo -->
-            <div class="header">
-                <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg" alt="Fasttrack Logo" style="height: 60px;" />
-            </div>
-            
-            <!-- Title Box -->
-            <div class="title-box">
-                TO WHOM IT MAY CONCERN
-            </div>
+            <!-- Header: Logo left, Title center -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
+                <tr>
+                    <td style="width:25%; vertical-align:middle;">
+                        <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg"
+                            alt="Fasttrack Logo"
+                            style="height:55px;">
+                    </td>
+                    <td style="width:50%; text-align:center; vertical-align:middle;">
+                        <div style="border: 2px solid black; padding: 8px; display: inline-block; font-weight: bold; font-size: 14px;">
+                            TO WHOM IT MAY CONCERN
+                        </div>
+                    </td>
+                    <td style="width:25%;"></td>
+                </tr>
+            </table>
 
             <!-- TO Section -->
             <div class="to-section">
@@ -204,9 +227,31 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             <!-- Shipping Details -->
             <div class="details-section">
                 <p><strong>Shipping Details:</strong></p>
+                <table style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; margin-bottom:8px;">
+                    <colgroup>
+                        <col style="width:22%">
+                        <col style="width:3%">
+                        <col style="width:75%">
+                    </colgroup>
+                    <tr>
+                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Notify Party</strong></td>
+                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
+                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('notify_to', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Consignee</strong></td>
+                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
+                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('hbl_consignee', '') or ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Shipper</strong></td>
+                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
+                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('hbl_shipper', '') or ''}</td>
+                    </tr>
+                </table>
                 {get_shipping_details_html(doc, format_date_fn=format_date)}
 
-                <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p>
+                <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p> </br>
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
                  <p style="margin: 5px 0;"><strong>Ocean Freight </strong>  :  <strong> (US$){ocean_freight_rate}</strong></p>
                 <p style="margin: 5px 0;"><strong>Total Container</strong>  : <strong>{container_volume}</strong></p>
@@ -218,7 +263,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             <!-- Closing and Signature Section Combined -->
             <div style="margin: 15px 0;">
                 <p style="margin: 5px 0;">Thanks and Best Regards,</p>
-                <p style="margin: 5px 0;">Sincerely Yours,</p>
+                <p style="margin: 5px 0;">Sincerely Yours,</p> </br></br>
                 
                 <div style="margin: 15px 0; display: table; width: 100%;">
                     <div style="display: table-cell; width: 60%; vertical-align: top;">
@@ -229,6 +274,14 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             </div>
 
             <!-- Footer -->
+            <div class="footer">
+                <p style="margin: 4px 0;">
+                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213 Tel: +880-2-8836386, Fax: +880-2-8836374
+                </p>
+                <p style="margin: 4px 0;">
+                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM Tel: +880-31-2527634
+                </p>
+            </div>
         </div>
     </body>
     </html>

@@ -44,12 +44,10 @@ def get_shipping_details_html(doc, format_date_fn=None):
     port_loading    = _d('port_of_loading')
     vol_cbm         = _d('hbl_vol_cbm')
     port_discharge  = _d('port_of_discharge')
-    gross_weight    = _d('gross_weight')
     port_delivery   = _d('port_of_delivery')
     no_of_pkg       = _d('no_of_pkg_hbl')
     shipping_line   = _d('shipping_line')
     total_container = int(doc.get('total_container_hbl') or 0)
-    goods_desc      = _d('description_of_good')
 
     lc_combined = f"{lc} &amp; {lc_date}" if lc or lc_date else ''
 
@@ -81,12 +79,12 @@ def get_shipping_details_html(doc, format_date_fn=None):
         + row('MBL No',            mbl_no,          'ETD',             hbl_etd)
         + row('MBL Date',          mbl_date,        'ETA',             eta)
         + row('L/C No.&amp; Date', lc_combined,     'F/Vsl. Name',     fv)
-        + row('FV Voyage No',      fv_v_no,         'Inco Terms',      inco_term)
-        + row('Port of Loading',   port_loading,    'Volume CBM',      vol_cbm)
-        + row('Port of Discharge', port_discharge,  'Total Weight',    gross_weight)
+        + row('Port of Loading',   port_loading,    'FV Voyage No',      fv_v_no, )
+        + row('Port of Discharge', port_discharge,         'Inco Terms',      inco_term)
+        + row(   'Volume CBM',      vol_cbm)
+
         + row('Port of Delivery',  port_delivery,   'Total (CTN/PKG)', no_of_pkg)
         + row('Shipping Line',     shipping_line,   'Total Container', str(total_container))
-        + row('Goods Description', goods_desc, v1_colspan=True)
     )
 
     return f"""
