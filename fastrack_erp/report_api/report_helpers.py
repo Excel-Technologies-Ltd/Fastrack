@@ -45,7 +45,7 @@ def get_shipping_details_html(doc, format_date_fn=None):
     vol_cbm         = _d('hbl_vol_cbm')
     port_discharge  = _d('port_of_discharge')
     port_delivery   = _d('port_of_delivery')
-    no_of_pkg       = _d('no_of_pkg_hbl')
+    no_of_pkg       = int(doc.get('no_of_pkg_hbl') or 0)
     shipping_line   = _d('shipping_line')
     total_container = int(doc.get('total_container_hbl') or 0)
 
@@ -80,11 +80,12 @@ def get_shipping_details_html(doc, format_date_fn=None):
         + row('MBL Date',          mbl_date,        'ETA',             eta)
         + row('L/C No.&amp; Date', lc_combined,     'F/Vsl. Name',     fv)
         + row('Port of Loading',   port_loading,    'FV Voyage No',      fv_v_no, )
-        + row('Port of Discharge', port_discharge,         'Inco Terms',      inco_term)
-        + row(   'Volume CBM',      vol_cbm)
-
-        + row('Port of Delivery',  port_delivery,   'Total (CTN/PKG)', no_of_pkg)
-        + row('Shipping Line',     shipping_line,   'Total Container', str(total_container))
+        + row('Port of Discharge', port_discharge,  'Inco Terms',      inco_term)
+        + row( 'Port of Delivery',  port_delivery,  'Volume CBM',     vol_cbm)
+        + row( 'Shipping Line',     shipping_line,  'Total (CTN/PKG)', no_of_pkg) 
+        + row( 'Total Container)', total_container) 
+        
+      
     )
 
     return f"""

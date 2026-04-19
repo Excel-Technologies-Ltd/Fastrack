@@ -640,6 +640,7 @@
    "label": "Ocean Freight Remarks"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "bill_of_entry",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -873,6 +874,7 @@
    "options": "Container Mode"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "bill_of_entry_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -895,7 +897,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-04-13 18:01:16.245324",
+ "modified": "2026-04-19 15:39:49.091732",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

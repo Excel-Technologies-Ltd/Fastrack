@@ -175,7 +175,6 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-top: 1px solid #000;
                 padding-top: 10px;
                 margin-top: 40px;
             }}
@@ -184,19 +183,32 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 font-weight: bold;
             }}
             .signature-section {{
+                margin-top: 20px;
+                margin-bottom: 30px;
                 font-size: 10px;
-                text-align: right;
+                text-align: left;
                 font-weight: bold;
             }}
             .signature-line {{
                 border-bottom: 1px solid #000;
-                width: 120px;
+                text-align: right;
+                width: 100px;
                 margin-top: 20px;
             }}
             .office-addresses {{
-                font-size: 9px;
-                margin-top: 30px;
-                line-height: 1.3;
+                margin-top: 20px;
+                font-size: 8px;
+                line-height: 1.4;
+                text-align: center;
+                color: black;
+                padding-top: 10px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding-left: 20px;
+                padding-right: 20px;
             }}
             .center {{
                 display: flex;
@@ -263,6 +275,18 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
 
                  </table>
                 {get_shipping_details_html(doc)}
+                <table style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;">
+                    <colgroup>
+                        <col style="width:22%">
+                        <col style="width:28%">
+                        <col style="width:22%">
+                        <col style="width:28%">
+                    </colgroup>
+                    <tr>
+                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top; white-space:nowrap;">Goods Description</td>
+                        <td colspan="3" style="padding:3px 6px; vertical-align:top;">: {doc.get('description_of_good', '') or ''}</td>
+                    </tr>
+                </table>
             </div>
 
             <!-- Container Table -->
@@ -279,11 +303,13 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 </thead>
                 <tbody>
                     {container_rows}
+                    <tr>
+                        <td colspan="5" style="border: 1px solid black; padding: 5px; text-align: right; font-weight: bold; border-top: 2px solid black;">Total Weight :</td>
+                        <td style="border: 1px solid black; padding: 5px; text-align: center; font-weight: bold; border-top: 2px solid black;">{doc.get('hbl_weight', '') or ''} KG</td>
+                    </tr>
                 </tbody>
             </table>
 
-            <!-- Total Weight -->
-            
 
             <!-- Terms and Conditions -->
             <div class="terms-conditions">
@@ -298,8 +324,8 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                     Note - This is System Generated, Not Require Signature or Seal.
                 </div>
                 <div class="signature-section">
-                    PREPARED BY<br>
-                    <div class="signature-line"></div>
+                    PREPARED BY</br>
+                    <div style: "text-align: left;" class="signature-line"></div>
                 </div>
             </div>
 
