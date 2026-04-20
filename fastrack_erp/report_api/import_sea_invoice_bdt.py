@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
+from fastrack_erp.report_api.report_helpers import get_invoice_bdt_shipping_html
 
 
 @frappe.whitelist()
@@ -91,10 +92,10 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
 
         # Create grouped string like "20ft: 3, 40ft: 2"
         grouped = [f"{size}/ {qty}" for size, qty in size_count.items()]
-        container_numbers_str = "" + ", ".join(grouped)
+        container_numbers_str = "" + ",</br>".join(grouped)
     else:
         # List individually
-        container_numbers_str = ", ".join(
+        container_numbers_str = ",</br>".join(
             f"{no}/{size}" for no, size in container_numbers
         )
 
@@ -290,132 +291,40 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
                 </tr>
             </table>
 
-            <!-- Header Section -->
-            <div class="header-section">
-                <div class="header-left">
-                    <p style="margin: 0;"><strong>TO:</strong> {customer_name}</p>
-                    <p style="margin: 0;">{customer_address.split("#")[0]}</p>
-                </div>
-            
-                <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                    <tr>
-                        <td style="width:35%; padding:2px 6px 2px 4px;">
-                            <strong>Invoice No</strong>
-                        </td>
-                        <td style="width:5%; text-align:center;">
-                            <strong>:</strong>
-                        </td>
-                        <td style="width:60%; padding:2px 6px; text-align:right;">
-                            {doc.get("invoice_uid", "") or ""}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:2px 6px 2px 4px;">
-                            <strong>Date</strong>
-                        </td>
-                        <td style="text-align:center;">
-                            <strong>:</strong>
-                        </td>
-                        <td style="padding:2px 6px; text-align:right;">
-                            {doc.get("hbl_date", "") or ""}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:2px 6px 2px 4px;">
-                            <strong>Currency</strong>
-                        </td>
-                        <td style="text-align:center;">
-                            <strong>:</strong>
-                        </td>
-                        <td style="padding:2px 6px; text-align:right;">
-                            BDT
-                        </td>
-                    </tr>
-                </table> 
-            </div>
+            <!-- Header Section: TO (left) | Invoice details (right) -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:12px;">
+                <tr>
+                    <td style="width:60%; vertical-align:top;">
+                        <p style="margin:0;"><strong>TO:</strong> {customer_name}</p>
+                        <p style="margin:0;">{customer_address.split("#")[0] if customer_address else ""}</p>
+                    </td>
+                    <td style="width:40%; vertical-align:top;">
+                        <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                            <tr>
+                                <td style="width:40%; padding:2px 4px; text-align:left;"><strong>Invoice No</strong></td>
+                                <td style="width:5%; text-align:center;"><strong>:</strong></td>
+                                <td style="width:55%; padding:2px 4px; text-align:right;">{doc.get("invoice_uid", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 4px; text-align:left;"><strong>Date</strong></td>
+                                <td style="text-align:center;"><strong>:</strong></td>
+                                <td style="padding:2px 4px; text-align:right;">{doc.get("hbl_date", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 4px; text-align:left;"><strong>Currency</strong></td>
+                                <td style="text-align:center;"><strong>:</strong></td>
+                                <td style="padding:2px 4px; text-align:right;">BDT</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
 
             <hr>
 
             <!-- Shipping Details -->
             <h4>Shipping Details:</h4>
-            <table class="details-table">
-              <tr>
-                    <td style="width: 20%;"><strong>Notify Party</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get("notify_to", "") or ""}</td>
-                   
-                </tr>
-                <tr>
-                    <td style="width: 20%;"><strong>Shipper</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get("hbl_shipper", "") or ""}</td>
-                    <td style="width: 20%;"><strong>M/Vsl. Name</strong></td>
-                    <td style="width: 30%;"><strong>: </strong>{doc.get("mv", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>HBL No</strong></td>
-                    <td><strong>: </strong>{doc.get("hbl_id", "") or ""}</td>
-                    <td><strong>Voyage</strong></td>
-                    <td><strong>: </strong>{doc.get("mv_voyage_no", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>HBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get("hbl_date", "") or ""}</td>
-                    <td><strong>ETD</strong></td>
-                    <td><strong>: </strong>{doc.get("hbl_etd", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>MBL No</strong></td>
-                    <td><strong>: </strong>{doc.get("mbl_no", "") or ""}</td>
-                    <td><strong>F/Vsl. Name</strong></td>
-                    <td><strong>: </strong>{doc.get("fv", "") or ""}</td>
-                </tr>
-                 <tr>
-                    <td><strong>FV Voyage No</strong></td>
-                    <td><strong>: </strong>{doc.get("fv__v_no", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>MBL Date</strong></td>
-                    <td><strong>: </strong>{doc.get("mbl_date", "") or ""}</td>
-                    <td><strong>ETA</strong></td>
-                    <td><strong>: </strong>{doc.get("eta", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>Consignee</strong></td>
-                    <td><strong>: </strong>MODHUMOTI BANK LIMITED</td>
-                    <td><strong>Inco Terms</strong></td>
-                    <td><strong>: </strong>{doc.get("inco_term", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>L/C No & Date</strong></td>
-                    <td><strong>: </strong>{doc.get("lc", "") or ""} & {doc.get("lc_date", "") or ""}</td>
-                    <td><strong>Container Volume</strong></td>
-                    <td><strong>: </strong>{container_volume}</td>
-                </tr>
-                <tr>
-                    <td><strong>Port of Loading</strong></td>
-                    <td><strong>: </strong>{doc.get("port_of_loading", "") or ""}</td>
-                    <td><strong>Volume CBM</strong></td>
-                    <td><strong>: </strong>{doc.get("hbl_vol_cbm", "") or ""}</td>
-                </tr>
-                <tr>
-                    <td><strong>Port of Discharge</strong></td>
-                    <td><strong>: </strong>{doc.get("port_of_discharge", "") or ""}</td>
-                    <td><strong>Total (CTN/PKG)</strong></td>
-                    <td><strong>: </strong>{int(doc.get("no_of_pkg_hbl", "")) or 0}</td>
-                </tr>
-                <tr>
-                    <td><strong>Port of Delivery</strong></td>
-                    <td><strong>: </strong>{doc.get("port_of_delivery", "") or ""}</td>
-                    <td><strong>Shipping Line</strong></td>
-                    <td><strong>: </strong>{doc.get("shipping_line", "") or ""}</td>
-                </tr>
-
-                <tr>
-                    <td><strong>Shipment Mode</strong></td>
-                    <td><strong>: </strong>{doc.get("custom_shipment_mode", "") or ""}</td>
-                    <td><strong>Goods Description</strong></td>
-                    <td><strong>: </strong>{doc.get("description_of_good", "") or ""}</td>
-                </tr>
-            </table>
+            {get_invoice_bdt_shipping_html(doc, container_volume)}
 
             <!-- Charges Table -->
             <h4 style="margin-top: 20px;">Charges</h4>

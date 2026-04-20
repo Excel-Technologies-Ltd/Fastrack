@@ -1,7 +1,7 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url, format_date, today
-from fastrack_erp.report_api.report_helpers import get_shipping_details_html
+from fastrack_erp.report_api.report_helpers import get_fc_shipping_html
 
 
 @frappe.whitelist()
@@ -227,29 +227,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
             <!-- Shipping Details -->
             <div class="details-section">
                 <p><strong>Shipping Details:</strong></p>
-                <table style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; margin-bottom:8px;">
-                    <colgroup>
-                        <col style="width:22%">
-                        <col style="width:3%">
-                        <col style="width:75%">
-                    </colgroup>
-                    <tr>
-                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Notify Party</strong></td>
-                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
-                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('notify_to', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Consignee</strong></td>
-                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
-                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('hbl_consignee', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top;"><strong>Shipper</strong></td>
-                        <td style="padding:3px 2px; vertical-align:top; text-align:center;">:</td>
-                        <td style="padding:3px 6px; vertical-align:top;">{doc.get('hbl_shipper', '') or ''}</td>
-                    </tr>
-                </table>
-                {get_shipping_details_html(doc, format_date_fn=format_date)}
+                {get_fc_shipping_html(doc, format_date_fn=format_date)}
 
                 <p><strong>Total Weight:</strong>  <strong>{doc.get('hbl_weight')} KG</strong></p> </br>
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>

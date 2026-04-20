@@ -1,7 +1,7 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
-from fastrack_erp.report_api.report_helpers import get_shipping_details_html
+from fastrack_erp.report_api.report_helpers import get_arrival_notice_shipping_html
 
 
 @frappe.whitelist()
@@ -183,10 +183,10 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 font-weight: bold;
             }}
             .signature-section {{
-                margin-top: 20px;
+                margin-top: 30px;
                 margin-bottom: 30px;
                 font-size: 10px;
-                text-align: left;
+                text-align: right;
                 font-weight: bold;
             }}
             .signature-line {{
@@ -194,6 +194,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 text-align: right;
                 width: 100px;
                 margin-top: 20px;
+                margin-left: auto;
             }}
             .office-addresses {{
                 margin-top: 20px;
@@ -257,37 +258,8 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
             <!-- Shipping Details Header -->
             <div class="section-header">Shipping Details:</div>
 
-            <!-- Details Container -->
-            <div class="details-container">
-                <table class="details-table" >
-                    <tr>
-                        <td style="width: 20%;"><strong>Notify Party</strong></td>
-                        <td style="width: 80%;"><strong>: </strong>{doc.get('notify_to', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 20%;"><strong>Consignee</strong></td>
-                        <td style="width: 80%;"><strong>: </strong>{doc.get('hbl_consignee', '') or ''}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 20%;"><strong>Shipper</strong></td>
-                        <td style="width: 80%;"><strong>: </strong>{doc.get('hbl_shipper', '') or ''}</td>
-                    </tr>
-
-                 </table>
-                {get_shipping_details_html(doc)}
-                <table style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;">
-                    <colgroup>
-                        <col style="width:22%">
-                        <col style="width:28%">
-                        <col style="width:22%">
-                        <col style="width:28%">
-                    </colgroup>
-                    <tr>
-                        <td style="font-weight:bold; padding:3px 6px; vertical-align:top; white-space:nowrap;">Goods Description</td>
-                        <td colspan="3" style="padding:3px 6px; vertical-align:top;">: {doc.get('description_of_good', '') or ''}</td>
-                    </tr>
-                </table>
-            </div>
+            <!-- Shipping Details Table -->
+            {get_arrival_notice_shipping_html(doc)}
 
             <!-- Container Table -->
             <table class="container-table">

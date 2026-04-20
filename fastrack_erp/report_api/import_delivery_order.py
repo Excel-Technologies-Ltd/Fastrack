@@ -33,6 +33,7 @@ def download_delivery_order_pdf(doc_name="SHBL-00000064"):
 def get_delivery_order_html(doc):
     """Generate HTML content for Delivery Order"""
 
+    # 1. Calculate Container Volume (Restored)
     container_volume_list = []
     if hasattr(doc, "container_cost_info") and doc.container_cost_info:
         for container in doc.container_cost_info:
@@ -43,20 +44,29 @@ def get_delivery_order_html(doc):
 
     container_volume = ", ".join(container_volume_list)
 
+    # 2. Generate Container Rows with Rowspan
     container_rows = ""
     goods_description = doc.get("description_of_good", "") or ""
+    
     if hasattr(doc, "container_info") and doc.container_info:
         containers = list(doc.container_info)
+        total_containers = len(containers)
+        
         for idx, container in enumerate(containers):
-            is_last = idx == len(containers) - 1
-            gd = goods_description if is_last else ""
+            # Only generate the Goods Description cell on the very first row
+            # and set its rowspan to the total number of containers.
+            if idx == 0:
+                gd_cell = f'<td rowspan="{total_containers}" style="border: 1px solid #000; padding: 4px; vertical-align: middle; text-align: center;">{goods_description}</td>'
+            else:
+                gd_cell = "" # Leave it empty for subsequent rows so it doesn't break the table
+                
             container_rows += f"""
             <tr>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("custom_container_no", "") or ""}</td>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("seal_no", "") or ""}</td>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("size", "") or ""}</td>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("status", "") or ""}</td>
-                <td style="border: 1px solid #000; padding: 4px;">{gd}</td>
+                {gd_cell}
             </tr>
             """
     else:
@@ -70,6 +80,7 @@ def get_delivery_order_html(doc):
         </tr>
         """
 
+    # 3. HTML Template
     html_template = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -175,78 +186,70 @@ def get_delivery_order_html(doc):
     </head>
     <body>
         <div class="container">
-            <!-- Logo -->
-            
-            
-            <!-- Title -->
             <div class="text-center">
                 <h5>DELIVERY ORDER</h5>
             </div>
 
-            <!-- Main Content Row -->
-            <div class="row mb-3">
-                <!-- Left Column - Party Info -->
-                <div class="col-6">
-                    <p><strong>TO:</strong> Deputy Traffic Manager, <br>CHATTOGRAM</p>
-                </div>
-                
-                <!-- Right Column - Details Table -->
-                <div class="col-6">
-                    <table style="width: 100%; border-collapse: collapse;">
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <tr>
+                    <td style="width: 40%; vertical-align: top; padding-right: 15px;">
+                        <p style="margin-top: 0;"><strong>TO:</strong> Deputy Traffic Manager, <br>CHATTOGRAM</p>
+                    </td>
                     
-                        <tr>
-                            <td style="width: 25%; font-weight: bold; padding: 2px 0;">Date:</td>
-                            <td style="padding: 2px 0;">{frappe.utils.today()}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">F/Vsl. Name:</td>
-                            <td style="padding: 2px 0;">{doc.get("vessel_name", "") or "CNC NEPTUNE, V-0HJ8RS1NC"}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Rotation No.:</td>
-                            <td style="padding: 2px 0;">{doc.get("rotation", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Line No.:</td>
-                            <td style="padding: 2px 0;">{doc.get("line_no", "") or doc.get("hbl_line_no", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">From:</td>
-                            <td style="padding: 2px 0;">{doc.get("port_of_loading", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">HBL No:</td>
-                            <td style="padding: 2px 0;">{doc.get("hbl_id", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Bill of Entry:</td>
-                            <td style="padding: 2px 0;">{doc.get("bill_of_entry", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Date:</td>
-                            <td style="padding: 2px 0;">{doc.get("bill_of_entry_date", "") or ""}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Volume:</td>
-                            <td style="padding: 2px 0;">{container_volume}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0;">Total Quantity:</td>
-                            <td style="padding: 2px 0;">{int(doc.get("no_of_pkg_hbl", "") or 0)}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; padding: 2px 0; vertical-align: top;">Marks And<br>Number:</td>
-                            <td style="padding: 2px 0;">{doc.get("marks_and_numbers", "") or ""}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                    <td style="width: 60%; vertical-align: top;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 35%; font-weight: bold; padding: 2px 0;">Date:</td>
+                                <td style="padding: 2px 0;">{frappe.utils.today()}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">F/Vsl. Name:</td>
+                                <td style="padding: 2px 0;">{doc.get("vessel_name", "") or "CNC NEPTUNE, V-0HJ8RS1NC"}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Rotation No.:</td>
+                                <td style="padding: 2px 0;">{doc.get("rotation", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Line No.:</td>
+                                <td style="padding: 2px 0;">{doc.get("line_no", "") or doc.get("hbl_line_no", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">From:</td>
+                                <td style="padding: 2px 0;">{doc.get("port_of_loading", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">HBL No:</td>
+                                <td style="padding: 2px 0;">{doc.get("hbl_id", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Bill of Entry:</td>
+                                <td style="padding: 2px 0;">{doc.get("bill_of_entry", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Date:</td>
+                                <td style="padding: 2px 0;">{doc.get("bill_of_entry_date", "") or ""}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Volume:</td>
+                                <td style="padding: 2px 0;">{container_volume}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0;">Total Quantity:</td>
+                                <td style="padding: 2px 0;">{int(doc.get("no_of_pkg_hbl", "") or 0)}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding: 2px 0; vertical-align: top;">Marks And<br>Number:</td>
+                                <td style="padding: 2px 0;">{doc.get("marks_and_numbers", "") or ""}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
 
-            <!-- Greeting -->
             <p><strong>Dear Sir,</strong></p>
             <p style="margin-top: -8px;">Please Deliver to M/S <strong>{doc.get("cf_agent", "S.F. TRADERS") or "S.F. TRADERS"}</strong> the following Goods:</p>
 
-            <!-- Container Table -->
             <table class="table">
                 <thead>
                     <tr>
@@ -262,13 +265,10 @@ def get_delivery_order_html(doc):
                 </tbody>
             </table>
 
-            <!-- Total Weight and Validity -->
             <p class="text-right mt-3"><strong>Total Weight :</strong> {doc.get("gross_weight", "") or ""}</p>
-            <p class="text-right" ><strong>THIS DELIVERY ORDER IS VALID UP TO :</strong> {doc.get("do_validity", "") or ""}</p>
+            <p class="text-right"><strong>THIS DELIVERY ORDER IS VALID UP TO :</strong> {doc.get("do_validity", "") or ""}</p>
 
-            <!-- Signature Section -->
-            <div class="text-right mt-5 style: "margin-top:40px;">
-                
+            <div class="text-right mt-5" style="margin-top:250px;">
                 <p><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
                 <p>As Agents</p>
             </div>
@@ -278,7 +278,6 @@ def get_delivery_order_html(doc):
     """
 
     return html_template
-
 
 @frappe.whitelist()
 def get_delivery_order_preview(doc_name):
