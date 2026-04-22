@@ -246,7 +246,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                 <div style="margin: 15px 0; display: table; width: 100%;">
                     <div style="display: table-cell; width: 60%; vertical-align: top;">
                         <p style="margin: 5px 0;"><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
-                        <p style="margin: 5px 0;"><strong>As Agent</strong></p>
+                        <p style="margin: 5px 0; margin-left: 50px; margin-top: 30px;"><strong>As Agent</strong></p>
                     </div>
                 </div>
             </div>

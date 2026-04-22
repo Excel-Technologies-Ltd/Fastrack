@@ -194,6 +194,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                 text-align: right;
                 width: 100px;
                 margin-top: 20px;
+                margin-bottom: 5px;
                 margin-left: auto;
             }}
             .office-addresses {{
@@ -296,8 +297,8 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                     Note - This is System Generated, Not Require Signature or Seal.
                 </div>
                 <div class="signature-section">
-                    PREPARED BY</br>
                     <div style: "text-align: left;" class="signature-line"></div>
+                    PREPARED BY</br>
                 </div>
             </div>
 

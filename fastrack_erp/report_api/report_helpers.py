@@ -119,12 +119,10 @@ def get_invoice_usd_shipping_html(doc):
         + _row('L/C No. &amp; Date',lc_combined,             'F/Vsl. Name',      _d('fv'))
         + _row('Port of Loading',   _d('port_of_loading'),   'FV Voyage No',     _d('fv__v_no'))
         + _row('Port of Discharge', _d('port_of_discharge'), 'Inco Terms',       _d('inco_term'))
-        + _row('Port of Delivery',  _d('port_of_delivery'),  'Volume CBM',       _d('hbl_vol_cbm'))
+        + _row('Port of Delivery',  _d('port_of_delivery'),  'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
+        + _row( 'Shipment Mode', (doc.get('custom_shipment_mode') or ""), 'Volume CBM',       _d('hbl_vol_cbm'))
         + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
-        + _row( 'Shipment Mode', (doc.get('custom_shipment_mode') or ""), 'Total Container',   int(doc.get('total_container_hbl') or 0))
-        + _row( 'Goods Description', (doc.get('description_of_good') or '' ), 'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
-        
-
+        + _row( 'Goods Description', (doc.get('description_of_good') or '' ),  'Total Container',   int(doc.get('total_container_hbl') or 0) )
         
     )
     return _wrap_table(rows)
@@ -144,18 +142,20 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
-        + _row('Shipper',           _d('hbl_shipper'),       'M/Vsl. Name',      _d('mv'))
-        + _row('HBL No',            _d('hbl_id'),            'Voyage',           _d('mv_voyage_no'))
-        + _row('HBL Date',          _date('hbl_date'),        'ETD',              _date('hbl_etd'))
-        + _row('MBL No',            _d('mbl_no'),            'F/Vsl. Name',      _d('fv'))
-        + _row('FV Voyage No',      _d('fv__v_no'))
+        + _row('Consignee',         _d('hbl_consignee'))
+        + _row('Shipper',           _d('hbl_shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'M/Vsl. Name',      _d('mv'))
+        + _row('HBL Date',          _date('hbl_date'),        'Voyage',           _d('mv_voyage_no'))
+        + _row('MBL No',            _d('mbl_no'),            'ETD',              _date('hbl_etd'))
         + _row('MBL Date',          _date('mbl_date'),        'ETA',              _date('eta'))
-        + _row('Consignee',         'MODHUMOTI BANK LIMITED','Inco Terms',       _d('inco_term'))
-        + _row('L/C No. &amp; Date',lc_combined,             'Container Volume', container_volume)
-        + _row('Port of Loading',   _d('port_of_loading'),   'Volume CBM',       _d('hbl_vol_cbm'))
-        + _row('Port of Discharge', _d('port_of_discharge'), 'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
-        + _row('Port of Delivery',  _d('port_of_delivery'),  'Shipping Line',    _d('shipping_line'))
-        + _row('Shipment Mode',     _d('custom_shipment_mode'), 'Goods Description', _d('description_of_good'))
+        + _row('L/C No. &amp; Date',lc_combined,             'F/Vsl. Name',      _d('fv'))
+        + _row('Port of Loading',   _d('port_of_loading'),   'FV Voyage No',     _d('fv__v_no'))
+        + _row('Port of Discharge', _d('port_of_discharge'), 'Inco Terms',       _d('inco_term'))
+        + _row('Port of Delivery',  _d('port_of_delivery'),  'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
+        + _row( 'Shipment Mode', (doc.get('custom_shipment_mode') or ""), 'Volume CBM',       _d('hbl_vol_cbm'))
+        + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
+        + _row( 'Goods Description', (doc.get('description_of_good') or '' ),  'Total Container',   int(doc.get('total_container_hbl') or 0) )
+        
     )
     return _wrap_table(rows)
 
