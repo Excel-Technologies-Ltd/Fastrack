@@ -42,8 +42,8 @@
   "port_of_delivery",
   "hbl_gr_weight",
   "chargeable_weight",
-  "billing_section",
   "arrival_date",
+  "billing_section",
   "invoice_list",
   "total_invoice_amount",
   "column_break_billing",
@@ -133,7 +133,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Carrier (Airlines)",
-   "options": "Customer"
+   "options": "Supplier"
   },
   {
    "fieldname": "mbl_link",
@@ -234,7 +234,8 @@
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "label": "Sales Person",
-   "options": "Sales Person"
+   "options": "Sales Person",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -245,7 +246,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "HAWB Date"
   },
   {
@@ -391,7 +392,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-13 12:18:56.999564",
+ "modified": "2026-04-22 13:41:48.395666",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",
