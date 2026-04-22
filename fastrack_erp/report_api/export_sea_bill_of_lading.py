@@ -205,8 +205,8 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
         )
 
     # Pre-compute conditional HTML snippets for goods table
-    inco_term_html = f'<div><strong>Inco Term</strong></div><div>{inco_term}</div>' if inco_term else ''
-    mode_html = f"<div style='margin-top:4px;'><strong>Mode</strong></div><div>{mode}</div>" if mode else ''
+    inco_term_html = f'<div><strong>FREIGHT</strong> {inco_term}</div>' if inco_term else ''
+    mode_html = f"<div style='margin-top:4px;'><strong>Mode:</strong> {mode}</div>" if mode else ''
 
     # Build goods table data rows.
     # When container_info exists, the container table spans both
@@ -217,7 +217,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             '<tr style="height: 160px;" >'
             f'<td rowspan="2" style="border: 1px solid transparent;  padding: 8px; vertical-align: top;">'
             f'<div style="display: flex; flex-direction: column;">'
-            f'<div class="_text_center" style="flex: 1;"><strong>{shipping_marks}</strong></div>'
+            f'<div class="_text_center" style="flex: 1; text-align: left;"><strong>{shipping_marks}</strong></div>'
             f'<div style="margin-top: 8px; font-size: 9px;">{inco_term_html}{mode_html}</div>'
             f'</div></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
@@ -554,7 +554,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           <!-- Goods Table -->
           <table style="border-left: none; width: 100%;   margin-top: 0; table-layout: fixed;">
             <tr style="font-size: 9px; ">
-              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 20%; padding: 8px;">Shipping Marks</th>
+              <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 20%; padding: 8px; text-align: left;">Shipping Marks</th>
               <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 15%; padding: 8px;">No. of Packages<br/>or Shipping Units</th>
               <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 35%; padding: 8px;">Description of Packages or Goods</th>
               <th style="border-right: 1px solid black; border-bottom: 1px solid black; width: 15%; padding: 8px;">Gross Weight</th>

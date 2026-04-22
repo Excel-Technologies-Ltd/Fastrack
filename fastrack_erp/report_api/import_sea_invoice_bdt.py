@@ -107,8 +107,8 @@ def get_sea_import_invoice_bdt_html(doc, customer_address):
             rate = round(float(item.get("rate", 0) or 0), 2)
             total_price = round(float(item.get("total_price", 0) or 0), 2)
             exchange_rate = item.get("exchange_rate", 0) or 0
-            base_net_amount = item.get("base_net_amount", 0) or 0
-            total_amount_bdt += float(base_net_amount) if base_net_amount else 0
+            base_net_amount = round(float(item.get("base_net_amount", 0) or 0), 2)
+            total_amount_bdt += round(float(base_net_amount), 2)
 
             if idx == 0:  # First row with rowspan for container number
                 invoice_rows += f"""

@@ -163,7 +163,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "HBL Date"
   },
   {
