@@ -1,16 +1,20 @@
 export const PDF_NAME_LIST = {
-
-    // INCOME: "Income of HBL",
-    // EXPENSE: "Expense of HBL",
     ARRIVAL_NOTICE: "Arrival Notice",
     SEA_IMPORT_INVOICE_USD: "Sea Import Invoice USD",
     SEA_IMPORT_INVOICE_BDT: "Sea Import Invoice BDT",
+    AIR_IMPORT_INVOICE_USD: "Air Import Invoice USD",
+    AIR_IMPORT_INVOICE_BDT: "Air Import Invoice BDT",
+    D2D_IMPORT_INVOICE_USD: "D2D Import Invoice USD",
+    D2D_IMPORT_INVOICE_BDT: "D2D Import Invoice BDT",
+    IGM: "IGM",
     DELIVERY_ORDER: "Delivery Order",
-    TO_WHOM_CONCERN: "FC",
+    TO_WHOM_CONCERN: "FC Import",
     INVOICE_FROM_MBL: "Invoice from MBL",
     SEA_BILL_OF_LADING_DRAFT: "Sea Bill of Lading Draft",
     SEA_BILL_OF_LADING_ORIGINAL: "Sea Bill of Lading Original",
-
-}
-
-// make here demo 20 list
+    SEA_EXPORT_INVOICE_USD: "Sea Export Invoice USD",
+    SEA_EXPORT_INVOICE_BDT: "Sea Export Invoice BDT",
+    FC_EXPORT: "FC Export",
+    D2D_EXPORT_INVOICE: "D2D Export Invoice",
+    SHIPPING: "Shipping",
+};

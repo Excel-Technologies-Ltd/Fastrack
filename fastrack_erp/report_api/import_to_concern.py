@@ -4,49 +4,94 @@ from frappe.utils import get_url, format_date, today
 from fastrack_erp.report_api.report_helpers import get_fc_shipping_html
 
 
+def _download_fc_style_certificate_pdf(
+    doc_name,
+    parent_doctype,
+    banner_title,
+    html_title,
+    filename_stem,
+):
+    doc = frappe.get_doc(parent_doctype, doc_name)
+    customer_name = ""
+    customer_address = ""
+    if doc.invoice_list and len(doc.invoice_list) > 0:
+        customer = doc.invoice_list[0].customer
+        if customer:
+            try:
+                customer_doc = frappe.get_doc("Customer", customer)
+                customer_name = customer_doc.customer_name or customer
+                customer_address = customer_doc.primary_address or ""
+            except Exception:
+                customer_name = customer
+                customer_address = ""
+    html_content = get_to_whom_concern_html(
+        doc,
+        customer_name,
+        customer_address,
+        banner_title=banner_title,
+        html_title=html_title,
+    )
+    pdf_content = get_pdf(html_content)
+    safe_stem = filename_stem.replace(" ", "_")
+    filename = f"{safe_stem}_{doc_name}.pdf"
+    frappe.local.response.filename = filename
+    frappe.local.response.filecontent = pdf_content
+    frappe.local.response.type = "download"
+
+
 @frappe.whitelist()
 def download_to_whom_concern_pdf(doc_name):
     """Download To Whom It May Concern certificate as PDF using HTML template"""
-    
     try:
-        # Get the document
-        doctype = "Import Sea House Bill"
-        doc = frappe.get_doc(doctype, doc_name)
-        
-        # Get customer info
-        customer_name = ""
-        customer_address = ""
-        if doc.invoice_list and len(doc.invoice_list) > 0:
-            customer = doc.invoice_list[0].customer
-            if customer:
-                try:
-                    customer_doc = frappe.get_doc("Customer", customer)
-                    customer_name = customer_doc.customer_name or customer
-                    customer_address = customer_doc.primary_address or ""
-                except:
-                    customer_name = customer
-                    customer_address = ""
-        
-        # Generate HTML content
-        html_content = get_to_whom_concern_html(doc, customer_name, customer_address)
-        
-        # Generate PDF
-        pdf_content = get_pdf(html_content)
-        
-        # Set filename
-        filename = f"To_Whom_Concern_{doc_name}.pdf"
-        
-        # Prepare response
-        frappe.local.response.filename = filename
-        frappe.local.response.filecontent = pdf_content
-        frappe.local.response.type = "download"
-        
+        _download_fc_style_certificate_pdf(
+            doc_name,
+            parent_doctype="Import Sea House Bill",
+            banner_title="TO WHOM IT MAY CONCERN",
+            html_title="To Whom It May Concern",
+            filename_stem="To_Whom_Concern",
+        )
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_to_whom_concern_html(doc, customer_name, customer_address):
-    """Generate HTML content for To Whom It May Concern certificate"""
+@frappe.whitelist()
+def download_export_fc_export_pdf(doc_name):
+    """Download FC Export certificate (export sea HBL) as PDF."""
+    try:
+        _download_fc_style_certificate_pdf(
+            doc_name,
+            parent_doctype="Export Sea House Bill",
+            banner_title="FC EXPORT",
+            html_title="FC Export",
+            filename_stem="FC_Export",
+        )
+    except Exception as e:
+        frappe.throw(f"Error generating PDF: {str(e)}")
+
+
+@frappe.whitelist()
+def download_export_shipping_pdf(doc_name):
+    """Download Shipping details certificate (export sea HBL) as PDF."""
+    try:
+        _download_fc_style_certificate_pdf(
+            doc_name,
+            parent_doctype="Export Sea House Bill",
+            banner_title="SHIPPING",
+            html_title="Shipping",
+            filename_stem="Shipping",
+        )
+    except Exception as e:
+        frappe.throw(f"Error generating PDF: {str(e)}")
+
+
+def get_to_whom_concern_html(
+    doc,
+    customer_name,
+    customer_address,
+    banner_title="TO WHOM IT MAY CONCERN",
+    html_title="To Whom It May Concern",
+):
+    """Generate HTML content for FC-style certificate (import or export)."""
     
     # Get container volume
     container_volume_list = []
@@ -83,7 +128,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>To Whom It May Concern</title>
+        <title>{html_title}</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;
@@ -206,7 +251,7 @@ def get_to_whom_concern_html(doc, customer_name, customer_address):
                     </td>
                     <td style="width:50%; text-align:center; vertical-align:middle;">
                         <div style="border: 2px solid black; padding: 8px; display: inline-block; font-weight: bold; font-size: 14px;">
-                            TO WHOM IT MAY CONCERN
+                            {banner_title}
                         </div>
                     </td>
                     <td style="width:25%;"></td>

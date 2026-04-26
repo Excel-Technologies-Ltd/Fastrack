@@ -2,6 +2,8 @@
 Shipping details HTML helpers — one function per report type.
 """
 
+import frappe
+
 _LBL  = "font-weight:bold; padding:3px 6px; vertical-align:top; white-space:nowrap; text-align:left;"
 _VAL  = "padding:3px 6px; vertical-align:top; text-align:left;"
 _RLBL = "font-weight:bold; padding:3px 6px 3px 18px; vertical-align:top; white-space:nowrap; text-align:left;"
@@ -63,6 +65,62 @@ def _wrap_table(rows):
     """
 
 
+def normalize_doc_for_invoice_shipping(doc):
+    """Map air/d2d HBL fields onto sea-style names for invoice shipping HTML."""
+    d = dict(doc.as_dict())
+    dt = d.get('doctype') or getattr(doc, 'doctype', None) or ''
+    if dt == 'Import Air House Bill':
+        d['hbl_consignee'] = d.get('hbl_consignee') or d.get('consignee')
+        d['hbl_shipper'] = d.get('hbl_shipper') or d.get('shipper')
+        d['notify_to'] = d.get('notify_to') or d.get('notify_party')
+        d['hbl_id'] = d.get('hbl_id') or d.get('hbl_no') or d.get('hawb_no')
+        if d.get('no_of_pkg_hbl') is None:
+            d['no_of_pkg_hbl'] = d.get('no_of_pkg')
+        d['hbl_weight'] = d.get('hbl_weight') or d.get('hbl_gr_weight')
+        d['mv'] = d.get('mv') or d.get('flight_name')
+        d['shipping_line'] = d.get('shipping_line') or d.get('airlines')
+        d['port_of_discharge'] = (
+            d.get('port_of_discharge') or d.get('port_of_delivery')
+        )
+        d['hbl_etd'] = d.get('hbl_etd') or d.get('flight_date')
+        d['eta'] = d.get('eta') or d.get('arrival_date')
+        d['mv_voyage_no'] = d.get('mv_voyage_no') or ''
+        d['fv'] = d.get('fv') or ''
+        d['fv__v_no'] = d.get('fv__v_no') or ''
+        d['hbl_vol_cbm'] = d.get('hbl_vol_cbm') or ''
+        d['lc'] = d.get('lc') or d.get('lc_number')
+        d['total_container_hbl'] = d.get('total_container_hbl') or 0
+        d['custom_shipment_mode'] = d.get('custom_shipment_mode') or ''
+        d['description_of_good'] = (
+            d.get('description_of_good') or d.get('cargo_description')
+        )
+    elif dt in ('Import D2D Bill', 'Export D2D Bill'):
+        d['hbl_consignee'] = d.get('hbl_consignee') or d.get('consignee')
+        d['hbl_shipper'] = d.get('hbl_shipper') or d.get('shipper')
+        d['notify_to'] = d.get('notify_to') or d.get('notify_party')
+        d['hbl_id'] = d.get('hbl_id') or d.get('hbl_no')
+        if d.get('no_of_pkg_hbl') is None:
+            d['no_of_pkg_hbl'] = d.get('no_of_pkg')
+        d['hbl_weight'] = d.get('hbl_weight') or d.get('gr_weight')
+        d['hbl_etd'] = d.get('hbl_etd') or d.get('etd')
+        d['port_of_discharge'] = (
+            d.get('port_of_discharge') or d.get('port_of_delivery')
+        )
+        d['mv'] = d.get('mv') or ''
+        d['mv_voyage_no'] = d.get('mv_voyage_no') or ''
+        d['fv'] = d.get('fv') or ''
+        d['fv__v_no'] = d.get('fv__v_no') or ''
+        d['hbl_vol_cbm'] = d.get('hbl_vol_cbm') or ''
+        d['lc'] = d.get('lc') or d.get('lc_number')
+        d['shipping_line'] = d.get('shipping_line') or ''
+        d['total_container_hbl'] = d.get('total_container_hbl') or 0
+        d['custom_shipment_mode'] = d.get('custom_shipment_mode') or ''
+        d['description_of_good'] = (
+            d.get('description_of_good') or d.get('cargo_description')
+        )
+    return frappe._dict(d)
+
+
 def get_arrival_notice_shipping_html(doc):
     """Complete shipping details section for Arrival Notice.
 
@@ -101,6 +159,7 @@ def get_invoice_usd_shipping_html(doc):
     and Total Container. Shipment Mode / Weight / Goods Description are rendered
     separately in the invoice template.
     """
+    doc = normalize_doc_for_invoice_shipping(doc)
     _d, _date = _make_helpers(doc)
 
     lc          = _d('lc')
@@ -134,6 +193,7 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
     Includes BDT-specific layout: Consignee fixed as MODHUMOTI BANK LIMITED,
     Container Volume, Shipment Mode, and Goods Description inline.
     """
+    doc = normalize_doc_for_invoice_shipping(doc)
     _d, _date = _make_helpers(doc)
 
     lc          = _d('lc')

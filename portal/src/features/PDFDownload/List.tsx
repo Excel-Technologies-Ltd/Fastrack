@@ -8,18 +8,33 @@ export const List = () => {
     const [selectAll, setSelectAll] = useState(false);
     const selectedIds = pdfFormOption?.selectedId ? pdfFormOption?.selectedId.split(",").filter(id => id.trim()) : [];
 
-    // Get child data
-    let childData: any = pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
-        ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData] 
-        : [];
-    // if customer select then filter by customer
-    // console.log("pdfFormOption", childData);
-    if(pdfPolicy.selectCustomer && pdfFormOption.customerName){
-        childData = childData.filter((row: any) => row.customer === pdfFormOption.customerName);
+    const rawChildData: any[] = (() => {
+        const key = pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData;
+        if (!pdfPolicy.CHILD_DOCTYPE || !docTypeData[key]) return [];
+        const rows = docTypeData[key];
+        return Array.isArray(rows) ? rows : [];
+    })();
+
+    let childData = [...rawChildData];
+
+    if (pdfPolicy.selectCustomer && pdfFormOption.customerName && childData.length) {
+        const sel = pdfFormOption.customerName.trim();
+        const filtered = childData.filter(
+            (row: any) => (row.customer || "").trim() === sel
+        );
+        if (filtered.length > 0) {
+            childData = filtered;
+        }
     }
-    // if supplier select then filter by supplier
-    if(pdfPolicy.selectSupplier && pdfFormOption.supplierName){
-        childData = childData.filter((row: any) => row.supplier === pdfFormOption.supplierName);
+
+    if (pdfPolicy.selectSupplier && pdfFormOption.supplierName && childData.length) {
+        const sel = pdfFormOption.supplierName.trim();
+        const filtered = childData.filter(
+            (row: any) => (row.supplier || "").trim() === sel
+        );
+        if (filtered.length > 0) {
+            childData = filtered;
+        }
     }
 
     // Handle select all checkbox
@@ -116,11 +131,10 @@ export const List = () => {
     //     setSelectAll(false);
     // }, [pdfPolicy.CHILD_DOCTYPE]);
 
-    if (pdfPolicy.CHILD_DOCTYPE && childData) {
+    if (pdfPolicy.selectChildDoctype && pdfPolicy.CHILD_DOCTYPE) {
         const columnMap = getChildDocTypeColumnMap(
-            pdfPolicy.parentDoctype, 
-            pdfPolicy.CHILD_DOCTYPE, 
-            docTypeData
+            pdfPolicy.parentDoctype,
+            pdfPolicy.CHILD_DOCTYPE,
         );
 
         return (
@@ -188,7 +202,11 @@ export const List = () => {
                         </table>
                     </div>
                 ) : (
-                    <div className="text-gray-500">{""}</div>
+                    <div className="text-gray-500 mt-2 text-sm">
+                        {pdfFormOption.docName
+                            ? "No invoice lines on this document, or data is still loading."
+                            : "Select a document to load invoice lines."}
+                    </div>
                 )}
             </div>
         );
@@ -196,7 +214,6 @@ export const List = () => {
 
     return (
         <div className="mt-10">
-            {/* <div>Debug: {JSON.stringify(docTypeData)}</div> */}
             {errorObj?.docNameError && pdfPolicy.CHILD_DOCTYPE && pdfFormOption.docName && (
                 <div className="text-red-500">{errorObj?.docNameError}</div>
             )}
@@ -204,10 +221,7 @@ export const List = () => {
     );
 };
 
-const getChildDocTypeColumnMap = (docType: string, childDocType: string, docTypeData: any) => {
-    const childDocTypeData = docTypeData[childDocType as keyof typeof docTypeData];
-    if (!childDocTypeData) return [];
-
+const getChildDocTypeColumnMap = (docType: string, childDocType: string) => {
     // Find the correct docType key in DOCTYPE_LIST
     const docTypeKey = Object.keys(DOCTYPE_LIST).find(key => 
         DOCTYPE_LIST[key as keyof typeof DOCTYPE_LIST].NAME === docType

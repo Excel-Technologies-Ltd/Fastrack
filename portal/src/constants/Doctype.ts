@@ -49,6 +49,36 @@ export const DOCTYPE_LIST = {
             },
         },
     },
+    IMPORT_AIR_HOUSE_BILL: {
+        NAME: "Import Air House Bill",
+        CHILD_DOCTYPE: {
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
+                ],
+            },
+        },
+    },
+    IMPORT_D2D_BILL: {
+        NAME: "Import D2D Bill",
+        CHILD_DOCTYPE: {
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
+                ],
+            },
+        },
+    },
     EXPORT_SEA_HOUSE_BILL: {
         NAME: "Export Sea House Bill",
         CHILD_DOCTYPE: {
@@ -59,6 +89,31 @@ export const DOCTYPE_LIST = {
                     { name: "custom_container_no", label: "Container No" },
                     { name: "size", label: "Size" },
                     { name: "no_of_pkg", label: "No of Pkg" },
+                ],
+            },
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
+                ],
+            },
+        },
+    },
+    EXPORT_D2D_BILL: {
+        NAME: "Export D2D Bill",
+        CHILD_DOCTYPE: {
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
                 ],
             },
         },

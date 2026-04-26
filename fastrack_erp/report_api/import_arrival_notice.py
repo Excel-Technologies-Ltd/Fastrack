@@ -21,8 +21,9 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
             except:
                 customer_address = ""
         
-        # Generate HTML content
-        html_content = get_arrival_notice_html(doc, customer_address,customer_name)
+        html_content = get_arrival_notice_html(
+            doc, customer_address, customer_name
+        )
         
         # Generate PDF
         pdf_content = get_pdf(html_content)
@@ -39,8 +40,44 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_arrival_notice_html(doc, customer_address,customer_name):
-    """Generate HTML content for Arrival Notice"""
+@frappe.whitelist()
+def download_igm_pdf(doc_name="SHBL-00000064", customer_name="Fastrack"):
+    """Download IGM (Import General Manifest style) PDF for Import Sea HBL."""
+    try:
+        doctype = "Import Sea House Bill"
+        doc = frappe.get_doc(doctype, doc_name)
+        customer_address = ""
+        if doc.customer:
+            try:
+                customer_address = frappe.get_doc(
+                    "Customer", {"customer_name": customer_name}
+                ).primary_address
+            except Exception:
+                customer_address = ""
+        html_content = get_arrival_notice_html(
+            doc,
+            customer_address,
+            customer_name,
+            document_title="IGM",
+            page_title="IGM",
+        )
+        pdf_content = get_pdf(html_content)
+        filename = f"IGM_{doc_name}.pdf"
+        frappe.local.response.filename = filename
+        frappe.local.response.filecontent = pdf_content
+        frappe.local.response.type = "download"
+    except Exception as e:
+        frappe.throw(f"Error generating PDF: {str(e)}")
+
+
+def get_arrival_notice_html(
+    doc,
+    customer_address,
+    customer_name,
+    document_title="ARRIVAL NOTICE",
+    page_title="Arrival Notice",
+):
+    """Generate HTML content for Arrival Notice or IGM."""
     
     # Get container information
     container_rows = ""
@@ -75,7 +112,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Arrival Notice</title>
+        <title>{page_title}</title>
         <style>
             .document-container {{
                 font-family: Arial, sans-serif;
@@ -235,7 +272,7 @@ def get_arrival_notice_html(doc, customer_address,customer_name):
                     <!-- Center: Title -->
                     <td style="width:50%; text-align:center; vertical-align:middle;">
                        <div class="title-box">
-                            ARRIVAL NOTICE
+                            {document_title}
                         </div>
                     </td>
 

@@ -1,57 +1,24 @@
-import { DOCTYPE_LIST } from "../constants/Doctype"
-import { PDF_NAME_LIST } from "../constants/pdfName"
-
+import { DOCTYPE_LIST } from "../constants/Doctype";
+import { PDF_NAME_LIST } from "../constants/pdfName";
 
 export type PDFPolicy = {
-    name: string
-    parentDoctype: string
-    isMasterBill?: boolean
-    getMethod?: string
-    selectPDFNAME: boolean
-    selectDocName: boolean
-    selectCustomer: boolean
-    selectSupplier: boolean
-    selectChildDoctype: boolean
-    CHILD_DOCTYPE?: string
-    CUSTOMER_FIELDS?: string[]
-    DOWNLOAD_METHOD: string
-    HAS_ARGUMENTS?: boolean
-    ARGUMENTS?: Record<string, string>
-}
+    name: string;
+    parentDoctype: string;
+    isMasterBill?: boolean;
+    getMethod?: string;
+    selectPDFNAME: boolean;
+    selectDocName: boolean;
+    selectCustomer: boolean;
+    selectSupplier: boolean;
+    selectChildDoctype: boolean;
+    CHILD_DOCTYPE?: string;
+    CUSTOMER_FIELDS?: string[];
+    DOWNLOAD_METHOD: string;
+    HAS_ARGUMENTS?: boolean;
+    ARGUMENTS?: Record<string, string>;
+};
 
 export const PDF_POLICY: Record<string, PDFPolicy> = {
-    // [PDF_NAME_LIST.INCOME]: {
-    //     name: PDF_NAME_LIST.INCOME,
-    //     parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
-    //     selectPDFNAME: true,
-    //     selectDocName: true,
-    //     selectCustomer: true,
-    //     selectSupplier: false,
-    //     selectChildDoctype: true,
-    //     CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
-    //     DOWNLOAD_METHOD: "fastrack_erp.api.download_sales_invoice_pdf",
-    //     HAS_ARGUMENTS: true,
-    //     ARGUMENTS: {
-    //         invoice_ids: "selectedId",
-    //         doctype_name: "docName"
-    //     }
-    // },
-    // [PDF_NAME_LIST.EXPENSE]: {
-    //     name: PDF_NAME_LIST.EXPENSE,
-    //     parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
-    //     selectPDFNAME: true,
-    //     selectDocName: true,
-    //     selectCustomer: false,
-    //     selectSupplier: true,
-    //     selectChildDoctype: true,
-    //     CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.EXPENSE_LIST.name,
-    //     DOWNLOAD_METHOD: "fastrack_erp.api.download_purchase_invoice_pdf",
-    //     HAS_ARGUMENTS: true,
-    //     ARGUMENTS: {
-    //         invoice_ids: "selectedId",
-    //         doctype_name: "docName"
-    //     }
-    // },
     [PDF_NAME_LIST.ARRIVAL_NOTICE]: {
         name: PDF_NAME_LIST.ARRIVAL_NOTICE,
         parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
@@ -63,12 +30,13 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectChildDoctype: false,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_arrival_notice.download_arrival_notice_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_arrival_notice.download_arrival_notice_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             doc_name: "docName",
-            customer_name: "customerName"
-        }
+            customer_name: "customerName",
+        },
     },
     [PDF_NAME_LIST.DELIVERY_ORDER]: {
         name: PDF_NAME_LIST.DELIVERY_ORDER,
@@ -78,11 +46,12 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectCustomer: false,
         selectSupplier: false,
         selectChildDoctype: false,
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_delivery_order.download_delivery_order_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_delivery_order.download_delivery_order_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
     [PDF_NAME_LIST.SEA_IMPORT_INVOICE_USD]: {
         name: PDF_NAME_LIST.SEA_IMPORT_INVOICE_USD,
@@ -90,16 +59,18 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         isMasterBill: false,
         selectPDFNAME: true,
         selectDocName: true,
-        selectCustomer: false,
+        selectCustomer: true,
         selectSupplier: false,
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doctype_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
     [PDF_NAME_LIST.SEA_IMPORT_INVOICE_BDT]: {
         name: PDF_NAME_LIST.SEA_IMPORT_INVOICE_BDT,
@@ -112,30 +83,106 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_bdt.download_sea_import_invoice_bdt_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_sea_invoice_bdt.download_sea_import_invoice_bdt_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
-    [PDF_NAME_LIST.SEA_IMPORT_INVOICE_USD]: {
-        name: PDF_NAME_LIST.SEA_IMPORT_INVOICE_USD,
-        parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
-        selectPDFNAME: true,
+    [PDF_NAME_LIST.AIR_IMPORT_INVOICE_USD]: {
+        name: PDF_NAME_LIST.AIR_IMPORT_INVOICE_USD,
+        parentDoctype: DOCTYPE_LIST.IMPORT_AIR_HOUSE_BILL.NAME,
         isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_AIR_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_air_invoice_usd.download_air_import_invoice_usd_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.AIR_IMPORT_INVOICE_BDT]: {
+        name: PDF_NAME_LIST.AIR_IMPORT_INVOICE_BDT,
+        parentDoctype: DOCTYPE_LIST.IMPORT_AIR_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
         selectDocName: true,
         selectCustomer: true,
         selectSupplier: false,
         selectChildDoctype: true,
-        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
-        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
+        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_AIR_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee", "notify_party", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_air_invoice_bdt.download_air_import_invoice_bdt_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.D2D_IMPORT_INVOICE_USD]: {
+        name: PDF_NAME_LIST.D2D_IMPORT_INVOICE_USD,
+        parentDoctype: DOCTYPE_LIST.IMPORT_D2D_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_D2D_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_d2d_invoice_usd.download_d2d_import_invoice_usd_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.D2D_IMPORT_INVOICE_BDT]: {
+        name: PDF_NAME_LIST.D2D_IMPORT_INVOICE_BDT,
+        parentDoctype: DOCTYPE_LIST.IMPORT_D2D_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_D2D_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee", "notify_party", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_d2d_invoice_bdt.download_d2d_import_invoice_bdt_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.IGM]: {
+        name: PDF_NAME_LIST.IGM,
+        parentDoctype: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_arrival_notice.download_igm_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName",
+            customer_name: "customerName",
+        },
     },
     [PDF_NAME_LIST.TO_WHOM_CONCERN]: {
         name: PDF_NAME_LIST.TO_WHOM_CONCERN,
@@ -146,11 +193,12 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectCustomer: false,
         selectSupplier: false,
         selectChildDoctype: false,
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_to_concern.download_to_whom_concern_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_to_concern.download_to_whom_concern_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
     [PDF_NAME_LIST.INVOICE_FROM_MBL]: {
         name: PDF_NAME_LIST.INVOICE_FROM_MBL,
@@ -164,12 +212,13 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_MASTER_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         CUSTOMER_FIELDS: ["consignee"],
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
     [PDF_NAME_LIST.SEA_BILL_OF_LADING_DRAFT]: {
         name: PDF_NAME_LIST.SEA_BILL_OF_LADING_DRAFT,
@@ -180,11 +229,12 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectCustomer: false,
         selectSupplier: false,
         selectChildDoctype: false,
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_draft_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_draft_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
     [PDF_NAME_LIST.SEA_BILL_OF_LADING_ORIGINAL]: {
         name: PDF_NAME_LIST.SEA_BILL_OF_LADING_ORIGINAL,
@@ -195,15 +245,121 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectCustomer: false,
         selectSupplier: false,
         selectChildDoctype: false,
-        DOWNLOAD_METHOD: "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_original_pdf",
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_sea_bill_of_lading.download_sea_bill_of_lading_original_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
-            doc_name: "docName"
-        }
+            doc_name: "docName",
+        },
     },
+    [PDF_NAME_LIST.SEA_EXPORT_INVOICE_USD]: {
+        name: PDF_NAME_LIST.SEA_EXPORT_INVOICE_USD,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_sea_invoice_usd.download_export_sea_invoice_usd_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.SEA_EXPORT_INVOICE_BDT]: {
+        name: PDF_NAME_LIST.SEA_EXPORT_INVOICE_BDT,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["hbl_consignee", "notify_to", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_sea_invoice_bdt.download_export_sea_invoice_bdt_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.FC_EXPORT]: {
+        name: PDF_NAME_LIST.FC_EXPORT,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_to_concern.download_export_fc_export_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.D2D_EXPORT_INVOICE]: {
+        name: PDF_NAME_LIST.D2D_EXPORT_INVOICE,
+        parentDoctype: DOCTYPE_LIST.EXPORT_D2D_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_D2D_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee", "notify_party", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_d2d_invoice_bdt.download_export_d2d_invoice_bdt_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.SHIPPING]: {
+        name: PDF_NAME_LIST.SHIPPING,
+        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.import_to_concern.download_export_shipping_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            doc_name: "docName",
+        },
+    },
+};
+
+/** Resets optional fields when switching report so stale CHILD_DOCTYPE does not linger. */
+export function buildPdfPolicyForName(pdfName: string): PDFPolicy {
+    const cleared: PDFPolicy = {
+        name: "",
+        parentDoctype: "",
+        selectPDFNAME: true,
+        selectDocName: false,
+        selectCustomer: false,
+        selectSupplier: false,
+        selectChildDoctype: false,
+        CHILD_DOCTYPE: "",
+        DOWNLOAD_METHOD: "",
+        isMasterBill: false,
+    };
+    const next = PDF_POLICY[pdfName];
+    if (!next) {
+        return cleared;
+    }
+    return { ...cleared, ...next };
 }
-
-
-
-
-

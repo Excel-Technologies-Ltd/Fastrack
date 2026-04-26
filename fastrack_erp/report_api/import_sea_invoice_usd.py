@@ -4,27 +4,22 @@ from frappe.utils import get_url
 from fastrack_erp.report_api.report_helpers import get_invoice_usd_shipping_html
 
 
-@frappe.whitelist()
-def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
-    print(doc_name,invoice_ids)
-    """Download Sea Import Invoice USD as PDF using HTML template"""
-    
+def download_invoice_usd_pdf(
+    doc_name,
+    invoice_ids,
+    parent_doctype,
+    heading,
+    html_title,
+    filename_prefix,
+):
+    """Build Sea/Air/D2D-style sales invoice USD PDF for any supported HBL doctype."""
     try:
-        # Get the document
-        doctype = "Import Sea House Bill"
-        doc = frappe.get_doc(doctype, doc_name)
-        invoice_list= doc.invoice_list
-        # filter if invoice_ids is not None
-        print(invoice_list)
+        doc = frappe.get_doc(parent_doctype, doc_name)
         if invoice_ids:
-            # make array of invoice_ids
-            invoice_ids = invoice_ids.split(",")
-            print(invoice_ids)
-            invoice_list = [invoice for invoice in invoice_list if invoice.name in invoice_ids]
-            print(invoice_list)
-        doc.invoice_list = invoice_list
-        print(doc.invoice_list)
-        # Get customer address
+            ids = invoice_ids.split(",")
+            doc.invoice_list = [
+                row for row in doc.invoice_list if row.name in ids
+            ]
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
             customer = doc.invoice_list[0].customer
@@ -32,29 +27,41 @@ def download_sea_import_invoice_usd_pdf(doc_name,invoice_ids=None):
                 try:
                     customer_doc = frappe.get_doc("Customer", customer)
                     customer_address = customer_doc.primary_address or ""
-                except:
+                except Exception:
                     customer_address = ""
-        
-        # Generate HTML content
-        html_content = get_sea_import_invoice_html(doc, customer_address)
-        
-        # Generate PDF
+        html_content = get_import_invoice_usd_html(
+            doc, customer_address, heading=heading, html_title=html_title
+        )
         pdf_content = get_pdf(html_content)
-        
-        # Set filename
-        filename = f"Sea_Import_Invoice_USD_{doc_name}.pdf"
-        
-        # Prepare response
+        safe_stem = filename_prefix.replace(" ", "_")
+        filename = f"{safe_stem}_{doc_name}.pdf"
         frappe.local.response.filename = filename
         frappe.local.response.filecontent = pdf_content
         frappe.local.response.type = "download"
-        
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
-def get_sea_import_invoice_html(doc, customer_address):
-    """Generate HTML content for Sea Import Invoice USD"""
+@frappe.whitelist()
+def download_sea_import_invoice_usd_pdf(doc_name, invoice_ids=None):
+    """Download Sea Import Invoice USD as PDF using HTML template"""
+    download_invoice_usd_pdf(
+        doc_name,
+        invoice_ids,
+        parent_doctype="Import Sea House Bill",
+        heading="SEA IMPORT INVOICE",
+        html_title="Sea Import Invoice USD",
+        filename_prefix="Sea_Import_Invoice_USD",
+    )
+
+
+def get_import_invoice_usd_html(
+    doc,
+    customer_address,
+    heading="SEA IMPORT INVOICE",
+    html_title="Sea Import Invoice USD",
+):
+    """Generate HTML content for import/export-style Invoice USD."""
     
     # Get customer info
     customer_name = ""
@@ -162,7 +169,7 @@ def get_sea_import_invoice_html(doc, customer_address):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sea Import Invoice USD</title>
+        <title>{html_title}</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;
@@ -267,7 +274,7 @@ def get_sea_import_invoice_html(doc, customer_address):
 
                     <!-- Center: Title -->
                     <td style="width:50%; text-align:center; vertical-align:middle;">
-                        <h3 style="margin:0;">SEA IMPORT INVOICE</h3>
+                        <h3 style="margin:0;">{heading}</h3>
                     </td>
 
                     <!-- Right: Empty (for balance) -->
@@ -383,7 +390,7 @@ def get_sea_import_invoice_preview(doc_name):
                     customer_address = ""
         
         # Generate and return HTML content
-        html_content = get_sea_import_invoice_html(doc, customer_address)
+        html_content = get_import_invoice_usd_html(doc, customer_address)
         return {"html": html_content}
         
     except Exception as e:

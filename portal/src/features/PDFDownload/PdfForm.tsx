@@ -11,7 +11,7 @@ import {
 import { AntSelect, AntButton } from "../../components/UI";
 import { PDF_NAME_LIST } from "../../constants/pdfName";
 import { usePDFDownload } from "./PDFDownloadPorvider";
-import { PDF_POLICY } from "../../utils/pdfPolicy";
+import { buildPdfPolicyForName } from "../../utils/pdfPolicy";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
 import { toast } from "react-toastify";
@@ -52,15 +52,7 @@ const PdfForm = () => {
         selectedId: "",
       }));
       resetAllFields();
-      setPdfPolicy((prev) => ({
-        ...prev,
-        selectDocName: false,
-        selectCustomer: false,
-        selectSupplier: false,
-        selectChildDoctype: false,
-        parentDoctype: "",
-        CHILD_DOCTYPE: "",
-      }));
+      setPdfPolicy(buildPdfPolicyForName(""));
     } else {
       setPdfFormOption((prev) => ({
         ...prev,
@@ -71,8 +63,7 @@ const PdfForm = () => {
         selectedId: "",
       }));
       resetAllFields();
-      const policy = PDF_POLICY[selectedPdfName];
-      setPdfPolicy((prev) => ({ ...prev, ...policy }));
+      setPdfPolicy(buildPdfPolicyForName(selectedPdfName));
     }
   };
 
