@@ -1,6 +1,11 @@
 import frappe
-from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
+from frappe.utils.pdf import get_pdf
+
+from fastrack_erp.report_api.report_helpers import (
+    FASTTRACK_PDF_MAIN_CSS,
+    merge_fastrack_wkhtml_pdf_options,
+)
 
 
 @frappe.whitelist()
@@ -16,7 +21,10 @@ def download_delivery_order_pdf(doc_name="SHBL-00000064"):
         html_content = get_delivery_order_html(doc)
 
         # Generate PDF
-        pdf_content = get_pdf(html_content)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(),
+        )
 
         # Set filename
         filename = f"Delivery_Order_{doc_name}.pdf"
@@ -89,6 +97,7 @@ def get_delivery_order_html(doc):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Delivery Order</title>
         <style>
+            {FASTTRACK_PDF_MAIN_CSS}
             body {{
                 font-family: Arial, sans-serif;
                 font-size: 14px;
@@ -185,7 +194,7 @@ def get_delivery_order_html(doc):
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container ft-pdf-main">
             <div class="text-center">
                 <h5>DELIVERY ORDER</h5>
             </div>

@@ -1,7 +1,11 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
-from fastrack_erp.report_api.report_helpers import get_invoice_bdt_shipping_html
+from fastrack_erp.report_api.report_helpers import (
+    FASTTRACK_PDF_MAIN_CSS,
+    get_invoice_bdt_shipping_html,
+    merge_fastrack_wkhtml_pdf_options,
+)
 
 
 def download_invoice_bdt_pdf(
@@ -35,7 +39,10 @@ def download_invoice_bdt_pdf(
             html_title=html_title,
             heading=heading,
         )
-        pdf_content = get_pdf(html_content)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(),
+        )
         safe_stem = filename_prefix.replace(" ", "_")
         filename = f"{safe_stem}_{doc_name}.pdf"
         frappe.local.response.filename = filename
@@ -187,6 +194,7 @@ def get_import_invoice_bdt_html(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{html_title}</title>
         <style>
+            {FASTTRACK_PDF_MAIN_CSS}
             body {{
                 font-family: Arial, sans-serif;
                 font-size: 12px;
@@ -265,19 +273,10 @@ def get_import_invoice_bdt_html(
             li {{
                 margin-bottom: 4px;
             }}
-            .footer {{
-                font-size: 8px;
-                line-height: 1.4;
-                text-align: center;
-                color: black;
-                margin-top: 40px;
-                border-top: 1px solid black;
-                padding-top: 10px;
-            }}
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container ft-pdf-main">
                      
             <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
                 <tr>
@@ -368,16 +367,6 @@ def get_import_invoice_bdt_html(
                 <li>All transactions are subject to FASTRACK CARGO SOLUTIONS LTD. terms and conditions, available upon request.</li>
                 <li>If any dispute, please notify in written within 03 days upon receipt of this Invoice.</li>
             </ol>
-
-            <!-- Footer -->
-            <div class="footer">
-                 <p style="margin: 4px 0;">
-                    <strong>DHAKA OFFICE :</strong> 7th Floor, House: 11, Road: 4, Block : F, Banani, Dhaka 1213 Tel: +880-2-8836386, Fax: +880-2-8836374
-                </p>
-                <p style="margin: 4px 0;">
-                    <strong>CHITTAGONG OFFICE :</strong> JAHAN CHAMBER(2ND FLOOR), 3048/4255 HALISHAHAR ROAD, CHOUMUHONI, AGRABAD C/A, CHATTOGRAM Tel: +880-31-2527634
-                </p>
-            </div>
         </div>
     </body>
     </html>

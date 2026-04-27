@@ -2,6 +2,8 @@
 Shipping details HTML helpers — one function per report type.
 """
 
+import os
+
 import frappe
 
 _LBL  = "font-weight:bold; padding:3px 6px; vertical-align:top; white-space:nowrap; text-align:left;"
@@ -253,3 +255,77 @@ def get_fc_shipping_html(doc, format_date_fn=None):
 # Legacy alias kept for any callers not yet updated.
 def get_shipping_details_html(doc, format_date_fn=None):
     return get_fc_shipping_html(doc, format_date_fn)
+
+
+# Minimal body CSS (optional). Do not use position:fixed for footers — wkhtmltopdf
+# splits/scales them badly; use merge_fastrack_wkhtml_pdf_options() instead.
+FASTTRACK_PDF_MAIN_CSS = """
+.ft-pdf-main {
+    box-sizing: border-box;
+}
+"""
+
+# Standalone document for wkhtmltopdf --footer-html (avoids print.bundle.css).
+FASTTRACK_WKHTML_FOOTER_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    color: #000 !important;
+    text-align: center;
+  }
+  p {
+    margin: 0 0 0.35mm 0 !important;
+    padding: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    font-weight: normal !important;
+    white-space: nowrap !important;
+  }
+  p:last-child { margin-bottom: 0 !important; }
+  strong {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+  }
+</style>
+</head>
+<body>
+<p><strong>DHAKA OFFICE:</strong> HOUSE# 14(2nd Floor), ROAD# 13/C, BLOCK # E, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374</p>
+<p><strong>CHITTAGONG OFFICE:</strong> 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634</p>
+</body>
+</html>
+"""
+
+
+def _write_fastrack_footer_html_path():
+    path = os.path.join(
+        '/tmp',
+        'ft-pdf-footer-{0}.html'.format(frappe.generate_hash(length=10)),
+    )
+    with open(path, 'w', encoding='utf-8') as fh:
+        fh.write(FASTTRACK_WKHTML_FOOTER_HTML)
+    return path
+
+
+def merge_fastrack_wkhtml_pdf_options(extra=None):
+    """Native wkhtml footer (correct size, no page-split). Pass orientation etc. in extra."""
+    opts = {
+        'footer-html': _write_fastrack_footer_html_path(),
+        'footer-spacing': '2',
+        'margin-bottom': '18mm',
+    }
+    if extra:
+        opts.update(extra)
+    return opts

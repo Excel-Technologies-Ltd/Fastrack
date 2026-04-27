@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Checkbox, Form, Card, Typography, Row, Col, Divider } from "antd";
+import { Checkbox, Form, Card, Typography, Row, Col } from "antd";
 import {
   DownloadOutlined,
   FileTextOutlined,
@@ -219,13 +219,13 @@ const PdfForm = () => {
       <div style={{ padding: "24px 28px 28px" }}>
         <Form layout="vertical" onFinish={handleSubmit}>
 
-          {/* PDF Type Section */}
-          <Divider orientation="left" orientationMargin={0} style={{ marginTop: 0, marginBottom: 12 }}>
+          {/* PDF Type Section (no rule line — matches clean section headers) */}
+          <div style={{ marginTop: 0, marginBottom: 12 }}>
             <Text strong style={{ fontSize: 13, color: "#555" }}>
               <FileTextOutlined style={{ marginRight: 6 }} />
               Select PDF Type
             </Text>
-          </Divider>
+          </div>
 
           <Form.Item required style={{ marginBottom: 20 }}>
             <Row gutter={[8, 8]}>
@@ -270,12 +270,12 @@ const PdfForm = () => {
           </Form.Item>
 
           {/* Document Details Section */}
-          <Divider orientation="left" orientationMargin={0} style={{ marginBottom: 12 }}>
+          <div style={{ marginBottom: 12 }}>
             <Text strong style={{ fontSize: 13, color: "#555" }}>
               <SearchOutlined style={{ marginRight: 6 }} />
               Document Details
             </Text>
-          </Divider>
+          </div>
 
           {/* Document Name — supports paste via auto-select on exact API match */}
           <AntSelect

@@ -1,7 +1,280 @@
+import html
+
 import frappe
+from frappe.utils import getdate
 from frappe.utils.pdf import get_pdf
-from frappe.utils import get_url
-from fastrack_erp.report_api.report_helpers import get_arrival_notice_shipping_html
+from fastrack_erp.report_api.report_helpers import (
+    FASTTRACK_PDF_MAIN_CSS,
+    get_arrival_notice_shipping_html,
+    merge_fastrack_wkhtml_pdf_options,
+)
+
+
+def _igm_escape(val):
+    if val is None or val == '':
+        return ''
+    return html.escape(str(val), quote=False)
+
+
+def _igm_customer_display(link_name):
+    if not link_name:
+        return ''
+    name = frappe.db.get_value('Customer', link_name, 'customer_name')
+    return _igm_escape(name or link_name)
+
+
+def _igm_year(doc):
+    for fld in ('eta', 'hbl_etd', 'mbl_date', 'hbl_date'):
+        v = doc.get(fld)
+        if v:
+            try:
+                return str(getdate(v).year)
+            except Exception:
+                continue
+    return ''
+
+
+def _igm_format_qty(val):
+    if val is None or val == '':
+        return ''
+    try:
+        return f'{int(val):,}'
+    except (TypeError, ValueError):
+        return _igm_escape(val)
+
+
+def _igm_format_gross(val):
+    if val is None or val == '':
+        return ''
+    try:
+        return _igm_escape(f'{float(val):,.2f} KGS')
+    except (TypeError, ValueError):
+        return _igm_escape(str(val))
+
+
+def _igm_container_lines(doc):
+    lines = []
+    rows = getattr(doc, 'container_info', None) or doc.get('container_info') or []
+    for c in rows:
+        c = c if isinstance(c, dict) else c.as_dict()
+        cno = (c.get('custom_container_no') or '').strip()
+        seal = (c.get('seal_no') or '').strip()
+        size = c.get('size')
+        if size and not isinstance(size, str):
+            size = getattr(size, 'name', None) or str(size)
+        size = (size or '').strip()
+        line = cno
+        if size:
+            line += f' /{size}'
+        if seal:
+            line += f' SN: {seal}'
+        line = line.strip()
+        if line:
+            lines.append(_igm_escape(line))
+    return '<br/>'.join(lines)
+
+
+def _igm_date_field(doc, fieldname):
+    v = doc.get(fieldname)
+    if not v:
+        return ''
+    try:
+        return _igm_escape(getdate(v).strftime('%d-%m-%Y'))
+    except Exception:
+        return _igm_escape(str(v))
+
+
+def get_igm_html(doc, _customer_name=''):
+    """Import General Manifest Sup (IGM) layout — wide manifest table + summary."""
+
+    mbl_display = _igm_escape(str(doc.get('mbl_no') or ''))
+    bl_number = _igm_escape((doc.get('bl_no') or doc.get('hbl_id') or '').strip())
+    master_line = _igm_escape(str(doc.get('line_no') or '').strip())
+    line_no = _igm_escape(str(doc.get('hbl_line_no') or '').strip())
+    pkg_desc = _igm_escape(str(doc.get('pkg_name') or '').strip())
+    marks = _igm_escape(str(doc.get('marks_and_numbers') or '').strip())
+    goods = _igm_escape(str(doc.get('description_of_good') or '').strip())
+    consignee = _igm_customer_display(doc.get('hbl_consignee'))
+    notify = _igm_customer_display(doc.get('notify_to'))
+    status = _igm_escape(
+        str(doc.get('container_type') or doc.get('container_mode') or doc.get('status') or '').strip()
+    )
+    perishable = _igm_escape(str(doc.get('dg_status') or '').strip())
+    remark = _igm_escape(
+        str(doc.get('remarks') or doc.get('hbl_remarks') or '').strip()
+    )
+    net_wt = ''
+    nw = doc.get('hbl_weight')
+    if nw not in (None, '', 0):
+        try:
+            net_wt = _igm_escape(f'{float(nw):,.2f} KGS')
+        except (TypeError, ValueError):
+            net_wt = _igm_escape(str(nw))
+
+    rotation = _igm_escape(str(doc.get('rotation') or '').strip())
+    sailed_year = _igm_escape(_igm_year(doc) or '')
+    vessel = _igm_escape(str(doc.get('mv') or '').strip())
+    voyage = _igm_escape(str(doc.get('mv_voyage_no') or '').strip())
+
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Import General Manifest Sup (IGM)</title>
+        <style>
+            {FASTTRACK_PDF_MAIN_CSS}
+            @page {{
+                size: A4 landscape;
+                margin: 8mm 10mm 8mm 10mm;
+            }}
+            html, body {{
+                height: 100%;
+            }}
+            body {{
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 8px;
+                color: #000;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }}
+            .igm-wrap {{
+                width: 100%;
+                box-sizing: border-box;
+                padding-bottom: 4mm;
+            }}
+            .igm-title {{
+                font-size: 13px;
+                font-weight: bold;
+                text-align: left;
+                margin: 0 0 8px 0;
+            }}
+            .igm-summary-wrap {{
+                width: 30%;
+                max-width: 30%;
+                margin-bottom: 12px;
+            }}
+            .igm-summary {{
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+            }}
+            .igm-summary th,
+            .igm-summary td {{
+                border: 1px solid #000;
+                padding: 6px 8px;
+                vertical-align: middle;
+            }}
+            .igm-summary th {{
+                font-weight: bold;
+                font-size: 8px;
+                text-align: center;
+            }}
+            .igm-summary td {{
+                text-align: left;
+                font-size: 9px;
+            }}
+            .igm-main {{
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                margin-bottom: 6mm;
+            }}
+            .igm-main th {{
+                border: 1px solid #000;
+                padding: 7px 4px;
+                font-size: 7px;
+                font-weight: bold;
+                text-align: center;
+                vertical-align: middle;
+                text-transform: uppercase;
+                line-height: 1.25;
+            }}
+            .igm-main td {{
+                border: 1px solid #000;
+                padding: 10px 6px;
+                font-size: 7.5px;
+                line-height: 1.45;
+                vertical-align: top;
+                text-align: left;
+                word-wrap: break-word;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="igm-wrap">
+            <div class="igm-title">Import General Manifest Sup (IGM)</div>
+            <div class="igm-summary-wrap">
+                <table class="igm-summary">
+                    <thead>
+                        <tr>
+                            <th>Sailed Year</th>
+                            <th>Ship&apos;s Name</th>
+                            <th>Voy. No</th>
+                            <th>Import Rot No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{sailed_year}</td>
+                            <td>{vessel}</td>
+                            <td>{voyage}</td>
+                            <td>{rotation}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="igm-main">
+                <thead>
+                    <tr>
+                        <th style="width:3.5%;">Master<br/>Line</th>
+                        <th style="width:6%;">MBL<br/>No</th>
+                        <th style="width:3.5%;">Line<br/>No</th>
+                        <th style="width:7%;">BL<br/>Number</th>
+                        <th style="width:5%;">Number of<br/>Quantity</th>
+                        <th style="width:5%;">Description</th>
+                        <th style="width:9%;">Mark &amp;<br/>Number</th>
+                        <th style="width:11%;">Description<br/>of Goods</th>
+                        <th style="width:5%;">Date of<br/>Entry</th>
+                        <th style="width:5%;">Conts<br/>Licence</th>
+                        <th style="width:8%;">Consignee</th>
+                        <th style="width:8%;">Notify<br/>Party</th>
+                        <th style="width:6%;">Gross<br/>Weight</th>
+                        <th style="width:5%;">Net<br/>Weight</th>
+                        <th style="width:8%;">Container</th>
+                        <th style="width:4%;">Status</th>
+                        <th style="width:5.5%;">PERISH<br/>ABLE</th>
+                        <th style="width:5.5%;">RE<br/>MARK</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{master_line}</td>
+                        <td>{mbl_display}</td>
+                        <td>{line_no}</td>
+                        <td>{bl_number}</td>
+                        <td>{_igm_format_qty(doc.get('no_of_pkg_hbl'))}</td>
+                        <td>{pkg_desc}</td>
+                        <td>{marks}</td>
+                        <td>{goods}</td>
+                        <td>{_igm_date_field(doc, 'bill_of_entry_date')}</td>
+                        <td>{_igm_escape(str(doc.get('bill_of_entry') or '').strip())}</td>
+                        <td>{consignee}</td>
+                        <td>{notify}</td>
+                        <td>{_igm_format_gross(doc.get('gross_weight'))}</td>
+                        <td>{net_wt}</td>
+                        <td>{_igm_container_lines(doc)}</td>
+                        <td>{status}</td>
+                        <td>{perishable}</td>
+                        <td>{remark}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    """
 
 
 @frappe.whitelist()
@@ -26,8 +299,11 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
         )
         
         # Generate PDF
-        pdf_content = get_pdf(html_content)
-        
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(),
+        )
+
         # Set filename
         filename = f"Arrival_Notice_{doc_name}.pdf"
         
@@ -46,22 +322,13 @@ def download_igm_pdf(doc_name="SHBL-00000064", customer_name="Fastrack"):
     try:
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
-        customer_address = ""
-        if doc.customer:
-            try:
-                customer_address = frappe.get_doc(
-                    "Customer", {"customer_name": customer_name}
-                ).primary_address
-            except Exception:
-                customer_address = ""
-        html_content = get_arrival_notice_html(
-            doc,
-            customer_address,
-            customer_name,
-            document_title="IGM",
-            page_title="IGM",
+        html_content = get_igm_html(doc, customer_name)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(
+                {'orientation': 'Landscape'},
+            ),
         )
-        pdf_content = get_pdf(html_content)
         filename = f"IGM_{doc_name}.pdf"
         frappe.local.response.filename = filename
         frappe.local.response.filecontent = pdf_content
@@ -77,7 +344,7 @@ def get_arrival_notice_html(
     document_title="ARRIVAL NOTICE",
     page_title="Arrival Notice",
 ):
-    """Generate HTML content for Arrival Notice or IGM."""
+    """Generate HTML content for Arrival Notice."""
     
     # Get container information
     container_rows = ""
@@ -114,6 +381,7 @@ def get_arrival_notice_html(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{page_title}</title>
         <style>
+            {FASTTRACK_PDF_MAIN_CSS}
             .document-container {{
                 font-family: Arial, sans-serif;
                 max-width: 800px;
@@ -213,15 +481,15 @@ def get_arrival_notice_html(
                 justify-content: space-between;
                 align-items: center;
                 padding-top: 10px;
-                margin-top: 40px;
+                margin-top: 12px;
             }}
             .footer-note {{
                 font-size: 10px;
                 font-weight: bold;
             }}
             .signature-section {{
-                margin-top: 30px;
-                margin-bottom: 30px;
+                margin-top: 12px;
+                margin-bottom: 6px;
                 font-size: 10px;
                 text-align: right;
                 font-weight: bold;
@@ -234,21 +502,6 @@ def get_arrival_notice_html(
                 margin-bottom: 5px;
                 margin-left: auto;
             }}
-            .office-addresses {{
-                margin-top: 20px;
-                font-size: 8px;
-                line-height: 1.4;
-                text-align: center;
-                color: black;
-                padding-top: 10px;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: white;
-                padding-left: 20px;
-                padding-right: 20px;
-            }}
             .center {{
                 display: flex;
                 justify-content: center;
@@ -257,7 +510,7 @@ def get_arrival_notice_html(
         </style>
     </head>
     <body>
-        <div class="document-container">
+        <div class="document-container ft-pdf-main">
         
 
              <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
@@ -334,15 +587,9 @@ def get_arrival_notice_html(
                     Note - This is System Generated, Not Require Signature or Seal.
                 </div>
                 <div class="signature-section">
-                    <div style: "text-align: left;" class="signature-line"></div>
+                    <div style="text-align: left;" class="signature-line"></div>
                     PREPARED BY</br>
                 </div>
-            </div>
-
-            <!-- Office Addresses -->
-            <div class="office-addresses">
-                <p><strong>DHAKA OFFICE:</strong> HOUSE# 14(2nd Floor), ROAD# 13/C, BLOCK # E, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374</p>
-                <p><strong>CHITTAGONG OFFICE:</strong> 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634</p>
             </div>
         </div>
     </body>

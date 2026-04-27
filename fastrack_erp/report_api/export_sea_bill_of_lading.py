@@ -1,6 +1,11 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 
+from fastrack_erp.report_api.report_helpers import (
+    FASTTRACK_PDF_MAIN_CSS,
+    merge_fastrack_wkhtml_pdf_options,
+)
+
 
 def get_customer_address(customer_name):
     """Return a <br>-separated address + contact info string for a Customer, or '' if not found."""
@@ -59,7 +64,10 @@ def download_sea_bill_of_lading_draft_pdf(doc_name):
         html_content = get_sea_bill_of_lading_html(doc, is_original=False)
 
         # Generate PDF
-        pdf_content = get_pdf(html_content)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(),
+        )
 
         # Set filename
         filename = f"Sea_Bill_of_Lading_Draft_{doc_name}.pdf"
@@ -85,7 +93,10 @@ def download_sea_bill_of_lading_original_pdf(doc_name):
         html_content = get_sea_bill_of_lading_html(doc, is_original=True)
 
         # Generate PDF
-        pdf_content = get_pdf(html_content)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(),
+        )
 
         # Set filename
         filename = f"Sea_Bill_of_Lading_Original_{doc_name}.pdf"
@@ -269,6 +280,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Bill of Lading</title>
         <style>
+          {FASTTRACK_PDF_MAIN_CSS}
           @page {{
             size: A4;
             margin: 5mm;
@@ -366,7 +378,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
         </style>
       </head>
       <body>
-        <div class="page">
+        <div class="page ft-pdf-main">
           <div class="_header_title">BILL OF LADING</div>
 
           <table style="width: 100%; margin-bottom: 1px; table-layout: fixed;">
