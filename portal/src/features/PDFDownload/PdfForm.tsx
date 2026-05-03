@@ -15,6 +15,10 @@ import { usePDFDownload } from "./PDFDownloadPorvider";
 import { buildPdfPolicyForName } from "../../utils/pdfPolicy";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
+import {
+  buildCustomerSelectOptions,
+  buildSupplierSelectOptions,
+} from "../../utils/pdfPickerOptions";
 import { toast } from "react-toastify";
 import { useFrappeGetDocList } from "frappe-react-sdk";
 import { List } from "./List";
@@ -114,30 +118,16 @@ const PdfForm = () => {
 
   const doclistArray = docNameList && docNameList.length > 0 ? docNameList : [];
 
-  // Build customer options from policy-defined fields in the fetched document
-  const customerOptions = (() => {
-    const fields = pdfPolicy.CUSTOMER_FIELDS;
-    if (!fields || fields.length === 0 || Object.keys(docTypeData).length === 0) return [];
-    const values = [
-      ...new Set(
-        fields.map((field) => (docTypeData as any)[field]).filter(Boolean)
-      ),
-    ];
-    return values.map((v: string) => ({ value: v, label: v }));
-  })();
+  const customerOptions = buildCustomerSelectOptions(
+    docTypeData as Record<string, unknown>,
+    pdfPolicy.CUSTOMER_FIELDS,
+    pdfPolicy.CHILD_DOCTYPE,
+  );
 
-  // Build supplier options from child doctype data
-  const childData: any =
-    pdfPolicy.CHILD_DOCTYPE && docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData]
-      ? docTypeData[pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData]
-      : null;
-
-  const supplierList =
-    childData && Array.isArray(childData)
-      ? [...new Set(childData.map((c: any) => c.supplier).filter(Boolean))]
-      : [];
-
-  const supplierOptions = supplierList.map((c: any) => ({ value: c, label: c }));
+  const supplierOptions = buildSupplierSelectOptions(
+    docTypeData as Record<string, unknown>,
+    pdfPolicy.CHILD_DOCTYPE,
+  );
 
   // Sync docSearchValue when docName is cleared externally
   useEffect(() => {
