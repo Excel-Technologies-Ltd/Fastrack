@@ -131,19 +131,19 @@ def make_export_air_house_bill(source_name, target_doc=None):
 HBL_SALES_INVOICE_FIELD_MAP = {
     "Import Sea House Bill": "custom_hbl_sea_link",
     "Import Air House Bill": "custom_hbl_air_link",
-    "Import D2D Bill": "custom_hbl_d2d_link",
-    "Export Sea House Bill": "custom_hbl_export_sea_link",
-    "Export Air House Bill": "custom_hbl_export_air_link",
-    "Export D2D Bill": "custom_hbl_export_d2d_link",
+    "Import D2D Bill": "custom_import_d2d_link",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
 }
 
 HBL_PURCHASE_INVOICE_FIELD_MAP = {
     "Import Sea House Bill": "custom_shbl_id",
     "Import Air House Bill": "custom_ahbl_id",
     "Import D2D Bill": "custom_dhbl_id",
-    "Export Sea House Bill": "custom_eshbl_id",
-    "Export Air House Bill": "custom_eahbl_id",
-    "Export D2D Bill": "custom_edhbl_id",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
 }
 
 HBL_PAYMENT_ENTRY_FIELD_MAP = {
@@ -1258,5 +1258,16 @@ def get_all_hbl_invoice_list_by_mbl_id(mbl_id="SMBL-00000063"):
         'total_invoices': len(all_invoices)
     }
 
+
+@frappe.whitelist()
+def get_hbl_invoice_lines_for_portal(parent_doctype, hbl_name):
+    """Invoice rows for portal PDF picker (child table or linked Sales Invoice)."""
+    if not parent_doctype or not hbl_name:
+        return []
+    from fastrack_erp.report_api.invoice_list_bridge import (
+        portal_invoice_line_payload,
+    )
+
+    return portal_invoice_line_payload(parent_doctype, hbl_name)
 
 

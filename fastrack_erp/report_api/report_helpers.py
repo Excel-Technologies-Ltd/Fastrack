@@ -67,9 +67,58 @@ def _wrap_table(rows):
     """
 
 
+def _plain_invoice_list_row(row):
+    """Turn one invoice_list row into a dict without parent Document.as_dict()."""
+    if row is None:
+        return None
+    if isinstance(row, dict):
+        return dict(row)
+    as_dict_fn = getattr(row, 'as_dict', None)
+    if callable(as_dict_fn):
+        try:
+            return dict(
+                as_dict_fn(
+                    convert_dates_to_str=True,
+                    no_child_table_fields=True,
+                ),
+            )
+        except TypeError:
+            pass
+    keys = (
+        'name', 'owner', 'creation', 'modified', 'modified_by', 'docstatus',
+        'idx', 'parent', 'parentfield', 'parenttype',
+        'customer', 'invoice_link', 'item_code', 'qty', 'rate',
+        'total_price', 'currency', 'exchange_rate', 'base_net_amount',
+    )
+    out = {}
+    for k in keys:
+        if hasattr(row, k):
+            try:
+                out[k] = getattr(row, k)
+            except Exception:
+                continue
+    return out
+
+
+def _plain_invoice_list_rows(rows):
+    out = []
+    for row in rows or []:
+        plain = _plain_invoice_list_row(row)
+        if plain is not None:
+            out.append(plain)
+    return out
+
+
 def normalize_doc_for_invoice_shipping(doc):
     """Map air/d2d HBL fields onto sea-style names for invoice shipping HTML."""
-    d = dict(doc.as_dict())
+    orig_il = list(doc.get('invoice_list') or [])
+    plain_il = _plain_invoice_list_rows(orig_il)
+    doc.invoice_list = []
+    try:
+        d = dict(doc.as_dict())
+    finally:
+        doc.invoice_list = orig_il
+    d['invoice_list'] = plain_il
     dt = d.get('doctype') or getattr(doc, 'doctype', None) or ''
     if dt == 'Import Air House Bill':
         d['hbl_consignee'] = d.get('hbl_consignee') or d.get('consignee')

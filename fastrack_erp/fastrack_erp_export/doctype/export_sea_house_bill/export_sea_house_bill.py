@@ -138,7 +138,7 @@ def get_draft_sales_and_purchase_invoice_list(house_bill_no):
 		sales_invoice_list = frappe.db.get_list(
 			"Sales Invoice",
 			filters=[
-				["custom_hbl_export_sea_link", "=", house_bill_no],
+				["custom_export_hbl_sea_link", "=", house_bill_no],
 				["docstatus", "=", 0]
 			],
 			fields=["name", "base_grand_total"]
@@ -148,7 +148,7 @@ def get_draft_sales_and_purchase_invoice_list(house_bill_no):
 		purchase_invoice_list = frappe.db.get_list(
 			"Purchase Invoice",
 			filters=[
-				["custom_eshbl_id", "=", house_bill_no],
+				["custom_export_hbl_sea_link", "=", house_bill_no],
 				["docstatus", "=", 0]
 			],
 			fields=["name", "base_grand_total"]

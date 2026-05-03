@@ -298,12 +298,14 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectDocName: true,
         selectCustomer: false,
         selectSupplier: false,
-        selectChildDoctype: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         DOWNLOAD_METHOD:
             "fastrack_erp.report_api.import_to_concern.download_export_fc_export_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             doc_name: "docName",
+            invoice_ids: "selectedId",
         },
     },
     [PDF_NAME_LIST.D2D_EXPORT_INVOICE]: {
@@ -333,12 +335,14 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         selectDocName: true,
         selectCustomer: false,
         selectSupplier: false,
-        selectChildDoctype: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         DOWNLOAD_METHOD:
             "fastrack_erp.report_api.import_to_concern.download_export_shipping_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             doc_name: "docName",
+            invoice_ids: "selectedId",
         },
     },
 };

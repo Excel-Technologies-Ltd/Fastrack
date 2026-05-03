@@ -4,10 +4,10 @@ import frappe
 HBL_TYPE_FIELD_MAP = {
     "Import Sea House Bill": "custom_hbl_sea_link",
     "Import Air House Bill": "custom_hbl_air_link",
-    "Import D2D Bill": "custom_hbl_d2d_link",
-    "Export Sea House Bill": "custom_hbl_export_sea_link",
-    "Export Air House Bill": "custom_hbl_export_air_link",
-    "Export D2D Bill": "custom_hbl_export_d2d_link",
+    "Import D2D Bill": "custom_import_d2d_link",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
 }
 
 def after_submit(doc, method):

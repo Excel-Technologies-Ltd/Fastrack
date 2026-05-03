@@ -1,6 +1,9 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url, format_date, today
+from fastrack_erp.report_api.invoice_list_bridge import (
+    resolve_invoice_list_for_hbl_pdf,
+)
 from fastrack_erp.report_api.report_helpers import (
     FASTTRACK_PDF_MAIN_CSS,
     get_fc_shipping_html,
@@ -14,8 +17,10 @@ def _download_fc_style_certificate_pdf(
     banner_title,
     html_title,
     filename_stem,
+    invoice_ids=None,
 ):
     doc = frappe.get_doc(parent_doctype, doc_name)
+    resolve_invoice_list_for_hbl_pdf(doc, parent_doctype, invoice_ids)
     customer_name = ""
     customer_address = ""
     if doc.invoice_list and len(doc.invoice_list) > 0:
@@ -62,7 +67,7 @@ def download_to_whom_concern_pdf(doc_name):
 
 
 @frappe.whitelist()
-def download_export_fc_export_pdf(doc_name):
+def download_export_fc_export_pdf(doc_name, invoice_ids=None):
     """Download FC Export certificate (export sea HBL) as PDF."""
     try:
         _download_fc_style_certificate_pdf(
@@ -71,16 +76,22 @@ def download_export_fc_export_pdf(doc_name):
             banner_title="FC EXPORT",
             html_title="FC Export",
             filename_stem="FC_Export",
+            invoice_ids=invoice_ids,
         )
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
 
 
 @frappe.whitelist()
-def download_export_shipping_pdf(doc_name):
+def download_export_shipping_pdf(doc_name, invoice_ids=None):
     """Download Shipping Order certificate (export sea HBL) as PDF."""
     try:
         doc = frappe.get_doc("Export Sea House Bill", doc_name)
+        resolve_invoice_list_for_hbl_pdf(
+            doc,
+            'Export Sea House Bill',
+            invoice_ids,
+        )
         html_content = get_export_shipping_order_html(doc)
         pdf_content = get_pdf(
             html_content,

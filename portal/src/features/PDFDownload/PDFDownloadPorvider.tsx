@@ -1,7 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import type { PDFPolicy } from "../../utils/pdfPolicy";
 import { useFrappeGetCall, useFrappeGetDoc } from "frappe-react-sdk";
-
 
 // Define the structure of the form data
 export type PdfFormOption = {
@@ -21,7 +26,7 @@ type PDFDownloadContextType = {
   setPdfPolicy: React.Dispatch<React.SetStateAction<PDFPolicy>>;
   docTypeData: {};
   errorObj: {
-    docNameError:string;
+    docNameError: string;
   };
 };
 
@@ -48,12 +53,15 @@ const PDFDownloadContext = createContext<PDFDownloadContextType>({
   setPdfPolicy: () => {},
   docTypeData: {},
   errorObj: {
-    docNameError:"",
+    docNameError: "",
   },
-
 });
 
-export const PDFDownloadProvider = ({ children }: { children: React.ReactNode }) => {
+export const PDFDownloadProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [pdfFormOption, setPdfFormOption] = useState<PdfFormOption>({
     pdfName: "",
     docName: "",
@@ -74,93 +82,203 @@ export const PDFDownloadProvider = ({ children }: { children: React.ReactNode })
     CHILD_DOCTYPE: "",
     DOWNLOAD_METHOD: "",
   });
-  const [errorObj, setErrorObj] = useState<{docNameError:string}>({docNameError:""});
+  const [errorObj, setErrorObj] = useState<{ docNameError: string }>({
+    docNameError: "",
+  });
 
+  const mblCallSwrKey =
+    pdfPolicy.isMasterBill &&
+    pdfPolicy.getMethod &&
+    pdfFormOption.docName?.trim()
+      ? `pdf-mbl|${pdfPolicy.getMethod}|${pdfFormOption.docName.trim()}`
+      : null;
 
-
-
-
-const { data :mblData  , error:mblError,  mutate:mblMutate,isLoading:mblIsLoading,isValidating:mblIsValidating } = useFrappeGetCall(
-  pdfPolicy.getMethod || "frappe.client.get",
-  pdfPolicy.getMethod ? {
-    mbl_id: pdfFormOption.docName,
-  } : undefined,
-  {
-    swrConfig: {
+  const {
+    data: mblData,
+    error: mblError,
+    mutate: mblMutate,
+    isLoading: mblIsLoading,
+    isValidating: mblIsValidating,
+  } = useFrappeGetCall(
+    pdfPolicy.getMethod || "frappe.client.get",
+    mblCallSwrKey
+      ? { mbl_id: pdfFormOption.docName?.trim() || "" }
+      : undefined,
+    mblCallSwrKey,
+    {
       revalidateOnMount: false,
       revalidateIfStale: false,
       revalidateOnFocus: false,
       shouldRetryOnError: false,
-    }
-  }
-)
+    },
+  );
 
-  const { data, error,  mutate,isLoading,isValidating } = useFrappeGetDoc(
-    pdfPolicy.parentDoctype,
-    pdfFormOption.docName,
-    
+  /** Server resolves child `invoice_list` or linked Sales Invoices (no SI list perm). */
+  const portalInvoiceLinesFetchEnabled = Boolean(
+    pdfFormOption.docName?.trim() &&
+      pdfPolicy.parentDoctype &&
+      pdfPolicy.CHILD_DOCTYPE === "invoice_list",
+  );
+
+  const hblDocSwrKey =
+    pdfPolicy.parentDoctype && pdfFormOption.docName?.trim()
+      ? `pdf-doc|${pdfPolicy.parentDoctype}|${pdfFormOption.docName.trim()}`
+      : null;
+
+  const { data, error, mutate, isLoading, isValidating } = useFrappeGetDoc(
+    pdfPolicy.parentDoctype || "",
+    pdfFormOption.docName?.trim() || "",
+    hblDocSwrKey,
     {
-        swrConfig: {
-          revalidateOnMount:false,
-          revalidateIfStale:false,
-          revalidateOnFocus:true,
-          shouldRetryOnError:false,
-        },
+      revalidateOnMount: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: true,
+      shouldRetryOnError: false,
+    },
+  );
+
+  /** Same HBL lines for every PDF type — omit pdfName so cache is shared across
+   *  Sea Export USD/BDT, FC Export, Shipping, etc. and switching types does not
+   *  briefly clear rows while a duplicate fetch runs. */
+  const portalLinesSwrKey = portalInvoiceLinesFetchEnabled
+    ? `portal-hbl-inv|${pdfPolicy.parentDoctype}|${pdfFormOption.docName.trim()}`
+    : null;
+
+  const { data: portalLinesResponse } = useFrappeGetCall<{
+    message?: unknown;
+  }>(
+    "fastrack_erp.api.get_hbl_invoice_lines_for_portal",
+    portalLinesSwrKey
+      ? {
+          parent_doctype: pdfPolicy.parentDoctype,
+          hbl_name: pdfFormOption.docName?.trim() || "",
+        }
+      : undefined,
+    portalLinesSwrKey,
+    {
+      revalidateOnMount: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  );
+
+  const portalInvoiceRows = useMemo(() => {
+    const raw = portalLinesResponse as Record<string, unknown> | undefined;
+    if (!raw) return [];
+    const msg = raw.message;
+    if (Array.isArray(msg)) return msg;
+    if (typeof msg === "string") {
+      try {
+        const parsed = JSON.parse(msg) as unknown;
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
       }
-  )
-  console.log("pdfFormOption.docName-bgry", pdfFormOption.docName);
-  console.log("data_object", data,isLoading,isValidating);
-  console.log("mblData_object", mblData,mblIsLoading,mblIsValidating);
+    }
+    return [];
+  }, [portalLinesResponse]);
 
-// refetch data when docName changes
-useEffect(() => {
-  
-  if(pdfFormOption.docName && !pdfPolicy.isMasterBill){
-    mutate();
-  }
-  if(pdfFormOption.docName && pdfPolicy.isMasterBill){
-    mblMutate();
-  }
-}, [pdfFormOption.docName]);
+  // refetch when document or HBL doctype (import vs export) changes
+  useEffect(() => {
+    if (pdfFormOption.docName && !pdfPolicy.isMasterBill) {
+      mutate();
+    }
+    if (pdfFormOption.docName && pdfPolicy.isMasterBill) {
+      mblMutate();
+    }
+  }, [pdfFormOption.docName, pdfPolicy.parentDoctype, pdfPolicy.isMasterBill]);
 
-useEffect(() => {
-  // Clear error first
-  setErrorObj((prev) => ({ ...prev, docNameError: "" }));
+  useEffect(() => {
+    setErrorObj((prev) => ({ ...prev, docNameError: "" }));
 
-  // // Handle error states
-  // if (error || mblError) {
-  //   setDocTypeData({});
-  //   setErrorObj((prev) => ({ 
-  //     ...prev, 
-  //     docNameError: "Not Found. Enter Valid Doc Name" 
-  //   }));
-  //   return;
-  // }
+    const targetData = pdfPolicy.isMasterBill ? mblData : data;
 
-  // Determine which data to use based on policy
-  const targetData = pdfPolicy.isMasterBill ? mblData : data;
-  console.log("targetData_object", targetData);
+    const fromPortal = portalInvoiceRows.map(
+      (row: Record<string, unknown>) => ({
+        name: row.name != null ? String(row.name) : "",
+        invoice_link:
+          row.invoice_link != null
+            ? String(row.invoice_link)
+            : String(row.name ?? ""),
+        customer: row.customer,
+        item_code:
+          row.item_code != null && String(row.item_code).trim() !== ""
+            ? String(row.item_code)
+            : "-",
+        qty:
+          row.qty != null && String(row.qty).trim() !== ""
+            ? String(row.qty)
+            : "-",
+      }),
+    );
 
-  // Handle data processing
-  if (targetData) {
-    // Check if data is an array (which seems to be an invalid state)
+    const shellDoc = (): Record<string, unknown> =>
+      pdfFormOption.docName?.trim()
+        ? { name: pdfFormOption.docName.trim() }
+        : {};
+
+    if (!targetData) {
+      if (portalInvoiceLinesFetchEnabled && fromPortal.length > 0) {
+        setDocTypeData({
+          ...shellDoc(),
+          invoice_list: fromPortal,
+        });
+      } else {
+        setDocTypeData(
+          portalInvoiceLinesFetchEnabled
+            ? { ...shellDoc(), invoice_list: [] }
+            : {},
+        );
+      }
+      return;
+    }
+
     if (Array.isArray(targetData)) {
       setDocTypeData({});
-    } else {
-      // For master bill, use the message property, otherwise use data directly
-      const processedData = pdfPolicy.isMasterBill ? targetData?.message : targetData;
-      setDocTypeData(processedData || {});
-      console.log("doc_data",docTypeData)
+      return;
     }
-  } else {
-    // No data available
-    setDocTypeData({});
-  }
-}, [data, error, mblData, mblError, pdfPolicy.isMasterBill]);
 
+    let processedData: Record<string, unknown> | null = pdfPolicy.isMasterBill
+      ? ((targetData as { message?: Record<string, unknown> }).message as
+          | Record<string, unknown>
+          | null
+          | undefined) ?? null
+      : (targetData as Record<string, unknown>);
+
+    if (!processedData || typeof processedData !== "object") {
+      processedData = shellDoc();
+    }
+
+    if (portalInvoiceLinesFetchEnabled && fromPortal.length > 0) {
+      processedData = { ...processedData, invoice_list: fromPortal };
+    }
+
+    setDocTypeData(processedData);
+  }, [
+    data,
+    error,
+    mblData,
+    mblError,
+    pdfPolicy.isMasterBill,
+    pdfPolicy.parentDoctype,
+    pdfPolicy.CHILD_DOCTYPE,
+    portalInvoiceLinesFetchEnabled,
+    portalInvoiceRows,
+    pdfFormOption.docName,
+  ]);
 
   return (
-    <PDFDownloadContext.Provider value={{ pdfFormOption, setPdfFormOption, pdfPolicy, setPdfPolicy,docTypeData,errorObj }}>
+    <PDFDownloadContext.Provider
+      value={{
+        pdfFormOption,
+        setPdfFormOption,
+        pdfPolicy,
+        setPdfPolicy,
+        docTypeData,
+        errorObj,
+      }}
+    >
       {children}
     </PDFDownloadContext.Provider>
   );

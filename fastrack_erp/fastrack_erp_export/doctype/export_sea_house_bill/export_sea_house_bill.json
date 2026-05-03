@@ -522,15 +522,15 @@
  "links": [
   {
    "link_doctype": "Journal Entry",
-   "link_fieldname": "custom_shbl_id"
+   "link_fieldname": "custom_eshbl_id"
   },
   {
    "link_doctype": "Sales Invoice",
-   "link_fieldname": "custom_hbl_sea_link"
+   "link_fieldname": "custom_export_hbl_sea_link"
   },
   {
    "link_doctype": "Purchase Invoice",
-   "link_fieldname": "custom_shbl_id"
+   "link_fieldname": "custom_export_hbl_sea_link"
   }
  ],
  "modified": "2026-04-13 18:12:23.745178",

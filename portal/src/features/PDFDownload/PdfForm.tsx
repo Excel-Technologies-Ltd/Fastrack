@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Checkbox, Form, Card, Typography, Row, Col } from "antd";
+import { Checkbox, Form, Card, Typography, Divider } from "antd";
 import {
   DownloadOutlined,
   FileTextOutlined,
@@ -7,6 +7,7 @@ import {
   ShopOutlined,
   FilePdfOutlined,
   SearchOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { AntSelect, AntButton } from "../../components/UI";
 import { PDF_NAME_LIST } from "../../constants/pdfName";
@@ -16,6 +17,7 @@ import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
 import { toast } from "react-toastify";
 import { useFrappeGetDocList } from "frappe-react-sdk";
+import { List } from "./List";
 
 const { Title, Text } = Typography;
 
@@ -185,7 +187,8 @@ const PdfForm = () => {
   return (
     <Card
       style={{
-        maxWidth: 620,
+        width: "100%",
+        maxWidth: 1320,
         margin: "0 auto",
         borderRadius: 12,
         boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
@@ -216,147 +219,194 @@ const PdfForm = () => {
       </div>
 
       {/* Form Body */}
-      <div style={{ padding: "24px 28px 28px" }}>
+      <div className="px-5 py-6 sm:px-7 sm:py-7">
         <Form layout="vertical" onFinish={handleSubmit}>
-
-          {/* PDF Type Section (no rule line — matches clean section headers) */}
-          <div style={{ marginTop: 0, marginBottom: 12 }}>
-            <Text strong style={{ fontSize: 13, color: "#555" }}>
-              <FileTextOutlined style={{ marginRight: 6 }} />
-              Select PDF Type
+          <section className="mb-2">
+            <Text strong style={{ fontSize: 14, color: "#333" }}>
+              <FileTextOutlined style={{ marginRight: 8 }} />
+              Select PDF type
             </Text>
-          </div>
-
-          <Form.Item required style={{ marginBottom: 20 }}>
-            <Row gutter={[8, 8]}>
-              {pdfNames.map((name) => {
-                const isSelected = pdfFormOption.pdfName === name;
-                return (
-                  <Col span={pdfNames.length > 5 ? 12 : 24} key={name}>
+            <p className="mb-3 mt-1 text-xs text-gray-500">
+              Choose one report, then fill document details and invoice lines below.
+            </p>
+            <Form.Item required style={{ marginBottom: 0 }}>
+              <div
+                className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+                role="list"
+              >
+                {pdfNames.map((name) => {
+                  const isSelected = pdfFormOption.pdfName === name;
+                  return (
                     <div
+                      key={name}
+                      role="listitem"
                       onClick={() => handlePdfNameChange(name)}
+                      className="min-w-0 rounded-lg border px-2.5 py-2 transition-all sm:px-3 sm:py-2.5"
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        padding: "9px 14px",
-                        borderRadius: 8,
-                        border: `1.5px solid ${isSelected ? "#1677ff" : "#d9d9d9"}`,
+                        borderColor: isSelected ? "#1677ff" : "#d9d9d9",
                         background: isSelected ? "#e6f4ff" : "#fafafa",
+                        borderWidth: 1.5,
                         cursor: "pointer",
-                        transition: "all 0.18s",
                         userSelect: "none",
                       }}
                     >
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={() => handlePdfNameChange(name)}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: isSelected ? "#1677ff" : "#333",
-                          fontWeight: isSelected ? 500 : 400,
-                        }}
-                      >
-                        {name}
-                      </Text>
+                      <div className="flex items-start gap-2">
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => handlePdfNameChange(name)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="mt-0.5 shrink-0"
+                        />
+                        <Text
+                          className="min-w-0 leading-snug"
+                          style={{
+                            fontSize: 12,
+                            color: isSelected ? "#1677ff" : "#333",
+                            fontWeight: isSelected ? 600 : 400,
+                          }}
+                        >
+                          {name}
+                        </Text>
+                      </div>
                     </div>
-                  </Col>
-                );
-              })}
-            </Row>
-          </Form.Item>
+                  );
+                })}
+              </div>
+            </Form.Item>
+          </section>
 
-          {/* Document Details Section */}
-          <div style={{ marginBottom: 12 }}>
-            <Text strong style={{ fontSize: 13, color: "#555" }}>
-              <SearchOutlined style={{ marginRight: 6 }} />
-              Document Details
+          <Divider className="my-6" />
+
+          <section>
+            <Text strong style={{ fontSize: 14, color: "#333" }}>
+              <SearchOutlined style={{ marginRight: 8 }} />
+              Document details
             </Text>
-          </div>
+            <div className="mt-3 w-full min-w-0 overflow-x-auto">
+              <div className="flex w-full min-w-0 flex-row gap-4">
+                <div className="min-w-0 flex-1 basis-0">
+                  <AntSelect
+                    label="Document Name"
+                    placeholder="Type or paste document name…"
+                    value={docSearchValue || undefined}
+                    onChange={(value: string) => {
+                      setDocSearchValue(value);
+                      setPdfFormOption((prev) => ({ ...prev, docName: value }));
+                    }}
+                    onSearch={(value: string) => {
+                      setDocSearchValue(value);
+                      setPdfFormOption((prev) => {
+                        if (prev.docName && value !== prev.docName) {
+                          return { ...prev, docName: "" };
+                        }
+                        return prev;
+                      });
+                    }}
+                    showSearch={true}
+                    filterOption={false}
+                    allowClear={true}
+                    disabled={!pdfPolicy.selectDocName}
+                    required={pdfPolicy.selectDocName}
+                    options={
+                      doclistArray?.map((doc: any) => ({
+                        value: doc.name,
+                        label: doc.name,
+                      })) || []
+                    }
+                    notFoundContent={
+                      docSearchValue
+                        ? "No documents found"
+                        : "Start typing to search…"
+                    }
+                  />
+                </div>
+                <div className="min-w-0 flex-1 basis-0">
+                  <AntSelect
+                    label={
+                      <span>
+                        <UserOutlined style={{ marginRight: 5 }} />
+                        Customer
+                      </span>
+                    }
+                    placeholder="Type or paste customer name…"
+                    value={pdfFormOption.customerName || undefined}
+                    onChange={(value: string) => {
+                      setCustomerSearchVal("");
+                      setPdfFormOption((prev) => ({
+                        ...prev,
+                        customerName: value,
+                      }));
+                    }}
+                    onSearch={(val) => setCustomerSearchVal(val)}
+                    onBlur={handleCustomerBlur}
+                    showSearch={true}
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    allowClear={true}
+                    disabled={!pdfPolicy.selectCustomer}
+                    required={pdfPolicy.selectCustomer}
+                    options={customerOptions}
+                    notFoundContent="No customers found"
+                  />
+                </div>
+                <div className="min-w-0 flex-1 basis-0">
+                  <AntSelect
+                    label={
+                      <span>
+                        <ShopOutlined style={{ marginRight: 5 }} />
+                        Supplier
+                      </span>
+                    }
+                    placeholder="Type or paste supplier name…"
+                    value={pdfFormOption.supplierName || undefined}
+                    onChange={(value: string) => {
+                      setSupplierSearchVal("");
+                      setPdfFormOption((prev) => ({
+                        ...prev,
+                        supplierName: value,
+                      }));
+                    }}
+                    onSearch={(val) => setSupplierSearchVal(val)}
+                    onBlur={handleSupplierBlur}
+                    showSearch={true}
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    allowClear={true}
+                    disabled={!pdfPolicy.selectSupplier}
+                    required={pdfPolicy.selectSupplier}
+                    options={supplierOptions}
+                    notFoundContent="No suppliers found"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
 
-          {/* Document Name — supports paste via auto-select on exact API match */}
-          <AntSelect
-            label="Document Name"
-            placeholder="Type or paste document name…"
-            value={docSearchValue || undefined}
-            onChange={(value: string) => {
-              setDocSearchValue(value);
-              setPdfFormOption({ ...pdfFormOption, docName: value });
-            }}
-            onSearch={(value: string) => {
-              setDocSearchValue(value);
-              if (pdfFormOption.docName && value !== pdfFormOption.docName) {
-                setPdfFormOption({ ...pdfFormOption, docName: "" });
-              }
-            }}
-            showSearch={true}
-            filterOption={false}
-            allowClear={true}
-            disabled={!pdfPolicy.selectDocName}
-            required={pdfPolicy.selectDocName}
-            options={doclistArray?.map((doc: any) => ({ value: doc.name, label: doc.name })) || []}
-            notFoundContent={docSearchValue ? "No documents found" : "Start typing to search…"}
-          />
+          {pdfPolicy.CHILD_DOCTYPE && pdfPolicy.parentDoctype ? (
+            <>
+              <Divider className="my-6" />
+              <section>
+                <Text strong style={{ fontSize: 14, color: "#333" }}>
+                  <UnorderedListOutlined style={{ marginRight: 8 }} />
+                  Invoice lines
+                </Text>
+                <p className="mb-2 mt-1 text-xs text-gray-500">
+                  Select one or more rows when the report requires invoice IDs.
+                </p>
+                <List />
+              </section>
+            </>
+          ) : null}
 
-          {/* Customer — supports paste via filterOption + onBlur auto-select */}
-          <AntSelect
-            label={
-              <span>
-                <UserOutlined style={{ marginRight: 5 }} />
-                Customer
-              </span>
-            }
-            placeholder="Type or paste customer name…"
-            value={pdfFormOption.customerName || undefined}
-            onChange={(value: string) => {
-              setCustomerSearchVal("");
-              setPdfFormOption({ ...pdfFormOption, customerName: value });
-            }}
-            onSearch={(val) => setCustomerSearchVal(val)}
-            onBlur={handleCustomerBlur}
-            showSearch={true}
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-            allowClear={true}
-            disabled={!pdfPolicy.selectCustomer}
-            required={pdfPolicy.selectCustomer}
-            options={customerOptions}
-            notFoundContent="No customers found"
-          />
+          <Divider className="my-6" />
 
-          {/* Supplier — supports paste via filterOption + onBlur auto-select */}
-          <AntSelect
-            label={
-              <span>
-                <ShopOutlined style={{ marginRight: 5 }} />
-                Supplier
-              </span>
-            }
-            placeholder="Type or paste supplier name…"
-            value={pdfFormOption.supplierName || undefined}
-            onChange={(value: string) => {
-              setSupplierSearchVal("");
-              setPdfFormOption({ ...pdfFormOption, supplierName: value });
-            }}
-            onSearch={(val) => setSupplierSearchVal(val)}
-            onBlur={handleSupplierBlur}
-            showSearch={true}
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-            allowClear={true}
-            disabled={!pdfPolicy.selectSupplier}
-            required={pdfPolicy.selectSupplier}
-            options={supplierOptions}
-            notFoundContent="No suppliers found"
-          />
-
-          {/* Download Button */}
-          <Form.Item style={{ marginBottom: 0, marginTop: 8 }}>
+          <Form.Item style={{ marginBottom: 0 }}>
             <AntButton
               type="primary"
               htmlType="submit"
@@ -365,6 +415,7 @@ const PdfForm = () => {
               size="large"
               style={{
                 width: "100%",
+                maxWidth: 400,
                 height: 48,
                 borderRadius: 8,
                 fontSize: 15,
@@ -374,7 +425,6 @@ const PdfForm = () => {
               {loading ? "Processing…" : "Download PDF"}
             </AntButton>
           </Form.Item>
-
         </Form>
       </div>
     </Card>

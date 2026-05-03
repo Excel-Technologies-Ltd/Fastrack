@@ -9,10 +9,11 @@ export const List = () => {
     const selectedIds = pdfFormOption?.selectedId ? pdfFormOption?.selectedId.split(",").filter(id => id.trim()) : [];
 
     const rawChildData: any[] = (() => {
+        if (!pdfPolicy.CHILD_DOCTYPE) return [];
         const key = pdfPolicy.CHILD_DOCTYPE as keyof typeof docTypeData;
-        if (!pdfPolicy.CHILD_DOCTYPE || !docTypeData[key]) return [];
-        const rows = docTypeData[key];
-        return Array.isArray(rows) ? rows : [];
+        const rows = (docTypeData as Record<string, unknown>)[key as string];
+        if (!Array.isArray(rows)) return [];
+        return rows;
     })();
 
     let childData = [...rawChildData];
@@ -131,30 +132,24 @@ export const List = () => {
     //     setSelectAll(false);
     // }, [pdfPolicy.CHILD_DOCTYPE]);
 
-    if (pdfPolicy.selectChildDoctype && pdfPolicy.CHILD_DOCTYPE) {
+    /* Show child table whenever policy defines one (import + export invoice PDFs).
+       Row checkboxes still respect selectChildDoctype. */
+    if (pdfPolicy.CHILD_DOCTYPE && pdfPolicy.parentDoctype) {
         const columnMap = getChildDocTypeColumnMap(
             pdfPolicy.parentDoctype,
             pdfPolicy.CHILD_DOCTYPE,
         );
 
         return (
-            <div className="mt-10 " style={{fontSize: "10px"}}>
+            <div className="mt-2 text-sm">
                 {/* Error display */}
                 {errorObj?.docNameError && pdfPolicy.CHILD_DOCTYPE && pdfFormOption.docName && (
                     <div className="text-red-500 mb-4">{errorObj?.docNameError}</div>
                 )}
-                
-                {/* Selected IDs display for debugging */}
-                {selectedIds.length > 0 && (
-                    <div className="mb-4 p-2 bg-blue-50 rounded">
-                        <strong>Selected IDs:</strong> {JSON.stringify(selectedIds)}
-                    </div>
-                )}
-                
-                {/* Table */}
+
                 {Array.isArray(childData) && childData?.length > 0 ? (
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-gray-300">
+                    <div className="overflow-x-auto rounded-md border border-gray-200">
+                        <table className="min-w-full border-collapse border-0 text-sm">
                             <thead>
                                 <tr className="bg-gray-100">
                                     <th className="border border-gray-300 px-4 py-2 text-left font-semibold">
@@ -213,7 +208,7 @@ export const List = () => {
     }
 
     return (
-        <div className="mt-10">
+        <div className="mt-2">
             {errorObj?.docNameError && pdfPolicy.CHILD_DOCTYPE && pdfFormOption.docName && (
                 <div className="text-red-500">{errorObj?.docNameError}</div>
             )}

@@ -1,13 +1,9 @@
-
-import PDFDownload from '../features/PDFDownload';
-
+import PDFDownload from "../features/PDFDownload";
 
 const PdfDownloadPage = () => {
-
-
   return (
-    <div>
-     <PDFDownload />
+    <div className="min-h-screen w-full bg-[#f5f7fa]">
+      <PDFDownload />
     </div>
   );
 };

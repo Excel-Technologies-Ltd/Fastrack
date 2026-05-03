@@ -1,6 +1,9 @@
 import frappe
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
+from fastrack_erp.report_api.invoice_list_bridge import (
+    resolve_invoice_list_for_hbl_pdf,
+)
 from fastrack_erp.report_api.report_helpers import (
     FASTTRACK_PDF_MAIN_CSS,
     get_invoice_usd_shipping_html,
@@ -19,11 +22,7 @@ def download_invoice_usd_pdf(
     """Build Sea/Air/D2D-style sales invoice USD PDF for any supported HBL doctype."""
     try:
         doc = frappe.get_doc(parent_doctype, doc_name)
-        if invoice_ids:
-            ids = invoice_ids.split(",")
-            doc.invoice_list = [
-                row for row in doc.invoice_list if row.name in ids
-            ]
+        resolve_invoice_list_for_hbl_pdf(doc, parent_doctype, invoice_ids)
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
             customer = doc.invoice_list[0].customer
