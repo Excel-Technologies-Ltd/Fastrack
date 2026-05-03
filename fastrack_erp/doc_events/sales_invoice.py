@@ -46,7 +46,10 @@ def after_submit(doc, method):
         row.base_net_amount = item.base_net_amount
         hbl_doc.append("invoice_list", row)
 
-    hbl_doc.total_invoice_amount = sum(float(item.base_net_amount) for item in hbl_doc.invoice_list)
+    hbl_doc.total_invoice_amount = sum(
+        float(item.base_net_amount) for item in hbl_doc.invoice_list
+    )
+    hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
 
 
@@ -71,5 +74,8 @@ def on_cancel(doc, method):
         if item.invoice_link == doc.name:
             hbl_doc.invoice_list.remove(item)
 
-    hbl_doc.total_invoice_amount = sum(float(item.base_net_amount) for item in hbl_doc.invoice_list)
-    hbl_doc.save()
+    hbl_doc.total_invoice_amount = sum(
+        float(item.base_net_amount) for item in hbl_doc.invoice_list
+    )
+    hbl_doc.flags.ignore_validate_update_after_submit = True
+    hbl_doc.save(ignore_permissions=True)
