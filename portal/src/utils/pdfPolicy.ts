@@ -97,10 +97,11 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         isMasterBill: false,
         selectPDFNAME: true,
         selectDocName: true,
-        selectCustomer: false,
+        selectCustomer: true,
         selectSupplier: false,
         selectChildDoctype: true,
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_AIR_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee", "notify_party", "customer"],
         DOWNLOAD_METHOD:
             "fastrack_erp.report_api.import_air_invoice_usd.download_air_import_invoice_usd_pdf",
         HAS_ARGUMENTS: true,
