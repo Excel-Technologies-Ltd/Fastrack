@@ -177,11 +177,82 @@ def _synthetic_rows_from_sales_invoices(
     return rows
 
 
+def _hbl_row_hbl_link(hbl_row):
+    if hbl_row is None:
+        return None
+    if isinstance(hbl_row, dict):
+        return hbl_row.get('hbl_link')
+    return getattr(hbl_row, 'hbl_link', None)
+
+
+def _hbl_row_is_create(hbl_row):
+    if hbl_row is None:
+        return 0
+    if isinstance(hbl_row, dict):
+        return int(hbl_row.get('is_create') or 0)
+    return int(getattr(hbl_row, 'is_create', 0) or 0)
+
+
+def _resolve_mbl_import_sea_invoice_list(mbl_doc, invoice_ids):
+    """
+    Merge Import Sea House Bill invoice lines / linked SIs for an MBL doc.
+    invoice_ids: comma-separated HBL child row `name`, SI `name`, or both.
+    """
+    hbl_doctype = 'Import Sea House Bill'
+    link_field = _si_link_field(hbl_doctype)
+    ids = [s.strip() for s in (invoice_ids or '').split(',') if s.strip()]
+    rows = []
+    seen = set()
+
+    for hbl_row in (mbl_doc.get('hbl_info') or []):
+        if _hbl_row_is_create(hbl_row) != 1:
+            continue
+        hbl_name = _hbl_row_hbl_link(hbl_row)
+        if not hbl_name:
+            continue
+
+        if ids:
+            hbl_doc = frappe.get_doc(hbl_doctype, hbl_name)
+            existing = list(hbl_doc.get('invoice_list') or [])
+            by_child = []
+            for r in existing:
+                rn = getattr(r, 'name', None)
+                ilink = getattr(r, 'invoice_link', None)
+                if rn in ids or (ilink and str(ilink) in ids):
+                    by_child.append(r)
+            if by_child:
+                for r in by_child:
+                    key = getattr(r, 'invoice_link', None) or getattr(
+                        r, 'name', None
+                    )
+                    if key and key not in seen:
+                        seen.add(key)
+                        rows.append(r)
+                continue
+
+        for r in _synthetic_rows_from_sales_invoices(
+            hbl_doctype,
+            hbl_name,
+            link_field,
+            ids if ids else None,
+        ):
+            key = getattr(r, 'invoice_link', None) or getattr(r, 'name', None)
+            if key and key not in seen:
+                seen.add(key)
+                rows.append(r)
+
+    return rows
+
+
 def resolve_invoice_list_for_hbl_pdf(doc, parent_doctype, invoice_ids):
     """
     Set doc.invoice_list for PDF: prefer matching child rows; else linked SIs.
     invoice_ids: comma-separated child `name` or Sales Invoice `name`.
     """
+    if parent_doctype == 'Import Sea Master Bill':
+        doc.invoice_list = _resolve_mbl_import_sea_invoice_list(doc, invoice_ids)
+        return
+
     link_field = _si_link_field(parent_doctype)
     existing = list(doc.get('invoice_list') or [])
     ids = [s.strip() for s in (invoice_ids or '').split(',') if s.strip()]

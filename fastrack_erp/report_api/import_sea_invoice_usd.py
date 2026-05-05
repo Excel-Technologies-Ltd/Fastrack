@@ -61,6 +61,16 @@ def download_sea_import_invoice_usd_pdf(doc_name, invoice_ids=None):
     )
 
 
+@frappe.whitelist()
+def download_sea_import_invoice_from_mbl_usd_pdf(doc_name, invoice_ids=None):
+    """Portal builds may still call this dotted path; delegates to MBL module."""
+    from fastrack_erp.report_api.import_sea_invoice_from_mbl_usd import (
+        download_sea_import_invoice_from_mbl_usd_pdf as _mbl_pdf,
+    )
+
+    return _mbl_pdf(doc_name, invoice_ids)
+
+
 def get_import_invoice_usd_html(
     doc,
     customer_address,
@@ -73,7 +83,9 @@ def get_import_invoice_usd_html(
     customer_name = ""
     if doc.invoice_list and len(doc.invoice_list) > 0:
         customer_name = doc.invoice_list[0].customer or ""
-    
+
+    inv_date = doc.get('hbl_date') or doc.get('mbl_date') or ''
+
     # Get container volume
     container_volume_list = []
     if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
@@ -297,7 +309,7 @@ def get_import_invoice_usd_html(
                             <tr>
                                 <td style="padding:2px 4px; text-align:left;"><strong>Date</strong></td>
                                 <td style="text-align:center;"><strong>:</strong></td>
-                                <td style="padding:2px 4px; text-align:right;">{doc.get('hbl_date', '') or ''}</td>
+                                <td style="padding:2px 4px; text-align:right;">{inv_date}</td>
                             </tr>
                             <tr>
                                 <td style="padding:2px 4px; text-align:left;"><strong>Currency</strong></td>

@@ -169,6 +169,41 @@ def normalize_doc_for_invoice_shipping(doc):
         d['description_of_good'] = (
             d.get('description_of_good') or d.get('cargo_description')
         )
+    elif dt == 'Import Sea Master Bill':
+        d['hbl_consignee'] = d.get('hbl_consignee') or d.get('consignee')
+        d['hbl_shipper'] = d.get('hbl_shipper') or d.get('shipper')
+        d['notify_to'] = d.get('notify_to') or ''
+        hbl_nos = []
+        for hi in (d.get('hbl_info') or []):
+            if isinstance(hi, dict):
+                hn = hi.get('hbl_no')
+            else:
+                hn = getattr(hi, 'hbl_no', None)
+            if hn:
+                hbl_nos.append(str(hn))
+        d['hbl_id'] = (
+            d.get('hbl_id')
+            or (', '.join(hbl_nos) if hbl_nos else '')
+            or d.get('mbl_no')
+            or ''
+        )
+        d['hbl_date'] = d.get('hbl_date') or d.get('mbl_date')
+        d['hbl_etd'] = d.get('hbl_etd') or d.get('etd')
+        if d.get('no_of_pkg_hbl') is None:
+            d['no_of_pkg_hbl'] = d.get('no_of_pkg')
+        d['hbl_weight'] = d.get('hbl_weight') or d.get('gr_weight')
+        d['hbl_vol_cbm'] = d.get('hbl_vol_cbm') or d.get('vol_cbm')
+        d['mv_voyage_no'] = d.get('mv_voyage_no') or ''
+        d['fv'] = d.get('fv') or ''
+        d['fv__v_no'] = d.get('fv__v_no') or d.get('fv_voyage_no') or ''
+        d['lc'] = d.get('lc') or ''
+        d['total_container_hbl'] = (
+            d.get('total_container_hbl') or d.get('total_container') or 0
+        )
+        d['custom_shipment_mode'] = d.get('custom_shipment_mode') or ''
+        d['description_of_good'] = (
+            d.get('description_of_good') or d.get('remarks') or ''
+        )
     return frappe._dict(d)
 
 

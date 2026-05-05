@@ -213,7 +213,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         CHILD_DOCTYPE: DOCTYPE_LIST.IMPORT_SEA_MASTER_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
         CUSTOMER_FIELDS: ["consignee"],
         DOWNLOAD_METHOD:
-            "fastrack_erp.report_api.import_sea_invoice_usd.download_sea_import_invoice_usd_pdf",
+            "fastrack_erp.report_api.import_sea_invoice_from_mbl_usd.download_sea_import_invoice_from_mbl_usd_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             invoice_ids: "selectedId",
