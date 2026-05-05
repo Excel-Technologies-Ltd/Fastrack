@@ -50,17 +50,17 @@ frappe.ui.form.on('Import D2D Bill', {
 
         if (frm.doc.docstatus == 1) {
             frm.add_custom_button(__("Sales Invoice"), function () {
-                frappe.model.open_mapped_doc({
-                    method: "fastrack_erp.api.make_sales_invoice_from_hbl",
-                    frm: frm
-                });
+                open_mapped_with_save_fix(
+                    frm,
+                    "fastrack_erp.api.make_sales_invoice_from_hbl"
+                );
             }, __("Create"));
 
             frm.add_custom_button(__("Expense"), function () {
-                frappe.model.open_mapped_doc({
-                    method: "fastrack_erp.api.make_purchase_invoice_from_hbl",
-                    frm: frm
-                });
+                open_mapped_with_save_fix(
+                    frm,
+                    "fastrack_erp.api.make_purchase_invoice_from_hbl"
+                );
             }, __("Create"));
 
             frm.add_custom_button(__("Profit Share"), function () {
@@ -68,10 +68,10 @@ frappe.ui.form.on('Import D2D Bill', {
             }, __("Create"));
 
             frm.add_custom_button(__("Payment Entry"), function () {
-                frappe.model.open_mapped_doc({
-                    method: "fastrack_erp.api.make_payment_entry_from_hbl",
-                    frm: frm
-                });
+                open_mapped_with_save_fix(
+                    frm,
+                    "fastrack_erp.api.make_payment_entry_from_hbl"
+                );
             }, __("Create"));
         }
 
@@ -242,3 +242,21 @@ frappe.ui.form.on('Import D2D Bill', {
         }, __("Download"));
     }
 });
+
+function open_mapped_with_save_fix(frm, method) {
+    frappe.model.open_mapped_doc({
+        method: method,
+        frm: frm,
+    });
+    setTimeout(() => {
+        const target = cur_frm;
+        if (!target || target.doc.docstatus !== 0) return;
+        if (
+            ['Sales Invoice', 'Purchase Invoice', 'Payment Entry'].includes(
+                target.doctype
+            )
+        ) {
+            target.enable_save();
+        }
+    }, 400);
+}

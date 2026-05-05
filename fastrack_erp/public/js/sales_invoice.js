@@ -1,4 +1,7 @@
 frappe.ui.form.on("Sales Invoice", {
+	refresh: function (frm) {
+		ensure_save_button_for_hbl_mapped_draft(frm);
+	},
 	custom_total_freight_charge: function (frm) {
 		calculate_freight(frm);
 	},
@@ -30,4 +33,19 @@ function calculate_freight(frm) {
 	frm.set_value("custom_service_commission", flt(service_commission, 2));
 	frm.set_value("custom_vat", flt(vat, 2));
 	frm.set_value("custom_freight_charge", flt(freight_charge, 2));
+}
+
+function ensure_save_button_for_hbl_mapped_draft(frm) {
+	if (!frm || !frm.doc || frm.doc.docstatus !== 0) return;
+
+	const has_hbl_link =
+		frm.doc.custom_hbl_sea_link ||
+		frm.doc.custom_hbl_air_link ||
+		frm.doc.custom_import_d2d_link ||
+		frm.doc.custom_export_hbl_sea_link ||
+		frm.doc.custom_export_hbl_air_link ||
+		frm.doc.custom_export_d2d_link;
+
+	if (!has_hbl_link) return;
+	frm.enable_save();
 }
