@@ -426,15 +426,28 @@ function open_mapped_with_save_fix(frm, method) {
         method: method,
         frm: frm,
     });
-    setTimeout(() => {
+    ensure_mapped_doc_save_button();
+}
+
+function ensure_mapped_doc_save_button(retries = 30, delay = 150) {
+    frappe.after_ajax(() => {
         const target = cur_frm;
-        if (!target || target.doc.docstatus !== 0) return;
         if (
+            target &&
+            target.doc &&
+            target.doc.docstatus === 0 &&
             ['Sales Invoice', 'Purchase Invoice', 'Payment Entry'].includes(
                 target.doctype
             )
         ) {
             target.enable_save();
+            target.refresh_header();
+            return;
         }
-    }, 400);
+
+        if (retries <= 0) return;
+        setTimeout(() => {
+            ensure_mapped_doc_save_button(retries - 1, delay);
+        }, delay);
+    });
 }
