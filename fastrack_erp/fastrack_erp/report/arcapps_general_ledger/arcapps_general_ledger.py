@@ -272,15 +272,15 @@ def get_conditions(filters):
 		or filters.get("party")
 		or filters.get("group_by") in ["Group by Account", "Group by Party"]
 	):
-		if not ignore_is_opening:
-			conditions.append("(posting_date >=%(from_date)s or is_opening = 'Yes')")
-		else:
+		# if not ignore_is_opening:
+		# 	conditions.append("(posting_date >=%(from_date)s or is_opening = 'Yes')")
+		# else:
 			conditions.append("posting_date >=%(from_date)s")
 
-	if not ignore_is_opening:
-		conditions.append("(posting_date <=%(to_date)s or is_opening = 'Yes')")
-	else:
-		conditions.append("posting_date <=%(to_date)s")
+	# if not ignore_is_opening:
+	# 	conditions.append("(posting_date <=%(to_date)s or is_opening = 'Yes')")
+	# else:
+	conditions.append("posting_date <=%(to_date)s")
 
 	if filters.get("project"):
 		conditions.append("project in %(project)s")
