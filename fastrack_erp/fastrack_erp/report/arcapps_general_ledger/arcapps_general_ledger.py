@@ -209,9 +209,9 @@ def get_gl_entries(filters, accounting_dimensions):
 def get_conditions(filters):
 	conditions = []
 
-	ignore_is_opening = frappe.db.get_single_value(
-		"Accounts Settings", "ignore_is_opening_check_for_reporting"
-	)
+	# ignore_is_opening = frappe.db.get_single_value(
+	# 	"Accounts Settings", "ignore_is_opening_check_for_reporting"
+	# )
 
 	if filters.get("account"):
 		filters.account = get_accounts_with_children(filters.account)
