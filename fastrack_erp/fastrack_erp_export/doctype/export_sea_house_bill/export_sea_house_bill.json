@@ -61,6 +61,22 @@
   "description_of_good",
   "section_break_nfgoz",
   "container_info",
+  "delivery_order_section",
+  "do_validity",
+  "do_party",
+  "cf_agent",
+  "line_no",
+  "column_break_do1",
+  "bill_of_entry",
+  "bill_of_entry_date",
+  "remarks",
+  "column_break_do2",
+  "rotation",
+  "section_break_generate",
+  "generate",
+  "container_cost_info",
+  "total",
+  "average_total",
   "billing_section",
   "invoice_list",
   "total_invoice_amount",
@@ -403,6 +419,103 @@
    "fieldname": "description_of_good",
    "fieldtype": "Text Editor",
    "label": "Description of Goods"
+  },
+  {
+   "allow_on_submit": 1,
+   "collapsible": 1,
+   "fieldname": "delivery_order_section",
+   "fieldtype": "Section Break",
+   "label": "Delivery Order Details"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "do_validity",
+   "fieldtype": "Date",
+   "label": "DO Validity"
+  },
+  {
+   "default": "Deputy Traffic Manager",
+   "fieldname": "do_party",
+   "fieldtype": "Data",
+   "label": "DO Party",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "cf_agent",
+   "fieldtype": "Link",
+   "label": "C&F Agent",
+   "options": "Customer"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "line_no",
+   "fieldtype": "Data",
+   "label": "Line No"
+  },
+  {
+   "fieldname": "column_break_do1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "bill_of_entry",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bill of Entry"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "bill_of_entry_date",
+   "fieldtype": "Date",
+   "label": "Bill of Entry Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "column_break_do2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "rotation",
+   "fieldtype": "Data",
+   "label": "Rotation"
+  },
+  {
+   "fieldname": "section_break_generate",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "generate",
+   "fieldtype": "Button",
+   "label": "Generate Freight Certificate"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "container_cost_info",
+   "fieldtype": "Table",
+   "label": "Freight Certificate",
+   "options": "Container Cost Info"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "average_total",
+   "fieldtype": "Currency",
+   "label": "Average Total",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",

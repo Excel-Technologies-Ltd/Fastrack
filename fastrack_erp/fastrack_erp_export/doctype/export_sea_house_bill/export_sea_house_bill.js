@@ -20,7 +20,25 @@ frappe.ui.form.on('Export Sea House Bill', {
             }
     },
 
+    generate: function(frm) {
+        const container_items = frm.doc.container_info;
+        if (container_items && container_items.length > 0) {
+            const sizeQtySummary = getSizeQtySummary(container_items);
+            frm.set_value("container_cost_info", sizeQtySummary);
+        } else {
+            frappe.throw("Please add container info first");
+        }
+    },
+
     refresh: function(frm) {
+        const container_cost_info = frm.doc.container_cost_info;
+        if (container_cost_info && container_cost_info.length > 0) {
+            const total_price = container_cost_info.reduce((acc, item) => acc + (item.qty * item.amount), 0);
+            const total_qty = container_cost_info.reduce((acc, item) => acc + item.qty, 0);
+            frm.set_value("total", total_price);
+            frm.set_value("average_total", total_qty ? total_price / total_qty : 0);
+        }
+
         const expense_list = frm.doc.purchase_invoice_list
         const format_expense = (expense_list && expense_list.length > 0) ? expense_list.map(expense => {
             return {
@@ -281,6 +299,26 @@ frappe.ui.form.on('Fastrack Export Sea Item', {
         calculate_container_totals(frm);
     }
 });
+
+frappe.ui.form.on('Container Cost Info', {
+    ex_rate: function(frm, cdt, cdn) {
+        var row = locals[cdt][cdn];
+        var usd_amount = row.amount || 0;
+        var ex_rate = row.ex_rate || 0;
+        frappe.model.set_value(cdt, cdn, "amountbdt", usd_amount * ex_rate);
+    }
+});
+
+function getSizeQtySummary(items) {
+    const summary = {};
+    items.forEach(item => {
+        const size = item.size;
+        if (size) {
+            summary[size] = (summary[size] || 0) + 1;
+        }
+    });
+    return Object.entries(summary).map(([size, qty]) => ({ size, qty }));
+}
 
 // Helper function to validate container limit
 function validate_export_sea_container_limit(frm) {
