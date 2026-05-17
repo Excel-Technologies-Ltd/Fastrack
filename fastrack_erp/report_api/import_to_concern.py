@@ -70,14 +70,40 @@ def download_to_whom_concern_pdf(doc_name):
 def download_export_fc_export_pdf(doc_name, invoice_ids=None):
     """Download FC Export certificate (export sea HBL) as PDF."""
     try:
-        _download_fc_style_certificate_pdf(
-            doc_name,
-            parent_doctype="Export Sea House Bill",
-            banner_title="FC EXPORT",
-            html_title="FC Export",
-            filename_stem="FC_Export",
-            invoice_ids=invoice_ids,
+        doc = frappe.get_doc("Export Sea House Bill", doc_name)
+        resolve_invoice_list_for_hbl_pdf(doc, "Export Sea House Bill", invoice_ids)
+
+        # Normalize Export field names to match the shared FC template
+        doc.hbl_etd = doc.get('etd') or ''
+        doc.total_container_hbl = doc.get('total_container') or 0
+        doc.hbl_weight = doc.get('gross_weight') or ''
+        doc.lc = doc.get('lc_no') or ''
+        doc.lc_date = doc.get('date_4') or ''
+
+        customer_name = ""
+        customer_address = ""
+        if doc.invoice_list and len(doc.invoice_list) > 0:
+            customer = doc.invoice_list[0].customer
+            if customer:
+                try:
+                    customer_doc = frappe.get_doc("Customer", customer)
+                    customer_name = customer_doc.customer_name or customer
+                    customer_address = customer_doc.primary_address or ""
+                except Exception:
+                    customer_name = customer
+                    customer_address = ""
+
+        html_content = get_to_whom_concern_html(
+            doc,
+            customer_name,
+            customer_address,
+            banner_title="TO WHOM IT MAY CONCERN",
+            html_title="TO WHOM IT MAY CONCERN",
         )
+        pdf_content = get_pdf(html_content, options=merge_fastrack_wkhtml_pdf_options())
+        frappe.local.response.filename = f"FC_Export_{doc_name}.pdf"
+        frappe.local.response.filecontent = pdf_content
+        frappe.local.response.type = "download"
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
 
