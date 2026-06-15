@@ -41,50 +41,42 @@ class ImportSeaHouseBill(Document):
 			draft_invoice_list.append(draft_invoice)
 		self.draft_invoice_list = draft_invoice_list
 
+	def _recalculate_freight_totals(self):
+		total_price = 0
+		total_qty = 0
+		for row in self.container_cost_info:
+			qty = row.qty or 0
+			amount_usd = float(row.amount or 0)
+			ex_rate = float(row.ex_rate or 0)
+			final_usd = qty * amount_usd
+			row.final_amount_usd = final_usd
+			row.amountbdt = final_usd * ex_rate
+			total_price += final_usd
+			total_qty += qty
+		self.total = total_price
+		self.average_total = (total_price / total_qty) if total_qty else 0
+
 	def before_save(self):
     #  need 10 digit uuid
 		generate_uuid = str(random.randint(10**9, 10**10 - 1))
 		if not self.invoice_uid:
 			generate_uuid = str(random.randint(10**9, 10**10 - 1))
 		self.invoice_uid=f"INV-{generate_uuid}"
-		total_price = 0
-		total_qty = 0
-
-		for row in self.container_cost_info:
-			total_price += (row.qty or 0) * (row.amount or 0)
-			total_qty += row.qty or 0
-		self.total = total_price
-		self.average_total = (total_price / total_qty) if total_qty else 0
-
+		self._recalculate_freight_totals()
 		# Validate container count
 		self.validate_container_count()
 
 	def on_update(self):
-		total_price = 0
-		total_qty = 0
-
-		for row in self.container_cost_info:
-			total_price += (row.qty or 0) * (row.amount or 0)
-			total_qty += row.qty or 0
-
-		self.total = total_price
-		self.average_total = (total_price / total_qty) if total_qty else 0
+		self._recalculate_freight_totals()
 		self.validate_container_count()
 		self.validate_container_name()
 		self.validate_container_weight()
 		self.validate_no_pkg_in_container()
 		self.hbl_weight= sum(item.weight for item in self.container_info)
-		self.gross_weight= self.hbl_weight		
+		self.gross_weight= self.hbl_weight
 	def on_update_after_submit(self):
 		self.validate_no_pkg_in_container()
-		total_price = 0
-		total_qty = 0
-
-		for row in self.container_cost_info:
-			total_price += (row.qty or 0) * (row.amount or 0)
-			total_qty += row.qty or 0
-		self.total = total_price
-		self.average_total = (total_price / total_qty) if total_qty else 0
+		self._recalculate_freight_totals()
 
   
 		

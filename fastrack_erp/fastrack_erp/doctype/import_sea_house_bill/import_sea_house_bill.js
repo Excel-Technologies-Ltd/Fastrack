@@ -1,19 +1,5 @@
 frappe.ui.form.on('Import Sea House Bill', {
 
-
-    refresh:function(frm){
-        const container_cost_info = frm.doc.container_cost_info;
-        const total_price = container_cost_info.reduce((acc, item) => acc + item.qty * item.amount, 0);
-        console.log(total_price)
-        frm.set_value("total", total_price);
-        const total_qty = container_cost_info.reduce((acc, item) => acc + item.qty, 0);
-        console.log(total_qty)
-        frm.set_value("average_total", total_price/total_qty);
-
-        // Hide/show container_info based on total_container_hbl
-        toggle_container_info_visibility(frm);
-    },
-
     total_container_hbl: function(frm) {
         // Validate against Master Bill total containers
         if (frm.doc.mbl_link && frm.doc.total_container_hbl) {
@@ -42,6 +28,16 @@ frappe.ui.form.on('Import Sea House Bill', {
     },
    
     refresh: function(frm) {
+        // Recalculate freight totals on load
+        const rows = frm.doc.container_cost_info || [];
+        const total = rows.reduce((sum, r) => sum + (r.qty || 0) * (r.amount || 0), 0);
+        const total_qty = rows.reduce((sum, r) => sum + (r.qty || 0), 0);
+        frm.set_value("total", total);
+        frm.set_value("average_total", total_qty ? total / total_qty : 0);
+
+        // Hide/show container_info based on total_container_hbl
+        toggle_container_info_visibility(frm);
+
         const expense_list=frm.doc.purchase_invoice_list
         const format_expense= (expense_list && expense_list.length>0) ? expense_list.map(expense => {
             return {
@@ -344,15 +340,29 @@ frappe.ui.form.on('Fastrack Sea Item', {
 
 //     Container Cost Info
 
-frappe.ui.form.on('Container Cost Info', {
-    ex_rate: function(frm, cdt, cdn) {
-        var row = locals[cdt][cdn];
-        var usd_amount = row.amount || 0;
-        var ex_rate = row.ex_rate || 0;  // Get from parent document
-        var bdt_amount = usd_amount * ex_rate;
+function recalculate_freight(frm, cdt, cdn) {
+    var row = locals[cdt][cdn];
+    var qty = row.qty || 0;
+    var amount_usd = row.amount || 0;
+    var ex_rate = parseFloat(row.ex_rate) || 0;
+    var final_usd = qty * amount_usd;
+    var amount_bdt = final_usd * ex_rate;
 
-        frappe.model.set_value(cdt, cdn, "amountbdt", bdt_amount);
-    }
+    frappe.model.set_value(cdt, cdn, "final_amount_usd", final_usd);
+    frappe.model.set_value(cdt, cdn, "amountbdt", amount_bdt);
+
+    // Recalculate parent totals
+    var rows = frm.doc.container_cost_info || [];
+    var total = rows.reduce((sum, r) => sum + ((r.qty || 0) * (r.amount || 0)), 0);
+    var total_qty = rows.reduce((sum, r) => sum + (r.qty || 0), 0);
+    frm.set_value("total", total);
+    frm.set_value("average_total", total_qty ? total / total_qty : 0);
+}
+
+frappe.ui.form.on('Container Cost Info', {
+    amount: function(frm, cdt, cdn) { recalculate_freight(frm, cdt, cdn); },
+    qty:    function(frm, cdt, cdn) { recalculate_freight(frm, cdt, cdn); },
+    ex_rate: function(frm, cdt, cdn) { recalculate_freight(frm, cdt, cdn); },
 });
 
 // Helper function to toggle container_info visibility

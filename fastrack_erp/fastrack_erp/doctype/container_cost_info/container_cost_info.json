@@ -9,6 +9,7 @@
   "size",
   "qty",
   "amount",
+  "final_amount_usd",
   "ex_rate",
   "amountbdt"
  ],
@@ -38,6 +39,14 @@
   },
   {
    "allow_on_submit": 1,
+   "fieldname": "final_amount_usd",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Final Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
    "fieldname": "ex_rate",
    "fieldtype": "Data",
    "in_standard_filter": 1,
@@ -46,7 +55,8 @@
   {
    "allow_on_submit": 1,
    "fieldname": "amountbdt",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Amount(BDT)",
    "read_only": 1
   }
