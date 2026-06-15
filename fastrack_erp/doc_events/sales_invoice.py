@@ -36,6 +36,7 @@ def after_submit(doc, method):
         row.invoice_link = doc.name
         row.item_code = item.item_code
         row.qty = item.qty
+        row.uom = item.uom
         row.rate = item.net_rate
         row.total_price = item.net_amount
         row.date = doc.posting_date

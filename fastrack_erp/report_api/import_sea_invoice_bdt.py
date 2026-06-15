@@ -136,6 +136,9 @@ def get_import_invoice_bdt_html(
                         {item.get("qty", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
+                        {item.get("uom", "") or ""}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
                         {rate}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
@@ -157,6 +160,9 @@ def get_import_invoice_bdt_html(
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get("qty", "") or ""}
+                    </td>
+                    <td style="border: 1px solid black; padding: 5px;">
+                        {item.get("uom", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
                         {rate}
@@ -368,6 +374,7 @@ def get_import_invoice_bdt_html(
                         <th>Container Number</th>
                         <th>Particulars</th>
                         <th>Qty</th>
+                        <th>UOM</th>
                         <th>Rate $</th>
                         <th>Total Price $</th>
                         <th>Ex. Rate</th>
@@ -377,7 +384,7 @@ def get_import_invoice_bdt_html(
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="6" class="total-row">
+                        <td colspan="7" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">

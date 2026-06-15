@@ -112,7 +112,7 @@ def _synthetic_row_from_si_name(si_name):
     items = frappe.db.get_all(
         'Sales Invoice Item',
         filters={'parent': si_name},
-        fields=['item_code', 'qty', 'rate'],
+        fields=['item_code', 'qty', 'uom', 'rate'],
         order_by='idx asc',
         limit_page_length=1,
     )
@@ -134,6 +134,7 @@ def _synthetic_row_from_si_name(si_name):
         invoice_link=si_name,
         item_code=first.get('item_code'),
         qty=first.get('qty'),
+        uom=first.get('uom') or '',
         rate=float(first.get('rate') or 0),
         total_price=float(head.get('grand_total') or 0),
         currency=head.get('currency') or '',
