@@ -419,6 +419,39 @@ def get_arrival_notice_html(
                 font-weight: bold;
                 margin-bottom: 15px;
             }}
+            
+            /* --- AGGRESSIVE SHIPPING DETAILS FIX --- */
+            .shipping-wrapper {{
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }}
+            .shipping-wrapper table {{
+                width: 100% !important;
+                table-layout: fixed !important;
+                border-collapse: collapse;
+                font-size: 12px;
+            }}
+            .shipping-wrapper td {{
+                vertical-align: top;
+                padding: 4px;
+            }}
+            /* Left side: Allow the description to take up space and wrap normally */
+            .shipping-wrapper td:nth-child(1) {{ width: 18% !important; font-weight: bold; }}
+            .shipping-wrapper td:nth-child(2) {{ width: 45% !important; word-wrap: break-word; padding-right: 15px !important; }}
+
+            /* Right side: Force exact widths and absolutely PREVENT wrapping */
+            .shipping-wrapper td:nth-child(3) {{ 
+                width: 15% !important; 
+                font-weight: bold; 
+                white-space: nowrap !important; /* Stops labels from breaking */
+            }}
+            .shipping-wrapper td:nth-child(4) {{ 
+                width: 22% !important; 
+                white-space: nowrap !important; /* Stops dates and short names from breaking */
+            }}
+            /* --- END FIX --- */
+
             .details-container {{
                 display: flex;
                 margin-bottom: 20px;
@@ -515,26 +548,22 @@ def get_arrival_notice_html(
 
              <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
                 <tr>
-                    <!-- Left: Logo -->
                     <td style="width:25%; vertical-align:middle;">
                         <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg"
                             alt="Fasttrack Logo"
                             style="height:55px;">
                     </td>
 
-                    <!-- Center: Title -->
                     <td style="width:50%; text-align:center; vertical-align:middle;">
                        <div class="title-box">
                             {document_title}
                         </div>
                     </td>
 
-                    <!-- Right: Empty (for balance) -->
                     <td style="width:25%;"></td>
                 </tr>
             </table>
 
-            <!-- Company Info -->
             <div class="company-info">
                 <div class="text-bold">TO: {customer_name}</div>
                 <div class="company-address">
@@ -546,13 +575,12 @@ def get_arrival_notice_html(
                 ATTN: Import / Commercial Department
             </div>
 
-            <!-- Shipping Details Header -->
             <div class="section-header">Shipping Details:</div>
 
-            <!-- Shipping Details Table -->
-            {get_arrival_notice_shipping_html(doc)}
+            <div class="shipping-wrapper">
+                {get_arrival_notice_shipping_html(doc)}
+            </div>
 
-            <!-- Container Table -->
             <table class="container-table">
                 <thead>
                     <tr class="table-header">
@@ -574,14 +602,12 @@ def get_arrival_notice_html(
             </table>
 
 
-            <!-- Terms and Conditions -->
             <div class="terms-conditions">
                 <p>It may be noted that in the event of your failure to take delivery of your goods in the nick of time, we will not be held responsible for any damages and/or shortage etc. Should your consignment be required to be removed from the Landing place to any other shed it will be done at your sole risk and responsibilities and any expenses which maybe incurred by us for such removal will be recovered from you prior to issuing delivery order from this office.</p>
                 
                 <p>Kindly note that the goods not cleared within 45 days of the date of arrival of the vessel are liable to be auctioned by Customs under Sea Customs Act 167 (8) of 1969 and amended Section 82 issued by the Custom Authority.</p>
             </div>
 
-            <!-- Footer -->
             <div class="footer">
                 <div class="footer-note">
                     Note - This is System Generated, Not Require Signature or Seal.

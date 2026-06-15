@@ -203,6 +203,39 @@ def get_import_invoice_usd_html(
                 max-width: 800px;
                 margin: 0 auto;
             }}
+            
+            /* --- AGGRESSIVE SHIPPING DETAILS FIX --- */
+            .shipping-wrapper {{
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }}
+            .shipping-wrapper table {{
+                width: 100% !important;
+                table-layout: fixed !important;
+                border-collapse: collapse;
+                font-size: 12px;
+            }}
+            .shipping-wrapper td {{
+                vertical-align: top;
+                padding: 4px;
+            }}
+            /* Left side: Allow the description to take up space and wrap normally */
+            .shipping-wrapper td:nth-child(1) {{ width: 18% !important; font-weight: bold; }}
+            .shipping-wrapper td:nth-child(2) {{ width: 45% !important; word-wrap: break-word; padding-right: 15px !important; }}
+
+            /* Right side: Force exact widths and absolutely PREVENT wrapping */
+            .shipping-wrapper td:nth-child(3) {{ 
+                width: 15% !important; 
+                font-weight: bold; 
+                white-space: nowrap !important; /* Stops labels from breaking */
+            }}
+            .shipping-wrapper td:nth-child(4) {{ 
+                width: 22% !important; 
+                white-space: nowrap !important; /* Stops dates and short names from breaking */
+            }}
+            /* --- END FIX --- */
+
             .header-section {{
                 display: table;
                 width: 100%;
@@ -275,24 +308,20 @@ def get_import_invoice_usd_html(
           
             <table style="width:100%; border-collapse:collapse; margin-bottom: 5px;">
                 <tr>
-                    <!-- Left: Logo -->
                     <td style="width:25%; vertical-align:middle;">
                         <img src="https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg"
                             alt="Fasttrack Logo"
                             style="height:55px;">
                     </td>
 
-                    <!-- Center: Title -->
                     <td style="width:50%; text-align:center; vertical-align:middle;">
                         <h3 style="margin:0;">{heading}</h3>
                     </td>
 
-                    <!-- Right: Empty (for balance) -->
                     <td style="width:25%;"></td>
                 </tr>
             </table>
 
-            <!-- Header Section: TO (left) | Invoice details (right) -->
             <table style="width:100%; border-collapse:collapse; margin-bottom:12px;">
                 <tr>
                     <td style="width:60%; vertical-align:top;">
@@ -323,11 +352,11 @@ def get_import_invoice_usd_html(
 
             <hr>
 
-            <!-- Shipping Details -->
             <h4>Shipping Details:</h4>
-            {get_invoice_usd_shipping_html(doc)}
+            <div class="shipping-wrapper">
+                {get_invoice_usd_shipping_html(doc)}
+            </div>
 
-            <!-- Charges Table -->
             <h4 style="margin-top: 20px;">Charges</h4>
             <table class="charges-table">
                 <thead>
@@ -353,7 +382,6 @@ def get_import_invoice_usd_html(
                 </tbody>
             </table>
 
-            <!-- Terms -->
             <p style="margin-top: 20px;"><strong>Terms:</strong></p>
             <ol>
                 <li>We accept Pay Order / Cash Only.</li>
