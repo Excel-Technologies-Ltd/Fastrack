@@ -403,6 +403,8 @@ def get_totals_dict():
 			credit=0.0,
 			debit_in_account_currency=0.0,
 			credit_in_account_currency=0.0,
+			bdtdebit=0.0,
+			bdtcredit=0.0,
 		)
 
 	return _dict(
@@ -446,6 +448,9 @@ def get_accountwise_gle(filters, accounting_dimensions, gl_entries, gle_map):
 
 		data[key].debit_in_account_currency += gle.debit_in_account_currency
 		data[key].credit_in_account_currency += gle.credit_in_account_currency
+
+		data[key].bdtdebit += flt(gle.get("bdtdebit", 0))
+		data[key].bdtcredit += flt(gle.get("bdtcredit", 0))
 
 		if filters.get("show_net_values_in_party_account") and account_type_map.get(data[key].account) in (
 			"Receivable",
@@ -703,7 +708,6 @@ def convert_to_presentation_currency(gl_entries, currency_info):
 	account_currencies = list(set(entry["account_currency"] for entry in gl_entries))
 
 	for entry in gl_entries:
-		print("entry", entry)
 		debit = flt(entry["debit"])
 		credit = flt(entry["credit"])
 		debit_in_account_currency = flt(entry["debit_in_account_currency"])
@@ -778,7 +782,6 @@ def get_document_conversion_rate(gl_entry, presentation_currency, company_curren
 
 		conversion_rate = None
 
-	print("conversion_rate", conversion_rate)
 	return conversion_rate
 
 
