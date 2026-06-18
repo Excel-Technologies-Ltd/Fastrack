@@ -1,4 +1,5 @@
 import frappe
+import re
 from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
 from fastrack_erp.report_api.invoice_list_bridge import (
@@ -186,6 +187,11 @@ def get_import_invoice_usd_html(
             <td style="border: 1px solid black; padding: 5px;">-</td>
         </tr>
         """
+        
+    # --- COLON ALIGNMENT & GAP REMOVAL ---
+    shipping_details_html = get_invoice_usd_shipping_html(doc)
+    shipping_details_html = re.sub(r'(<td[^>]*>)(?:&nbsp;|\s)*:\s*(?:<br\s*/?>|&nbsp;|\s)+', r'\1: ', shipping_details_html)
+    # ---------------------------
     
     html_template = f"""
     <!DOCTYPE html>
@@ -210,7 +216,7 @@ def get_import_invoice_usd_html(
                 margin: 0 auto;
             }}
             
-            /* --- AGGRESSIVE SHIPPING DETAILS FIX --- */
+            /* --- PERFECT SHIPPING DETAILS ALIGNMENT (NO TABS) --- */
             .shipping-wrapper {{
                 width: 100%;
                 display: block;
@@ -218,7 +224,8 @@ def get_import_invoice_usd_html(
             }}
             .shipping-wrapper table {{
                 width: 100% !important;
-                table-layout: fixed !important;
+                /* 'auto' allows 1% width to shrink-wrap perfectly around the text */
+                table-layout: auto !important; 
                 border-collapse: collapse;
                 font-size: 12px;
             }}
@@ -226,19 +233,36 @@ def get_import_invoice_usd_html(
                 vertical-align: top;
                 padding: 4px;
             }}
-            /* Left side: Allow the description to take up space and wrap normally */
-            .shipping-wrapper td:nth-child(1) {{ width: 18% !important; font-weight: bold; }}
-            .shipping-wrapper td:nth-child(2) {{ width: 45% !important; word-wrap: break-word; padding-right: 15px !important; }}
-
-            /* Right side: Force exact widths and absolutely PREVENT wrapping */
-            .shipping-wrapper td:nth-child(3) {{ 
-                width: 15% !important; 
+            
+            /* Col 1: Left Label (Shrinks to fit exactly the longest word) */
+            .shipping-wrapper td:nth-child(1) {{ 
+                width: 1% !important; 
+                white-space: nowrap !important; 
                 font-weight: bold; 
-                white-space: nowrap !important; /* Stops labels from breaking */
+                padding-right: 4px !important; 
             }}
+            
+            /* Col 2: Left Value (Absorbs available space, wraps long text like description) */
+            .shipping-wrapper td:nth-child(2) {{ 
+                width: auto !important; 
+                word-wrap: break-word; 
+                padding-right: 15px !important; 
+            }}
+            
+            /* Col 3: Right Label (Shrinks to fit, adds left padding to distance from Col 2) */
+            .shipping-wrapper td:nth-child(3) {{ 
+                width: 1% !important; 
+                white-space: nowrap !important; 
+                font-weight: bold; 
+                padding-left: 20px !important; 
+                padding-right: 4px !important; 
+            }}
+            
+            /* Col 4: Right Value (Shrinks to fit, stops dates/names from breaking) */
             .shipping-wrapper td:nth-child(4) {{ 
-                width: 22% !important; 
-                white-space: nowrap !important; /* Stops dates and short names from breaking */
+                width: 1% !important; 
+                white-space: nowrap !important; 
+                padding-right: 10px !important;
             }}
             /* --- END FIX --- */
 
@@ -360,7 +384,7 @@ def get_import_invoice_usd_html(
 
             <h4>Shipping Details:</h4>
             <div class="shipping-wrapper">
-                {get_invoice_usd_shipping_html(doc)}
+                {shipping_details_html}
             </div>
 
             <h4 style="margin-top: 20px;">Charges</h4>
