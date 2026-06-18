@@ -89,8 +89,8 @@ def get_igm_html(doc, _customer_name=''):
     """Import General Manifest Sup (IGM) layout — wide manifest table + summary."""
 
     mbl_display = _igm_escape(str(doc.get('mbl_no') or ''))
-    bl_number = _igm_escape((doc.get('bl_no') or doc.get('hbl_id') or '').strip())
-    master_line = _igm_escape(str(doc.get('line_no') or '').strip())
+    bl_number = _igm_escape((doc.get('name') or doc.get('hbl_id') or '').strip())
+    master_line = '1'  # Always 1 master line per HBL in this layout
     line_no = _igm_escape(str(doc.get('hbl_line_no') or '').strip())
     pkg_desc = _igm_escape(str(doc.get('pkg_name') or '').strip())
     marks = _igm_escape(str(doc.get('marks_and_numbers') or '').strip())
@@ -98,11 +98,11 @@ def get_igm_html(doc, _customer_name=''):
     consignee = _igm_customer_display(doc.get('hbl_consignee'))
     notify = _igm_customer_display(doc.get('notify_to'))
     status = _igm_escape(
-        str(doc.get('container_type') or doc.get('container_mode') or doc.get('status') or doc.get('con_type') or '').strip()
+        str(doc.get('custom_shipment_mode') or doc.get('container_mode') or doc.get('status') or doc.get('con_type') or '').strip()
     )
     perishable = _igm_escape(str(doc.get('dg_status') or '').strip())
-    remark = _igm_escape(
-        str(doc.get('remarks') or doc.get('hbl_remarks') or '').strip()
+    pod_code = _igm_escape(
+        str(doc.get('pod_code') or doc.get('hbl_remarks') or '').strip()
     )
     net_wt = ''
     nw = doc.get('hbl_weight')
@@ -234,19 +234,16 @@ def get_igm_html(doc, _customer_name=''):
                         <th style="width:3.5%;">Line<br/>No</th>
                         <th style="width:7%;">BL<br/>Number</th>
                         <th style="width:5%;">Number of<br/>Quantity</th>
-                        <th style="width:5%;">Description</th>
-                        <th style="width:9%;">Mark &amp;<br/>Number</th>
+                        <th style="width:7%;">Description</th>
+                        <th style="width:5%;">Mark &amp;<br/>Number</th>
                         <th style="width:11%;">Description<br/>of Goods</th>
-                        <th style="width:5%;">Date of<br/>Entry</th>
-                        <th style="width:5%;">Conts<br/>Licence</th>
                         <th style="width:8%;">Consignee</th>
                         <th style="width:8%;">Notify<br/>Party</th>
-                        <th style="width:6%;">Gross<br/>Weight</th>
-                        <th style="width:5%;">Net<br/>Weight</th>
-                        <th style="width:8%;">Container</th>
+                        <th style="width:8%;">Gross<br/>Weight</th>
+                        <th style="width:4%;">Net<br/>Weight</th>
+                        <th style="width:11%;">Container</th>
                         <th style="width:4%;">Status</th>
-                        <th style="width:5.5%;">PERISH<br/>ABLE</th>
-                        <th style="width:5.5%;">RE<br/>MARK</th>
+                        <th style="width:8%;">POD<br/>Code</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -259,16 +256,13 @@ def get_igm_html(doc, _customer_name=''):
                         <td>{pkg_desc}</td>
                         <td>{marks}</td>
                         <td>{goods}</td>
-                        <td>{_igm_date_field(doc, 'bill_of_entry_date')}</td>
-                        <td>{_igm_escape(str(doc.get('bill_of_entry') or '').strip())}</td>
                         <td>{consignee}</td>
                         <td>{notify}</td>
                         <td>{_igm_format_gross(doc.get('gross_weight'))}</td>
-                        <td>{net_wt}</td>
+                        <td>{''}</td>
                         <td>{_igm_container_lines(doc)}</td>
                         <td>{status}</td>
-                        <td>{perishable}</td>
-                        <td>{remark}</td>
+                        <td>{pod_code}</td>
                     </tr>
                 </tbody>
             </table>
