@@ -480,23 +480,37 @@ def get_to_whom_concern_html(
 ):
     """Generate HTML content for FC-style certificate (import or export)."""
     
-    # Get container volume
+    # Get container volume and ocean freight details
     container_volume_list = []
-    ocean_freight_rate = 0
+    ocean_freight_parts = []
     ocean_freight_total = 0
     ocean_freight_total_bdt = 0
+    exchange_rate = 0
+
     if hasattr(doc, 'container_cost_info') and doc.container_cost_info:
         for container in doc.container_cost_info:
             qty = container.get('qty', '') or ''
             size = container.get('size', '') or ''
-            ocean_freight_rate += container.get('amount', 0) or 0
+            amount = container.get('amount', 0) or 0
+            exchange_rate = container.get('ex_rate', 0) or 0
+            if size:
+                ocean_freight_parts.append(f"{amount}/{size}")
             if qty and size:
                 container_volume_list.append(f"{qty}x{size}")
-                ocean_freight_total += ocean_freight_rate * int(qty)
-            if container.get('amountbdt') and int(qty):
-                ocean_freight_total_bdt += int(container.get('amountbdt')) * int(qty)
-                
+            try:
+                if qty:
+                    ocean_freight_total += float(amount) * int(qty)
+            except (ValueError, TypeError):
+                pass
+            try:
+                amountbdt = container.get('amountbdt', 0) or 0
+                if amountbdt and qty:
+                    ocean_freight_total_bdt += int(amountbdt) * int(qty)
+            except (ValueError, TypeError):
+                pass
+
     container_volume = ", ".join(container_volume_list)
+    ocean_freight_rate = ", ".join(ocean_freight_parts)
     
     # amountbdt
     
@@ -650,6 +664,8 @@ def get_to_whom_concern_html(
                 <p style="margin: 8px 0;">This is to certify that the Ocean Freight of the above mentioned shipment is as under:</p>
                  <p style="margin: 5px 0;"><strong>Ocean Freight </strong>  :  <strong> (US$){ocean_freight_rate}</strong></p>
                 <p style="margin: 5px 0;"><strong>Total Container</strong>  : <strong>{container_volume}</strong></p>
+                <p style="margin: 5px 0;"><strong>Exchange Rate</strong>  : <strong>{exchange_rate}</strong></p>
+
                 <p style="margin: 5px 0;"><strong>So, Total Ocean Freight is</strong>  : <strong> (US$) {ocean_freight_total}{f' and BDT is {ocean_freight_total_bdt}' if ocean_freight_total_bdt else ''}</strong></p>
                 
                 <p style="margin: 5px 0;"><strong>Goods Description</strong> : <strong>{doc.get('description_of_good', '')}</strong></p>
