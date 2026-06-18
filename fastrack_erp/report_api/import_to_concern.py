@@ -140,51 +140,49 @@ def download_export_shipping_pdf(doc_name, invoice_ids=None):
 
 def get_export_shipping_order_html(doc):
     """Generate landscape Shipping Order HTML matching paper layout."""
-    company_name = 'FASTRACK CARGO SOLUTIONS LTD'
-    company_address = (
-        'Anderkilla, Chatteshwari Road, Choumuhani, Agrabad C/A, '
-        'Chittagong, Bangladesh'
-    )
-    company_contacts = (
-        'Mobile: +880 1649255506, +880 1649755506  '
-        'Email: sales@fastrackcargo.com'
-    )
-    company_email2 = 'import.cmf01@fastrackcargo.com.bd'
-    ain = '30-15-6745'
+    company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
+    company_addr1 = 'JAHAN CHAMBER (2ND FLOOR), 3048/4255, HALISHAHAR ROAD, CHOUMOHARI,'
+    company_addr2 = 'Agrabad C/A, Chittagong. Bangladesh'
+    company_cell = 'Cell: +880 1708544568 (DHK) / +880 1640753506 (CTG)'
+    company_email1 = 'Email: sales@fastrackcargo.com.bd'
+    company_email2 = 'Email: import.crm01@fastrackcargo.com.bd'
+    ain = '301-16-0475'
 
-    shipper = (
-        doc.get('shipper_name')
-        or doc.get('customer')
-        or doc.get('consignor')
-        or ''
-    )
-    cnf_agent = doc.get('cnf_agent') or doc.get('consignee_name') or ''
-    place_of_receipt = doc.get('place_of_receipt') or ''
+    shipper = doc.get('hbl_shipper') or doc.get('shipper_name') or doc.get('customer') or ''
+    cnf_agent = doc.get('cf_agent') or doc.get('cnf_agent') or ''
+    notify = doc.get('notify_to') or doc.get('notify') or ''
+    place_of_receipt = doc.get('port_of_receipt') or doc.get('place_of_receipt') or ''
+    destination = doc.get('port_of_discharge') or doc.get('port_of_delivery') or doc.get('destination') or ''
     stuffing_date = format_date(
-        doc.get('stuffing_date') or today(),
-        'dd-MM-yyyy',
+        doc.get('stuffing_date') or doc.get('etd') or today(),
+        'dd.MM.yyyy',
     )
-    vessel_voyage = (
-        f"{doc.get('mv') or ''} {doc.get('mv_voyage_no') or ''}"
-    ).strip()
-    carrier = (
-        doc.get('shipping_line')
-        or doc.get('carrier')
-        or doc.get('mbl_carrier')
-        or 'SITC CONTAINER LINES CO.LTD'
-    )
-    booking_no = doc.get('booking_no') or doc.get('mbl') or ''
-    hbl_no = doc.get('name') or 'FTCSCGP2601109'
 
-    invoice_no = doc.get('invoice_no') or ''
-    po_no = doc.get('po_no') or ''
+    vessel_voyage = (f"{doc.get('mv') or ''} {doc.get('mv_voyage_no') or ''}").strip()
+    projected = (f"{doc.get('fv') or ''} {doc.get('fv__v_no') or ''}").strip()
+    carrier = doc.get('shipping_line') or doc.get('carrier') or ''
+    booking_no = doc.get('booking_no') or doc.get('mbl_no') or ''
+    cfs = doc.get('cfs') or ''
+    hbl_no = doc.get('hbl_no') or doc.get('hbl_id') or doc.get('name') or ''
+
+    invoice_no = doc.get('inv_no') or doc.get('invoice_no') or ''
+    po_no = doc.get('po_no') or doc.get('sc_no') or ''
     commodity = doc.get('description_of_good') or ''
-    equipment = doc.get('container_type') or ''
-    carton_qty = doc.get('no_of_pkg_hbl') or ''
-    total_pcs = doc.get('no_of_pkg_hbl') or ''
-    net_weight = doc.get('hbl_weight') or ''
+    net_weight = doc.get('hbl_weight') or doc.get('net_weight') or ''
     gross_weight = doc.get('gross_weight') or ''
-    cbm = doc.get('cbm') or ''
+    cbm = doc.get('hbl_vol_cbm') or doc.get('cbm') or ''
+    carton_qty = doc.get('no_of_pkg_hbl') or ''
+    total_pcs = doc.get('total_pcs') or doc.get('no_of_pcs') or doc.get('total_no_of_cartons') or ''
+
+    # Build equipment string from container_info
+    equipment_parts = []
+    container_info = doc.get('container_info') or []
+    for c in container_info:
+        qty = c.get('no_of_pkg') or ''
+        size = c.get('size') or ''
+        if qty and size:
+            equipment_parts.append(f"{qty}X{size}")
+    equipment = ', '.join(equipment_parts) or doc.get('container_type') or ''
 
     return f"""
     <!DOCTYPE html>
@@ -211,132 +209,180 @@ def get_export_shipping_order_html(doc):
             .so-head {{
                 width: 100%;
                 border-collapse: collapse;
-                margin-bottom: 8px;
+                margin-bottom: 6px;
             }}
             .so-head td {{
                 vertical-align: top;
             }}
             .logo {{
-                width: 120px;
+                height: 55px;
             }}
             .title {{
                 text-align: center;
-                font-size: 30px;
+                font-size: 22px;
+                font-weight: bold;
                 letter-spacing: 1px;
-                margin-top: 28px;
             }}
-            .line {{
-                margin: 2px 0;
+            .right-head-table {{
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11px;
+            }}
+            .right-head-table td {{
+                padding: 1px 3px;
+                vertical-align: top;
                 white-space: nowrap;
             }}
-            .label {{
-                display: inline-block;
-                width: 130px;
+            .rh-label {{
+                font-weight: bold;
+                width: 1%;
+                white-space: nowrap;
             }}
-            .right-head {{
-                text-align: left;
-                padding-left: 20px;
-                padding-top: 0;
+            .rh-colon {{
+                width: 1%;
+                text-align: center;
+            }}
+            .rh-value {{
+                white-space: normal;
             }}
             .item-table {{
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 12px;
+                margin-top: 10px;
             }}
             .item-table th,
             .item-table td {{
                 border: 1px solid #000;
-                padding: 6px 4px;
+                padding: 5px 4px;
                 text-align: center;
                 font-size: 11px;
             }}
             .item-table th {{
                 font-weight: bold;
+                background-color: #f9f9f9;
+                text-decoration: underline;
+            }}
+            .sign-header {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 18px;
+            }}
+            .sign-header td {{
+                padding: 2px 0;
+                font-size: 11px;
             }}
             .sign-row {{
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 28px;
+                margin-top: 4px;
             }}
             .sign-row td {{
                 width: 33.33%;
                 vertical-align: bottom;
+                padding-top: 6px;
             }}
             .stamp {{
-                width: 95px;
-                height: 95px;
-                background-image: url(
-                    'https://ftcl-portal.arcapps.org/files/fastrack_stamp.png'
-                );
+                width: 90px;
+                height: 90px;
+                background-image: url('https://ftcl-portal.arcapps.org/files/fastrack_stamp.png');
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center;
                 margin: 0 auto;
             }}
-            .right-sign {{
-                text-align: right;
-            }}
             .right-meta {{
                 text-align: right;
-                line-height: 1.6;
+                line-height: 1.8;
+            }}
+            .right-meta table {{
+                margin-left: auto;
+                border-collapse: collapse;
+            }}
+            .right-meta td {{
+                padding: 0 2px;
+                text-align: left;
+            }}
+            .right-meta .ml {{
+                font-weight: bold;
+                white-space: nowrap;
             }}
         </style>
     </head>
     <body>
         <div class='so-page ft-pdf-main'>
+
+            <!-- ===== HEADER ===== -->
             <table class='so-head'>
                 <tr>
-                    <td style='width: 42%;'>
+                    <td style='width:30%; vertical-align:middle;'>
                         <img class='logo'
                             src='https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg'
                             alt='Fastrack'>
                     </td>
-                    <td style='width: 26%;'>
+                    <td style='width:40%; text-align:center; vertical-align:middle;'>
                         <div class='title'>SHIPPING ORDER</div>
                     </td>
-                    <td style='width: 32%;'></td>
+                    <td style='width:30%;'></td>
                 </tr>
                 <tr>
-                    <td>
+                    <td style='vertical-align:top; padding-top:4px;'>
                         <div><strong>{company_name}</strong></div>
-                        <div>{company_address}</div>
-                        <div>{company_contacts}</div>
+                        <div>{company_addr1}</div>
+                        <div>{company_addr2}</div>
+                        <div>{company_cell}</div>
+                        <div>{company_email1}</div>
                         <div>{company_email2}</div>
-                        <div style='margin-top: 4px;'>
-                            <strong>AIN NO:</strong> {ain}
-                        </div>
+                        <div style='margin-top:4px;'><strong>AIN NO: {ain}</strong></div>
                     </td>
                     <td></td>
-                    <td class='right-head'>
-                        <div class='line'>
-                            <span class='label'>Shipper:</span>{shipper}
-                        </div>
-                        <div class='line'>
-                            <span class='label'>C&amp;F Agent:</span>{cnf_agent}
-                        </div>
-                        <div class='line'>
-                            <span class='label'>Place of Receipt:</span>
-                            {place_of_receipt}
-                        </div>
-                        <div class='line'>
-                            <span class='label'>Stuffing Date:</span>
-                            {stuffing_date}
-                        </div>
+                    <td style='vertical-align:top; padding-top:4px;'>
+                        <table class='right-head-table'>
+                            <tr>
+                                <td class='rh-label'>Shipper</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{shipper}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>C&amp;F Agent</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{cnf_agent}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>Notify</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{notify}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label' style='white-space:nowrap;'>Place of Receipt</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>
+                                    {place_of_receipt}
+                                    &nbsp;&nbsp;&nbsp;
+                                    <strong>Destination:</strong>&nbsp;{destination}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>Stuffing Date</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{stuffing_date}</td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
 
+            <!-- ===== ITEM TABLE ===== -->
             <table class='item-table'>
                 <thead>
                     <tr>
-                        <th>Com Inv No.</th>
+                        <th>Invoice No.</th>
                         <th>P.O No</th>
-                        <th>Commodity</th>
-                        <th>Equipment</th>
-                        <th>Carton Qty</th>
-                        <th>Total PCS.</th>
-                        <th>Net Weight</th>
-                        <th>G. Weight</th>
+                        <th>Commodity:</th>
+                        <th>Equipment:</th>
+                        <th>Carton Qty:</th>
+                        <th>Total PCS:</th>
+                        <th>Net Weight:</th>
+                        <th>G. Weight:</th>
                         <th>CBM</th>
                     </tr>
                 </thead>
@@ -353,34 +399,72 @@ def get_export_shipping_order_html(doc):
                         <td>{cbm}</td>
                     </tr>
                     <tr>
-                        <td colspan='9' style='text-align: center;'>
+                        <td colspan='4' style='text-align:right; font-weight:bold; border:1px solid #000; padding:5px 8px;'>
                             TOTAL:
                         </td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{carton_qty}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{total_pcs}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{net_weight}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{gross_weight}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{cbm}</strong></td>
                     </tr>
                 </tbody>
             </table>
 
+            <!-- ===== SIGNATURE SECTION ===== -->
+            <table class='sign-header'>
+                <tr>
+                    <td style='width:50%;'>To be field by Office</td>
+                    <td style='width:50%; text-align:right;'>Signature of Shipper/C&amp;F Agent</td>
+                </tr>
+            </table>
+
             <table class='sign-row'>
                 <tr>
-                    <td>
-                        <div>Authorized</div>
+                    <td style='vertical-align:bottom;'>
+                        <!-- authorized signature line placeholder -->
                     </td>
-                    <td style='text-align: center;'>
+                    <td style='text-align:center; vertical-align:bottom;'>
                         <div class='stamp'></div>
                     </td>
-                    <td class='right-sign'>
+                    <td style='vertical-align:bottom;'>
                         <div class='right-meta'>
-                            <div>Vessel/Voyage: {vessel_voyage}</div>
-                            <div>Carrier: {carrier}</div>
-                            <div>Booking No: {booking_no}</div>
-                            <div>HBL No: {hbl_no}</div>
-                        </div>
-                        <div style='margin-top: 4px;'>
-                            Signature of Shipper/C&amp;F Agent
+                            <table>
+                                <tr>
+                                    <td class='ml'>Vessel/Voyage</td>
+                                    <td style='padding-left:6px;'>{vessel_voyage}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>Projected MVSL</td>
+                                    <td style='padding-left:6px;'>{projected}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>Carrier</td>
+                                    <td style='padding-left:6px;'>: {carrier}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>Booking No</td>
+                                    <td style='padding-left:6px;'>: {booking_no}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>CFS</td>
+                                    <td style='padding-left:6px;'>: {cfs}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>HBL No</td>
+                                    <td style='padding-left:6px;'>: {hbl_no}</td>
+                                </tr>
+                            </table>
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan='3' style='padding-top:6px;'>
+                        <strong>Authorized</strong>
+                    </td>
+                </tr>
             </table>
+
         </div>
     </body>
     </html>
