@@ -98,7 +98,7 @@ def get_igm_html(doc, _customer_name=''):
     consignee = _igm_customer_display(doc.get('hbl_consignee'))
     notify = _igm_customer_display(doc.get('notify_to'))
     status = _igm_escape(
-        str(doc.get('container_type') or doc.get('container_mode') or doc.get('status') or '').strip()
+        str(doc.get('container_type') or doc.get('container_mode') or doc.get('status') or doc.get('con_type') or '').strip()
     )
     perishable = _igm_escape(str(doc.get('dg_status') or '').strip())
     remark = _igm_escape(
@@ -356,7 +356,7 @@ def get_arrival_notice_html(
                 <td class="table-cell-data">{container.get('custom_container_no', '') or ''}</td>
                 <td class="table-cell-data">{container.get('seal_no', '') or ''}</td>
                 <td class="table-cell-data">{container.get('size', '') or ''}</td>
-                <td class="table-cell-data">{container.get('status', '') or ''}</td>
+                <td class="table-cell-data">{container.get('con_type', '') or ''}</td>
                 <td class="table-cell-data">{ int(container.get('no_of_pkg', '') or 0)}</td>
                 <td class="table-cell-data">{container.get('weight', '') or ''}</td>
             </tr>

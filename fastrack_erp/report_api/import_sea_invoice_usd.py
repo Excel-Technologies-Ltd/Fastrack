@@ -33,8 +33,10 @@ def download_invoice_usd_pdf(
                     customer_address = customer_doc.primary_address or ""
                 except Exception:
                     customer_address = ""
+        show_container_number = parent_doctype != "Import Air House Bill"
         html_content = get_import_invoice_usd_html(
-            doc, customer_address, heading=heading, html_title=html_title
+            doc, customer_address, heading=heading, html_title=html_title,
+            show_container_number=show_container_number,
         )
         pdf_content = get_pdf(
             html_content,
@@ -77,6 +79,7 @@ def get_import_invoice_usd_html(
     customer_address,
     heading="SEA IMPORT INVOICE",
     html_title="Sea Import Invoice USD",
+    show_container_number=True,
 ):
     """Generate HTML content for import/export-style Invoice USD."""
     
@@ -129,11 +132,10 @@ def get_import_invoice_usd_html(
             total_amount += float(total_price) if total_price else 0
             
             if idx == 0:  # First row with rowspan for container number
+                container_td = f"""<td rowspan="{len(doc.invoice_list)}" style="border: 1px solid black; padding: 5px; text-align: center; vertical-align: middle;">{container_numbers_str}</td>""" if show_container_number else ""
                 invoice_rows += f"""
                 <tr>
-                    <td rowspan="{len(doc.invoice_list)}" style="border: 1px solid black; padding: 5px; text-align: center; vertical-align: middle;">
-                        {container_numbers_str}
-                    </td>
+                    {container_td}
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('item_code', '') or ''}
                     </td>
@@ -391,7 +393,7 @@ def get_import_invoice_usd_html(
             <table class="charges-table">
                 <thead>
                     <tr>
-                        <th>Container Number</th>
+                        {"<th>Container Number</th>" if show_container_number else ""}
                         <th>Particulars</th>
                         <th>Qty</th>
                         <th>UOM</th>
@@ -403,7 +405,7 @@ def get_import_invoice_usd_html(
                 <tbody>
                     {invoice_rows}
                     <tr>
-                        <td colspan="6" class="total-row">
+                        <td colspan="{6 if show_container_number else 5}" class="total-row">
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">

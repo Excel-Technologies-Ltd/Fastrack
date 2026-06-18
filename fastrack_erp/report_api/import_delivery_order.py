@@ -73,7 +73,7 @@ def get_delivery_order_html(doc):
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("custom_container_no", "") or ""}</td>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("seal_no", "") or ""}</td>
                 <td style="border: 1px solid #000; padding: 4px;">{container.get("size", "") or ""}</td>
-                <td style="border: 1px solid #000; padding: 4px;">{container.get("status", "") or ""}</td>
+                <td style="border: 1px solid #000; padding: 4px;">{container.get("con_type", "") or ""}</td>
                 {gd_cell}
             </tr>
             """
@@ -202,7 +202,7 @@ def get_delivery_order_html(doc):
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                 <tr>
                     <td style="width: 40%; vertical-align: top; padding-right: 15px;">
-                        <p style="margin-top: 0;"><strong>TO:</strong> Deputy Traffic Manager, <br>CHATTOGRAM</p>
+                        <p style="margin-top: 0;"><strong>TO:</strong> Deputy Traffic Manager, <br>{doc.get("port_of_delivery", "") or ""}</p>
                     </td>
                     
                     <td style="width: 60%; vertical-align: top;">
@@ -277,7 +277,7 @@ def get_delivery_order_html(doc):
             <p class="text-right mt-3"><strong>Total Weight :</strong> {doc.get("gross_weight", "") or ""}</p>
             <p class="text-right"><strong>THIS DELIVERY ORDER IS VALID UP TO :</strong> {doc.get("do_validity", "") or ""}</p>
 
-            <div class="text-right mt-5" style="margin-top:250px;">
+            <div class="text-right mt-5" style="margin-top:150px;">
                 <p><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
                 <p>As Agents</p>
             </div>
