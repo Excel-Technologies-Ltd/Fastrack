@@ -139,6 +139,15 @@ HBL_SALES_INVOICE_FIELD_MAP = {
 
 HBL_PURCHASE_INVOICE_FIELD_MAP = {
     "Import Sea House Bill": "custom_shbl_id",
+    "Import Air House Bill": "custom_hbl_air_link",
+    "Import D2D Bill": "custom_import_d2d_link",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
+}
+
+HBL_JOURNAL_ENTRY_FIELD_MAP = {
+    "Import Sea House Bill": "custom_shbl_id",
     "Import Air House Bill": "custom_ahbl_id",
     "Import D2D Bill": "custom_dhbl_id",
     "Export Sea House Bill": "custom_export_hbl_sea_link",
@@ -227,9 +236,9 @@ def make_payment_entry_from_hbl(source_name, target_doc=None):
 def make_journal_entry_from_hbl(source_name, target_doc=None):
     """Generic method to create Journal Entry from any House Bill type"""
     # Determine the HBL doctype from the source document
-    for hbl_type in HBL_PURCHASE_INVOICE_FIELD_MAP.keys():
+    for hbl_type in HBL_JOURNAL_ENTRY_FIELD_MAP.keys():
         if frappe.db.exists(hbl_type, source_name):
-            link_field = HBL_PURCHASE_INVOICE_FIELD_MAP.get(hbl_type)
+            link_field = HBL_JOURNAL_ENTRY_FIELD_MAP.get(hbl_type)
 
             def set_missing_values(source, target):
                 target.custom_hbl_type = hbl_type

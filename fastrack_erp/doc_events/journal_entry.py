@@ -50,6 +50,7 @@ def after_submit(doc, method):
         hbl_doc.append("profit_share_list", account_info)
 
     hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
+    hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
 
 
@@ -75,4 +76,5 @@ def on_cancel(doc, method):
             hbl_doc.profit_share_list.remove(item)
 
     hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
-    hbl_doc.save()
+    hbl_doc.flags.ignore_validate_update_after_submit = True
+    hbl_doc.save(ignore_permissions=True)

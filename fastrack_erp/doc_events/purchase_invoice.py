@@ -3,8 +3,8 @@ import frappe
 # Map of HBL types to their link field names for Purchase Invoice
 HBL_TYPE_FIELD_MAP = {
     "Import Sea House Bill": "custom_shbl_id",
-    "Import Air House Bill": "custom_ahbl_id",
-    "Import D2D Bill": "custom_dhbl_id",
+    "Import Air House Bill": "custom_hbl_air_link",
+    "Import D2D Bill": "custom_import_d2d_link",
     "Export Sea House Bill": "custom_export_hbl_sea_link",
     "Export Air House Bill": "custom_export_hbl_air_link",
     "Export D2D Bill": "custom_export_d2d_link",
@@ -46,6 +46,7 @@ def after_submit(doc, method):
         hbl_doc.append("purchase_invoice_list", row)
 
     hbl_doc.total_purchase_amount = sum(float(item.total_price) for item in hbl_doc.purchase_invoice_list)
+    hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
 
 
@@ -71,4 +72,5 @@ def on_cancel(doc, method):
             hbl_doc.purchase_invoice_list.remove(item)
 
     hbl_doc.total_purchase_amount = sum(float(item.total_price) for item in hbl_doc.purchase_invoice_list)
-    hbl_doc.save()
+    hbl_doc.flags.ignore_validate_update_after_submit = True
+    hbl_doc.save(ignore_permissions=True)

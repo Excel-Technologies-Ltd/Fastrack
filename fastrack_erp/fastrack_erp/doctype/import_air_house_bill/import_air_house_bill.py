@@ -31,6 +31,34 @@ class ImportAirHouseBill(Document):
 		self.payment_entry_list = payment_entry
 		self.total_payment = sum(float(item.amount) for item in payment_entry)
 
+		# Rebuild purchase invoice list from submitted purchase invoices
+		submitted_pis = frappe.db.get_list(
+			"Purchase Invoice",
+			filters=[["custom_hbl_air_link", "=", self.name], ["docstatus", "=", 1]],
+			fields=["name", "supplier", "posting_date", "currency"]
+		)
+		purchase_invoice_rows = []
+		for pi in submitted_pis:
+			pi_doc = frappe.get_doc("Purchase Invoice", pi.name)
+			for item in pi_doc.items:
+				row = frappe.new_doc("Fastrack Purchase Invoice")
+				row.invoice_link = pi_doc.name
+				row.item_code = item.item_code
+				row.qty = item.qty
+				row.rate = item.net_rate
+				row.amount = item.net_amount
+				row.exchange_rate = item.get("custom_exchange_rate") or None
+				row.total_price = item.base_amount
+				row.date = pi_doc.posting_date
+				row.supplier = pi_doc.supplier
+				row.currency = pi_doc.currency
+				row.parent = self.name
+				row.parenttype = "Import Air House Bill"
+				row.parentfield = "purchase_invoice_list"
+				purchase_invoice_rows.append(row)
+		self.purchase_invoice_list = purchase_invoice_rows
+		self.total_purchase_amount = sum(float(r.total_price or 0) for r in purchase_invoice_rows)
+
 		# Get draft invoices
 		draft_list = get_draft_sales_and_purchase_invoice_list(self.name)
 		draft_invoice_list = []
@@ -143,7 +171,7 @@ def get_draft_sales_and_purchase_invoice_list(house_bill_no):
 		purchase_invoice_list = frappe.db.get_list(
 			"Purchase Invoice",
 			filters=[
-				["custom_ahbl_id", "=", house_bill_no],
+				["custom_hbl_air_link", "=", house_bill_no],
 				["docstatus", "=", 0]
 			],
 			fields=["name", "base_grand_total"]

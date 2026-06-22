@@ -574,13 +574,15 @@
    "fieldname": "purchase_invoice_list",
    "fieldtype": "Table",
    "label": "Purchase Invoice List",
-   "options": "Fastrack Purchase Invoice"
+   "options": "Fastrack Purchase Invoice",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "total_purchase_amount",
    "fieldtype": "Float",
    "label": "Total Purchase Amount",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "profit_share_section",
