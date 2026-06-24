@@ -118,4 +118,8 @@ export const DOCTYPE_LIST = {
             },
         },
     },
+    SHIPPING_ORDER: {
+        NAME: "Shipping Order",
+        CHILD_DOCTYPE: {},
+    },
 };

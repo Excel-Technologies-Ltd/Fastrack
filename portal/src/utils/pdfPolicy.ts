@@ -328,20 +328,18 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
     },
     [PDF_NAME_LIST.SHIPPING]: {
         name: PDF_NAME_LIST.SHIPPING,
-        parentDoctype: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.NAME,
+        parentDoctype: DOCTYPE_LIST.SHIPPING_ORDER.NAME,
         isMasterBill: false,
         selectPDFNAME: true,
         selectDocName: true,
         selectCustomer: false,
         selectSupplier: false,
-        selectChildDoctype: true,
-        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_SEA_HOUSE_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        selectChildDoctype: false,
         DOWNLOAD_METHOD:
-            "fastrack_erp.report_api.import_to_concern.download_export_shipping_pdf",
+            "fastrack_erp.report_api.import_to_concern.download_shipping_order_pdf",
         HAS_ARGUMENTS: true,
         ARGUMENTS: {
             doc_name: "docName",
-            invoice_ids: "selectedId",
         },
     },
 };

@@ -109,6 +109,265 @@ def download_export_fc_export_pdf(doc_name, invoice_ids=None):
 
 
 @frappe.whitelist()
+def download_shipping_order_pdf(doc_name):
+    """Download Shipping Order PDF directly from the Shipping Order doctype."""
+    try:
+        doc = frappe.get_doc("Shipping Order", doc_name)
+        html_content = get_shipping_order_from_so_html(doc)
+        pdf_content = get_pdf(
+            html_content,
+            options=merge_fastrack_wkhtml_pdf_options(
+                {
+                    'orientation': 'Landscape',
+                    'margin-left': '8mm',
+                    'margin-right': '8mm',
+                    'margin-top': '8mm',
+                },
+            ),
+        )
+        frappe.local.response.filename = f"Shipping_Order_{doc_name}.pdf"
+        frappe.local.response.filecontent = pdf_content
+        frappe.local.response.type = "download"
+    except Exception as e:
+        frappe.throw(f"Error generating PDF: {str(e)}")
+
+
+def get_shipping_order_from_so_html(doc):
+    """Generate landscape Shipping Order HTML from a Shipping Order document."""
+    company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
+    company_addr1 = 'JAHAN CHAMBER (2ND FLOOR), 3048/4255, HALISHAHAR ROAD, CHOUMOHARI,'
+    company_addr2 = 'Agrabad C/A, Chittagong. Bangladesh'
+    company_cell = 'Cell: +880 1708544568 (DHK) / +880 1640753506 (CTG)'
+    company_email1 = 'Email: sales@fastrackcargo.com.bd'
+    company_email2 = 'Email: import.crm01@fastrackcargo.com.bd'
+    ain = '301-16-0475'
+
+    shipper = doc.shipper or ''
+    cnf_agent = doc.cnf_agent or ''
+    notify = doc.consignee or ''
+    place_of_receipt = doc.place_of_receipt or ''
+    destination = doc.destination or ''
+    stuffing_date = format_date(doc.stuffing_date or today(), 'dd.MM.yyyy')
+    vessel_voyage = doc.forworder or ''
+    carrier = doc.carieer or ''
+    booking_no = doc.booking_no or ''
+    cfs = doc.cfs or ''
+    hbl_no = doc.hbl_number or ''
+    invoice_no = doc.invoice_no or ''
+    po_no = doc.po_no or ''
+    commodity = doc.commodity or ''
+    net_weight = doc.net_weight or ''
+    gross_weight = doc.gr_weight or ''
+    cbm = doc.cbm or ''
+    carton_qty = doc.carton_qty or ''
+    total_pcs = doc.total_pcs or ''
+    equipment = doc.equipment or ''
+
+    from fastrack_erp.report_api.report_helpers import FASTTRACK_PDF_MAIN_CSS
+    return f"""
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Shipping Order</title>
+        <style>
+            {FASTTRACK_PDF_MAIN_CSS}
+            @page {{
+                size: A4 landscape;
+                margin: 8mm;
+            }}
+            body {{
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+                margin: 0;
+                color: #000;
+            }}
+            .so-page {{ width: 100%; }}
+            .so-head {{ width: 100%; border-collapse: collapse; margin-bottom: 6px; }}
+            .so-head td {{ vertical-align: top; }}
+            .logo {{ height: 55px; }}
+            .title {{ text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 1px; }}
+            .right-head-table {{ width: 100%; border-collapse: collapse; font-size: 11px; }}
+            .right-head-table td {{ padding: 1px 3px; vertical-align: top; white-space: nowrap; }}
+            .rh-label {{ font-weight: bold; width: 1%; white-space: nowrap; }}
+            .rh-colon {{ width: 1%; text-align: center; }}
+            .rh-value {{ white-space: normal; }}
+            .item-table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
+            .item-table th, .item-table td {{
+                border: 1px solid #000; padding: 5px 4px;
+                text-align: center; font-size: 11px;
+            }}
+            .item-table th {{ font-weight: bold; background-color: #f9f9f9; text-decoration: underline; }}
+            .sign-header {{ width: 100%; border-collapse: collapse; margin-top: 18px; }}
+            .sign-header td {{ padding: 2px 0; font-size: 11px; }}
+            .sign-row {{ width: 100%; border-collapse: collapse; margin-top: 4px; }}
+            .sign-row td {{ width: 33.33%; vertical-align: bottom; padding-top: 6px; }}
+            .stamp {{
+                width: 90px; height: 90px;
+                background-image: url('https://ftcl-portal.arcapps.org/files/fastrack_stamp.png');
+                background-size: contain; background-repeat: no-repeat;
+                background-position: center; margin: 0 auto;
+            }}
+            .right-meta {{ text-align: right; line-height: 1.8; }}
+            .right-meta table {{ margin-left: auto; border-collapse: collapse; }}
+            .right-meta td {{ padding: 0 2px; text-align: left; }}
+            .right-meta .ml {{ font-weight: bold; white-space: nowrap; }}
+        </style>
+    </head>
+    <body>
+        <div class='so-page ft-pdf-main'>
+            <table class='so-head'>
+                <tr>
+                    <td style='width:30%; vertical-align:middle;'>
+                        <img class='logo'
+                            src='https://ftcl-portal.arcapps.org/files/Fastrack-AI.jpg'
+                            alt='Fastrack'>
+                    </td>
+                    <td style='width:40%; text-align:center; vertical-align:middle;'>
+                        <div class='title'>SHIPPING ORDER</div>
+                    </td>
+                    <td style='width:30%;'></td>
+                </tr>
+                <tr>
+                    <td style='vertical-align:top; padding-top:4px;'>
+                        <div><strong>{company_name}</strong></div>
+                        <div>{company_addr1}</div>
+                        <div>{company_addr2}</div>
+                        <div>{company_cell}</div>
+                        <div>{company_email1}</div>
+                        <div>{company_email2}</div>
+                        <div style='margin-top:4px;'><strong>AIN NO: {ain}</strong></div>
+                    </td>
+                    <td></td>
+                    <td style='vertical-align:top; padding-top:4px;'>
+                        <table class='right-head-table'>
+                            <tr>
+                                <td class='rh-label'>Shipper</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{shipper}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>C&amp;F Agent</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{cnf_agent}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>Notify</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{notify}</td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label' style='white-space:nowrap;'>Place of Receipt</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>
+                                    {place_of_receipt}
+                                    &nbsp;&nbsp;&nbsp;
+                                    <strong>Destination:</strong>&nbsp;{destination}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='rh-label'>Stuffing Date</td>
+                                <td class='rh-colon'>:</td>
+                                <td class='rh-value'>{stuffing_date}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table class='item-table'>
+                <thead>
+                    <tr>
+                        <th>Invoice No.</th>
+                        <th>P.O No</th>
+                        <th>Commodity:</th>
+                        <th>Equipment:</th>
+                        <th>Carton Qty:</th>
+                        <th>Total PCS:</th>
+                        <th>Net Weight:</th>
+                        <th>G. Weight:</th>
+                        <th>CBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{invoice_no}</td>
+                        <td>{po_no}</td>
+                        <td>{commodity}</td>
+                        <td>{equipment}</td>
+                        <td>{carton_qty}</td>
+                        <td>{total_pcs}</td>
+                        <td>{net_weight}</td>
+                        <td>{gross_weight}</td>
+                        <td>{cbm}</td>
+                    </tr>
+                    <tr>
+                        <td colspan='4' style='text-align:right; font-weight:bold; border:1px solid #000; padding:5px 8px;'>
+                            TOTAL:
+                        </td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{carton_qty}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{total_pcs}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{net_weight}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{gross_weight}</strong></td>
+                        <td style='border:1px solid #000; padding:5px 4px;'><strong>{cbm}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class='sign-header'>
+                <tr>
+                    <td style='width:50%;'>To be field by Office</td>
+                    <td style='width:50%; text-align:right;'>Signature of Shipper/C&amp;F Agent</td>
+                </tr>
+            </table>
+
+            <table class='sign-row'>
+                <tr>
+                    <td style='vertical-align:bottom;'></td>
+                    <td style='text-align:center; vertical-align:bottom;'>
+                        <div class='stamp'></div>
+                    </td>
+                    <td style='vertical-align:bottom;'>
+                        <div class='right-meta'>
+                            <table>
+                                <tr>
+                                    <td class='ml'>Vessel/Voyage</td>
+                                    <td style='padding-left:6px;'>{vessel_voyage}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>Carrier</td>
+                                    <td style='padding-left:6px;'>: {carrier}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>Booking No</td>
+                                    <td style='padding-left:6px;'>: {booking_no}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>CFS</td>
+                                    <td style='padding-left:6px;'>: {cfs}</td>
+                                </tr>
+                                <tr>
+                                    <td class='ml'>HBL No</td>
+                                    <td style='padding-left:6px;'>: {hbl_no}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='3' style='padding-top:6px;'>
+                        <strong>Authorized</strong>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+    </html>
+    """
+
+
+@frappe.whitelist()
 def download_export_shipping_pdf(doc_name, invoice_ids=None):
     """Download Shipping Order certificate (export sea HBL) as PDF."""
     try:

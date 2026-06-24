@@ -33,7 +33,7 @@ def download_invoice_usd_pdf(
                     customer_address = customer_doc.primary_address or ""
                 except Exception:
                     customer_address = ""
-        show_container_number = parent_doctype != "Import Air House Bill"
+        show_container_number = parent_doctype not in ("Import Air House Bill", "Import D2D Bill", "Export D2D Bill")
         html_content = get_import_invoice_usd_html(
             doc, customer_address, heading=heading, html_title=html_title,
             show_container_number=show_container_number,
@@ -217,6 +217,16 @@ def get_import_invoice_usd_html(
                 max-width: 800px;
                 margin: 0 auto;
             }}
+
+            .title-box {{
+                text-align: center;
+                border: 2px solid #000;
+                padding: 8px;
+                margin: 0 auto 20px auto;
+                font-weight: bold;
+                font-size: 14px;
+                width: 200px;
+            }}
             
             /* --- PERFECT SHIPPING DETAILS ALIGNMENT (NO TABS) --- */
             .shipping-wrapper {{
@@ -347,7 +357,9 @@ def get_import_invoice_usd_html(
                     </td>
 
                     <td style="width:50%; text-align:center; vertical-align:middle;">
-                        <h3 style="margin:0;">{heading}</h3>
+                        <div class="title-box">
+                            <h3 style="margin:0;">{heading}</h3>
+                        </div>
                     </td>
 
                     <td style="width:25%;"></td>
