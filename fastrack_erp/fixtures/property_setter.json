@@ -5310,5 +5310,37 @@
   "property_type": "Select",
   "row_name": null,
   "value": "0"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Purchase Taxes and Charges",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "tax_amount_after_discount_amount",
+  "is_system_generated": 0,
+  "modified": "2026-06-24 15:50:45.905341",
+  "module": null,
+  "name": "Purchase Taxes and Charges-tax_amount_after_discount_amount-precision",
+  "property": "precision",
+  "property_type": "Select",
+  "row_name": null,
+  "value": "9"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Purchase Taxes and Charges",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "base_tax_amount_after_discount_amount",
+  "is_system_generated": 0,
+  "modified": "2026-06-24 15:50:45.993326",
+  "module": null,
+  "name": "Purchase Taxes and Charges-base_tax_amount_after_discount_amount-precision",
+  "property": "precision",
+  "property_type": "Select",
+  "row_name": null,
+  "value": "0"
  }
 ]
