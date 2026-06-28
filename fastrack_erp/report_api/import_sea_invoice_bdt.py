@@ -33,7 +33,7 @@ def download_invoice_bdt_pdf(
                     customer_address = customer_doc.primary_address or ""
                 except Exception:
                     customer_address = ""
-        show_container_number = parent_doctype not in ("Import Air House Bill", "Import D2D Bill", "Export D2D Bill")
+        show_container_number = parent_doctype not in ("Import Air House Bill", "Export Air House Bill", "Import D2D Bill", "Export D2D Bill")
         html_content = get_import_invoice_bdt_html(
             doc,
             customer_address,

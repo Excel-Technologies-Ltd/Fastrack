@@ -122,4 +122,19 @@ export const DOCTYPE_LIST = {
         NAME: "Shipping Order",
         CHILD_DOCTYPE: {},
     },
+    EXPORT_AIR_HOUSE_BILL: {
+        NAME: "Export Air House Bill",
+        CHILD_DOCTYPE: {
+            INVOICE_LIST: {
+                name: "invoice_list",
+                fields: [
+                    { name: "name", label: "Id" },
+                    { name: "invoice_link", label: "Invoice No" },
+                    { name: "customer", label: "Customer" },
+                    { name: "item_code", label: "Item Code" },
+                    { name: "qty", label: "QTY" },
+                ],
+            },
+        },
+    },
 };

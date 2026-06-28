@@ -17,4 +17,6 @@ export const PDF_NAME_LIST = {
     FC_EXPORT: "FC Export",
     D2D_EXPORT_INVOICE: "D2D Export Invoice",
     SHIPPING: "Shipping Order",
+    AIR_EXPORT_INVOICE_USD: "Air Export Invoice USD",
+    AIR_EXPORT_INVOICE_BDT: "Air Export Invoice BDT",
 };
