@@ -337,19 +337,19 @@ def get_shipping_order_from_so_html(doc):
                                 </tr>
                                 <tr>
                                     <td class='ml'>Carrier</td>
-                                    <td style='padding-left:6px;'>: {carrier}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {carrier}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>Booking No</td>
-                                    <td style='padding-left:6px;'>: {booking_no}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {booking_no}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>CFS</td>
-                                    <td style='padding-left:6px;'>: {cfs}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {cfs}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>HBL No</td>
-                                    <td style='padding-left:6px;'>: {hbl_no}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {hbl_no}</div></td>
                                 </tr>
                             </table>
                         </div>
@@ -699,19 +699,19 @@ def get_export_shipping_order_html(doc):
                                 </tr>
                                 <tr>
                                     <td class='ml'>Carrier</td>
-                                    <td style='padding-left:6px;'>: {carrier}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {carrier}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>Booking No</td>
-                                    <td style='padding-left:6px;'>: {booking_no}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {booking_no}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>CFS</td>
-                                    <td style='padding-left:6px;'>: {cfs}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {cfs}</div></td>
                                 </tr>
                                 <tr>
                                     <td class='ml'>HBL No</td>
-                                    <td style='padding-left:6px;'>: {hbl_no}</td>
+                                    <td style='padding-left:6px;'><div style="padding-left:10px;text-indent:-10px;">: {hbl_no}</div></td>
                                 </tr>
                             </table>
                         </div>

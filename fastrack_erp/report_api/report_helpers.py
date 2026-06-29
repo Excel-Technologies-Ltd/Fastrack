@@ -28,19 +28,36 @@ def _make_helpers(doc, format_date_fn=None):
     return _d, _date
 
 
+def _val_cell(value, colspan=1):
+    """Value cell with colon prefix that stays aligned on wrap.
+
+    Uses a CSS hanging indent: padding-left reserves space for the colon
+    prefix on wrapped lines, while text-indent pulls the first line back so
+    the colon sits flush with the cell's left edge.  wkhtmltopdf renders
+    block-level text-indent reliably; no nested tables needed.
+    """
+    span_attr = f' colspan="{colspan}"' if colspan > 1 else ''
+    # 10px ≈ width of ": " in Arial 12px — keep first line flush, wrap at value start
+    return (
+        f'<td{span_attr} style="{_VAL}">'
+        f'<div style="padding-left:10px;text-indent:-10px;">: {value}</div>'
+        f'</td>'
+    )
+
+
 def _row(l1, v1, l2='', v2=''):
     if not l2:
         return f"""
         <tr>
             <td style="{_LBL}">{l1}</td>
-            <td colspan="3" style="{_VAL}">: {v1}</td>
+            {_val_cell(v1, colspan=3)}
         </tr>"""
     return f"""
         <tr>
             <td style="{_LBL}">{l1}</td>
-            <td style="{_VAL}">: {v1}</td>
+            {_val_cell(v1)}
             <td style="{_RLBL}">{l2}</td>
-            <td style="{_VAL}">: {v2}</td>
+            {_val_cell(v2)}
         </tr>"""
 
 

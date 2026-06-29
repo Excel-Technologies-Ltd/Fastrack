@@ -209,47 +209,47 @@ def get_delivery_order_html(doc):
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
                                 <td style="width: 35%; font-weight: bold; padding: 2px 0;">Date</td>
-                                <td style="padding: 2px 0;">: {frappe.utils.today()}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {frappe.utils.today()}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">F/Vsl. Name</td>
-                                <td style="padding: 2px 0;">: {doc.get("vessel_name", "") or "CNC NEPTUNE, V-0HJ8RS1NC"}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("vessel_name", "") or "CNC NEPTUNE, V-0HJ8RS1NC"}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Rotation No.</td>
-                                <td style="padding: 2px 0;">: {doc.get("rotation", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("rotation", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Line No.</td>
-                                <td style="padding: 2px 0;">: {doc.get("line_no", "") or doc.get("hbl_line_no", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("line_no", "") or doc.get("hbl_line_no", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">From</td>
-                                <td style="padding: 2px 0;">: {doc.get("port_of_loading", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("port_of_loading", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">HBL No</td>
-                                <td style="padding: 2px 0;">: {doc.get("hbl_id", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("hbl_id", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Bill of Entry</td>
-                                <td style="padding: 2px 0;">: {doc.get("bill_of_entry", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("bill_of_entry", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Date</td>
-                                <td style="padding: 2px 0;">: {doc.get("bill_of_entry_date", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("bill_of_entry_date", "") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Volume</td>
-                                <td style="padding: 2px 0;">: {container_volume}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {container_volume}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Total Quantity</td>
-                                <td style="padding: 2px 0;">: {int(doc.get("no_of_pkg_hbl", "") or 0)}
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {int(doc.get("no_of_pkg_hbl", "") or 0)}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0; vertical-align: top;">Marks And<br>Number</td>
-                                <td style="padding: 2px 0;">: {doc.get("marks_and_numbers", "") or ""}</td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("marks_and_numbers", "") or ""}</div></td>
                             </tr>
                         </table>
                     </td>
