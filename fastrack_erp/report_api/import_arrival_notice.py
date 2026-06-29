@@ -101,8 +101,8 @@ def get_igm_html(doc, _customer_name=''):
         str(doc.get('custom_shipment_mode') or doc.get('container_mode') or doc.get('status') or doc.get('con_type') or '').strip()
     )
     perishable = _igm_escape(str(doc.get('dg_status') or '').strip())
-    pod_code = _igm_escape(
-        str(doc.get('pod_code') or doc.get('hbl_remarks') or '').strip()
+    port_of_delivery = _igm_escape(
+        str(doc.get('port_of_delivery') or doc.get('hbl_remarks') or '').strip()
     )
     net_wt = ''
     nw = doc.get('hbl_weight')
@@ -262,7 +262,7 @@ def get_igm_html(doc, _customer_name=''):
                         <td>{''}</td>
                         <td>{_igm_container_lines(doc)}</td>
                         <td>{status}</td>
-                        <td>{pod_code}</td>
+                        <td>{port_of_delivery}</td>
                     </tr>
                 </tbody>
             </table>
