@@ -715,6 +715,18 @@ def convert_to_presentation_currency(gl_entries, currency_info):
 		account_currency = entry["account_currency"]
 
 		if len(account_currencies) == 1 and account_currency == presentation_currency:
+			# BDT columns: the raw debit/credit from GL Entry are already in company currency (BDT)
+			entry["bdtdebit"] = debit
+			entry["bdtcredit"] = credit
+			# Exchange rate: try source document first, then derive from GL values
+			conversion_rate = get_document_conversion_rate(entry, presentation_currency, company_currency)
+			if not conversion_rate:
+				if debit_in_account_currency:
+					conversion_rate = round(debit / debit_in_account_currency, 6)
+				elif credit_in_account_currency:
+					conversion_rate = round(credit / credit_in_account_currency, 6)
+			if conversion_rate:
+				entry["exchange_rate"] = conversion_rate
 			entry["debit"] = debit_in_account_currency
 			entry["credit"] = credit_in_account_currency
 		else:

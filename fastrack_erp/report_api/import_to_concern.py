@@ -764,7 +764,7 @@ def get_to_whom_concern_html(
             try:
                 amountbdt = container.get('amountbdt', 0) or 0
                 if amountbdt and qty:
-                    ocean_freight_total_bdt += int(amountbdt) * int(qty)
+                    ocean_freight_total_bdt += float(amountbdt)
             except (ValueError, TypeError):
                 pass
 

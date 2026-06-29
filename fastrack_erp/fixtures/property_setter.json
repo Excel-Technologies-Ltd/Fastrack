@@ -5297,22 +5297,6 @@
  },
  {
   "default_value": null,
-  "doc_type": "Sales Taxes and Charges",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocField",
-  "field_name": "base_tax_amount_after_discount_amount",
-  "is_system_generated": 0,
-  "modified": "2026-06-24 15:07:04.112477",
-  "module": null,
-  "name": "Sales Taxes and Charges-base_tax_amount_after_discount_amount-precision",
-  "property": "precision",
-  "property_type": "Select",
-  "row_name": null,
-  "value": "0"
- },
- {
-  "default_value": null,
   "doc_type": "Purchase Taxes and Charges",
   "docstatus": 0,
   "doctype": "Property Setter",
@@ -5329,18 +5313,34 @@
  },
  {
   "default_value": null,
+  "doc_type": "Sales Taxes and Charges",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "base_tax_amount_after_discount_amount",
+  "is_system_generated": 0,
+  "modified": "2026-06-29 10:43:51.704242",
+  "module": null,
+  "name": "Sales Taxes and Charges-base_tax_amount_after_discount_amount-precision",
+  "property": "precision",
+  "property_type": "Select",
+  "row_name": null,
+  "value": "9"
+ },
+ {
+  "default_value": null,
   "doc_type": "Purchase Taxes and Charges",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
   "field_name": "base_tax_amount_after_discount_amount",
   "is_system_generated": 0,
-  "modified": "2026-06-24 15:50:45.993326",
+  "modified": "2026-06-29 10:44:38.754448",
   "module": null,
   "name": "Purchase Taxes and Charges-base_tax_amount_after_discount_amount-precision",
   "property": "precision",
   "property_type": "Select",
   "row_name": null,
-  "value": "0"
+  "value": "9"
  }
 ]
