@@ -55,26 +55,30 @@ def after_submit(doc, method):
 
 
 def on_cancel(doc, method):
+    _remove_from_hbl_invoice_list(doc)
+
+
+def on_trash(doc, method):
+    _remove_from_hbl_invoice_list(doc)
+
+
+def _remove_from_hbl_invoice_list(doc):
     if not doc.custom_hbl_type:
         return
 
-    # Get the link field for this HBL type
     link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
     if not link_field:
         return
 
-    # Get the HBL link value
     hbl_link = doc.get(link_field)
     if not hbl_link:
         return
 
-    # Get the HBL document
     hbl_doc = frappe.get_doc(doc.custom_hbl_type, hbl_link)
 
-    for item in hbl_doc.invoice_list:
-        if item.invoice_link == doc.name:
-            hbl_doc.invoice_list.remove(item)
-
+    hbl_doc.invoice_list = [
+        item for item in hbl_doc.invoice_list if item.invoice_link != doc.name
+    ]
     hbl_doc.total_invoice_amount = sum(
         float(item.base_net_amount) for item in hbl_doc.invoice_list
     )
