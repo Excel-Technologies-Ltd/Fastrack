@@ -128,7 +128,6 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "mbl_no.consignee",
    "fieldname": "airlines",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -329,15 +328,13 @@
    "fieldname": "purchase_invoice_list",
    "fieldtype": "Table",
    "label": "Purchase Invoice List",
-   "options": "Fastrack Purchase Invoice",
-   "allow_on_submit": 1
+   "options": "Fastrack Purchase Invoice"
   },
   {
    "fieldname": "total_purchase_amount",
    "fieldtype": "Float",
    "label": "Total Purchase Amount",
-   "read_only": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
    "fieldname": "profit_share_section",
@@ -394,7 +391,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-22 13:41:48.395666",
+ "modified": "2026-07-07 10:58:06.674023",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",
