@@ -390,7 +390,16 @@
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
+ "links": [
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_hbl_air_link"
+  },
+  {
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_hbl_air_link"
+  }
+ ],
  "modified": "2026-07-07 10:58:06.674023",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",

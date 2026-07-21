@@ -356,7 +356,16 @@
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
+ "links": [
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_export_d2d_link"
+  },
+  {
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_export_d2d_link"
+  }
+ ],
  "modified": "2026-04-13 11:48:32.145596",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
