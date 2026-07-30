@@ -106,6 +106,7 @@
    "options": "Supplier"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "shipping_line.primary_address",
    "fieldname": "shipping_line_address",
    "fieldtype": "Small Text",
@@ -171,8 +172,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
+   "fieldtype": "Text",
+   "label": "Remarks",
+   "max_height": "50px"
   },
   {
    "fieldname": "unit",
@@ -373,7 +375,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-04-13 11:44:58.567733",
+ "modified": "2026-07-30 12:33:26.143832",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea Master Bill",

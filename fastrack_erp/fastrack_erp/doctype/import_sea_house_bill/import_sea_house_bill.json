@@ -326,8 +326,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "hbl_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
+   "fieldtype": "Text",
+   "label": "Remarks",
+   "max_height": "50px"
   },
   {
    "allow_on_submit": 1,
@@ -366,8 +367,10 @@
   {
    "allow_on_submit": 1,
    "fieldname": "description_of_good",
-   "fieldtype": "Data",
-   "label": "Goods Description"
+   "fieldtype": "Text",
+   "label": "Goods Description",
+   "length": 100000,
+   "max_height": "50px"
   },
   {
    "allow_on_submit": 1,
@@ -897,7 +900,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-05-12 12:33:55.127368",
+ "modified": "2026-07-30 12:24:01.292209",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

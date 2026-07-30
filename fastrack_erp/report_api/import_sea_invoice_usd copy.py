@@ -265,7 +265,7 @@ def get_sea_import_invoice_html(doc, customer_address):
             <!-- Header Section -->
             <div class="header-section">
                 <div class="header-left">
-                    <p style="margin: 0;"><strong>TO:</strong> {customer_name}</p>
+                    <p style="margin: 0;"><strong>TO: {customer_name} </strong> </p>
                     <p style="margin: 0;">{customer_address}</p>
                 </div>
                 <div class="header-right">

@@ -905,7 +905,7 @@ def get_to_whom_concern_html(
 
             <!-- TO Section -->
             <div class="to-section">
-                <p><strong>TO:</strong> &nbsp;&nbsp;{customer_name.upper()}</p>
+                <p><strong>TO:&nbsp;&nbsp; {doc.customer.upper() or doc.customer_name.upper()} </strong> </p>
                 <p style="margin-left: 40px;"> {customer_address.split('#')[0] if customer_address else ''} </p>
             </div>
 

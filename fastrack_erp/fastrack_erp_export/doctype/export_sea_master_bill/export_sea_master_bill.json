@@ -95,8 +95,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
+   "fieldtype": "Text",
+   "label": "Remarks",
+   "max_height": "50px"
   },
   {
    "fieldname": "column_break_it4cw",
@@ -214,7 +215,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-13 11:49:21.739176",
+ "modified": "2026-07-30 12:26:34.638634",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

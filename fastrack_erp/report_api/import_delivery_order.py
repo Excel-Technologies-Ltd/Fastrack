@@ -202,7 +202,7 @@ def get_delivery_order_html(doc):
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                 <tr>
                     <td style="width: 40%; vertical-align: top; padding-right: 15px;">
-                        <p style="margin-top: 0;"><strong>TO:</strong> Deputy Traffic Manager, <br>{doc.get("port_of_delivery", "") or ""}</p>
+                        <p style="margin-top: 0;"><strong>TO: Deputy Traffic Manager, <br>{doc.get("port_of_delivery", "") or ""} </strong> </p>
                     </td>
                     
                     <td style="width: 60%; vertical-align: top;">

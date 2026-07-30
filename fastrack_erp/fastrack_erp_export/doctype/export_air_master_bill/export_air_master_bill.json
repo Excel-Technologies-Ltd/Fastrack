@@ -68,8 +68,9 @@
   {
    "allow_on_submit": 1,
    "fieldname": "remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
+   "fieldtype": "Text",
+   "label": "Remarks",
+   "max_height": "50px"
   },
   {
    "allow_on_submit": 1,
@@ -194,7 +195,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-04-13 11:56:32.148511",
+ "modified": "2026-07-30 12:27:27.799229",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air Master Bill",
