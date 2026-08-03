@@ -109,7 +109,16 @@
   "total",
   "draft_invoice_list",
   "invoice_list",
+  "vat_list",
+  "section_break_o8yi6",
+  "invoice_amount_usd",
+  "vat_amount_usd",
+  "total_invoice_amount_usd",
+  "column_break_imh0m",
+  "invoice_amount_bdt",
+  "vat_amount_bdt",
   "total_invoice_amount",
+  "section_break_ounav",
   "payment_entry_list",
   "total_payment",
   "purchase_invoice_list",
@@ -758,7 +767,7 @@
    "allow_on_submit": 1,
    "fieldname": "total_invoice_amount",
    "fieldtype": "Currency",
-   "label": "Total Invoice Amount",
+   "label": "Total Invoice Amount (BDT)",
    "read_only": 1
   },
   {
@@ -882,6 +891,60 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Bill of Entry Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vat_list",
+   "fieldtype": "Table",
+   "label": "VAT List",
+   "options": "VAT List"
+  },
+  {
+   "fieldname": "section_break_o8yi6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "invoice_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Invoice Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vat_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Vat Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_invoice_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Total Invoice Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_imh0m",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "invoice_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Invoice Amount (BDT)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vat_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Vat Amount (BDT)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ounav",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -900,7 +963,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-07-30 12:24:01.292209",
+ "modified": "2026-08-02 16:23:00.782638",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

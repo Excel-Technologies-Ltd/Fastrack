@@ -39,6 +39,10 @@ frappe.ui.form.on('Export Sea House Bill', {
             frm.set_value("average_total", total_qty ? total_price / total_qty : 0);
         }
 
+        // Auto-populate vat_list with any invoice_link not yet represented, then recalc totals
+        sync_vat_list_with_invoices(frm);
+        calculate_invoice_totals(frm);
+
         const expense_list = frm.doc.purchase_invoice_list
         const format_expense = (expense_list && expense_list.length > 0) ? expense_list.map(expense => {
             return {
@@ -353,6 +357,57 @@ function calculate_container_totals(frm) {
     frm.set_value('no_of_pkg_hbl', total_pkg);
     frm.set_value('gross_weight', total_weight);
     frm.set_value('hbl_vol_cbm', total_cbm);
+}
+
+// Add a vat_list row for every unique invoice_link in invoice_list that doesn't already have one
+function sync_vat_list_with_invoices(frm) {
+    // VAT List rows are auto-generated from invoice_list; block manual add
+    if (frm.fields_dict.vat_list) {
+        frm.fields_dict.vat_list.grid.cannot_add_rows = true;
+        frm.fields_dict.vat_list.grid.refresh();
+    }
+
+    if (!frm.doc.invoice_list || frm.doc.invoice_list.length === 0) return;
+
+    const unique_invoices = [...new Set(
+        frm.doc.invoice_list
+            .map(row => row.invoice_link)
+            .filter(id => id)
+    )];
+
+    const existing_vats = (frm.doc.vat_list || []).map(row => row.invoice_no);
+
+    let is_updated = false;
+    unique_invoices.forEach(invoice_link => {
+        if (!existing_vats.includes(invoice_link)) {
+            const new_row = frm.add_child("vat_list");
+            new_row.invoice_no = invoice_link;
+            is_updated = true;
+        }
+    });
+
+    if (is_updated) {
+        frm.refresh_field("vat_list");
+    }
+}
+
+// Sum invoice_list / vat_list child tables into the USD and BDT invoice totals
+function calculate_invoice_totals(frm) {
+    const invoice_rows = frm.doc.invoice_list || [];
+    const invoice_amount_usd = invoice_rows.reduce((sum, r) => sum + flt(r.total_price), 0);
+    const invoice_amount_bdt = invoice_rows.reduce((sum, r) => sum + flt(r.base_net_amount), 0);
+
+    const vat_rows = frm.doc.vat_list || [];
+    const vat_amount_usd = vat_rows.reduce((sum, r) => sum + flt(r.vat_amount_usd), 0);
+    const vat_amount_bdt = vat_rows.reduce((sum, r) => sum + flt(r.vat_amount_bdt), 0);
+
+    frm.set_value("invoice_amount_usd", invoice_amount_usd);
+    frm.set_value("vat_amount_usd", vat_amount_usd);
+    frm.set_value("total_invoice_amount_usd", invoice_amount_usd + vat_amount_usd);
+
+    frm.set_value("invoice_amount_bdt", invoice_amount_bdt);
+    frm.set_value("vat_amount_bdt", vat_amount_bdt);
+    frm.set_value("total_invoice_amount", invoice_amount_bdt + vat_amount_bdt);
 }
 
 function open_mapped_with_save_fix(frm, method) {

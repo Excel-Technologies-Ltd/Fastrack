@@ -45,6 +45,14 @@
   "arrival_date",
   "billing_section",
   "invoice_list",
+  "vat_list",
+  "section_break_vat_usd",
+  "invoice_amount_usd",
+  "vat_amount_usd",
+  "total_invoice_amount_usd",
+  "column_break_vat_bdt",
+  "invoice_amount_bdt",
+  "vat_amount_bdt",
   "total_invoice_amount",
   "column_break_billing",
   "purchase_invoice_list",
@@ -315,14 +323,64 @@
   },
   {
    "allow_on_submit": 1,
+   "fieldname": "vat_list",
+   "fieldtype": "Table",
+   "label": "VAT List",
+   "options": "VAT List"
+  },
+  {
+   "fieldname": "section_break_vat_usd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "invoice_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Invoice Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vat_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Vat Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_invoice_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Total Invoice Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_vat_bdt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "invoice_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Invoice Amount (BDT)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vat_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Vat Amount (BDT)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
    "fieldname": "total_invoice_amount",
-   "fieldtype": "Float",
-   "label": "Total Invoice Amount",
+   "fieldtype": "Currency",
+   "label": "Total Invoice Amount (BDT)",
    "read_only": 1
   },
   {
    "fieldname": "column_break_billing",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "purchase_invoice_list",
@@ -400,7 +458,7 @@
    "link_fieldname": "custom_hbl_air_link"
   }
  ],
- "modified": "2026-07-07 10:58:06.674023",
+ "modified": "2026-08-02 17:56:03.913697",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

@@ -79,8 +79,22 @@ def _remove_from_hbl_invoice_list(doc):
     hbl_doc.invoice_list = [
         item for item in hbl_doc.invoice_list if item.invoice_link != doc.name
     ]
-    hbl_doc.total_invoice_amount = sum(
-        float(item.base_net_amount) for item in hbl_doc.invoice_list
-    )
+    hbl_doc.vat_list = [
+        row for row in hbl_doc.vat_list if row.invoice_no != doc.name
+    ]
+
+    invoice_amount_usd = sum(float(item.total_price or 0) for item in hbl_doc.invoice_list)
+    invoice_amount_bdt = sum(float(item.base_net_amount or 0) for item in hbl_doc.invoice_list)
+    vat_amount_usd = sum(float(row.vat_amount_usd or 0) for row in hbl_doc.vat_list)
+    vat_amount_bdt = sum(float(row.vat_amount_bdt or 0) for row in hbl_doc.vat_list)
+
+    hbl_doc.invoice_amount_usd = invoice_amount_usd
+    hbl_doc.vat_amount_usd = vat_amount_usd
+    hbl_doc.total_invoice_amount_usd = invoice_amount_usd + vat_amount_usd
+
+    hbl_doc.invoice_amount_bdt = invoice_amount_bdt
+    hbl_doc.vat_amount_bdt = vat_amount_bdt
+    hbl_doc.total_invoice_amount = invoice_amount_bdt + vat_amount_bdt
+
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)

@@ -212,7 +212,14 @@ doc_events = {
 
 # exempt linked doctypes from being automatically cancelled
 #
-# auto_cancel_exempted_doctypes = ["Auto Repeat"]
+auto_cancel_exempted_doctypes = [
+	"Import Sea House Bill",
+	"Import Air House Bill",
+	"Import D2D Bill",
+	"Export Sea House Bill",
+	"Export Air House Bill",
+	"Export D2D Bill",
+]
 
 # Ignore links to specified DocTypes when deleting documents
 # -----------------------------------------------------------
