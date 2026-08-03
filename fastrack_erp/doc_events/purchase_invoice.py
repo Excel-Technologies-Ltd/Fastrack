@@ -45,7 +45,8 @@ def after_submit(doc, method):
         row.currency = doc.currency
         hbl_doc.append("purchase_invoice_list", row)
 
-    hbl_doc.total_purchase_amount = sum(float(item.total_price) for item in hbl_doc.purchase_invoice_list)
+    # total_purchase_amount ("Total Expense Amount") is now owned by
+    # doc_events.payment_entry -- do not write it here.
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
 
@@ -75,8 +76,7 @@ def _remove_from_hbl_purchase_list(doc):
     hbl_doc.purchase_invoice_list = [
         item for item in hbl_doc.purchase_invoice_list if item.invoice_link != doc.name
     ]
-    hbl_doc.total_purchase_amount = sum(
-        float(item.total_price) for item in hbl_doc.purchase_invoice_list
-    )
+    # total_purchase_amount ("Total Expense Amount") is now owned by
+    # doc_events.payment_entry -- do not write it here.
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)

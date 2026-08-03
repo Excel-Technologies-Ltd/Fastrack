@@ -11,25 +11,10 @@ class ExportAirHouseBill(Document):
 		"""Load invoice, payment, and draft data"""
 		self.hbl_data = self.name
 
-		# Get invoice list and payment entries
-		invoice_list = self.get_invoice_list()
-		gl_entry_list = get_gl_entry_from_invoice(invoice_list)
-		payment_entry = []
-
-		for idx, gl_entry in enumerate(gl_entry_list):
-			payment_entry_doc = frappe.new_doc("Fastrack Payment Entry")
-			payment_entry_doc.idx = idx + 1
-			payment_entry_doc.payment_link = gl_entry.voucher_no
-			payment_entry_doc.customer = gl_entry.party
-			payment_entry_doc.invoice = gl_entry.against_voucher
-			payment_entry_doc.amount = gl_entry.credit_in_account_currency
-			payment_entry_doc.parent = self.name
-			payment_entry_doc.parenttype = "Export Air House Bill"
-			payment_entry_doc.parentfield = "payment_entry_list"
-			payment_entry.append(payment_entry_doc)
-
-		self.payment_entry_list = payment_entry
-		self.total_payment = sum(float(item.amount) for item in payment_entry)
+		# payment_entry_list / total_payment ("Total Payment Received") and
+		# purchase_invoice_list / total_purchase_amount ("Total Expense Amount") are
+		# maintained persistently by doc_events.payment_entry and
+		# doc_events.purchase_invoice -- do not rebuild here.
 
 		# Get draft invoices
 		draft_list = get_draft_sales_and_purchase_invoice_list(self.name)
@@ -96,31 +81,6 @@ class ExportAirHouseBill(Document):
 				f"Total HBL weight ({total_weight}) exceeds MBL gross weight ({mbl_doc.gr_weight})"
 			)
 
-	def get_invoice_list(self):
-		"""Get list of invoice links"""
-		return [invoice.invoice_link for invoice in self.invoice_list if invoice.invoice_link]
-
-
-@frappe.whitelist()
-def get_gl_entry_from_invoice(invoice_list):
-	"""Get GL entries for payment tracking"""
-	default_receivable_account = frappe.get_all("Company", ["default_receivable_account", 'name'])
-	bank_account = default_receivable_account[0].default_receivable_account
-	default_company = default_receivable_account[0].name
-
-	gl_entry_list = frappe.db.get_list("GL Entry",
-		filters=[
-			["company", "=", default_company],
-			["account", "=", bank_account],
-			["voucher_type", "=", "Payment Entry"],
-			["against_voucher_type", "=", "Sales Invoice"],
-			["against_voucher", "in", invoice_list],
-			["credit_in_account_currency", ">", 0],
-			["docstatus", "=", 1]
-		],
-		fields=["name", 'credit_in_account_currency', 'party', 'voucher_no', "against_voucher"]
-	)
-	return gl_entry_list
 
 
 @frappe.whitelist()

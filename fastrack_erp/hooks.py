@@ -167,7 +167,12 @@ doc_events = {
 	"Journal Entry": {
 		"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
 		"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
-	}
+	},
+	"Payment Entry": {
+		"on_submit": "fastrack_erp.doc_events.payment_entry.after_submit",
+		"before_cancel": "fastrack_erp.doc_events.payment_entry.on_cancel",
+		"on_trash": "fastrack_erp.doc_events.payment_entry.on_trash",
+	},
 }
 
 # Scheduled Tasks

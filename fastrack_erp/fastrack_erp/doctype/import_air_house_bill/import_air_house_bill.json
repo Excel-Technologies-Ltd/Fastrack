@@ -390,8 +390,8 @@
   },
   {
    "fieldname": "total_purchase_amount",
-   "fieldtype": "Float",
-   "label": "Total Purchase Amount",
+   "fieldtype": "Currency",
+   "label": "Total Expense Amount",
    "read_only": 1
   },
   {
@@ -424,8 +424,8 @@
   },
   {
    "fieldname": "total_payment",
-   "fieldtype": "Float",
-   "label": "Total Payment",
+   "fieldtype": "Currency",
+   "label": "Total Payment Received",
    "read_only": 1
   },
   {
