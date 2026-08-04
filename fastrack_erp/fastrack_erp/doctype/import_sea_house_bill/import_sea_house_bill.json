@@ -120,12 +120,17 @@
   "total_invoice_amount",
   "section_break_ounav",
   "payment_entry_list",
+  "section_break_hqdha",
   "total_payment_received_usd",
-  "total_payment_received_bdt",
+  "total_pay_usd",
   "total_payment_profit_share_usd",
-  "total_payment_profit_share_bdt",
-  "purchase_invoice_list",
+  "column_break_cesso",
+  "total_payment_received_bdt",
   "total_purchase_amount",
+  "total_payment_profit_share_bdt",
+  "section_break_uft3c",
+  "purchase_invoice_list",
+  "section_break_4pytb",
   "profit_share_list",
   "total_profit_share",
   "hbl_weight",
@@ -785,28 +790,42 @@
    "allow_on_submit": 1,
    "fieldname": "total_payment_received_usd",
    "fieldtype": "Currency",
-   "label": "Total Payment Received (USD)",
+   "label": "Total Received (USD)",
    "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "total_payment_received_bdt",
    "fieldtype": "Currency",
-   "label": "Total Payment Received (BDT)",
+   "label": "Total Received (BDT)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_pay_usd",
+   "fieldtype": "Currency",
+   "label": "Total Pay (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_purchase_amount",
+   "fieldtype": "Currency",
+   "label": "Total Pay (BDT)",
    "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "total_payment_profit_share_usd",
    "fieldtype": "Currency",
-   "label": "Total Payment Profit Share (USD)",
+   "label": "Total Profit Share (USD)",
    "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "total_payment_profit_share_bdt",
    "fieldtype": "Currency",
-   "label": "Total Payment Profit Share (BDT)",
+   "label": "Total Profit Share (BDT)",
    "read_only": 1
   },
   {
@@ -815,13 +834,6 @@
    "fieldtype": "Table",
    "label": "Expense List",
    "options": "Fastrack Purchase Invoice",
-   "read_only": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "total_purchase_amount",
-   "fieldtype": "Currency",
-   "label": "Total Expense Amount",
    "read_only": 1
   },
   {
@@ -969,6 +981,22 @@
   {
    "fieldname": "section_break_ounav",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_hqdha",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_cesso",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_uft3c",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_4pytb",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -987,7 +1015,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-08-02 16:23:00.782638",
+ "modified": "2026-08-04 16:00:17.049501",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
