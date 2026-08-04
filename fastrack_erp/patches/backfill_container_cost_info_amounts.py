@@ -3,6 +3,14 @@ import frappe
 
 def execute():
     """Backfill final_amount_usd and amountbdt on Container Cost Info rows."""
+    # This patch runs in the pre_model_sync phase, before `bench migrate`'s schema
+    # sync creates these columns on a fresh site -- add them defensively first.
+    for column in ("final_amount_usd", "amountbdt"):
+        if not frappe.db.has_column("Container Cost Info", column):
+            frappe.db.sql(
+                f"ALTER TABLE `tabContainer Cost Info` ADD COLUMN `{column}` decimal(21,9) NOT NULL DEFAULT 0.000000000"
+            )
+
     rows = frappe.db.get_all(
         "Container Cost Info",
         fields=["name", "qty", "amount", "ex_rate"],
