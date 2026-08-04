@@ -11,7 +11,8 @@ class ExportAirHouseBill(Document):
 		"""Load invoice, payment, and draft data"""
 		self.hbl_data = self.name
 
-		# payment_entry_list / total_payment ("Total Payment Received") and
+		# payment_entry_list / total_payment_received_usd / total_payment_received_bdt /
+		# total_payment_profit_share_usd / total_payment_profit_share_bdt and
 		# purchase_invoice_list / total_purchase_amount ("Total Expense Amount") are
 		# maintained persistently by doc_events.payment_entry and
 		# doc_events.purchase_invoice -- do not rebuild here.

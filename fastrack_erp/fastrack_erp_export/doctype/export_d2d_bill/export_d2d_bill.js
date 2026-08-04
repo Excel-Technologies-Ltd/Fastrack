@@ -32,10 +32,6 @@ frappe.ui.form.on('Export D2D Bill', {
                 );
             }, __("Create"));
 
-            frm.add_custom_button(__("Profit Share"), function () {
-                frappe.new_doc("Payment Entry");
-            }, __("Create"));
-
             frm.add_custom_button(__("Payment Entry"), function () {
                 open_mapped_with_save_fix(
                     frm,

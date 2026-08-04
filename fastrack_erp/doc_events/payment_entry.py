@@ -10,9 +10,12 @@ HBL_TYPE_FIELD_MAP = {
     "Export D2D Bill": "custom_export_d2d_link",
 }
 
+REPORT_BUCKETS = ("Receive", "Pay", "Profit Share")
+
 
 def after_submit(doc, method):
-    if doc.payment_type not in ("Receive", "Pay") or not doc.custom_hbl_type:
+    report_type = doc.custom_payment_type_for_report or doc.payment_type
+    if report_type not in REPORT_BUCKETS or not doc.custom_hbl_type:
         return
 
     link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
@@ -28,8 +31,10 @@ def after_submit(doc, method):
     row = frappe.new_doc("Fastrack Payment Entry")
     row.payment_link = doc.name
     row.payment_type = doc.payment_type
+    row.payment_type_for_report = report_type
     row.party = doc.party_name or doc.party
-    row.amount = doc.base_received_amount if doc.payment_type == "Receive" else doc.base_paid_amount
+    row.amount_usd = _get_usd_amount(doc)
+    row.amount = doc.base_paid_amount
     hbl_doc.append("payment_entry_list", row)
 
     _recalculate_payment_totals(hbl_doc)
@@ -68,10 +73,24 @@ def _remove_from_hbl_payment_list(doc):
     hbl_doc.save(ignore_permissions=True)
 
 
+def _get_usd_amount(doc):
+    if doc.paid_from_account_currency == "USD":
+        return doc.paid_amount
+    if doc.paid_to_account_currency == "USD":
+        return doc.received_amount
+    return 0
+
+
 def _recalculate_payment_totals(hbl_doc):
-    hbl_doc.total_payment = sum(
-        float(row.amount or 0) for row in hbl_doc.payment_entry_list if row.payment_type == "Receive"
-    )
-    hbl_doc.total_purchase_amount = sum(
-        float(row.amount or 0) for row in hbl_doc.payment_entry_list if row.payment_type == "Pay"
-    )
+    def total(report_type, field):
+        return sum(
+            float(row.get(field) or 0)
+            for row in hbl_doc.payment_entry_list
+            if row.payment_type_for_report == report_type
+        )
+
+    hbl_doc.total_payment_received_usd = total("Receive", "amount_usd")
+    hbl_doc.total_payment_received_bdt = total("Receive", "amount")
+    hbl_doc.total_purchase_amount = total("Pay", "amount")
+    hbl_doc.total_payment_profit_share_usd = total("Profit Share", "amount_usd")
+    hbl_doc.total_payment_profit_share_bdt = total("Profit Share", "amount")
