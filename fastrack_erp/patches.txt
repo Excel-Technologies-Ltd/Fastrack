@@ -4,3 +4,4 @@ fastrack_erp.patches.backfill_container_cost_info_amounts
 
 [post_model_sync]
 fastrack_erp.patches.backfill_payment_entry_list_report_type
+fastrack_erp.patches.cleanup_stale_payment_totals
