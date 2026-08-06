@@ -98,16 +98,15 @@
   "total_invoice_amount",
   "column_break_billing",
   "purchase_invoice_list",
-  "profit_share_section",
-  "profit_share_list",
-  "total_profit_share",
   "payment_section",
   "payment_entry_list",
+  "section_break_xyohw",
   "total_payment_received_usd",
-  "total_payment_received_bdt",
   "total_pay_usd",
-  "total_purchase_amount",
   "total_payment_profit_share_usd",
+  "column_break_mqagf",
+  "total_payment_received_bdt",
+  "total_purchase_amount",
   "total_payment_profit_share_bdt",
   "draft_section",
   "draft_invoice_list",
@@ -623,39 +622,22 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_invoice_amount",
    "fieldtype": "Currency",
    "label": "Total Invoice Amount (BDT)",
-   "read_only": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
    "fieldname": "column_break_billing",
-   "fieldtype": "Column Break"
+   "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "purchase_invoice_list",
    "fieldtype": "Table",
    "label": "Purchase Invoice List",
-   "options": "Fastrack Purchase Invoice",
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "profit_share_section",
-   "fieldtype": "Section Break",
-   "label": "Profit Share"
-  },
-  {
-   "fieldname": "profit_share_list",
-   "fieldtype": "Table",
-   "label": "Profit Share List",
-   "options": "Profit Share List"
-  },
-  {
-   "fieldname": "total_profit_share",
-   "fieldtype": "Float",
-   "label": "Total Profit Share",
-   "read_only": 1
+   "options": "Fastrack Purchase Invoice"
   },
   {
    "fieldname": "payment_section",
@@ -690,11 +672,11 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_purchase_amount",
    "fieldtype": "Currency",
    "label": "Total Pay (BDT)",
-   "read_only": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -758,6 +740,14 @@
    "fieldtype": "Link",
    "label": "Vendor",
    "options": "Supplier"
+  },
+  {
+   "fieldname": "section_break_xyohw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_mqagf",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -772,7 +762,7 @@
    "link_fieldname": "custom_export_hbl_air_link"
   }
  ],
- "modified": "2026-02-03 18:04:21.892283",
+ "modified": "2026-08-06 17:35:44.796916",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",

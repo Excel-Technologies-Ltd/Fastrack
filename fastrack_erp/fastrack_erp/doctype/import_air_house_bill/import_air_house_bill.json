@@ -56,16 +56,16 @@
   "total_invoice_amount",
   "column_break_billing",
   "purchase_invoice_list",
-  "profit_share_section",
   "profit_share_list",
-  "total_profit_share",
   "payment_section",
   "payment_entry_list",
+  "section_break_szxut",
   "total_payment_received_usd",
-  "total_payment_received_bdt",
   "total_pay_usd",
-  "total_purchase_amount",
   "total_payment_profit_share_usd",
+  "column_break_kifij",
+  "total_payment_received_bdt",
+  "total_purchase_amount",
   "total_payment_profit_share_bdt",
   "draft_section",
   "draft_invoice_list",
@@ -393,21 +393,10 @@
    "options": "Fastrack Purchase Invoice"
   },
   {
-   "fieldname": "profit_share_section",
-   "fieldtype": "Section Break",
-   "label": "Profit Share"
-  },
-  {
    "fieldname": "profit_share_list",
    "fieldtype": "Table",
    "label": "Profit Share List",
    "options": "Profit Share List"
-  },
-  {
-   "fieldname": "total_profit_share",
-   "fieldtype": "Float",
-   "label": "Total Profit Share",
-   "read_only": 1
   },
   {
    "fieldname": "payment_section",
@@ -477,6 +466,14 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Arrival Date"
+  },
+  {
+   "fieldname": "section_break_szxut",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_kifij",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -491,7 +488,7 @@
    "link_fieldname": "custom_hbl_air_link"
   }
  ],
- "modified": "2026-08-02 17:56:03.913697",
+ "modified": "2026-08-06 16:44:10.183119",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air House Bill",

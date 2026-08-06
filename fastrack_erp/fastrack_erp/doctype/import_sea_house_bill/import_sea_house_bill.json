@@ -128,9 +128,9 @@
   "total_payment_received_bdt",
   "total_purchase_amount",
   "total_payment_profit_share_bdt",
-  "section_break_uft3c",
+  "section_break_owwfi",
   "purchase_invoice_list",
-  "section_break_4pytb",
+  "section_break_gfk1w",
   "profit_share_list",
   "total_profit_share",
   "hbl_weight",
@@ -991,11 +991,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "section_break_uft3c",
+   "fieldname": "section_break_owwfi",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "section_break_4pytb",
+   "fieldname": "section_break_gfk1w",
    "fieldtype": "Section Break"
   }
  ],
@@ -1015,7 +1015,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-08-04 16:00:17.049501",
+ "modified": "2026-08-06 16:14:18.586641",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",
