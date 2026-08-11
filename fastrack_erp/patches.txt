@@ -1,6 +1,7 @@
 [pre_model_sync]
 fastrack_erp.patches.backfill_fastrack_sales_invoice_uom
 fastrack_erp.patches.backfill_container_cost_info_amounts
+fastrack_erp.patches.rename_total_purchase_amount_to_total_pay_bdt
 
 [post_model_sync]
 fastrack_erp.patches.backfill_payment_entry_list_report_type

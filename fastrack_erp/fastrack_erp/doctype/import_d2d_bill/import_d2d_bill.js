@@ -24,6 +24,7 @@ frappe.ui.form.on('Import D2D Bill', {
         // Auto-populate vat_list with any invoice_link not yet represented, then recalc totals
         sync_vat_list_with_invoices(frm);
         calculate_invoice_totals(frm);
+        calculate_expense_totals(frm);
 
         const expense_list = frm.doc.purchase_invoice_list
         const format_expense = (expense_list && expense_list.length > 0) ? expense_list.map(expense => {
@@ -292,6 +293,16 @@ function calculate_invoice_totals(frm) {
     frm.set_value("invoice_amount_bdt", invoice_amount_bdt);
     frm.set_value("vat_amount_bdt", vat_amount_bdt);
     frm.set_value("total_invoice_amount", invoice_amount_bdt + vat_amount_bdt);
+}
+
+// Sum purchase_invoice_list into the USD and BDT expense totals
+function calculate_expense_totals(frm) {
+    const expense_rows = frm.doc.purchase_invoice_list || [];
+    const expense_amount_usd = expense_rows.reduce((sum, r) => sum + flt(r.amount), 0);
+    const expense_amount_bdt = expense_rows.reduce((sum, r) => sum + flt(r.total_price), 0);
+
+    frm.set_value("expense_amount_usd", expense_amount_usd);
+    frm.set_value("expense_amount_bdt", expense_amount_bdt);
 }
 
 function open_mapped_with_save_fix(frm, method) {

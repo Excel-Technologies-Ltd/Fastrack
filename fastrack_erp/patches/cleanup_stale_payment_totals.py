@@ -15,7 +15,7 @@ TOTAL_FIELDS = (
     "total_payment_received_usd",
     "total_payment_received_bdt",
     "total_pay_usd",
-    "total_purchase_amount",
+    "total_pay_bdt",
     "total_payment_profit_share_usd",
     "total_payment_profit_share_bdt",
 )
@@ -23,7 +23,7 @@ TOTAL_FIELDS = (
 
 def execute():
     """
-    total_purchase_amount ("Total Pay (BDT)") used to be written by
+    total_pay_bdt ("Total Pay (BDT)") used to be written by
     doc_events.purchase_invoice from submitted Purchase Invoices. That hook no
     longer writes it -- ownership moved to doc_events.payment_entry -- but
     documents with no linked Payment Entry rows were never revisited, so they

@@ -126,10 +126,12 @@
   "total_payment_profit_share_usd",
   "column_break_cesso",
   "total_payment_received_bdt",
-  "total_purchase_amount",
+  "total_pay_bdt",
   "total_payment_profit_share_bdt",
   "section_break_owwfi",
   "purchase_invoice_list",
+  "expense_amount_usd",
+  "expense_amount_bdt",
   "section_break_gfk1w",
   "profit_share_list",
   "total_profit_share",
@@ -809,7 +811,7 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "total_purchase_amount",
+   "fieldname": "total_pay_bdt",
    "fieldtype": "Currency",
    "label": "Total Pay (BDT)",
    "read_only": 1
@@ -834,6 +836,20 @@
    "fieldtype": "Table",
    "label": "Expense List",
    "options": "Fastrack Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "expense_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Expense Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "expense_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Expense Amount (BDT)",
    "read_only": 1
   },
   {

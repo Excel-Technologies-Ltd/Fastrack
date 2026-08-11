@@ -147,9 +147,9 @@ def get_sea_import_data(from_date, to_date):
                 hbl.eta as eta,
                 hbl.mbl_surrender_status,
                 hbl.do_validity as do_date,
-                hbl.total_purchase_amount as expense,
+                hbl.total_pay_bdt as expense,
                 hbl.total_invoice_amount as income,
-                (hbl.total_invoice_amount - hbl.total_purchase_amount) as profit      
+                (hbl.total_invoice_amount - hbl.total_pay_bdt) as profit
             FROM 
             `tabImport Sea House Bill` AS hbl
             LEFT JOIN `tabImport Sea Master Bill` as mbl ON mbl.name = hbl.mbl_link

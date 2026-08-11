@@ -14,7 +14,7 @@ def execute():
     """
     Backfill payment_type_for_report / amount_usd on Fastrack Payment Entry rows
     created before those fields existed, then recalculate the HBL total fields
-    they feed (total_payment_received_usd/bdt, total_purchase_amount,
+    they feed (total_payment_received_usd/bdt, total_pay_bdt,
     total_payment_profit_share_usd/bdt).
     """
     rows = frappe.db.get_all(
@@ -82,7 +82,7 @@ def execute():
         hbl_doc.total_payment_received_usd = total("Receive", "amount_usd")
         hbl_doc.total_payment_received_bdt = total("Receive", "amount")
         hbl_doc.total_pay_usd = total("Pay", "amount_usd")
-        hbl_doc.total_purchase_amount = total("Pay", "amount")
+        hbl_doc.total_pay_bdt = total("Pay", "amount")
         hbl_doc.total_payment_profit_share_usd = total("Profit Share", "amount_usd")
         hbl_doc.total_payment_profit_share_bdt = total("Profit Share", "amount")
 

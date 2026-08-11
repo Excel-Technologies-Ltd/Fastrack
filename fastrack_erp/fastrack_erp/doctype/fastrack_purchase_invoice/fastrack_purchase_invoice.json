@@ -13,9 +13,10 @@
   "supplier",
   "qty",
   "rate",
+  "base_rate",
   "amount",
-  "exchange_rate",
   "total_price",
+  "exchange_rate",
   "currency"
  ],
  "fields": [
@@ -64,7 +65,21 @@
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Rate",
+   "label": "Rate (USD)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "base_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate (BDT)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount (USD)",
    "read_only": 1
   },
   {
@@ -72,13 +87,7 @@
    "fieldname": "total_price",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Total",
-   "read_only": 1
-  },
-  {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "label": "Amount",
+   "label": "Amount (BDT)",
    "read_only": 1
   },
   {
@@ -98,7 +107,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-29 13:18:36.476937",
+ "modified": "2026-08-11 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Fastrack Purchase Invoice",

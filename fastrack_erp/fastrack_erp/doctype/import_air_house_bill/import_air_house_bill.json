@@ -56,6 +56,8 @@
   "total_invoice_amount",
   "column_break_billing",
   "purchase_invoice_list",
+  "expense_amount_usd",
+  "expense_amount_bdt",
   "profit_share_list",
   "payment_section",
   "payment_entry_list",
@@ -65,7 +67,7 @@
   "total_payment_profit_share_usd",
   "column_break_kifij",
   "total_payment_received_bdt",
-  "total_purchase_amount",
+  "total_pay_bdt",
   "total_payment_profit_share_bdt",
   "draft_section",
   "draft_invoice_list",
@@ -393,6 +395,20 @@
    "options": "Fastrack Purchase Invoice"
   },
   {
+   "allow_on_submit": 1,
+   "fieldname": "expense_amount_usd",
+   "fieldtype": "Currency",
+   "label": "Expense Amount (USD)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "expense_amount_bdt",
+   "fieldtype": "Currency",
+   "label": "Expense Amount (BDT)",
+   "read_only": 1
+  },
+  {
    "fieldname": "profit_share_list",
    "fieldtype": "Table",
    "label": "Profit Share List",
@@ -431,7 +447,7 @@
    "read_only": 1
   },
   {
-   "fieldname": "total_purchase_amount",
+   "fieldname": "total_pay_bdt",
    "fieldtype": "Currency",
    "label": "Total Pay (BDT)",
    "read_only": 1
