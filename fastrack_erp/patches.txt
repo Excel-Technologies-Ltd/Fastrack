@@ -6,3 +6,4 @@ fastrack_erp.patches.rename_total_purchase_amount_to_total_pay_bdt
 [post_model_sync]
 fastrack_erp.patches.backfill_payment_entry_list_report_type
 fastrack_erp.patches.cleanup_stale_payment_totals
+fastrack_erp.patches.rebuild_payment_entry_list_from_references

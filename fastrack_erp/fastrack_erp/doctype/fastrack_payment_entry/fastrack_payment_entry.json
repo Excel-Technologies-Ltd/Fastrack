@@ -13,7 +13,8 @@
   "customer",
   "invoice",
   "amount_usd",
-  "amount"
+  "amount",
+  "exchange_gain_loss"
  ],
  "fields": [
   {
@@ -79,6 +80,14 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Amount (BDT)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "exchange_gain_loss",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Exchange Gain/Loss",
    "read_only": 1
   }
  ],
