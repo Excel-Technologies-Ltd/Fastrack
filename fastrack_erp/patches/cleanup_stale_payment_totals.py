@@ -16,6 +16,7 @@ TOTAL_FIELDS = (
     "total_payment_received_bdt",
     "total_pay_usd",
     "total_pay_bdt",
+    "total_exchange_gain_loss",
     "total_payment_profit_share_usd",
     "total_payment_profit_share_bdt",
 )

@@ -61,6 +61,7 @@
   "profit_share_list",
   "payment_section",
   "payment_entry_list",
+  "total_exchange_gain_loss",
   "section_break_szxut",
   "total_payment_received_usd",
   "total_pay_usd",
@@ -424,6 +425,13 @@
    "fieldtype": "Table",
    "label": "Payment Entry List",
    "options": "Fastrack Payment Entry"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_exchange_gain_loss",
+   "fieldtype": "Currency",
+   "label": "Total Exchange Gain/Loss",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,

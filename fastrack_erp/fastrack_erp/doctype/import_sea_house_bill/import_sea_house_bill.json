@@ -120,6 +120,7 @@
   "total_invoice_amount",
   "section_break_ounav",
   "payment_entry_list",
+  "total_exchange_gain_loss",
   "section_break_hqdha",
   "total_payment_received_usd",
   "total_pay_usd",
@@ -786,6 +787,13 @@
    "fieldtype": "Table",
    "label": "Payment Entry List",
    "options": "Fastrack Payment Entry",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_exchange_gain_loss",
+   "fieldtype": "Currency",
+   "label": "Total Exchange Gain/Loss",
    "read_only": 1
   },
   {

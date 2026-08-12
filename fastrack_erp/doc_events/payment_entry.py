@@ -94,5 +94,6 @@ def _recalculate_payment_totals(hbl_doc):
     hbl_doc.total_payment_received_bdt = total("Receive", "amount")
     hbl_doc.total_pay_usd = total("Pay", "amount_usd")
     hbl_doc.total_pay_bdt = total("Pay", "amount")
+    hbl_doc.total_exchange_gain_loss = total("Pay", "exchange_gain_loss")
     hbl_doc.total_payment_profit_share_usd = total("Profit Share", "amount_usd")
     hbl_doc.total_payment_profit_share_bdt = total("Profit Share", "amount")
