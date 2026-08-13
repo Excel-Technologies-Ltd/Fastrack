@@ -31,7 +31,8 @@ frappe.query_reports["VAT"] = {
 		{
 			"fieldname": "carrier",
 			"label": "Carrier",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": "fastrack_erp.fastrack_erp.report.vat.vat.get_carrier_list"
 		},
 		{
 			"fieldname": "sales_person",

@@ -1,10 +1,15 @@
 # Copyright (c) 2026, Shaid Azmin and contributors
 # For license information, please see license.txt
 
+import json
+
 import frappe
 import pymysql
 
-# Order must match GetVatReport's parameter list exactly.
+# Order must match GetVatReport's parameter list exactly. "carrier" is
+# deliberately never sent to the procedure (see get_data) -- it's filtered
+# here in Python instead so the Carrier report filter can hold more than one
+# selected value.
 FILTER_PARAMS = [
     "start_date",
     "end_date",
@@ -62,20 +67,59 @@ def get_columns():
 
 
 def get_data(filters):
-    params = [filters.get(key) or None for key in FILTER_PARAMS]
+    carrier_filter = _as_list(filters.get("carrier"))
+
+    params = [None if key == "carrier" else (filters.get(key) or None) for key in FILTER_PARAMS]
+    data = _call_procedure("GetVatReport", params)
+
+    if carrier_filter:
+        data = [row for row in data if row.get("Carrier") in carrier_filter]
+
+    return data
+
+
+def _as_list(value):
+    """Report filter values arrive as a list for MultiSelectList, or a plain
+    string/None otherwise -- normalize to a list, dropping blanks."""
+    if not value:
+        return []
+    if isinstance(value, str):
+        value = frappe.parse_json(value) if value.startswith("[") else [value]
+    return [v for v in value if v]
+
+
+@frappe.whitelist()
+def get_carrier_list(txt=None, **kwargs):
+    """Carrier suggestions for the report's Carrier filter, searched by
+    GetCarrierListByName -- used as vat.js's Autocomplete get_query source.
+    Accepts/ignores stray kwargs since the Autocomplete control's query call
+    always includes a `query` arg (its own method path) alongside `txt`."""
+    rows = _call_procedure("GetCarrierListByName", [txt or None, 1, 50])
+    if not rows:
+        return []
+
+    result = rows[0]["Result"]
+    result = json.loads(result) if isinstance(result, str) else result
+    carriers = result.get("data") or []
+
+    return [{"value": c, "description": ""} for c in carriers]
+
+
+def _call_procedure(name, params):
     placeholders = ", ".join(["%s"] * len(params))
 
-    # The procedure's final SELECT returns a single result set, but a MySQL
-    # CALL always leaves a second "procedure status" result set behind on the
-    # connection. frappe.db.sql() only reads the first one, which then makes
-    # every later query on that same shared connection fail with
-    # "Commands out of sync". Use a separate, throwaway connection (built
-    # from frappe's own settings) so the stored procedure call can't corrupt
-    # the connection the rest of the request relies on.
+    # A stored procedure's own SELECTs return normally, but a MySQL CALL
+    # always leaves an extra "procedure status" result set behind on the
+    # connection afterwards. frappe.db.sql() only reads the first result
+    # set and never drains that trailing one, which then makes every later
+    # query on that same shared connection fail with "Commands out of
+    # sync". Use a separate, throwaway connection (built from frappe's own
+    # settings) so the stored procedure call can't corrupt the connection
+    # the rest of the request relies on.
     connection = frappe.db.create_connection()
     try:
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(f"CALL GetVatReport({placeholders})", params)
+            cursor.execute(f"CALL {name}({placeholders})", params)
             data = cursor.fetchall()
             while cursor.nextset():
                 pass
