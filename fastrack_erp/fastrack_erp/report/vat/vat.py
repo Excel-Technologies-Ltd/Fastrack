@@ -6,10 +6,7 @@ import json
 import frappe
 import pymysql
 
-# Order must match GetVatReport's parameter list exactly. "carrier" is
-# deliberately never sent to the procedure (see get_data) -- it's filtered
-# here in Python instead so the Carrier report filter can hold more than one
-# selected value.
+# Order must match GetVatReport's parameter list exactly.
 FILTER_PARAMS = [
     "start_date",
     "end_date",
@@ -27,6 +24,22 @@ FILTER_PARAMS = [
     "hbl_no",
     "inco_term",
 ]
+
+# Report filter fieldname -> the "...ByName" search/suggest procedure backing
+# its Autocomplete dropdown (Database/<name>.sql). All of them share the same
+# (p_search, p_page, p_page_size) signature and the same
+# {"data": [...], "pagination": {...}} JSON result shape.
+FILTER_LIST_PROCEDURES = {
+    "carrier": "GetCarrierListByName",
+    "shipper_name": "GetShipperByName",
+    "customer_name": "GetCustomerByName",
+    "agent_name": "GetAgentByName",
+    "mbl_consignee": "GetMblConsigneeByName",
+    "notify_party": "GetNotifyPartyByName",
+    "lc_no": "GetLcNoByName",
+    "mbl_no": "GetMblNoByName",
+    "hbl_no": "GetHblNoByName",
+}
 
 
 def execute(filters=None):
@@ -67,42 +80,30 @@ def get_columns():
 
 
 def get_data(filters):
-    carrier_filter = _as_list(filters.get("carrier"))
-
-    params = [None if key == "carrier" else (filters.get(key) or None) for key in FILTER_PARAMS]
-    data = _call_procedure("GetVatReport", params)
-
-    if carrier_filter:
-        data = [row for row in data if row.get("Carrier") in carrier_filter]
-
-    return data
-
-
-def _as_list(value):
-    """Report filter values arrive as a list for MultiSelectList, or a plain
-    string/None otherwise -- normalize to a list, dropping blanks."""
-    if not value:
-        return []
-    if isinstance(value, str):
-        value = frappe.parse_json(value) if value.startswith("[") else [value]
-    return [v for v in value if v]
+    params = [filters.get(key) or None for key in FILTER_PARAMS]
+    return _call_procedure("GetVatReport", params)
 
 
 @frappe.whitelist()
-def get_carrier_list(txt=None, **kwargs):
-    """Carrier suggestions for the report's Carrier filter, searched by
-    GetCarrierListByName -- used as vat.js's Autocomplete get_query source.
-    Accepts/ignores stray kwargs since the Autocomplete control's query call
-    always includes a `query` arg (its own method path) alongside `txt`."""
-    rows = _call_procedure("GetCarrierListByName", [txt or None, 1, 50])
+def get_filter_list(fieldname, txt=None, **kwargs):
+    """Autocomplete suggestions for one of the report's *ByName-backed
+    filters (see FILTER_LIST_PROCEDURES) -- used as vat.js's get_query
+    source. Accepts/ignores stray kwargs since the Autocomplete control's
+    query call always includes a `query` arg (its own method path)
+    alongside `txt`."""
+    procedure = FILTER_LIST_PROCEDURES.get(fieldname)
+    if not procedure:
+        frappe.throw(f"No filter list procedure registered for {fieldname!r}")
+
+    rows = _call_procedure(procedure, [txt or None, 1, 50])
     if not rows:
         return []
 
     result = rows[0]["Result"]
     result = json.loads(result) if isinstance(result, str) else result
-    carriers = result.get("data") or []
+    values = result.get("data") or []
 
-    return [{"value": c, "description": ""} for c in carriers]
+    return [{"value": v, "description": ""} for v in values]
 
 
 def _call_procedure(name, params):

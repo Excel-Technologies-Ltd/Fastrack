@@ -41,7 +41,7 @@ BEGIN
         (
             -- Import Sea
             SELECT
-                TRIM(COALESCE(ISHB.`notify_party`, '')) AS NotifyParty
+                TRIM(COALESCE(ISHB.`notify_to`, '')) AS NotifyParty
             FROM `tabImport Sea House Bill` ISHB
             WHERE ISHB.`docstatus` = 1
 
@@ -65,7 +65,7 @@ BEGIN
 
             -- Export Sea
             SELECT
-                TRIM(COALESCE(ESHB.`notify_party`, '')) AS NotifyParty
+                TRIM(COALESCE(ESHB.`notify_to`, '')) AS NotifyParty
             FROM `tabExport Sea House Bill` ESHB
             WHERE ESHB.`docstatus` = 1
 
@@ -117,7 +117,7 @@ BEGIN
                     (
                         -- Import Sea
                         SELECT
-                            TRIM(COALESCE(ISHB.`notify_party`, '')) AS NotifyParty
+                            TRIM(COALESCE(ISHB.`notify_to`, '')) AS NotifyParty
                         FROM `tabImport Sea House Bill` ISHB
                         WHERE ISHB.`docstatus` = 1
 
@@ -141,7 +141,7 @@ BEGIN
 
                         -- Export Sea
                         SELECT
-                            TRIM(COALESCE(ESHB.`notify_party`, '')) AS NotifyParty
+                            TRIM(COALESCE(ESHB.`notify_to`, '')) AS NotifyParty
                         FROM `tabExport Sea House Bill` ESHB
                         WHERE ESHB.`docstatus` = 1
 

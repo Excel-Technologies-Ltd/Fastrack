@@ -2,6 +2,13 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
+function vat_filter_list_query(fieldname) {
+	return {
+		query: "fastrack_erp.fastrack_erp.report.vat.vat.get_filter_list",
+		params: { fieldname: fieldname }
+	};
+}
+
 frappe.query_reports["VAT"] = {
 	"filters": [
 		{
@@ -32,7 +39,7 @@ frappe.query_reports["VAT"] = {
 			"fieldname": "carrier",
 			"label": "Carrier",
 			"fieldtype": "Autocomplete",
-			"get_query": "fastrack_erp.fastrack_erp.report.vat.vat.get_carrier_list"
+			"get_query": vat_filter_list_query("carrier")
 		},
 		{
 			"fieldname": "sales_person",
@@ -43,42 +50,50 @@ frappe.query_reports["VAT"] = {
 		{
 			"fieldname": "shipper_name",
 			"label": "Shipper Name",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("shipper_name")
 		},
 		{
 			"fieldname": "customer_name",
 			"label": "Customer Name",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("customer_name")
 		},
 		{
 			"fieldname": "agent_name",
 			"label": "Agent Name",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("agent_name")
 		},
 		{
 			"fieldname": "mbl_consignee",
 			"label": "MBL Consignee",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("mbl_consignee")
 		},
 		{
 			"fieldname": "notify_party",
 			"label": "Notify Party",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("notify_party")
 		},
 		{
 			"fieldname": "lc_no",
 			"label": "L/C No.",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("lc_no")
 		},
 		{
 			"fieldname": "mbl_no",
 			"label": "MBL No.",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("mbl_no")
 		},
 		{
 			"fieldname": "hbl_no",
 			"label": "HBL No.",
-			"fieldtype": "Data"
+			"fieldtype": "Autocomplete",
+			"get_query": vat_filter_list_query("hbl_no")
 		},
 		{
 			"fieldname": "inco_term",
