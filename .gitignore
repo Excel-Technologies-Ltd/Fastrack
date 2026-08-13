@@ -6,3 +6,7 @@ tags
 fastrack_erp/docs/current
 node_modules/
 /.vs
+/Database/.vs/Database.slnx/FileContentIndex
+/Database/.vs/slnx.sqlite
+/Database/.vs/Database.slnx/v18
+/Database/.vs/VSWorkspaceState.json
