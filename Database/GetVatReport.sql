@@ -123,13 +123,15 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`, 
             COALESCE(ISHB.`inco_term`, '') AS `Inco Term` 
-        FROM `tabImport Sea House Bill` ISHB 
-        INNER JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no` 
-        LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent` 
-        LEFT JOIN VATAggregated VL ON ISHB.`name` = VL.`parent` 
-        WHERE ISHB.`hbl_etd` >= v_start_date 
-          AND ISHB.`hbl_etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND ISHB.`docstatus` = 1
+        FROM 
+            `tabImport Sea House Bill` ISHB 
+            LEFT JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no` 
+            LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent` 
+            LEFT JOIN VATAggregated VL ON ISHB.`name` = VL.`parent` 
+        WHERE 
+            ISHB.`hbl_etd` >= v_start_date 
+            AND ISHB.`hbl_etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND ISHB.`docstatus` = 1
     ),
     ImportAirHouseBill AS (
         SELECT
@@ -159,13 +161,15 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
             COALESCE(IAHB.`inco_term`, '') AS `Inco Term`
-        FROM `tabImport Air House Bill` IAHB
-        INNER JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
-        LEFT JOIN FSIAggregated FSI ON IAHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON IAHB.`name` = VL.`parent` 
-        WHERE IAHB.`flight_date` >= v_start_date 
-          AND IAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND IAHB.`docstatus` = 1
+        FROM 
+            `tabImport Air House Bill` IAHB
+            LEFT JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
+            LEFT JOIN FSIAggregated FSI ON IAHB.`name` = FSI.`parent`
+            LEFT JOIN VATAggregated VL ON IAHB.`name` = VL.`parent` 
+        WHERE 
+            IAHB.`flight_date` >= v_start_date 
+            AND IAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND IAHB.`docstatus` = 1
     ),
     ImportD2DBill AS (
         SELECT
@@ -195,12 +199,14 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
             '' AS `Inco Term`
-        FROM `tabImport D2D Bill` ID2D
-        LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent` 
-        LEFT JOIN VATAggregated VL ON ID2D.`name` = VL.`parent` 
-        WHERE ID2D.`etd` >= v_start_date 
-          AND ID2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND ID2D.`docstatus` = 1
+        FROM 
+            `tabImport D2D Bill` ID2D
+            LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent` 
+            LEFT JOIN VATAggregated VL ON ID2D.`name` = VL.`parent` 
+        WHERE 
+            ID2D.`etd` >= v_start_date 
+            AND ID2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND ID2D.`docstatus` = 1
     ),
     ExportSeaHouseBill AS (
         SELECT
@@ -230,12 +236,14 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`, 
             COALESCE(ESHB.`inco_term`, '') AS `Inco Term` 
-        FROM `tabExport Sea House Bill` ESHB
-        LEFT JOIN FSIAggregated FSI ON ESHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON ESHB.`name` = VL.`parent` 
-        WHERE ESHB.`etd` >= v_start_date 
-          AND ESHB.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND ESHB.`docstatus` = 1
+        FROM 
+            `tabExport Sea House Bill` ESHB
+            LEFT JOIN FSIAggregated FSI ON ESHB.`name` = FSI.`parent`
+            LEFT JOIN VATAggregated VL ON ESHB.`name` = VL.`parent` 
+        WHERE 
+            ESHB.`etd` >= v_start_date 
+            AND ESHB.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND ESHB.`docstatus` = 1
     ),
     ExportAirHouseBill AS (
         SELECT
@@ -265,12 +273,14 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
             COALESCE(EAHB.`inco_term`, '') AS `Inco Term`
-        FROM `tabExport Air House Bill` EAHB
-        LEFT JOIN FSIAggregated FSI ON EAHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON EAHB.`name` = VL.`parent`
-        WHERE EAHB.`flight_date` >= v_start_date 
-          AND EAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND EAHB.`docstatus` = 1
+        FROM 
+            `tabExport Air House Bill` EAHB
+            LEFT JOIN FSIAggregated FSI ON EAHB.`name` = FSI.`parent`
+            LEFT JOIN VATAggregated VL ON EAHB.`name` = VL.`parent`
+        WHERE 
+            EAHB.`flight_date` >= v_start_date 
+            AND EAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND EAHB.`docstatus` = 1
     ),
     ExportD2DBill AS (
         SELECT
@@ -300,13 +310,15 @@ BEGIN
             COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
             COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`, 
             '' AS `Inco Term` 
-        FROM `tabExport D2D Bill` ED2D
-        INNER JOIN `tabExport D2D Bill` IMB ON ED2D.`mbl_no` = IMB.`mbl_no`
-        LEFT JOIN FSIAggregated FSI ON ED2D.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON ED2D.`name` = VL.`parent`
-        WHERE ED2D.`etd` >= v_start_date 
-          AND ED2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
-          AND ED2D.`docstatus` = 1
+        FROM 
+            `tabExport D2D Bill` ED2D
+            LEFT JOIN `tabExport D2D Bill` IMB ON ED2D.`mbl_no` = IMB.`mbl_no`
+            LEFT JOIN FSIAggregated FSI ON ED2D.`name` = FSI.`parent`
+            LEFT JOIN VATAggregated VL ON ED2D.`name` = VL.`parent`
+        WHERE 
+            ED2D.`etd` >= v_start_date 
+            AND ED2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            AND ED2D.`docstatus` = 1
     ),
     AllBills AS (
         SELECT * FROM ImportSeaHouseBill
@@ -322,22 +334,26 @@ BEGIN
         SELECT * FROM ExportD2DBill
     )
     -- Final SELECT with dynamic filtering
-    SELECT *
-    FROM AllBills
-    WHERE (p_import_export IS NULL OR p_import_export = '' OR `Import/Export` = p_import_export)
-      AND (p_hbl_type IS NULL OR p_hbl_type = '' OR `HBL Type` = p_hbl_type)
-      AND (p_carrier IS NULL OR p_carrier = '' OR Carrier = p_carrier)
-      AND (p_sales_person IS NULL OR p_sales_person = '' OR `Sales Person` = p_sales_person)
-      AND (p_shipper_name IS NULL OR p_shipper_name = '' OR `Shipper Name` = p_shipper_name)
-      AND (p_customer_name IS NULL OR p_customer_name = '' OR `Customer Name` = p_customer_name)
-      AND (p_agent_name IS NULL OR p_agent_name = '' OR `Agent Name` = p_agent_name)
-      AND (p_mbl_consignee IS NULL OR p_mbl_consignee = '' OR `MBL Consignee` = p_mbl_consignee)
-      AND (p_notify_party IS NULL OR p_notify_party = '' OR `Notify Party` = p_notify_party)
-      AND (p_lc_no IS NULL OR p_lc_no = '' OR `L/C No.` = p_lc_no)
-      AND (p_mbl_no IS NULL OR p_mbl_no = '' OR `MBL No.` = p_mbl_no)
-      AND (p_hbl_no IS NULL OR p_hbl_no = '' OR `HBL No.` = p_hbl_no)
-      AND (p_inco_term IS NULL OR p_inco_term = '' OR `Inco Term` = p_inco_term)
-    ORDER BY ETD DESC;
+    SELECT 
+        *
+    FROM
+        AllBills
+    WHERE
+        (p_import_export IS NULL OR p_import_export = '' OR `Import/Export` = p_import_export)
+        AND (p_hbl_type IS NULL OR p_hbl_type = '' OR `HBL Type` = p_hbl_type)
+        AND (p_carrier IS NULL OR p_carrier = '' OR Carrier = p_carrier)
+        AND (p_sales_person IS NULL OR p_sales_person = '' OR `Sales Person` = p_sales_person)
+        AND (p_shipper_name IS NULL OR p_shipper_name = '' OR `Shipper Name` = p_shipper_name)
+        AND (p_customer_name IS NULL OR p_customer_name = '' OR `Customer Name` = p_customer_name)
+        AND (p_agent_name IS NULL OR p_agent_name = '' OR `Agent Name` = p_agent_name)
+        AND (p_mbl_consignee IS NULL OR p_mbl_consignee = '' OR `MBL Consignee` = p_mbl_consignee)
+        AND (p_notify_party IS NULL OR p_notify_party = '' OR `Notify Party` = p_notify_party)
+        AND (p_lc_no IS NULL OR p_lc_no = '' OR `L/C No.` = p_lc_no)
+        AND (p_mbl_no IS NULL OR p_mbl_no = '' OR `MBL No.` = p_mbl_no)
+        AND (p_hbl_no IS NULL OR p_hbl_no = '' OR `HBL No.` = p_hbl_no)
+        AND (p_inco_term IS NULL OR p_inco_term = '' OR `Inco Term` = p_inco_term)
+    ORDER BY
+        ETD DESC;
 END$$
 
 DELIMITER ;
