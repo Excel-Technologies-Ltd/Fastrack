@@ -766,35 +766,69 @@ def convert_to_presentation_currency(gl_entries, currency_info):
 
 def get_document_conversion_rate(gl_entry, presentation_currency, company_currency):
 	"""
-	Get conversion rate from the source document (only for Sales Invoice)
+	Get conversion rate from the source document. Sales/Purchase Invoice,
+	Payment Entry, and Journal Entry all carry their own real exchange rate;
+	using it here is far more reliable than falling back to the daily rate
+	table (erpnext.accounts.report.utils.get_rate_as_at), which silently
+	returns 1 -- a false 1:1 rate -- whenever no Currency Exchange record
+	exists for that date and the external rate-fetch fails or is
+	unreachable, which is always true in an offline/unconfigured system.
 	"""
 	voucher_type = gl_entry.get("voucher_type")
 	voucher_no = gl_entry.get("voucher_no")
-	
+
 	if not voucher_type or not voucher_no:
 		return None
-	
 
-	if voucher_type not in ["Sales Invoice","Purchase Invoice"]:
-		return None
-	
-	conversion_rate = None
-	
 	try:
+		if voucher_type in ["Sales Invoice", "Purchase Invoice"]:
+			doc_currency, doc_conversion_rate = frappe.db.get_value(
+				voucher_type, voucher_no, ["currency", "conversion_rate"]
+			)
 
-		doc_currency, doc_conversion_rate = frappe.db.get_value(
-			voucher_type, voucher_no, ["currency", "conversion_rate"]
-		)
+			if doc_currency != company_currency and (
+				doc_currency == presentation_currency or company_currency == presentation_currency
+			):
+				return flt(doc_conversion_rate) or None
 
-		if (doc_currency != company_currency and 
-			(doc_currency == presentation_currency or company_currency == presentation_currency)):
-			conversion_rate = flt(doc_conversion_rate)
-	
+			return None
+
+		if voucher_type == "Payment Entry":
+			pe = frappe.db.get_value(
+				"Payment Entry",
+				voucher_no,
+				[
+					"paid_from_account_currency",
+					"paid_to_account_currency",
+					"source_exchange_rate",
+					"target_exchange_rate",
+				],
+				as_dict=True,
+			)
+			if not pe:
+				return None
+
+			if pe.paid_from_account_currency == presentation_currency:
+				return flt(pe.source_exchange_rate) or None
+			if pe.paid_to_account_currency == presentation_currency:
+				return flt(pe.target_exchange_rate) or None
+
+			return None
+
+		if voucher_type == "Journal Entry":
+			# The one account line (if any) actually denominated in the
+			# presentation currency carries the rate for the whole voucher.
+			rate = frappe.db.get_value(
+				"Journal Entry Account",
+				{"parent": voucher_no, "account_currency": presentation_currency},
+				"exchange_rate",
+			)
+			return flt(rate) or None
+
 	except Exception:
+		return None
 
-		conversion_rate = None
-
-	return conversion_rate
+	return None
 
 
 

@@ -2,14 +2,14 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-function vat_filter_list_query(fieldname) {
+function management_filter_list_query(fieldname) {
 	return {
 		query: "fastrack_erp.fastrack_erp.report.report_filters.get_filter_list",
 		params: { fieldname: fieldname }
 	};
 }
 
-frappe.query_reports["VAT"] = {
+frappe.query_reports["Management"] = {
 	"filters": [
 		{
 			"fieldname": "start_date",
@@ -39,7 +39,7 @@ frappe.query_reports["VAT"] = {
 			"fieldname": "carrier",
 			"label": "Carrier",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("carrier")
+			"get_query": management_filter_list_query("carrier")
 		},
 		{
 			"fieldname": "sales_person",
@@ -51,49 +51,49 @@ frappe.query_reports["VAT"] = {
 			"fieldname": "shipper_name",
 			"label": "Shipper Name",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("shipper_name")
+			"get_query": management_filter_list_query("shipper_name")
 		},
 		{
 			"fieldname": "customer_name",
 			"label": "Customer Name",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("customer_name")
+			"get_query": management_filter_list_query("customer_name")
 		},
 		{
 			"fieldname": "agent_name",
 			"label": "Agent Name",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("agent_name")
+			"get_query": management_filter_list_query("agent_name")
 		},
 		{
 			"fieldname": "mbl_consignee",
 			"label": "MBL Consignee",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("mbl_consignee")
+			"get_query": management_filter_list_query("mbl_consignee")
 		},
 		{
 			"fieldname": "notify_party",
 			"label": "Notify Party",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("notify_party")
+			"get_query": management_filter_list_query("notify_party")
 		},
 		{
 			"fieldname": "lc_no",
 			"label": "L/C No.",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("lc_no")
+			"get_query": management_filter_list_query("lc_no")
 		},
 		{
 			"fieldname": "mbl_no",
 			"label": "MBL No.",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("mbl_no")
+			"get_query": management_filter_list_query("mbl_no")
 		},
 		{
 			"fieldname": "hbl_no",
 			"label": "HBL No.",
 			"fieldtype": "Autocomplete",
-			"get_query": vat_filter_list_query("hbl_no")
+			"get_query": management_filter_list_query("hbl_no")
 		},
 		{
 			"fieldname": "inco_term",

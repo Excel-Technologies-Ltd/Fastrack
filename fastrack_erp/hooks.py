@@ -175,6 +175,13 @@ doc_events = {
 	},
 }
 
+# Migration
+# ---------
+# Recreate the hand-written MySQL stored procedures in Database/*.sql after
+# every migrate, so the database never drifts from what's committed in
+# source control (previously they had to be applied by hand).
+after_migrate = ["fastrack_erp.utils.db_procedures.sync_stored_procedures"]
+
 # Scheduled Tasks
 # ---------------
 
