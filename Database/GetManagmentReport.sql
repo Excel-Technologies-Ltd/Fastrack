@@ -42,60 +42,7 @@ BEGIN
     END IF;
 
     -- Common Table Expressions
-    WITH FSIAggregated AS (
-        SELECT
-            FSI.`parent`,
-            SUM(CASE
-                WHEN FSI.`item_code` IN ('Ocean Freight', 'Air Freight')
-                THEN COALESCE(FSI.`base_net_amount`, 0)
-                ELSE 0
-            END) AS `Freight Charge BDT`,
-            SUM(CASE
-                WHEN FSI.`item_code` IN ('Ocean Freight', 'Air Freight')
-                THEN COALESCE(FSI.`total_price`, 0)
-                ELSE 0
-            END) AS `Freight Charge USD`,
-            SUM(CASE
-                WHEN FSI.`item_code` = 'Service Commission'
-                THEN COALESCE(FSI.`base_net_amount`, 0)
-                ELSE 0
-            END) AS `Service Commission BDT`,
-            SUM(CASE
-                WHEN FSI.`item_code` = 'Service Commission'
-                THEN COALESCE(FSI.`total_price`, 0)
-                ELSE 0
-            END) AS `Service Commission USD`,
-            SUM(CASE
-                WHEN FSI.`item_code` = 'NOC Fee'
-                THEN COALESCE(FSI.`base_net_amount`, 0)
-                ELSE 0
-            END) AS `NOC BDT`,
-            SUM(CASE
-                WHEN FSI.`item_code` = 'NOC Fee'
-                THEN COALESCE(FSI.`total_price`, 0)
-                ELSE 0
-            END) AS `NOC USD`,
-            SUM(CASE
-                WHEN FSI.`item_code` NOT IN ('Ocean Freight', 'Air Freight', 'Service Commission', 'NOC Fee')
-                THEN COALESCE(FSI.`base_net_amount`, 0)
-                ELSE 0
-            END) AS `Others Income BDT`,
-            SUM(CASE
-                WHEN FSI.`item_code` NOT IN ('Ocean Freight', 'Air Freight', 'Service Commission', 'NOC Fee')
-                THEN COALESCE(FSI.`total_price`, 0)
-                ELSE 0
-            END) AS `Others Income USD`
-        FROM `tabFastrack Sales Invoice` FSI
-        GROUP BY FSI.`parent`
-    ), 
-    VATAggregated AS (
-        SELECT
-            VL.`parent`,
-            SUM(COALESCE(VL.`vat_amount_bdt`, 0)) AS `VAT BDT`,
-            SUM(COALESCE(VL.`vat_amount_usd`, 0)) AS `VAT USD`
-        FROM `tabVAT List` VL
-        GROUP BY VL.`parent`
-    ),
+    WITH 
     ImportSeaHouseBill AS (
         SELECT
             'Import' AS `Import/Export`,
@@ -129,21 +76,9 @@ BEGIN
             COALESCE(ISHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(ISHB.`total_invoice_amount_usd`, 0) + COALESCE(ISHB.`total_payment_profit_share_usd`, 0) - COALESCE(ISHB.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(ISHB.`total_invoice_amount`, 0) + COALESCE(ISHB.`total_payment_profit_share_bdt`, 0) - COALESCE(ISHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            COALESCE(ISHB.`inco_term`, '') AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            COALESCE(ISHB.`inco_term`, '') AS `Inco Term`
         FROM `tabImport Sea House Bill` ISHB 
-        INNER JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no` 
-        LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent` 
-        LEFT JOIN VATAggregated VL ON ISHB.`name` = VL.`parent` 
+        LEFT JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no`
         WHERE ISHB.`hbl_etd` >= v_start_date 
           AND ISHB.`hbl_etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
           AND ISHB.`docstatus` = 1
@@ -181,21 +116,9 @@ BEGIN
             COALESCE(IAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(IAHB.`total_invoice_amount_usd`, 0) + COALESCE(IAHB.`total_payment_profit_share_usd`, 0) - COALESCE(IAHB.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(IAHB.`total_invoice_amount`, 0) + COALESCE(IAHB.`total_payment_profit_share_bdt`, 0) - COALESCE(IAHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            COALESCE(IAHB.`inco_term`, '') AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            COALESCE(IAHB.`inco_term`, '') AS `Inco Term`
         FROM `tabImport Air House Bill` IAHB
-        INNER JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
-        LEFT JOIN FSIAggregated FSI ON IAHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON IAHB.`name` = VL.`parent` 
+        LEFT JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
         WHERE IAHB.`flight_date` >= v_start_date 
           AND IAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
           AND IAHB.`docstatus` = 1
@@ -233,20 +156,8 @@ BEGIN
             COALESCE(ID2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(ID2D.`total_invoice_amount_usd`, 0) + COALESCE(ID2D.`total_payment_profit_share_usd`, 0) - COALESCE(ID2D.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(ID2D.`total_invoice_amount`, 0) + COALESCE(ID2D.`total_payment_profit_share_bdt`, 0) - COALESCE(ID2D.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            '' AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            '' AS `Inco Term`
         FROM `tabImport D2D Bill` ID2D
-        LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent` 
-        LEFT JOIN VATAggregated VL ON ID2D.`name` = VL.`parent` 
         WHERE ID2D.`etd` >= v_start_date 
           AND ID2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
           AND ID2D.`docstatus` = 1
@@ -284,20 +195,8 @@ BEGIN
             COALESCE(ESHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(ESHB.`total_invoice_amount_usd`, 0) + COALESCE(ESHB.`total_payment_profit_share_usd`, 0) - COALESCE(ESHB.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(ESHB.`total_invoice_amount`, 0) + COALESCE(ESHB.`total_payment_profit_share_bdt`, 0) - COALESCE(ESHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            COALESCE(ESHB.`inco_term`, '') AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            COALESCE(ESHB.`inco_term`, '') AS `Inco Term`
         FROM `tabExport Sea House Bill` ESHB
-        LEFT JOIN FSIAggregated FSI ON ESHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON ESHB.`name` = VL.`parent` 
         WHERE ESHB.`etd` >= v_start_date 
           AND ESHB.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
           AND ESHB.`docstatus` = 1
@@ -335,20 +234,8 @@ BEGIN
             COALESCE(EAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(EAHB.`total_invoice_amount_usd`, 0) + COALESCE(EAHB.`total_payment_profit_share_usd`, 0) - COALESCE(EAHB.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(EAHB.`total_invoice_amount`, 0) + COALESCE(EAHB.`total_payment_profit_share_bdt`, 0) - COALESCE(EAHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            COALESCE(EAHB.`inco_term`, '') AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            COALESCE(EAHB.`inco_term`, '') AS `Inco Term`
         FROM `tabExport Air House Bill` EAHB
-        LEFT JOIN FSIAggregated FSI ON EAHB.`name` = FSI.`parent`
-        LEFT JOIN VATAggregated VL ON EAHB.`name` = VL.`parent`
         WHERE EAHB.`flight_date` >= v_start_date 
           AND EAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
           AND EAHB.`docstatus` = 1
@@ -386,16 +273,42 @@ BEGIN
             COALESCE(ED2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
             (COALESCE(ED2D.`total_invoice_amount_usd`, 0) + COALESCE(ED2D.`total_payment_profit_share_usd`, 0) - COALESCE(ED2D.`expense_amount_usd`, 0)) AS `GP USD`,
             (COALESCE(ED2D.`total_invoice_amount`, 0) + COALESCE(ED2D.`total_payment_profit_share_bdt`, 0) - COALESCE(ED2D.`expense_amount_bdt`, 0)) AS `GP BDT`,
-            '' AS `Inco Term`,
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`
+            '' AS `Inco Term`
         FROM `tabExport D2D Bill` ED2D
-        LEFT JOIN
+        WHERE ED2D.`etd` >= v_start_date 
+          AND ED2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+          AND ED2D.`docstatus` = 1
+    ),
+    AllBills AS (
+        SELECT * FROM ImportSeaHouseBill
+        UNION ALL
+        SELECT * FROM ImportAirHouseBill
+        UNION ALL
+        SELECT * FROM ImportD2DBill
+        UNION ALL
+        SELECT * FROM ExportSeaHouseBill
+        UNION ALL
+        SELECT * FROM ExportAirHouseBill
+        UNION ALL
+        SELECT * FROM ExportD2DBill
+    )
+    -- Final SELECT with dynamic filtering
+    SELECT *
+    FROM AllBills
+    WHERE (p_import_export IS NULL OR p_import_export = '' OR `Import/Export` = p_import_export)
+      AND (p_hbl_type IS NULL OR p_hbl_type = '' OR `HBL Type` = p_hbl_type)
+      AND (p_carrier IS NULL OR p_carrier = '' OR Carrier = p_carrier)
+      AND (p_sales_person IS NULL OR p_sales_person = '' OR `Sales Person` = p_sales_person)
+      AND (p_shipper_name IS NULL OR p_shipper_name = '' OR `Shipper Name` = p_shipper_name)
+      AND (p_customer_name IS NULL OR p_customer_name = '' OR `Customer Name` = p_customer_name)
+      AND (p_agent_name IS NULL OR p_agent_name = '' OR `Agent Name` = p_agent_name)
+      AND (p_mbl_consignee IS NULL OR p_mbl_consignee = '' OR `MBL Consignee` = p_mbl_consignee)
+      AND (p_notify_party IS NULL OR p_notify_party = '' OR `Notify Party` = p_notify_party)
+      AND (p_lc_no IS NULL OR p_lc_no = '' OR `L/C No.` = p_lc_no)
+      AND (p_mbl_no IS NULL OR p_mbl_no = '' OR `MBL No.` = p_mbl_no)
+      AND (p_hbl_no IS NULL OR p_hbl_no = '' OR `HBL No.` = p_hbl_no)
+      AND (p_inco_term IS NULL OR p_inco_term = '' OR `Inco Term` = p_inco_term)
+    ORDER BY ETD DESC;
+END //
+
+DELIMITER ;
