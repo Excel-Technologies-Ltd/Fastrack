@@ -1,8 +1,8 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS GetVatReport$$
+DROP PROCEDURE IF EXISTS GetOperationReport$$
 
-CREATE PROCEDURE `GetVatReport`(
+CREATE PROCEDURE `GetOperationReport`(
     -- Date Parameters
     IN p_start_date DATE,
     IN p_end_date DATE,
@@ -15,7 +15,7 @@ CREATE PROCEDURE `GetVatReport`(
     IN p_shipper_name VARCHAR(200),
     IN p_customer_name VARCHAR(200),
     IN p_agent_name VARCHAR(200),
-    IN p_mbl_consignee VARCHAR(200),
+    IN p_consignee VARCHAR(200),
     IN p_notify_party VARCHAR(200),
     IN p_lc_no VARCHAR(100),
     IN p_mbl_no VARCHAR(100),
@@ -46,54 +46,54 @@ BEGIN
             FSI.`parent`,
             SUM(CASE
                 WHEN FSI.`item_code` IN ('Ocean Freight', 'Air Freight')
-                THEN COALESCE(FSI.`base_net_amount`, 0)
-                ELSE 0
-            END) AS `Freight Charge BDT`,
-            SUM(CASE
-                WHEN FSI.`item_code` IN ('Ocean Freight', 'Air Freight')
                 THEN COALESCE(FSI.`total_price`, 0)
                 ELSE 0
             END) AS `Freight Charge USD`,
             SUM(CASE
-                WHEN FSI.`item_code` = 'Service Commission'
+                WHEN FSI.`item_code` IN ('Ocean Freight', 'Air Freight')
                 THEN COALESCE(FSI.`base_net_amount`, 0)
                 ELSE 0
-            END) AS `Service Commission BDT`,
+            END) AS `Freight Charge BDT`,
             SUM(CASE
                 WHEN FSI.`item_code` = 'Service Commission'
                 THEN COALESCE(FSI.`total_price`, 0)
                 ELSE 0
             END) AS `Service Commission USD`,
             SUM(CASE
-                WHEN FSI.`item_code` = 'NOC Fee'
+                WHEN FSI.`item_code` = 'Service Commission'
                 THEN COALESCE(FSI.`base_net_amount`, 0)
                 ELSE 0
-            END) AS `NOC BDT`,
+            END) AS `Service Commission BDT`,
             SUM(CASE
                 WHEN FSI.`item_code` = 'NOC Fee'
                 THEN COALESCE(FSI.`total_price`, 0)
                 ELSE 0
             END) AS `NOC USD`,
             SUM(CASE
-                WHEN FSI.`item_code` NOT IN ('Ocean Freight', 'Air Freight', 'Service Commission', 'NOC Fee')
+                WHEN FSI.`item_code` = 'NOC Fee'
                 THEN COALESCE(FSI.`base_net_amount`, 0)
                 ELSE 0
-            END) AS `Others Income BDT`,
+            END) AS `NOC BDT`,
             SUM(CASE
                 WHEN FSI.`item_code` NOT IN ('Ocean Freight', 'Air Freight', 'Service Commission', 'NOC Fee')
                 THEN COALESCE(FSI.`total_price`, 0)
                 ELSE 0
-            END) AS `Others Income USD`
+            END) AS `Others Income USD`,
+            SUM(CASE
+                WHEN FSI.`item_code` NOT IN ('Ocean Freight', 'Air Freight', 'Service Commission', 'NOC Fee')
+                THEN COALESCE(FSI.`base_net_amount`, 0)
+                ELSE 0
+            END) AS `Others Income BDT`
         FROM `tabFastrack Sales Invoice` FSI
         GROUP BY FSI.`parent`
-    ), 
-    VATAggregated AS (
+    ),
+    ContainerAggregated AS (
         SELECT
-            VL.`parent`,
-            SUM(COALESCE(VL.`vat_amount_bdt`, 0)) AS `VAT BDT`,
-            SUM(COALESCE(VL.`vat_amount_usd`, 0)) AS `VAT USD`
-        FROM `tabVAT List` VL
-        GROUP BY VL.`parent`
+            SI.`parent`,
+            GROUP_CONCAT(DISTINCT SI.`custom_container_no` ORDER BY SI.`custom_container_no` SEPARATOR ', ') AS `Container No.`
+        FROM `tabFastrack Sea Item` SI
+        WHERE SI.`custom_container_no` IS NOT NULL AND SI.`custom_container_no` != ''
+        GROUP BY SI.`parent`
     ),
     ImportSeaHouseBill AS (
         SELECT
@@ -102,32 +102,43 @@ BEGIN
             COALESCE(ISHB.`carrier`, '') AS Carrier,
             COALESCE(ISHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(ISHB.`hbl_shipper`, '') AS `Shipper Name`,
-            COALESCE(ISHB.`customer`, '') AS `Customer Name`,
             COALESCE(ISHB.`agent_name`, '') AS `Agent Name`,
+            COALESCE(IMB.`shipper`, '') AS `MBL Shipper`,
+            COALESCE(IMB.`shipping_line`, '') AS `Shipping Line`,
+            COALESCE(ISHB.`customer`, '') AS `Customer Name`,
+            COALESCE(ISHB.`consignee`, '') AS `Consignee`,
             COALESCE(ISHB.`notify_to`, '') AS `Notify Party`,
-            COALESCE(IMB.`consignee`, '') AS `MBL Consignee`,
             COALESCE(ISHB.`lc`, '') AS `L/C No.`,
             COALESCE(ISHB.`lc_date`, '') AS `L/C Date`,
             COALESCE(ISHB.`mbl_no`, '') AS `MBL No.`,
             COALESCE(ISHB.`hbl_id`, '') AS `HBL No.`,
+            COALESCE(ISHB.`reference_number`, '') AS `Ref. No.`,
+            '' AS `CI Number`,
+            COALESCE(IMB.`port_of_loading`, '') AS POL,
+            COALESCE(IMB.`port_of_discharge`, '') AS `Port of Discharge`,
+            COALESCE(IMB.`port_of_delivery`, '') AS `Port of Delivery`,
+            COALESCE(IMB.`mv`, '') AS MV,
+            COALESCE(IMB.`mv_voyage_no`, '') AS `MV Voyage No.`,
+            COALESCE(IMB.`fv`, '') AS FV,
+            COALESCE(IMB.`fv_voyage_no`, '') AS `FV Voyage No.`,
             COALESCE(ISHB.`hbl_etd`, '') AS ETD,
             COALESCE(ISHB.`eta`, '') AS ETA,
+            COALESCE(ISHB.`mbl_surrender_status`, '') AS `MBL Surrender`,
+            COALESCE(ISHB.`do_validity`, '') AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            COALESCE(ISHB.`total_container`, 0) AS `Total Container`,
             COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
             COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
             COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
             COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`, 
+            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
             COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`, 
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
-            COALESCE(ISHB.`inco_term`, '') AS `Inco Term` 
+            COALESCE(ISHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabImport Sea House Bill` ISHB 
-            LEFT JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no` 
-            LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent` 
-            LEFT JOIN VATAggregated VL ON ISHB.`name` = VL.`parent` 
+            LEFT JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no`
+            LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent`
+            LEFT JOIN ContainerAggregated CA ON ISHB.`name` = CA.`parent`
         WHERE 
             ISHB.`hbl_etd` >= v_start_date 
             AND ISHB.`hbl_etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -140,32 +151,43 @@ BEGIN
             COALESCE(IAHB.`airlines`, '') AS Carrier,
             COALESCE(IAHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(IAHB.`shipper`, '') AS `Shipper Name`,
-            COALESCE(IAHB.`customer`, '') AS `Customer Name`,
             COALESCE(IAHB.`agent`, '') AS `Agent Name`,
+            '' AS `MBL Shipper`,
+            COALESCE(IAHB.`airlines`, '') AS `Shipping Line`,
+            COALESCE(IAHB.`customer`, '') AS `Customer Name`,
+            COALESCE(IAHB.`consignee`, '') AS `Consignee`,
             COALESCE(IAHB.`notify_party`, '') AS `Notify Party`,
-            COALESCE(IMB.`consignee`, '') AS `MBL Consignee`,
             COALESCE(IAHB.`lc_number`, '') AS `L/C No.`,
             COALESCE(IAHB.`lc_date`, '') AS `L/C Date`,
             COALESCE(IAHB.`mbl_no`, '') AS `MBL No.`,
             COALESCE(IAHB.`hbl_no`, '') AS `HBL No.`,
+            COALESCE(IAHB.`reference_number`, '') AS `Ref. No.`,
+            '' AS `CI Number`,
+            COALESCE(IMB.`port_of_loading`, '') AS POL,
+            '' AS `Port of Discharge`,
+            COALESCE(IMB.`port_of_delivery`, '') AS `Port of Delivery`,
+            '' AS MV,
+            '' AS `MV Voyage No.`,
+            '' AS FV,
+            '' AS `FV Voyage No.`,
             IAHB.`flight_date` AS ETD,
             IAHB.`flight_date` AS ETA,
+            '' AS `MBL Surrender`,
+            COALESCE(IAHB.`do_validity`, '') AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            0 AS `Total Container`,
             COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
             COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
             COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
             COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
             COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`, 
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
+            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
             COALESCE(IAHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabImport Air House Bill` IAHB
             LEFT JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
             LEFT JOIN FSIAggregated FSI ON IAHB.`name` = FSI.`parent`
-            LEFT JOIN VATAggregated VL ON IAHB.`name` = VL.`parent` 
+            LEFT JOIN ContainerAggregated CA ON IAHB.`name` = CA.`parent`
         WHERE 
             IAHB.`flight_date` >= v_start_date 
             AND IAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -175,34 +197,45 @@ BEGIN
         SELECT
             'Import' AS `Import/Export`,
             'Import D2D Bill' AS `HBL Type`,
-            '' AS Carrier,
+            COALESCE(ID2D.`agent`, '') AS Carrier,
             COALESCE(ID2D.`sales_person`, '') AS `Sales Person`,
             COALESCE(ID2D.`shipper`, '') AS `Shipper Name`,
-            COALESCE(ID2D.`customer`, '') AS `Customer Name`,
             COALESCE(ID2D.`agent`, '') AS `Agent Name`,
+            '' AS `MBL Shipper`,
+            '' AS `Shipping Line`,
+            COALESCE(ID2D.`customer`, '') AS `Customer Name`,
+            COALESCE(ID2D.`consignee`, '') AS `Consignee`,
             COALESCE(ID2D.`notify_party`, '') AS `Notify Party`,
-            COALESCE(ID2D.`consignee`, '') AS `MBL Consignee`,
             COALESCE(ID2D.`lc_number`, '') AS `L/C No.`,
             COALESCE(ID2D.`lc_date`, '') AS `L/C Date`,
             COALESCE(ID2D.`mbl_no`, '') AS `MBL No.`,
             COALESCE(ID2D.`hbl_no`, '') AS `HBL No.`,
+            COALESCE(ID2D.`reference_number`, '') AS `Ref. No.`,
+            '' AS `CI Number`,
+            COALESCE(ID2D.`port_of_loading`, '') AS POL,
+            '' AS `Port of Discharge`,
+            COALESCE(ID2D.`port_of_delivery`, '') AS `Port of Delivery`,
+            '' AS MV,
+            '' AS `MV Voyage No.`,
+            '' AS FV,
+            '' AS `FV Voyage No.`,
             COALESCE(ID2D.`etd`, '') AS ETD,
             COALESCE(ID2D.`eta`, '') AS ETA,
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`, 
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`, 
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`, 
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`, 
+            '' AS `MBL Surrender`,
+            '' AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            0 AS `Total Container`,
+            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
+            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
             COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
             COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
             COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
             COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
             '' AS `Inco Term`
         FROM 
             `tabImport D2D Bill` ID2D
-            LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent` 
-            LEFT JOIN VATAggregated VL ON ID2D.`name` = VL.`parent` 
+            LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent`
+            LEFT JOIN ContainerAggregated CA ON ID2D.`name` = CA.`parent`
         WHERE 
             ID2D.`etd` >= v_start_date 
             AND ID2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -215,31 +248,43 @@ BEGIN
             COALESCE(ESHB.`shipping_line`, '') AS Carrier,
             COALESCE(ESHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(ESHB.`hbl_shipper`, '') AS `Shipper Name`,
-            '' AS `Customer Name`,
             COALESCE(ESHB.`delivery_agent`, '') AS `Agent Name`,
-            COALESCE(ESHB.`notify_to`, '') AS `Notify Party`, 
-            '' AS `MBL Consignee`, 
-            COALESCE(ESHB.`lc_no`, '') AS `L/C No.`, 
-            COALESCE(ESHB.`lc_date`, '') AS `L/C Date`, 
-            COALESCE(ESHB.`mbl_no`, '') AS `MBL No.`, 
-            COALESCE(ESHB.`hbl_no`, '') AS `HBL No.`, 
-            COALESCE(ESHB.`etd`, '') AS ETD, 
-            COALESCE(ESHB.`eta`, '') AS ETA, 
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`, 
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`, 
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`, 
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`, 
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`, 
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`, 
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`, 
+            COALESCE(ESHB.`hbl_shipper`, '') AS `MBL Shipper`,
+            COALESCE(ESHB.`shipping_line`, '') AS `Shipping Line`,
+            COALESCE(ESHB.`customer`, '') AS `Customer Name`,
+            COALESCE(ESHB.`hbl_consignee`, '') AS `Consignee`,
+            COALESCE(ESHB.`notify_to`, '') AS `Notify Party`,
+            COALESCE(ESHB.`lc_no`, '') AS `L/C No.`,
+            COALESCE(ESHB.`lc_date`, '') AS `L/C Date`,
+            COALESCE(ESHB.`mbl_no`, '') AS `MBL No.`,
+            COALESCE(ESHB.`hbl_no`, '') AS `HBL No.`,
+            COALESCE(ESHB.`reference_number`, '') AS `Ref. No.`,
+            COALESCE(ESHB.`inv_no`, '') AS `CI Number`,
+            COALESCE(ESHB.`port_of_loading`, '') AS POL,
+            COALESCE(ESHB.`port_of_discharge`, '') AS `Port of Discharge`,
+            COALESCE(ESHB.`port_of_delivery`, '') AS `Port of Delivery`,
+            COALESCE(ESHB.`mv`, '') AS MV,
+            COALESCE(ESHB.`mv_voyage_no`, '') AS `MV Voyage No.`,
+            COALESCE(ESHB.`fv`, '') AS FV,
+            COALESCE(ESHB.`fv__v_no`, '') AS `FV Voyage No.`,
+            COALESCE(ESHB.`etd`, '') AS ETD,
+            COALESCE(ESHB.`eta`, '') AS ETA,
+            COALESCE(ESHB.`mbl_surrender_status`, '') AS `MBL Surrender`,
+            COALESCE(ESHB.`do_validity`, '') AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            COALESCE(ESHB.`total_container`, 0) AS `Total Container`,
+            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
+            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
+            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
+            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
+            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
             COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,  
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
-            COALESCE(ESHB.`inco_term`, '') AS `Inco Term` 
+            COALESCE(ESHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabExport Sea House Bill` ESHB
+            LEFT JOIN `tabExport Sea Master Bill` IMB ON ESHB.`mbl_no` = IMB.`mbl_no`
             LEFT JOIN FSIAggregated FSI ON ESHB.`name` = FSI.`parent`
-            LEFT JOIN VATAggregated VL ON ESHB.`name` = VL.`parent` 
+            LEFT JOIN ContainerAggregated CA ON ESHB.`name` = CA.`parent`
         WHERE 
             ESHB.`etd` >= v_start_date 
             AND ESHB.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -252,31 +297,42 @@ BEGIN
             COALESCE(EAHB.`airlines`, '') AS Carrier,
             COALESCE(EAHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(EAHB.`shipper`, '') AS `Shipper Name`,
-            '' AS `Customer Name`,
             COALESCE(EAHB.`agent`, '') AS `Agent Name`,
+            '' AS `MBL Shipper`,
+            COALESCE(EAHB.`airlines`, '') AS `Shipping Line`,
+            COALESCE(EAHB.`customer`, '') AS `Customer Name`,
+            COALESCE(EAHB.`consignee`, '') AS `Consignee`,
             COALESCE(EAHB.`notify_party`, '') AS `Notify Party`,
-            '' AS `MBL Consignee`,
             COALESCE(EAHB.`lc_number`, '') AS `L/C No.`,
             COALESCE(EAHB.`lc_date`, '') AS `L/C Date`,
             COALESCE(EAHB.`mbl_no`, '') AS `MBL No.`,
             COALESCE(EAHB.`hbl_no`, '') AS `HBL No.`,
-            COALESCE(EAHB.`flight_date`, '') AS ETD,
-            COALESCE(EAHB.`flight_date`, '') AS ETA,
+            COALESCE(EAHB.`reference_number`, '') AS `Ref. No.`,
+            COALESCE(EAHB.`inv_no`, '') AS `CI Number`,
+            COALESCE(EAHB.`port_of_loading`, '') AS POL,
+            '' AS `Port of Discharge`,
+            COALESCE(EAHB.`port_of_delivery`, '') AS `Port of Delivery`,
+            '' AS MV,
+            '' AS `MV Voyage No.`,
+            '' AS FV,
+            '' AS `FV Voyage No.`,
+            EAHB.`flight_date` AS ETD,
+            EAHB.`flight_date` AS ETA,
+            '' AS `MBL Surrender`,
+            '' AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            0 AS `Total Container`,
             COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
             COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`,
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`,
             COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
             COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
             COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
             COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`,
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`,
             COALESCE(EAHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabExport Air House Bill` EAHB
             LEFT JOIN FSIAggregated FSI ON EAHB.`name` = FSI.`parent`
-            LEFT JOIN VATAggregated VL ON EAHB.`name` = VL.`parent`
+            LEFT JOIN ContainerAggregated CA ON EAHB.`name` = CA.`parent`
         WHERE 
             EAHB.`flight_date` >= v_start_date 
             AND EAHB.`flight_date` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -289,32 +345,42 @@ BEGIN
             '' AS Carrier,
             COALESCE(ED2D.`sales_person`, '') AS `Sales Person`,
             COALESCE(ED2D.`shipper`, '') AS `Shipper Name`,
+            COALESCE(ED2D.`agent`, '') AS `Agent Name`,
+            COALESCE(ED2D.`shipper`, '') AS `MBL Shipper`,
+            '' AS `Shipping Line`,
             COALESCE(ED2D.`customer`, '') AS `Customer Name`,
-            COALESCE(ED2D.`agent`, '') AS `Agent Name`, 
+            COALESCE(ED2D.`consignee`, '') AS `Consignee`,
             COALESCE(ED2D.`notify_party`, '') AS `Notify Party`,
-            COALESCE(ED2D.`consignee`, '') AS `MBL Consignee`, 
             COALESCE(ED2D.`lc_number`, '') AS `L/C No.`,
-            COALESCE(ED2D.`lc_date`, '') AS `L/C Date`, 
-            COALESCE(ED2D.`mbl_no`, '') AS `MBL No.`, 
-            COALESCE(ED2D.`hbl_no`, '') AS `HBL No.`, 
-            COALESCE(ED2D.`etd`, '') AS ETD, 
-            COALESCE(ED2D.`eta`, '') AS ETA, 
-            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`, 
-            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`, 
-            COALESCE(FSI.`Service Commission USD`, 0) AS `Service Commission USD`, 
-            COALESCE(FSI.`Service Commission BDT`, 0) AS `Service Commission BDT`, 
-            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`, 
-            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`, 
-            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`, 
-            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`, 
-            COALESCE(VL.`VAT USD`, 0) AS `VAT (USD)`, 
-            COALESCE(VL.`VAT BDT`, 0) AS `VAT (BDT)`, 
-            '' AS `Inco Term` 
+            COALESCE(ED2D.`lc_date`, '') AS `L/C Date`,
+            COALESCE(ED2D.`mbl_no`, '') AS `MBL No.`,
+            COALESCE(ED2D.`hbl_no`, '') AS `HBL No.`,
+            COALESCE(ED2D.`reference_number`, '') AS `Ref. No.`,
+            '' AS `CI Number`,
+            COALESCE(ED2D.`port_of_loading`, '') AS POL,
+            '' AS `Port of Discharge`,
+            COALESCE(ED2D.`port_of_delivery`, '') AS `Port of Delivery`,
+            '' AS MV,
+            '' AS `MV Voyage No.`,
+            '' AS FV,
+            '' AS `FV Voyage No.`,
+            COALESCE(ED2D.`etd`, '') AS ETD,
+            COALESCE(ED2D.`eta`, '') AS ETA,
+            '' AS `MBL Surrender`,
+            '' AS `DO Date`,
+            COALESCE(CA.`Container No.`, '') AS `Container No.`,
+            0 AS `Total Container`,
+            COALESCE(FSI.`Freight Charge USD`, 0) AS `Freight Charge USD`,
+            COALESCE(FSI.`Freight Charge BDT`, 0) AS `Freight Charge BDT`,
+            COALESCE(FSI.`NOC USD`, 0) AS `NOC USD`,
+            COALESCE(FSI.`NOC BDT`, 0) AS `NOC BDT`,
+            COALESCE(FSI.`Others Income USD`, 0) AS `Others Income USD`,
+            COALESCE(FSI.`Others Income BDT`, 0) AS `Others Income BDT`,
+            '' AS `Inco Term`
         FROM 
             `tabExport D2D Bill` ED2D
-            LEFT JOIN `tabExport D2D Bill` IMB ON ED2D.`mbl_no` = IMB.`mbl_no`
             LEFT JOIN FSIAggregated FSI ON ED2D.`name` = FSI.`parent`
-            LEFT JOIN VATAggregated VL ON ED2D.`name` = VL.`parent`
+            LEFT JOIN ContainerAggregated CA ON ED2D.`name` = CA.`parent`
         WHERE 
             ED2D.`etd` >= v_start_date 
             AND ED2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
@@ -336,9 +402,9 @@ BEGIN
     -- Final SELECT with dynamic filtering
     SELECT 
         *
-    FROM
+    FROM 
         AllBills
-    WHERE
+    WHERE 
         (p_import_export IS NULL OR p_import_export = '' OR `Import/Export` = p_import_export)
         AND (p_hbl_type IS NULL OR p_hbl_type = '' OR `HBL Type` = p_hbl_type)
         AND (p_carrier IS NULL OR p_carrier = '' OR Carrier = p_carrier)
@@ -346,13 +412,13 @@ BEGIN
         AND (p_shipper_name IS NULL OR p_shipper_name = '' OR `Shipper Name` = p_shipper_name)
         AND (p_customer_name IS NULL OR p_customer_name = '' OR `Customer Name` = p_customer_name)
         AND (p_agent_name IS NULL OR p_agent_name = '' OR `Agent Name` = p_agent_name)
-        AND (p_mbl_consignee IS NULL OR p_mbl_consignee = '' OR `MBL Consignee` = p_mbl_consignee)
+        AND (p_consignee IS NULL OR p_consignee = '' OR `Consignee` = p_consignee)
         AND (p_notify_party IS NULL OR p_notify_party = '' OR `Notify Party` = p_notify_party)
         AND (p_lc_no IS NULL OR p_lc_no = '' OR `L/C No.` = p_lc_no)
         AND (p_mbl_no IS NULL OR p_mbl_no = '' OR `MBL No.` = p_mbl_no)
         AND (p_hbl_no IS NULL OR p_hbl_no = '' OR `HBL No.` = p_hbl_no)
         AND (p_inco_term IS NULL OR p_inco_term = '' OR `Inco Term` = p_inco_term)
-    ORDER BY
+    ORDER BY 
         ETD DESC;
 END$$
 
