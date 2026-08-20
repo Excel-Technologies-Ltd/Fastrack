@@ -203,6 +203,14 @@ def get_gl_entries(filters, accounting_dimensions):
 	if filters.get("presentation_currency") and filters.get("presentation_currency") != "BDT":
 		return convert_to_presentation_currency(gl_entries, currency_map)
 	else:
+		# No USD conversion requested: debit/credit are already in company
+		# currency (BDT), so the BDT columns just mirror them. Always set
+		# these keys -- update_value_in_dict()/get_accountwise_gle() assume
+		# every GL entry carries bdtdebit/bdtcredit, and a missing key reads
+		# back as None (frappe._dict), which crashes the += aggregation.
+		for entry in gl_entries:
+			entry["bdtdebit"] = flt(entry.get("debit"))
+			entry["bdtcredit"] = flt(entry.get("credit"))
 		return gl_entries
 
 
