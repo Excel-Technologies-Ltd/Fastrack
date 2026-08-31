@@ -56,7 +56,7 @@ BEGIN
             COALESCE(ISHB.`carrier`, '') AS Carrier,
             COALESCE(ISHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(ISHB.`hbl_shipper`, '') AS `Shipper Name`,
-            COALESCE(ISHB.`agent_name`, '') AS `Agent Name`,
+            COALESCE(ISHB.`agent`, '') AS `Agent Name`,
             COALESCE(IMB.`shipper`, '') AS `MBL Shipper`,
             COALESCE(ISHB.`shipping_line`, '') AS `Shipping Line`,
             COALESCE(ISHB.`customer`, '') AS `Customer Name`,

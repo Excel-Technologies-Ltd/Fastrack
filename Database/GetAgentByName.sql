@@ -41,7 +41,7 @@ BEGIN
         (
             -- Import Sea
             SELECT
-                TRIM(COALESCE(ISHB.`agent_name`, '')) AS AgentName
+                TRIM(COALESCE(ISHB.`agent`, '')) AS AgentName
             FROM `tabImport Sea House Bill` ISHB
             WHERE ISHB.`docstatus` = 1
 
@@ -117,7 +117,7 @@ BEGIN
                     (
                         -- Import Sea
                         SELECT
-                            TRIM(COALESCE(ISHB.`agent_name`, '')) AS AgentName
+                            TRIM(COALESCE(ISHB.`agent`, '')) AS AgentName
                         FROM `tabImport Sea House Bill` ISHB
                         WHERE ISHB.`docstatus` = 1
 

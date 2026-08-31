@@ -51,7 +51,7 @@ BEGIN
             COALESCE(ISHB.`sales_person`, '') AS `Sales Person`,
             COALESCE(ISHB.`hbl_shipper`, '') AS `Shipper Name`,
             COALESCE(ISHB.`customer`, '') AS `Customer Name`,
-            COALESCE(ISHB.`agent_name`, '') AS `Agent Name`,
+            COALESCE(ISHB.`agent`, '') AS `Agent Name`,
             COALESCE(ISHB.`notify_to`, '') AS `Notify Party`,
             COALESCE(IMB.`consignee`, '') AS `MBL Consignee`,
             COALESCE(ISHB.`lc`, '') AS `L/C No.`,
