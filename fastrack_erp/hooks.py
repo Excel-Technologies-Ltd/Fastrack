@@ -156,20 +156,25 @@ doc_events = {
 	},
 	"Sales Invoice": {
 		"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
+		"on_update_after_submit": "fastrack_erp.doc_events.sales_invoice.on_update_after_submit",
 		"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
 		"on_trash": "fastrack_erp.doc_events.sales_invoice.on_trash",
 	},
 	"Purchase Invoice": {
 		"on_submit": "fastrack_erp.doc_events.purchase_invoice.after_submit",
+		"on_update_after_submit": "fastrack_erp.doc_events.purchase_invoice.on_update_after_submit",
 		"before_cancel": "fastrack_erp.doc_events.purchase_invoice.on_cancel",
 		"on_trash": "fastrack_erp.doc_events.purchase_invoice.on_trash",
 	},
 	"Journal Entry": {
 		"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
+		"on_update_after_submit": "fastrack_erp.doc_events.journal_entry.on_update_after_submit",
 		"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
+		"on_trash": "fastrack_erp.doc_events.journal_entry.on_cancel",
 	},
 	"Payment Entry": {
 		"on_submit": "fastrack_erp.doc_events.payment_entry.after_submit",
+		"on_update_after_submit": "fastrack_erp.doc_events.payment_entry.on_update_after_submit",
 		"before_cancel": "fastrack_erp.doc_events.payment_entry.on_cancel",
 		"on_trash": "fastrack_erp.doc_events.payment_entry.on_trash",
 	},

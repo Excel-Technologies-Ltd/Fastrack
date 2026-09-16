@@ -10,6 +10,7 @@ HBL_TYPE_FIELD_MAP = {
     "Export D2D Bill": "custom_export_d2d_link",
 }
 
+
 def after_submit(doc, method):
     if not doc.custom_hbl_type:
         return
@@ -47,11 +48,17 @@ def after_submit(doc, method):
         row.base_net_amount = item.base_net_amount
         hbl_doc.append("invoice_list", row)
 
-    hbl_doc.total_invoice_amount = sum(
-        float(item.base_net_amount) for item in hbl_doc.invoice_list
-    )
+    # Keep the VAT list and the invoice USD/BDT totals in sync automatically
+    _sync_vat_list(hbl_doc)
+    _recalculate_invoice_totals(hbl_doc)
+
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
+
+
+def on_update_after_submit(doc, method):
+    _remove_from_hbl_invoice_list(doc)
+    after_submit(doc, method)
 
 
 def on_cancel(doc, method):
@@ -83,18 +90,57 @@ def _remove_from_hbl_invoice_list(doc):
         row for row in hbl_doc.vat_list if row.invoice_no != doc.name
     ]
 
-    invoice_amount_usd = sum(float(item.total_price or 0) for item in hbl_doc.invoice_list)
-    invoice_amount_bdt = sum(float(item.base_net_amount or 0) for item in hbl_doc.invoice_list)
-    vat_amount_usd = sum(float(row.vat_amount_usd or 0) for row in hbl_doc.vat_list)
-    vat_amount_bdt = sum(float(row.vat_amount_bdt or 0) for row in hbl_doc.vat_list)
-
-    hbl_doc.invoice_amount_usd = invoice_amount_usd
-    hbl_doc.vat_amount_usd = vat_amount_usd
-    hbl_doc.total_invoice_amount_usd = invoice_amount_usd + vat_amount_usd
-
-    hbl_doc.invoice_amount_bdt = invoice_amount_bdt
-    hbl_doc.vat_amount_bdt = vat_amount_bdt
-    hbl_doc.total_invoice_amount = invoice_amount_bdt + vat_amount_bdt
+    _recalculate_invoice_totals(hbl_doc)
 
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
+
+
+def _sync_vat_list(hbl_doc):
+    """Add a VAT List row for every Sales Invoice in invoice_list that does not
+    already have one, so VAT amounts always mirror the submitted invoices."""
+    existing = {row.invoice_no for row in hbl_doc.vat_list if row.invoice_no}
+    for row in hbl_doc.invoice_list:
+        if not row.invoice_link or row.invoice_link in existing:
+            continue
+
+        vat = frappe.db.get_value(
+            "Sales Invoice",
+            row.invoice_link,
+            ["total_taxes_and_charges", "base_total_taxes_and_charges"],
+        )
+        vat_usd, vat_bdt = vat or (0, 0)
+
+        hbl_doc.append(
+            "vat_list",
+            {
+                "invoice_no": row.invoice_link,
+                "vat_amount_usd": vat_usd or 0,
+                "vat_amount_bdt": vat_bdt or 0,
+            },
+        )
+        existing.add(row.invoice_link)
+
+
+def _recalculate_invoice_totals(hbl_doc):
+    """Sum invoice_list / vat_list child tables into the USD and BDT invoice
+    totals."""
+    invoice_amount_usd = sum(
+        float(item.total_price or 0) for item in hbl_doc.invoice_list
+    )
+    invoice_amount_bdt = sum(
+        float(item.base_net_amount or 0) for item in hbl_doc.invoice_list
+    )
+    vat_amount_usd = sum(
+        float(row.vat_amount_usd or 0) for row in hbl_doc.vat_list
+    )
+    vat_amount_bdt = sum(
+        float(row.vat_amount_bdt or 0) for row in hbl_doc.vat_list
+    )
+
+    hbl_doc.invoice_amount_usd = invoice_amount_usd
+    hbl_doc.invoice_amount_bdt = invoice_amount_bdt
+    hbl_doc.vat_amount_usd = vat_amount_usd
+    hbl_doc.vat_amount_bdt = vat_amount_bdt
+    hbl_doc.total_invoice_amount_usd = invoice_amount_usd + vat_amount_usd
+    hbl_doc.total_invoice_amount = invoice_amount_bdt + vat_amount_bdt

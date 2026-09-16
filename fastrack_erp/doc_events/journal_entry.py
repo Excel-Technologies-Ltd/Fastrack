@@ -10,6 +10,7 @@ HBL_TYPE_FIELD_MAP = {
     "Export D2D Bill": "custom_edhbl_id",
 }
 
+
 def after_submit(doc, method):
     if not doc.custom_hbl_type:
         return
@@ -26,6 +27,11 @@ def after_submit(doc, method):
 
     # Get the HBL document
     hbl_doc = frappe.get_doc(doc.custom_hbl_type, hbl_link)
+
+    # Not every HBL doctype stores a profit share list (e.g. D2D bills keep
+    # profit share in Payment Entry) -- skip those instead of failing.
+    if not hbl_doc.meta.has_field("profit_share_list"):
+        return
 
     for account in doc.accounts:
         party_name = ""
@@ -49,9 +55,15 @@ def after_submit(doc, method):
         }
         hbl_doc.append("profit_share_list", account_info)
 
-    hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
+    if hbl_doc.meta.has_field("total_profit_share"):
+        hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
+
+
+def on_update_after_submit(doc, method):
+    on_cancel(doc, method)
+    after_submit(doc, method)
 
 
 def on_cancel(doc, method):
@@ -71,10 +83,14 @@ def on_cancel(doc, method):
     # Get the HBL document
     hbl_doc = frappe.get_doc(doc.custom_hbl_type, hbl_link)
 
+    if not hbl_doc.meta.has_field("profit_share_list"):
+        return
+
     for item in hbl_doc.profit_share_list:
         if item.journal_id == doc.name:
             hbl_doc.profit_share_list.remove(item)
 
-    hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
+    if hbl_doc.meta.has_field("total_profit_share"):
+        hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)

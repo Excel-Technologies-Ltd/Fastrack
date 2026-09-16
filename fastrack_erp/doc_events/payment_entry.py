@@ -51,6 +51,11 @@ def _group_references_by_hbl(doc):
     return groups
 
 
+def on_update_after_submit(doc, method):
+    _remove_from_all_hbl_payment_lists(doc)
+    after_submit(doc, method)
+
+
 def on_cancel(doc, method):
     _remove_from_all_hbl_payment_lists(doc)
 

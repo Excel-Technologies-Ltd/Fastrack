@@ -10,6 +10,7 @@ HBL_TYPE_FIELD_MAP = {
     "Export D2D Bill": "custom_export_d2d_link",
 }
 
+
 def after_submit(doc, method):
     if not doc.custom_hbl_type:
         return
@@ -48,8 +49,14 @@ def after_submit(doc, method):
 
     # total_pay_bdt ("Total Pay (BDT)") is now owned by
     # doc_events.payment_entry -- do not write it here.
+    _recalculate_expense_totals(hbl_doc)
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
+
+
+def on_update_after_submit(doc, method):
+    _remove_from_hbl_purchase_list(doc)
+    after_submit(doc, method)
 
 
 def on_cancel(doc, method):
@@ -79,5 +86,16 @@ def _remove_from_hbl_purchase_list(doc):
     ]
     # total_pay_bdt ("Total Pay (BDT)") is now owned by
     # doc_events.payment_entry -- do not write it here.
+    _recalculate_expense_totals(hbl_doc)
     hbl_doc.flags.ignore_validate_update_after_submit = True
     hbl_doc.save(ignore_permissions=True)
+
+
+def _recalculate_expense_totals(hbl_doc):
+    """Sum purchase_invoice_list into the USD and BDT expense totals."""
+    hbl_doc.expense_amount_usd = sum(
+        float(row.amount or 0) for row in hbl_doc.purchase_invoice_list
+    )
+    hbl_doc.expense_amount_bdt = sum(
+        float(row.total_price or 0) for row in hbl_doc.purchase_invoice_list
+    )
