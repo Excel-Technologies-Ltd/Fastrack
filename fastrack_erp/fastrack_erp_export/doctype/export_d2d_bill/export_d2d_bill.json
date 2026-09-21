@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:mbl_no",
+ "autoname": "field:hbl_no",
  "creation": "2026-01-15 14:03:27.733247",
  "default_view": "List",
  "doctype": "DocType",
@@ -12,8 +12,8 @@
   "invoice_uid",
   "shipment_mode",
   "mbl_no",
-  "mbl_id",
   "hbl_no",
+  "hbl_id",
   "shipper",
   "consignee",
   "notify_party",
@@ -96,7 +96,9 @@
   {
    "fieldname": "mbl_no",
    "fieldtype": "Data",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "MBL No.",
    "reqd": 1,
    "unique": 1
@@ -104,9 +106,12 @@
   {
    "fieldname": "hbl_no",
    "fieldtype": "Data",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "HBL No.",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "allow_on_submit": 1,
@@ -315,22 +320,22 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_invoice_amount",
    "fieldtype": "Currency",
    "label": "Total Invoice Amount (BDT)",
-   "read_only": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
    "fieldname": "column_break_billing",
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "purchase_invoice_list",
    "fieldtype": "Table",
    "label": "Purchase Invoice List",
-   "options": "Fastrack Purchase Invoice",
-   "allow_on_submit": 1
+   "options": "Fastrack Purchase Invoice"
   },
   {
    "allow_on_submit": 1,
@@ -403,11 +408,11 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_pay_bdt",
    "fieldtype": "Currency",
    "label": "Total Pay (BDT)",
-   "read_only": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -455,11 +460,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "mbl_id",
-   "fieldtype": "Data",
-   "label": "MBL No."
-  },
-  {
    "fieldname": "etd",
    "fieldtype": "Date",
    "label": "ETD"
@@ -468,6 +468,11 @@
    "fieldname": "eta",
    "fieldtype": "Date",
    "label": "ETA"
+  },
+  {
+   "fieldname": "hbl_id",
+   "fieldtype": "Data",
+   "label": "HBL No."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -482,7 +487,7 @@
    "link_fieldname": "custom_export_d2d_link"
   }
  ],
- "modified": "2026-04-13 11:48:32.145596",
+ "modified": "2026-09-21 12:50:51.293920",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export D2D Bill",

@@ -56,11 +56,32 @@ def on_update_after_submit(doc, method):
     after_submit(doc, method)
 
 
-def on_cancel(doc, method):
+HBL_DOCTYPES = [
+    "Import Sea House Bill",
+    "Import Air House Bill",
+    "Import D2D Bill",
+    "Export Sea House Bill",
+    "Export Air House Bill",
+    "Export D2D Bill",
+    "Fastrack Draft Bill",
+    "Fastrack Purchase Invoice",
+    "Fastrack Sales Invoice",
+    "Fastrack Payment Entry",
+    "VAT List",
+]
+
+
+def before_cancel(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
     _remove_from_all_hbl_payment_lists(doc)
 
 
+def on_cancel(doc, method):
+    pass
+
+
 def on_trash(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
     _remove_from_all_hbl_payment_lists(doc)
 
 

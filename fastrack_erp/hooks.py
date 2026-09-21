@@ -157,25 +157,25 @@ doc_events = {
 	"Sales Invoice": {
 		"on_submit": "fastrack_erp.doc_events.sales_invoice.after_submit",
 		"on_update_after_submit": "fastrack_erp.doc_events.sales_invoice.on_update_after_submit",
-		"before_cancel": "fastrack_erp.doc_events.sales_invoice.on_cancel",
+		"before_cancel": "fastrack_erp.doc_events.sales_invoice.before_cancel",
 		"on_trash": "fastrack_erp.doc_events.sales_invoice.on_trash",
 	},
 	"Purchase Invoice": {
 		"on_submit": "fastrack_erp.doc_events.purchase_invoice.after_submit",
 		"on_update_after_submit": "fastrack_erp.doc_events.purchase_invoice.on_update_after_submit",
-		"before_cancel": "fastrack_erp.doc_events.purchase_invoice.on_cancel",
+		"before_cancel": "fastrack_erp.doc_events.purchase_invoice.before_cancel",
 		"on_trash": "fastrack_erp.doc_events.purchase_invoice.on_trash",
 	},
 	"Journal Entry": {
 		"on_submit": "fastrack_erp.doc_events.journal_entry.after_submit",
 		"on_update_after_submit": "fastrack_erp.doc_events.journal_entry.on_update_after_submit",
-		"before_cancel": "fastrack_erp.doc_events.journal_entry.on_cancel",
-		"on_trash": "fastrack_erp.doc_events.journal_entry.on_cancel",
+		"before_cancel": "fastrack_erp.doc_events.journal_entry.before_cancel",
+		"on_trash": "fastrack_erp.doc_events.journal_entry.on_trash",
 	},
 	"Payment Entry": {
 		"on_submit": "fastrack_erp.doc_events.payment_entry.after_submit",
 		"on_update_after_submit": "fastrack_erp.doc_events.payment_entry.on_update_after_submit",
-		"before_cancel": "fastrack_erp.doc_events.payment_entry.on_cancel",
+		"before_cancel": "fastrack_erp.doc_events.payment_entry.before_cancel",
 		"on_trash": "fastrack_erp.doc_events.payment_entry.on_trash",
 	},
 }
@@ -241,7 +241,19 @@ auto_cancel_exempted_doctypes = [
 # Ignore links to specified DocTypes when deleting documents
 # -----------------------------------------------------------
 
-# ignore_links_on_delete = ["Communication", "ToDo"]
+ignore_links_on_delete = [
+	"Import Sea House Bill",
+	"Import Air House Bill",
+	"Import D2D Bill",
+	"Export Sea House Bill",
+	"Export Air House Bill",
+	"Export D2D Bill",
+	"Fastrack Draft Bill",
+	"Fastrack Purchase Invoice",
+	"Fastrack Sales Invoice",
+	"Fastrack Payment Entry",
+	"VAT List",
+]
 
 # Request Events
 # ----------------

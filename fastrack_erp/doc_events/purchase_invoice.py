@@ -1,5 +1,19 @@
 import frappe
 
+HBL_DOCTYPES = [
+    "Import Sea House Bill",
+    "Import Air House Bill",
+    "Import D2D Bill",
+    "Export Sea House Bill",
+    "Export Air House Bill",
+    "Export D2D Bill",
+    "Fastrack Draft Bill",
+    "Fastrack Purchase Invoice",
+    "Fastrack Sales Invoice",
+    "Fastrack Payment Entry",
+    "VAT List",
+]
+
 # Map of HBL types to their link field names for Purchase Invoice
 HBL_TYPE_FIELD_MAP = {
     "Import Sea House Bill": "custom_shbl_id",
@@ -59,36 +73,46 @@ def on_update_after_submit(doc, method):
     after_submit(doc, method)
 
 
-def on_cancel(doc, method):
+def before_cancel(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
     _remove_from_hbl_purchase_list(doc)
 
 
+def on_cancel(doc, method):
+    pass
+
+
 def on_trash(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
     _remove_from_hbl_purchase_list(doc)
 
 
 def _remove_from_hbl_purchase_list(doc):
-    if not doc.custom_hbl_type:
-        return
+    affected = frappe.db.get_all(
+        "Fastrack Purchase Invoice",
+        filters={"invoice_link": doc.name},
+        fields=["parent", "parenttype"],
+        distinct=True,
+    )
 
-    link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
-    if not link_field:
-        return
+    all_affected = {(row.parenttype, row.parent) for row in affected}
 
-    hbl_link = doc.get(link_field)
-    if not hbl_link:
-        return
+    if doc.custom_hbl_type:
+        link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
+        if link_field and (hbl_link := doc.get(link_field)):
+            all_affected.add((doc.custom_hbl_type, hbl_link))
 
-    hbl_doc = frappe.get_doc(doc.custom_hbl_type, hbl_link)
-
-    hbl_doc.purchase_invoice_list = [
-        item for item in hbl_doc.purchase_invoice_list if item.invoice_link != doc.name
-    ]
-    # total_pay_bdt ("Total Pay (BDT)") is now owned by
-    # doc_events.payment_entry -- do not write it here.
-    _recalculate_expense_totals(hbl_doc)
-    hbl_doc.flags.ignore_validate_update_after_submit = True
-    hbl_doc.save(ignore_permissions=True)
+    for parenttype, parent in all_affected:
+        try:
+            hbl_doc = frappe.get_doc(parenttype, parent)
+            hbl_doc.purchase_invoice_list = [
+                item for item in hbl_doc.purchase_invoice_list if item.invoice_link != doc.name
+            ]
+            _recalculate_expense_totals(hbl_doc)
+            hbl_doc.flags.ignore_validate_update_after_submit = True
+            hbl_doc.save(ignore_permissions=True)
+        except Exception as e:
+            frappe.log_error(f"Error removing Purchase Invoice {doc.name} from {parenttype} {parent}: {e}", "HBL Unlink Error")
 
 
 def _recalculate_expense_totals(hbl_doc):
