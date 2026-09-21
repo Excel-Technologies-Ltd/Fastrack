@@ -307,8 +307,27 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
             doc_name: "docName",
         },
     },
-    [PDF_NAME_LIST.D2D_EXPORT_INVOICE]: {
-        name: PDF_NAME_LIST.D2D_EXPORT_INVOICE,
+    [PDF_NAME_LIST.D2D_EXPORT_INVOICE_USD]: {
+        name: PDF_NAME_LIST.D2D_EXPORT_INVOICE_USD,
+        parentDoctype: DOCTYPE_LIST.EXPORT_D2D_BILL.NAME,
+        isMasterBill: false,
+        selectPDFNAME: true,
+        selectDocName: true,
+        selectCustomer: true,
+        selectSupplier: false,
+        selectChildDoctype: true,
+        CHILD_DOCTYPE: DOCTYPE_LIST.EXPORT_D2D_BILL.CHILD_DOCTYPE.INVOICE_LIST.name,
+        CUSTOMER_FIELDS: ["consignee", "notify_party", "customer"],
+        DOWNLOAD_METHOD:
+            "fastrack_erp.report_api.export_d2d_invoice_usd.download_export_d2d_invoice_usd_pdf",
+        HAS_ARGUMENTS: true,
+        ARGUMENTS: {
+            invoice_ids: "selectedId",
+            doc_name: "docName",
+        },
+    },
+    [PDF_NAME_LIST.D2D_EXPORT_INVOICE_BDT]: {
+        name: PDF_NAME_LIST.D2D_EXPORT_INVOICE_BDT,
         parentDoctype: DOCTYPE_LIST.EXPORT_D2D_BILL.NAME,
         isMasterBill: false,
         selectPDFNAME: true,

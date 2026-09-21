@@ -21,18 +21,27 @@ def _download_fc_style_certificate_pdf(
 ):
     doc = frappe.get_doc(parent_doctype, doc_name)
     resolve_invoice_list_for_hbl_pdf(doc, parent_doctype, invoice_ids)
+    
     customer_name = ""
     customer_address = ""
     if doc.invoice_list and len(doc.invoice_list) > 0:
+        
         customer = doc.invoice_list[0].customer
         if customer:
             try:
+                
                 customer_doc = frappe.get_doc("Customer", customer)
                 customer_name = customer_doc.customer_name or customer
-                customer_address = customer_doc.primary_address or ""
+                customer_address = customer_doc.primary_address or customer_doc.customer_primary_address or ""
             except Exception:
                 customer_name = customer
                 customer_address = ""
+    if not customer_name:
+        customer_name = doc.get("customer") or doc.get("shipper_name") or ""
+    if not customer_address:
+        customer_doc = frappe.get_doc("Customer", doc.customer)
+        customer_address = customer_doc.primary_address or customer_doc.customer_primary_address or ""
+
     html_content = get_to_whom_concern_html(
         doc,
         customer_name,
@@ -83,16 +92,23 @@ def download_export_fc_export_pdf(doc_name, invoice_ids=None):
         customer_name = ""
         customer_address = ""
         if doc.invoice_list and len(doc.invoice_list) > 0:
-            customer = doc.invoice_list[0].customer
+            customer = doc.invoice_list[0].customer  or doc.invoice_list[0].hbl_shipper
             if customer:
                 try:
                     customer_doc = frappe.get_doc("Customer", customer)
                     customer_name = customer_doc.customer_name or customer
-                    customer_address = customer_doc.primary_address or ""
+                    customer_address = customer_doc.primary_address or customer_doc.customer_primary_address or ""
                 except Exception:
                     customer_name = customer
                     customer_address = ""
 
+        # if not customer_name:
+        #     customer_name = doc.get("customer") or doc.get("shipper_name") or doc.get("hbl_shipper") or ""
+        # if not customer_address:
+        #     customer_doc = frappe.get_doc("Customer", customer_name)
+        #     customer_address = customer_doc.primary_address or customer_doc.customer_primary_address or ""
+
+        
         html_content = get_to_whom_concern_html(
             doc,
             customer_name,
@@ -110,6 +126,7 @@ def download_export_fc_export_pdf(doc_name, invoice_ids=None):
 
 @frappe.whitelist()
 def download_shipping_order_pdf(doc_name):
+
     """Download Shipping Order PDF directly from the Shipping Order doctype."""
     try:
         doc = frappe.get_doc("Shipping Order", doc_name)
@@ -781,6 +798,7 @@ def get_to_whom_concern_html(
     
     # Format current date
     current_date = format_date(today(), "dd-MMM-yyyy")
+
     
     html_template = f"""
     <!DOCTYPE html>
@@ -905,8 +923,8 @@ def get_to_whom_concern_html(
 
             <!-- TO Section -->
             <div class="to-section">
-                <p><strong>TO:&nbsp;&nbsp; {doc.customer.upper() or doc.customer_name.upper()} </strong> </p>
-                <p style="margin-left: 40px;"> {customer_address.split('#')[0] if customer_address else ''} </p>
+                <p><strong>TO:&nbsp;&nbsp; {customer_name or  doc.customer.upper() or doc.customer_name.upper() } </strong> </p>
+                <p style="margin-left: 40px; margin-top: -10px;"> {customer_address.split('#')[0].strip() if customer_address else ''} </p>
             </div>
 
             <!-- Date -->
@@ -967,7 +985,9 @@ def get_to_whom_concern_preview(doc_name):
                 try:
                     customer_doc = frappe.get_doc("Customer", customer)
                     customer_name = customer_doc.customer_name or customer
-                    customer_address = customer_doc.primary_address or ""
+                    customer_address = customer_doc.customer_primary_address or ""
+                    
+
                 except:
                     customer_name = customer
                     customer_address = ""

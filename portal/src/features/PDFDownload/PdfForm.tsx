@@ -116,18 +116,29 @@ const PdfForm = () => {
     fields: ["name"],
   });
 
+  const { data: allCustomers } = useFrappeGetDocList("Customer", {
+    orFilters: [["customer_name", "like", `%${customerSearchVal}%`], ["name", "like", `%${customerSearchVal}%`]],
+    limit: 20,
+    fields: ["name", "customer_name"],
+  });
+
+  const { data: allSuppliers } = useFrappeGetDocList("Supplier", {
+    orFilters: [["supplier_name", "like", `%${supplierSearchVal}%`], ["name", "like", `%${supplierSearchVal}%`]],
+    limit: 20,
+    fields: ["name", "supplier_name"],
+  });
+
   const doclistArray = docNameList && docNameList.length > 0 ? docNameList : [];
 
-  const customerOptions = buildCustomerSelectOptions(
-    docTypeData as Record<string, unknown>,
-    pdfPolicy.CUSTOMER_FIELDS,
-    pdfPolicy.CHILD_DOCTYPE,
-  );
+  const customerOptions = allCustomers?.map((c: any) => ({
+    value: c.name,
+    label: c.customer_name || c.name,
+  })) || [];
 
-  const supplierOptions = buildSupplierSelectOptions(
-    docTypeData as Record<string, unknown>,
-    pdfPolicy.CHILD_DOCTYPE,
-  );
+  const supplierOptions = allSuppliers?.map((s: any) => ({
+    value: s.name,
+    label: s.supplier_name || s.name,
+  })) || [];
 
   // Sync docSearchValue when docName is cleared externally
   useEffect(() => {
