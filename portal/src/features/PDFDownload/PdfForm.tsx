@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Checkbox, Form, Card, Typography, Divider } from "antd";
 import {
   DownloadOutlined,
@@ -15,10 +15,6 @@ import { usePDFDownload } from "./PDFDownloadPorvider";
 import { buildPdfPolicyForName } from "../../utils/pdfPolicy";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
-import {
-  buildCustomerSelectOptions,
-  buildSupplierSelectOptions,
-} from "../../utils/pdfPickerOptions";
 import { toast } from "react-toastify";
 import { useFrappeGetDocList } from "frappe-react-sdk";
 import { List } from "./List";
@@ -116,29 +112,24 @@ const PdfForm = () => {
     fields: ["name"],
   });
 
-  const { data: allCustomers } = useFrappeGetDocList("Customer", {
-    orFilters: [["customer_name", "like", `%${customerSearchVal}%`], ["name", "like", `%${customerSearchVal}%`]],
-    limit: 20,
-    fields: ["name", "customer_name"],
-  });
-
-  const { data: allSuppliers } = useFrappeGetDocList("Supplier", {
-    orFilters: [["supplier_name", "like", `%${supplierSearchVal}%`], ["name", "like", `%${supplierSearchVal}%`]],
-    limit: 20,
-    fields: ["name", "supplier_name"],
-  });
-
   const doclistArray = docNameList && docNameList.length > 0 ? docNameList : [];
 
-  const customerOptions = allCustomers?.map((c: any) => ({
-    value: c.name,
-    label: c.customer_name || c.name,
-  })) || [];
+  // Customer / supplier options are the unique values from the invoice lines
+  const invoiceLines = useMemo(() => {
+    if (!pdfPolicy.CHILD_DOCTYPE) return [];
+    const rows = (docTypeData as Record<string, unknown>)[pdfPolicy.CHILD_DOCTYPE];
+    return Array.isArray(rows) ? rows : [];
+  }, [docTypeData, pdfPolicy.CHILD_DOCTYPE]);
 
-  const supplierOptions = allSuppliers?.map((s: any) => ({
-    value: s.name,
-    label: s.supplier_name || s.name,
-  })) || [];
+  const customerOptions = useMemo(
+    () => uniqueLineOptions(invoiceLines, "customer"),
+    [invoiceLines],
+  );
+
+  const supplierOptions = useMemo(
+    () => uniqueLineOptions(invoiceLines, "supplier"),
+    [invoiceLines],
+  );
 
   // Sync docSearchValue when docName is cleared externally
   useEffect(() => {
@@ -155,7 +146,7 @@ const PdfForm = () => {
     );
     if (exactMatch) {
       setDocSearchValue(exactMatch.name);
-      setPdfFormOption((prev) => ({ ...prev, docName: exactMatch.name }));
+      setPdfFormOption((prev) => ({ ...prev, docName: exactMatch.name, customerName: "", supplierName: "" }));
     }
   }, [doclistArray]);
 
@@ -292,7 +283,14 @@ const PdfForm = () => {
                     value={docSearchValue || undefined}
                     onChange={(value: string) => {
                       setDocSearchValue(value);
-                      setPdfFormOption((prev) => ({ ...prev, docName: value }));
+                      setCustomerSearchVal("");
+                      setSupplierSearchVal("");
+                      setPdfFormOption((prev) => ({
+                        ...prev,
+                        docName: value,
+                        customerName: "",
+                        supplierName: "",
+                      }));
                     }}
                     onSearch={(value: string) => {
                       setDocSearchValue(value);
@@ -430,6 +428,18 @@ const PdfForm = () => {
       </div>
     </Card>
   );
+};
+
+const uniqueLineOptions = (
+  rows: any[],
+  field: "customer" | "supplier",
+): { value: string; label: string }[] => {
+  const values = rows
+    .map((row) => (row?.[field] != null ? String(row[field]).trim() : ""))
+    .filter(Boolean);
+  return [...new Set(values)]
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+    .map((v) => ({ value: v, label: v }));
 };
 
 export default PdfForm;

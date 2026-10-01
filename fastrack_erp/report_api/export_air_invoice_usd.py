@@ -4,7 +4,7 @@ from fastrack_erp.report_api.import_sea_invoice_usd import download_invoice_usd_
 
 
 @frappe.whitelist()
-def download_export_air_invoice_usd_pdf(doc_name, invoice_ids=None):
+def download_export_air_invoice_usd_pdf(doc_name, invoice_ids=None, customer_name=None):
     download_invoice_usd_pdf(
         doc_name,
         invoice_ids,
@@ -12,4 +12,5 @@ def download_export_air_invoice_usd_pdf(doc_name, invoice_ids=None):
         heading="AIR EXPORT INVOICE",
         html_title="Air Export Invoice USD",
         filename_prefix="Air_Export_Invoice_USD",
+        customer_name=customer_name,
     )

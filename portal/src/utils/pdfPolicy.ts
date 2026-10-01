@@ -70,6 +70,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.SEA_IMPORT_INVOICE_BDT]: {
@@ -89,6 +90,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.AIR_IMPORT_INVOICE_USD]: {
@@ -108,6 +110,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.AIR_IMPORT_INVOICE_BDT]: {
@@ -127,6 +130,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.D2D_IMPORT_INVOICE_USD]: {
@@ -145,6 +149,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.D2D_IMPORT_INVOICE_BDT]: {
@@ -164,6 +169,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.IGM]: {
@@ -219,6 +225,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.SEA_BILL_OF_LADING_DRAFT]: {
@@ -270,6 +277,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.SEA_EXPORT_INVOICE_BDT]: {
@@ -289,6 +297,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.FC_EXPORT]: {
@@ -324,6 +333,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.D2D_EXPORT_INVOICE_BDT]: {
@@ -343,6 +353,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.AIR_EXPORT_INVOICE_USD]: {
@@ -362,6 +373,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.AIR_EXPORT_INVOICE_BDT]: {
@@ -381,6 +393,7 @@ export const PDF_POLICY: Record<string, PDFPolicy> = {
         ARGUMENTS: {
             invoice_ids: "selectedId",
             doc_name: "docName",
+            customer_name: "customerName",
         },
     },
     [PDF_NAME_LIST.SHIPPING]: {

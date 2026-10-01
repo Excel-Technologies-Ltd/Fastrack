@@ -19,24 +19,24 @@ def download_invoice_usd_pdf(
     heading,
     html_title,
     filename_prefix,
+    customer_name=None,
 ):
     """Build Sea/Air/D2D-style sales invoice USD PDF for any supported HBL doctype."""
     try:
         doc = frappe.get_doc(parent_doctype, doc_name)
         resolve_invoice_list_for_hbl_pdf(doc, parent_doctype, invoice_ids)
+        # "TO" is the customer picked on the portal; fall back to the first invoice line
+        customer_name = (customer_name or "").strip()
+        if not customer_name and doc.invoice_list:
+            customer_name = doc.invoice_list[0].customer or ""
         customer_address = ""
-        if doc.invoice_list and len(doc.invoice_list) > 0:
-            customer = doc.invoice_list[0].customer
-            if customer:
-                try:
-                    customer_doc = frappe.get_doc("Customer", customer)
-                    customer_address = customer_doc.primary_address or ""
-                except Exception:
-                    customer_address = ""
+        if customer_name:
+            customer_address = frappe.db.get_value("Customer", customer_name, "primary_address") or ""
         show_container_number = parent_doctype not in ("Import Air House Bill", "Export Air House Bill", "Import D2D Bill", "Export D2D Bill")
         html_content = get_import_invoice_usd_html(
             doc, customer_address, heading=heading, html_title=html_title,
             show_container_number=show_container_number,
+            customer_name=customer_name,
         )
         pdf_content = get_pdf(
             html_content,
@@ -52,7 +52,7 @@ def download_invoice_usd_pdf(
 
 
 @frappe.whitelist()
-def download_sea_import_invoice_usd_pdf(doc_name, invoice_ids=None):
+def download_sea_import_invoice_usd_pdf(doc_name, invoice_ids=None, customer_name=None):
     """Download Sea Import Invoice USD as PDF using HTML template"""
     download_invoice_usd_pdf(
         doc_name,
@@ -61,6 +61,7 @@ def download_sea_import_invoice_usd_pdf(doc_name, invoice_ids=None):
         heading="SEA IMPORT INVOICE",
         html_title="Sea Import Invoice USD",
         filename_prefix="Sea_Import_Invoice_USD",
+        customer_name=customer_name,
     )
 
 
@@ -80,13 +81,14 @@ def get_import_invoice_usd_html(
     heading="SEA IMPORT INVOICE",
     html_title="Sea Import Invoice USD",
     show_container_number=True,
+    customer_name=None,
 ):
     """Generate HTML content for import/export-style Invoice USD."""
     
     # Get customer info
-    customer_name = ""
-    if doc.invoice_list and len(doc.invoice_list) > 0:
+    if not customer_name and doc.invoice_list:
         customer_name = doc.invoice_list[0].customer or ""
+    customer_name = customer_name or ""
 
     inv_date = doc.get('hbl_date') or doc.get('mbl_date') or ''
 

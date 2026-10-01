@@ -4,7 +4,7 @@ from fastrack_erp.report_api.import_sea_invoice_bdt import download_invoice_bdt_
 
 
 @frappe.whitelist()
-def download_air_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
+def download_air_import_invoice_bdt_pdf(doc_name, invoice_ids=None, customer_name=None):
     download_invoice_bdt_pdf(
         doc_name,
         invoice_ids,
@@ -12,4 +12,5 @@ def download_air_import_invoice_bdt_pdf(doc_name, invoice_ids=None):
         html_title="Air Import Invoice BDT",
         heading="AIR IMPORT INVOICE",
         filename_prefix="Air_Import_Invoice_BDT",
+        customer_name=customer_name,
     )

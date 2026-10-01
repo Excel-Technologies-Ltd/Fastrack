@@ -6,7 +6,7 @@ from fastrack_erp.report_api.import_sea_invoice_usd import (
 
 
 @frappe.whitelist()
-def download_sea_import_invoice_from_mbl_usd_pdf(doc_name, invoice_ids=None):
+def download_sea_import_invoice_from_mbl_usd_pdf(doc_name, invoice_ids=None, customer_name=None):
     """Sea Import Invoice USD for Import Sea Master Bill (portal: Invoice from MBL)."""
     download_invoice_usd_pdf(
         doc_name,
@@ -15,4 +15,5 @@ def download_sea_import_invoice_from_mbl_usd_pdf(doc_name, invoice_ids=None):
         heading="SEA IMPORT INVOICE",
         html_title="Sea Import Invoice USD (MBL)",
         filename_prefix="Sea_Import_Invoice_MBL_USD",
+        customer_name=customer_name,
     )

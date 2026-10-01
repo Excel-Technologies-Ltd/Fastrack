@@ -16,27 +16,7 @@ export const List = () => {
         return rows;
     })();
 
-    let childData = [...rawChildData];
-
-    if (pdfPolicy.selectCustomer && pdfFormOption.customerName && childData.length) {
-        const sel = pdfFormOption.customerName.trim();
-        const filtered = childData.filter(
-            (row: any) => (row.customer || "").trim() === sel
-        );
-        if (filtered.length > 0) {
-            childData = filtered;
-        }
-    }
-
-    if (pdfPolicy.selectSupplier && pdfFormOption.supplierName && childData.length) {
-        const sel = pdfFormOption.supplierName.trim();
-        const filtered = childData.filter(
-            (row: any) => (row.supplier || "").trim() === sel
-        );
-        if (filtered.length > 0) {
-            childData = filtered;
-        }
-    }
+    const childData = rawChildData;
 
     // Handle select all checkbox
     const handleSelectAll = (checked: boolean) => {

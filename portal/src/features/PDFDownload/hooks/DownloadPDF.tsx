@@ -21,7 +21,8 @@ export const useDownloadPDF = () => {
   const pdfPolicy = PDF_POLICY[pdfFormOption.pdfName] || ({} as PDFPolicy);
   const args = pdfPolicy.HAS_ARGUMENTS && pdfPolicy.ARGUMENTS ? pdfPolicy.ARGUMENTS : {};
   const argsMap = Object.entries(args).reduce((acc, [key, value]) => {
-    acc[key] = pdfFormOption[value as keyof PdfFormOption];
+    const argValue = pdfFormOption[value as keyof PdfFormOption];
+    if (argValue != null && argValue !== "") acc[key] = argValue;
     return acc;
   }, {} as Record<string, any>);
 
