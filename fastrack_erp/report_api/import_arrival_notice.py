@@ -91,7 +91,7 @@ def get_igm_html(doc, _customer_name=''):
     mbl_display = _igm_escape(str(doc.get('mbl_no') or ''))
     bl_number = _igm_escape((doc.get('name') or doc.get('hbl_id') or '').strip())
     master_line = '1'  # Always 1 master line per HBL in this layout
-    line_no = _igm_escape(str(doc.get('hbl_line_no') or '').strip())
+    line_no = _igm_escape(str(doc.get('line_no') or '').strip())
     pkg_desc = _igm_escape(str(doc.get('pkg_name') or '').strip())
     marks = _igm_escape(str(doc.get('marks_and_numbers') or '').strip())
     goods = _igm_escape(str(doc.get('description_of_good') or '').strip())
@@ -114,8 +114,8 @@ def get_igm_html(doc, _customer_name=''):
 
     rotation = _igm_escape(str(doc.get('rotation') or '').strip())
     sailed_year = _igm_escape(_igm_year(doc) or '')
-    vessel = _igm_escape(str(doc.get('mv') or '').strip())
-    voyage = _igm_escape(str(doc.get('mv_voyage_no') or '').strip())
+    vessel = _igm_escape(str(doc.get('fv') or '').strip())
+    voyage = _igm_escape(str(doc.get('fv__v_no') or '').strip())
 
     return f"""
     <!DOCTYPE html>
