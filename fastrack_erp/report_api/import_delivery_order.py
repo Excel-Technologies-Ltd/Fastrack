@@ -41,16 +41,8 @@ def download_delivery_order_pdf(doc_name="SHBL-00000064"):
 def get_delivery_order_html(doc):
     """Generate HTML content for Delivery Order"""
 
-    # 1. Calculate Container Volume (Restored)
-    container_volume_list = []
-    if hasattr(doc, "container_cost_info") and doc.container_cost_info:
-        for container in doc.container_cost_info:
-            qty = container.get("qty", "") or ""
-            size = container.get("size", "") or ""
-            if qty and size:
-                container_volume_list.append(f"{qty}x{size}")
-
-    container_volume = ", ".join(container_volume_list)
+    # 1. Feeder vessel name and voyage, e.g. "MSC SUJIN, SX636A"
+    fv_name = ", ".join(v for v in (doc.get("fv"), doc.get("fv__v_no")) if v)
 
     # 2. Generate Container Rows with Rowspan
     container_rows = ""
@@ -213,7 +205,7 @@ def get_delivery_order_html(doc):
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">F/Vsl. Name</td>
-                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("vessel_name", "") or "CNC NEPTUNE, V-0HJ8RS1NC"}</div></td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {fv_name}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Rotation No.</td>
@@ -221,7 +213,7 @@ def get_delivery_order_html(doc):
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Line No.</td>
-                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("line_no", "") or doc.get("hbl_line_no", "") or ""}</div></td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("line_no") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">From</td>
@@ -241,7 +233,7 @@ def get_delivery_order_html(doc):
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Volume</td>
-                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {container_volume}</div></td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {doc.get("remarks") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Total Quantity</td>
