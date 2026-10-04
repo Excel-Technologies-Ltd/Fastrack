@@ -1,10 +1,10 @@
 import frappe
-from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url, format_date, today
 from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     get_fc_shipping_html,
     merge_fastrack_wkhtml_pdf_options,
@@ -49,7 +49,7 @@ def _download_fc_style_certificate_pdf(
         banner_title=banner_title,
         html_title=html_title,
     )
-    pdf_content = get_pdf(
+    pdf_content = get_fastrack_pdf(
         html_content,
         options=merge_fastrack_wkhtml_pdf_options(),
     )
@@ -116,7 +116,7 @@ def download_export_fc_export_pdf(doc_name, invoice_ids=None):
             banner_title="TO WHOM IT MAY CONCERN",
             html_title="TO WHOM IT MAY CONCERN",
         )
-        pdf_content = get_pdf(html_content, options=merge_fastrack_wkhtml_pdf_options())
+        pdf_content = get_fastrack_pdf(html_content, options=merge_fastrack_wkhtml_pdf_options())
         frappe.local.response.filename = f"FC_Export_{doc_name}.pdf"
         frappe.local.response.filecontent = pdf_content
         frappe.local.response.type = "download"
@@ -131,14 +131,13 @@ def download_shipping_order_pdf(doc_name):
     try:
         doc = frappe.get_doc("Shipping Order", doc_name)
         html_content = get_shipping_order_from_so_html(doc)
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(
                 {
                     'orientation': 'Landscape',
                     'margin-left': '8mm',
                     'margin-right': '8mm',
-                    'margin-top': '8mm',
                 },
             ),
         )
@@ -195,7 +194,7 @@ def get_shipping_order_from_so_html(doc):
                 margin: 8mm;
             }}
             body {{
-                font-family: Arial, Helvetica, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 11px;
                 margin: 0;
                 color: #000;
@@ -395,14 +394,13 @@ def download_export_shipping_pdf(doc_name, invoice_ids=None):
             invoice_ids,
         )
         html_content = get_export_shipping_order_html(doc)
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(
                 {
                     'orientation': 'Landscape',
                     'margin-left': '8mm',
                     'margin-right': '8mm',
-                    'margin-top': '8mm',
                 },
             ),
         )
@@ -474,7 +472,7 @@ def get_export_shipping_order_html(doc):
                 margin: 8mm;
             }}
             body {{
-                font-family: Arial, Helvetica, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 11px;
                 margin: 0;
                 color: #000;
@@ -810,7 +808,7 @@ def get_to_whom_concern_html(
         <style>
             {FASTTRACK_PDF_MAIN_CSS}
             body {{
-                font-family: Arial, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 12px;
                 margin: 0;
                 padding: 20px;

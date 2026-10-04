@@ -1,11 +1,11 @@
 import frappe
 import re
-from frappe.utils.pdf import get_pdf
 from frappe.utils import get_url
 from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     get_invoice_bdt_shipping_html,
     merge_fastrack_wkhtml_pdf_options,
@@ -41,7 +41,7 @@ def download_invoice_bdt_pdf(
             show_container_number=show_container_number,
             customer_name=customer_name,
         )
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(),
         )
@@ -215,7 +215,7 @@ def get_import_invoice_bdt_html(
         <style>
             {FASTTRACK_PDF_MAIN_CSS}
             body {{
-                font-family: Arial, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 12px;
                 margin: 0;
                 padding: 20px;

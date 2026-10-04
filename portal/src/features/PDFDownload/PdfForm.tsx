@@ -15,6 +15,10 @@ import { usePDFDownload } from "./PDFDownloadPorvider";
 import { buildPdfPolicyForName } from "../../utils/pdfPolicy";
 import { useDownloadPDF } from "./hooks/DownloadPDF";
 import { validatePdfPolicy } from "../../utils/validateOption";
+import {
+  buildCustomerSelectOptions,
+  buildSupplierSelectOptions,
+} from "../../utils/pdfPickerOptions";
 import { toast } from "react-toastify";
 import { useFrappeGetDocList } from "frappe-react-sdk";
 import { List } from "./List";
@@ -114,21 +118,24 @@ const PdfForm = () => {
 
   const doclistArray = docNameList && docNameList.length > 0 ? docNameList : [];
 
-  // Customer / supplier options are the unique values from the invoice lines
-  const invoiceLines = useMemo(() => {
-    if (!pdfPolicy.CHILD_DOCTYPE) return [];
-    const rows = (docTypeData as Record<string, unknown>)[pdfPolicy.CHILD_DOCTYPE];
-    return Array.isArray(rows) ? rows : [];
-  }, [docTypeData, pdfPolicy.CHILD_DOCTYPE]);
-
+  // Customer / supplier options: unique parties on the selected document and its invoice lines
   const customerOptions = useMemo(
-    () => uniqueLineOptions(invoiceLines, "customer"),
-    [invoiceLines],
+    () =>
+      buildCustomerSelectOptions(
+        docTypeData as Record<string, unknown>,
+        pdfPolicy.parentDoctype,
+        pdfPolicy.CHILD_DOCTYPE,
+      ),
+    [docTypeData, pdfPolicy.parentDoctype, pdfPolicy.CHILD_DOCTYPE],
   );
 
   const supplierOptions = useMemo(
-    () => uniqueLineOptions(invoiceLines, "supplier"),
-    [invoiceLines],
+    () =>
+      buildSupplierSelectOptions(
+        docTypeData as Record<string, unknown>,
+        pdfPolicy.parentDoctype,
+      ),
+    [docTypeData, pdfPolicy.parentDoctype],
   );
 
   // Sync docSearchValue when docName is cleared externally
@@ -428,18 +435,6 @@ const PdfForm = () => {
       </div>
     </Card>
   );
-};
-
-const uniqueLineOptions = (
-  rows: any[],
-  field: "customer" | "supplier",
-): { value: string; label: string }[] => {
-  const values = rows
-    .map((row) => (row?.[field] != null ? String(row[field]).trim() : ""))
-    .filter(Boolean);
-  return [...new Set(values)]
-    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
-    .map((v) => ({ value: v, label: v }));
 };
 
 export default PdfForm;

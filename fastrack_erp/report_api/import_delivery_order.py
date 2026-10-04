@@ -1,8 +1,8 @@
 import frappe
 from frappe.utils import get_url
-from frappe.utils.pdf import get_pdf
 
 from fastrack_erp.report_api.report_helpers import (
+    get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     merge_fastrack_wkhtml_pdf_options,
 )
@@ -21,7 +21,7 @@ def download_delivery_order_pdf(doc_name="SHBL-00000064"):
         html_content = get_delivery_order_html(doc)
 
         # Generate PDF
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(),
         )
@@ -99,7 +99,7 @@ def get_delivery_order_html(doc):
         <style>
             {FASTTRACK_PDF_MAIN_CSS}
             body {{
-                font-family: Arial, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 14px;
                 margin: 0;
                 padding: 20px;

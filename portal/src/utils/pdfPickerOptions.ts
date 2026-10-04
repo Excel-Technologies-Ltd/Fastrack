@@ -1,52 +1,68 @@
 /**
- * Customer / supplier pickers for PDF Download: merge header fields with
- * distinct values from child tables so filters match table rows for every
- * report (import/export sea, air, D2D, MBL, arrival, IGM, etc.).
+ * Customer / supplier pickers for PDF Download: unique parties linked on the
+ * selected document (header link fields) and on its invoice lines.
  */
 
-const sortLabels = (a: string, b: string) =>
-  a.localeCompare(b, undefined, { sensitivity: "base" });
+type PickerOption = { value: string; label: string };
 
-const DEFAULT_CUSTOMER_CHILD_KEYS = [
-  "invoice_list",
-  "draft_invoice_list",
-] as const;
+/** Header Link fields pointing to Customer / Supplier, per parent doctype. */
+const PARTY_LINK_FIELDS: Record<string, { customer: string[]; supplier: string[] }> = {
+  "Import Sea House Bill": {
+    customer: ["customer", "hbl_consignee", "notify_to", "co_loader", "cf_agent"],
+    supplier: ["hbl_shipper", "agent", "shipping_line", "carrier"],
+  },
+  "Import Air House Bill": {
+    customer: ["customer", "consignee", "notify_party"],
+    supplier: ["shipper", "agent", "airlines"],
+  },
+  "Import D2D Bill": {
+    customer: ["customer", "consignee", "notify_party"],
+    supplier: ["shipper", "agent"],
+  },
+  "Import Sea Master Bill": {
+    customer: [],
+    supplier: ["consignee", "shipper", "agent", "shipping_line"],
+  },
+  "Export Sea House Bill": {
+    customer: ["hbl_shipper", "hbl_consignee", "notify_to", "also_notify_party", "delivery_agent", "agent", "cf_agent"],
+    supplier: ["shipping_line"],
+  },
+  "Export Air House Bill": {
+    customer: ["shipper", "consignee", "notify_party", "also_notify_party", "agent"],
+    supplier: ["vendor", "airline"],
+  },
+  "Export D2D Bill": {
+    customer: ["customer", "consignee", "notify_party"],
+    supplier: ["shipper", "agent"],
+  },
+};
 
-const DEFAULT_SUPPLIER_CHILD_KEYS = [
-  "purchase_invoice_list",
-  "draft_invoice_list",
-] as const;
+/** Child tables whose rows carry a customer / supplier link. */
+const CUSTOMER_CHILD_KEYS = ["invoice_list"];
+const SUPPLIER_CHILD_KEYS = ["purchase_invoice_list"];
 
-function uniqueSorted(values: string[]): { value: string; label: string }[] {
-  const merged = [...new Set(values.map((v) => v.trim()).filter(Boolean))].sort(
-    sortLabels,
-  );
-  return merged.map((v) => ({ value: v, label: v }));
+const toText = (v: unknown) => (v != null ? String(v).trim() : "");
+
+function uniqueSorted(values: string[]): PickerOption[] {
+  return [...new Set(values.filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+    .map((v) => ({ value: v, label: v }));
 }
 
-function mergeChildKeys(
-  defaults: readonly string[],
-  policyChild?: string,
-): Set<string> {
-  const keys = new Set<string>([...defaults]);
-  if (policyChild) keys.add(policyChild);
-  return keys;
-}
-
-function collectRowStrings(
-  doc: Record<string, unknown>,
-  keys: Set<string>,
-  field: "customer" | "supplier",
+function collectPartyValues(
+  doc: Record<string, unknown> | null | undefined,
+  headerFields: string[],
+  childKeys: string[],
+  rowField: "customer" | "supplier",
 ): string[] {
-  const out: string[] = [];
-  for (const key of keys) {
+  if (!doc) return [];
+  const out = headerFields.map((f) => toText(doc[f]));
+  for (const key of childKeys) {
     const rows = doc[key];
     if (!Array.isArray(rows)) continue;
-    for (const r of rows) {
-      if (!r || typeof r !== "object") continue;
-      const v = (r as Record<string, unknown>)[field];
-      if (v != null && String(v).trim() !== "") {
-        out.push(String(v).trim());
+    for (const row of rows) {
+      if (row && typeof row === "object") {
+        out.push(toText((row as Record<string, unknown>)[rowField]));
       }
     }
   }
@@ -55,37 +71,20 @@ function collectRowStrings(
 
 export function buildCustomerSelectOptions(
   docTypeData: Record<string, unknown> | null | undefined,
-  customerDocFields: string[] | undefined,
+  parentDoctype: string,
   policyChildDoctype?: string,
-): { value: string; label: string }[] {
-  if (!docTypeData || Object.keys(docTypeData).length === 0) {
-    return [];
-  }
-
-  const fromDoc: string[] = [];
-  if (customerDocFields?.length) {
-    for (const field of customerDocFields) {
-      const v = docTypeData[field];
-      if (v != null && String(v).trim() !== "") {
-        fromDoc.push(String(v).trim());
-      }
-    }
-  }
-
-  const keys = mergeChildKeys(DEFAULT_CUSTOMER_CHILD_KEYS, policyChildDoctype);
-  const fromRows = collectRowStrings(docTypeData, keys, "customer");
-
-  return uniqueSorted([...fromDoc, ...fromRows]);
+): PickerOption[] {
+  const childKeys = [...new Set([...CUSTOMER_CHILD_KEYS, ...(policyChildDoctype ? [policyChildDoctype] : [])])];
+  return uniqueSorted(
+    collectPartyValues(docTypeData, PARTY_LINK_FIELDS[parentDoctype]?.customer ?? [], childKeys, "customer"),
+  );
 }
 
 export function buildSupplierSelectOptions(
   docTypeData: Record<string, unknown> | null | undefined,
-  policyChildDoctype?: string,
-): { value: string; label: string }[] {
-  if (!docTypeData || Object.keys(docTypeData).length === 0) {
-    return [];
-  }
-  const keys = mergeChildKeys(DEFAULT_SUPPLIER_CHILD_KEYS, policyChildDoctype);
-  const fromRows = collectRowStrings(docTypeData, keys, "supplier");
-  return uniqueSorted(fromRows);
+  parentDoctype: string,
+): PickerOption[] {
+  return uniqueSorted(
+    collectPartyValues(docTypeData, PARTY_LINK_FIELDS[parentDoctype]?.supplier ?? [], SUPPLIER_CHILD_KEYS, "supplier"),
+  );
 }

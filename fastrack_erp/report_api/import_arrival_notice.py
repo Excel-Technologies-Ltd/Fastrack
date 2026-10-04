@@ -3,8 +3,8 @@ import re
 
 import frappe
 from frappe.utils import getdate
-from frappe.utils.pdf import get_pdf
 from fastrack_erp.report_api.report_helpers import (
+    get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     get_arrival_notice_shipping_html,
     merge_fastrack_wkhtml_pdf_options,
@@ -133,7 +133,7 @@ def get_igm_html(doc, _customer_name=''):
                 height: 100%;
             }}
             body {{
-                font-family: Arial, Helvetica, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 font-size: 8px;
                 color: #000;
                 margin: 0;
@@ -294,7 +294,7 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
         )
         
         # Generate PDF
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(),
         )
@@ -318,7 +318,7 @@ def download_igm_pdf(doc_name="SHBL-00000064", customer_name="Fastrack"):
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
         html_content = get_igm_html(doc, customer_name)
-        pdf_content = get_pdf(
+        pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(
                 {'orientation': 'Landscape'},
@@ -387,7 +387,7 @@ def get_arrival_notice_html(
         <style>
             {FASTTRACK_PDF_MAIN_CSS}
             .document-container {{
-                font-family: Arial, sans-serif;
+                font-family: Vendura, Verdana, Helvetica, sans-serif;
                 max-width: 800px;
                 margin: 0 auto;
                 padding: 20px;
@@ -509,6 +509,7 @@ def get_arrival_notice_html(
             }}
             .table-header {{
                 background-color: #f0f0f0;
+                font-size: 12px;
             }}
             .table-cell {{
                 border: 1px solid #000;
@@ -519,6 +520,7 @@ def get_arrival_notice_html(
             .table-cell-data {{
                 border: 1px solid #000;
                 padding: 5px;
+                font-size: 12px;
                 text-align: center;
             }}
             .total-weight {{
@@ -617,8 +619,8 @@ def get_arrival_notice_html(
                 <tbody>
                     {container_rows}
                     <tr>
-                        <td colspan="5" style="border: 1px solid black; padding: 5px; text-align: right; font-weight: bold; border-top: 2px solid black;">Total Weight :</td>
-                        <td style="border: 1px solid black; padding: 5px; text-align: center; font-weight: bold; border-top: 2px solid black;">{doc.get('hbl_weight', '') or ''} KG</td>
+                        <td colspan="5" style="border: 1px solid black; padding: 5px; text-align: right; font-weight: bold; border-top: 2px solid black; font-size: 12px;">Total Weight :</td>
+                        <td style="border: 1px solid black; padding: 5px; text-align: center; font-weight: bold; border-top: 2px solid black; font-size: 12px;">{doc.get('hbl_weight', '') or ''} KG</td>
                     </tr>
                 </tbody>
             </table>

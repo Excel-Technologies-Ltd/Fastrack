@@ -37,7 +37,7 @@ def _val_cell(value, colspan=1):
     block-level text-indent reliably; no nested tables needed.
     """
     span_attr = f' colspan="{colspan}"' if colspan > 1 else ''
-    # 10px ≈ width of ": " in Arial 12px — keep first line flush, wrap at value start
+    # 10px ≈ width of ": " in Vendura 12px — keep first line flush, wrap at value start
     return (
         f'<td{span_attr} style="{_VAL}">'
         f'<div style="padding-left:10px;text-indent:-10px;">: {value}</div>'
@@ -249,8 +249,8 @@ def get_arrival_notice_shipping_html(doc):
         + _row('Port of Discharge', _d('port_of_discharge'), 'Inco Terms',       _d('inco_term'))
         + _row('Port of Delivery',  _d('port_of_delivery'),  'Volume CBM',       _d('hbl_vol_cbm'))
         + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
-        + _row('Goods Description', _d('description_of_good'),'Total Container',   int(doc.get('total_container_hbl') or 0))
-  
+        + _row('Shipment Mode', _d('custom_shipment_mode'),'Total Container',   int(doc.get('total_container_hbl') or 0))
+        + _row('Goods Description', _d('description_of_good'))
     )
     return _wrap_table(rows)
 
@@ -379,7 +379,7 @@ FASTTRACK_WKHTML_FOOTER_HTML = """<!DOCTYPE html>
     width: 100%;
   }
   body {
-    font-family: Arial, Helvetica, sans-serif !important;
+    font-family: Vendura, Verdana, Helvetica, sans-serif !important;
     font-size: 8px !important;
     line-height: 1.15 !important;
     color: #000 !important;
@@ -388,7 +388,7 @@ FASTTRACK_WKHTML_FOOTER_HTML = """<!DOCTYPE html>
   p {
     margin: 0 0 0.35mm 0 !important;
     padding: 0 !important;
-    font-family: Arial, Helvetica, sans-serif !important;
+    font-family: Vendura, Verdana, Helvetica, sans-serif !important;
     font-size: 8px !important;
     line-height: 1.15 !important;
     font-weight: normal !important;
@@ -396,7 +396,7 @@ FASTTRACK_WKHTML_FOOTER_HTML = """<!DOCTYPE html>
   }
   p:last-child { margin-bottom: 0 !important; }
   strong {
-    font-family: Arial, Helvetica, sans-serif !important;
+    font-family: Vendura, Verdana, Helvetica, sans-serif !important;
     font-size: 8px !important;
     font-weight: bold !important;
   }
@@ -420,13 +420,38 @@ def _write_fastrack_footer_html_path():
     return path
 
 
+# Top page margin for every Fastrack report PDF (space for pre-printed letterhead)
+FASTTRACK_PDF_MARGIN_TOP = '38.1mm'  # 1.5 inch (wkhtmltopdf rejects the 'in' unit)
+
+
 def merge_fastrack_wkhtml_pdf_options(extra=None):
     """Native wkhtml footer (correct size, no page-split). Pass orientation etc. in extra."""
     opts = {
         'footer-html': _write_fastrack_footer_html_path(),
         'footer-spacing': '2',
+        'margin-top': FASTTRACK_PDF_MARGIN_TOP,
         'margin-bottom': '18mm',
     }
     if extra:
         opts.update(extra)
     return opts
+
+
+def get_fastrack_pdf(html, options=None):
+    """frappe get_pdf that keeps our page margins.
+
+    frappe resets margin-top / margin-bottom to 15mm when the HTML has no
+    #header-html / #footer-html element, but honours margins declared on a
+    `.print-format { ... }` rule — so declare them there.
+    """
+    from frappe.utils.pdf import get_pdf
+
+    options = dict(options or {})
+    margins = "".join(
+        f"{key}: {options[key]}; "
+        for key in ("margin-top", "margin-bottom")
+        if options.get(key)
+    )
+    if margins:
+        html = f"<style>.print-format {{ {margins}}}</style>" + html
+    return get_pdf(html, options=options)
