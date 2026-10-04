@@ -203,7 +203,7 @@ def get_shipping_order_from_so_html(doc):
             .so-head {{ width: 100%; border-collapse: collapse; margin-bottom: 6px; }}
             .so-head td {{ vertical-align: top; }}
             .logo {{ height: 55px; }}
-            .title {{ text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 1px; }}
+            .title {{ text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 1px; display: inline-block; padding: 6px 20px; border: 2px solid #000; border-radius: 10px; white-space: nowrap; }}
             .right-head-table {{ width: 100%; border-collapse: collapse; font-size: 11px; }}
             .right-head-table td {{ padding: 1px 3px; vertical-align: top; white-space: nowrap; }}
             .rh-label {{ font-weight: bold; width: 1%; white-space: nowrap; }}
@@ -227,7 +227,7 @@ def get_shipping_order_from_so_html(doc):
             }}
             .right-meta {{ text-align: right; line-height: 1.8; }}
             .right-meta table {{ margin-left: auto; border-collapse: collapse; }}
-            .right-meta td {{ padding: 0 2px; text-align: left; }}
+            .right-meta td {{ padding: 0 2px; text-align: left; white-space: nowrap; }}
             .right-meta .ml {{ font-weight: bold; white-space: nowrap; }}
         </style>
     </head>
@@ -496,6 +496,11 @@ def get_export_shipping_order_html(doc):
                 font-size: 22px;
                 font-weight: bold;
                 letter-spacing: 1px;
+                display: inline-block;
+                padding: 6px 20px;
+                border: 2px solid #000;
+                border-radius: 10px;
+                white-space: nowrap;
             }}
             .right-head-table {{
                 width: 100%;
@@ -575,6 +580,7 @@ def get_export_shipping_order_html(doc):
             .right-meta td {{
                 padding: 0 2px;
                 text-align: left;
+                white-space: nowrap;
             }}
             .right-meta .ml {{
                 font-weight: bold;

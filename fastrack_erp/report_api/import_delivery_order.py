@@ -237,7 +237,7 @@ def get_delivery_order_html(doc):
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0;">Total Quantity</td>
-                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {int(doc.get("no_of_pkg_hbl", "") or 0)}</div></td>
+                                <td style="padding: 2px 0;"><div style="padding-left:10px;text-indent:-10px;">: {int(doc.get("no_of_pkg_hbl", "") or 0)} {doc.get("pkg_name") or ""}</div></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; padding: 2px 0; vertical-align: top;">Marks And<br>Number</td>

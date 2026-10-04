@@ -382,6 +382,23 @@ def _air_export_invoice_rows(doc, _d, _date):
     )
 
 
+def _d2d_export_invoice_rows(doc, _d, _date):
+    """D2D Export invoice shipping rows: Air Export layout, minus the rows Export
+    D2D Bill has no field for (carrier, flight, invoice, inco terms, volume)."""
+    return (
+        _row('Notify Party',        _d('notify_party'))
+        + _row('Consignee',         _d('consignee'))
+        + _row('Shipper',           _d('shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'ETD',              _date('etd'))
+        + _row('HBL Date',          _date('hbl_date'),        'ETA',              _date('eta'))
+        + _row('MBL No',            _d('mbl_no'),            'Total Weight', (str(doc.get('gr_weight') or 0))+' KG')
+        + _row('MBL Date',          _date('mbl_date'),        'Chargeable Weight', (str(doc.get('chargeable_weight') or 0))+' KG')
+        + _row('Port of Loading',   _d('port_of_loading'),   'Total (CTN/PKG)',  int(doc.get('no_of_pkg') or 0))
+        + _row('Port of Delivery',  _d('port_of_delivery'))
+        + _row('Goods Description', _rich_text_inline(doc.get('cargo_description')))
+    )
+
+
 def get_invoice_usd_shipping_html(doc):
     """Shipping details section for Sea Import Invoice USD.
 
@@ -405,6 +422,8 @@ def get_invoice_usd_shipping_html(doc):
         return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
     if doc.get('doctype') == 'Export Air House Bill':
         return _wrap_table(_air_export_invoice_rows(doc, _d, _date))
+    if doc.get('doctype') == 'Export D2D Bill':
+        return _wrap_table(_d2d_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -447,6 +466,8 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
         return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
     if doc.get('doctype') == 'Export Air House Bill':
         return _wrap_table(_air_export_invoice_rows(doc, _d, _date))
+    if doc.get('doctype') == 'Export D2D Bill':
+        return _wrap_table(_d2d_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
