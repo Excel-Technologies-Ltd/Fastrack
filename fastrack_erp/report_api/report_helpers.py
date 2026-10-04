@@ -291,6 +291,23 @@ def _air_import_invoice_rows(doc, _d, _date, lc_combined):
     )
 
 
+def _d2d_import_invoice_rows(doc, _d, _date, lc_combined):
+    """D2D Import invoice shipping rows: no vessel / voyage, feeder vessel,
+    container, shipment mode, shipping line, notify party or consignee rows."""
+    return (
+        _row('Shipper',             _d('hbl_shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'ETD',              _date('hbl_etd'))
+        + _row('HBL Date',          _date('hbl_date'),        'ETA',              _date('eta'))
+        + _row('MBL No',            _d('mbl_no'),            'Inco Terms',       _d('inco_term'))
+        + _row('MBL Date',          _date('mbl_date'),        'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
+        + _row('L/C No. &amp; Date',lc_combined,             'Volume CBM',       _d('hbl_vol_cbm'))
+        + _row('Port of Loading',   _d('port_of_loading'),   'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
+        + _row('Port of Discharge', _d('port_of_discharge'))
+        + _row('Port of Delivery',  _d('port_of_delivery'))
+        + _row('Goods Description', doc.get('description_of_good') or '')
+    )
+
+
 def get_invoice_usd_shipping_html(doc):
     """Shipping details section for Sea Import Invoice USD.
 
@@ -308,6 +325,8 @@ def get_invoice_usd_shipping_html(doc):
 
     if doc.get('doctype') == 'Import Air House Bill':
         return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
+    if doc.get('doctype') == 'Import D2D Bill':
+        return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -344,6 +363,8 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
 
     if doc.get('doctype') == 'Import Air House Bill':
         return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
+    if doc.get('doctype') == 'Import D2D Bill':
+        return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
