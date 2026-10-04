@@ -255,6 +255,42 @@ def get_arrival_notice_shipping_html(doc):
     return _wrap_table(rows)
 
 
+# Import invoices print the ETA as the invoice date (field name per doctype)
+_IMPORT_INVOICE_ETA_FIELD = {
+    'Import Sea House Bill': 'eta',
+    'Import Air House Bill': 'arrival_date',
+    'Import D2D Bill': 'eta',
+}
+
+
+def get_invoice_header_date(doc):
+    """Header "Date" on invoice PDFs: ETA for import HBLs, else HBL / MBL date."""
+    eta_field = _IMPORT_INVOICE_ETA_FIELD.get(doc.get('doctype'))
+    if eta_field:
+        return doc.get(eta_field) or ''
+    return doc.get('hbl_date') or doc.get('mbl_date') or ''
+
+
+def _air_import_invoice_rows(doc, _d, _date, lc_combined):
+    """Air Import invoice shipping rows: carrier / flight instead of vessel / voyage,
+    no feeder vessel, container or shipment mode rows."""
+    return (
+        _row('Notify Party',        _d('notify_to'))
+        + _row('Consignee',         _d('hbl_consignee'))
+        + _row('Shipper',           _d('hbl_shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'Carrier Name',     _d('airlines'))
+        + _row('HBL Date',          _date('hbl_date'),        'Flight Number',    _d('flight_name'))
+        + _row('MBL No',            _d('mbl_no'),            'ETD',              _date('hbl_etd'))
+        + _row('MBL Date',          _date('mbl_date'),        'ETA',              _date('eta'))
+        + _row('L/C No. &amp; Date',lc_combined,             'Inco Terms',       _d('inco_term'))
+        + _row('Port of Loading',   _d('port_of_loading'),   'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
+        + _row('Port of Discharge', _d('port_of_discharge'), 'Chargeable Weight', (str(doc.get('chargeable_weight') or 0))+' KG')
+        + _row('Port of Delivery',  _d('port_of_delivery'),  'Volume CBM',       _d('hbl_vol_cbm'))
+        + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
+        + _row('Goods Description', doc.get('description_of_good') or '')
+    )
+
+
 def get_invoice_usd_shipping_html(doc):
     """Shipping details section for Sea Import Invoice USD.
 
@@ -269,6 +305,9 @@ def get_invoice_usd_shipping_html(doc):
     lc_date     = _d('lc_date')
     lc_combined = f"{lc} &amp; {lc_date}" if (lc or lc_date) else ''
 
+
+    if doc.get('doctype') == 'Import Air House Bill':
+        return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -302,6 +341,9 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
     lc          = _d('lc')
     lc_date     = _d('lc_date')
     lc_combined = f"{lc} &amp; {lc_date}" if (lc or lc_date) else ''
+
+    if doc.get('doctype') == 'Import Air House Bill':
+        return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -420,6 +462,9 @@ def _write_fastrack_footer_html_path():
     return path
 
 
+# Font size for all text in every Fastrack report PDF
+FASTTRACK_PDF_FONT_SIZE = '12px'
+
 # Top page margin for every Fastrack report PDF (space for pre-printed letterhead)
 FASTTRACK_PDF_MARGIN_TOP = '38.1mm'  # 1.5 inch (wkhtmltopdf rejects the 'in' unit)
 
@@ -454,4 +499,6 @@ def get_fastrack_pdf(html, options=None):
     )
     if margins:
         html = f"<style>.print-format {{ {margins}}}</style>" + html
+    # Uniform text size across every report (the footer is a separate file, unaffected)
+    html += f"<style>body, body * {{ font-size: {FASTTRACK_PDF_FONT_SIZE} !important; }}</style>"
     return get_pdf(html, options=options)

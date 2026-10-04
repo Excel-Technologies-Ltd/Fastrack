@@ -5,6 +5,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     get_invoice_bdt_shipping_html,
@@ -392,7 +393,7 @@ def get_import_invoice_bdt_html(
                             <tr>
                                 <td style="padding:2px 4px; text-align:left;"><strong>Date</strong></td>
                                 <td style="text-align:center;"><strong>:</strong></td>
-                                <td style="padding:2px 4px; text-align:right;">{doc.get("hbl_date", "") or ""}</td>
+                                <td style="padding:2px 4px; text-align:right;">{get_invoice_header_date(doc)}</td>
                             </tr>
                             <tr>
                                 <td style="padding:2px 4px; text-align:left;"><strong>Currency</strong></td>

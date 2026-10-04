@@ -5,6 +5,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
     get_invoice_usd_shipping_html,
@@ -90,7 +91,7 @@ def get_import_invoice_usd_html(
         customer_name = doc.invoice_list[0].customer or ""
     customer_name = customer_name or ""
 
-    inv_date = doc.get('hbl_date') or doc.get('mbl_date') or ''
+    inv_date = get_invoice_header_date(doc)
 
     # Get container volume
     container_volume_list = []
