@@ -358,6 +358,30 @@ def _sea_export_invoice_rows(doc, _d, _date):
     )
 
 
+def _air_export_invoice_rows(doc, _d, _date):
+    """Air Export invoice shipping rows, using Export Air House Bill field names:
+    carrier / flight, Invoice & Date, gross + chargeable weight; no vessel,
+    container, shipment mode or shipping line rows."""
+    inv_no       = _d('inv_no')
+    inv_date     = _date('date_1')
+    inv_combined = f"{inv_no} &amp; {inv_date}" if (inv_no or inv_date) else ''
+    return (
+        _row('Notify Party',        _d('notify_party'))
+        + _row('Consignee',         _d('consignee'))
+        + _row('Shipper',           _d('shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'Carrier Name',     _d('airline'))
+        + _row('HBL Date',          _date('hbl_date'),        'Flight No.',       _d('flight_no'))
+        + _row('MBL No',            _d('mbl_no'),            'ETD',              _date('etd'))
+        + _row('MBL Date',          _date('mbl_date'),        'ETA',              _date('eta'))
+        + _row('Invoice &amp; Date', inv_combined,           'Inco Terms',       _d('inco_term'))
+        + _row('Port of Loading',   _d('port_of_loading'),   'Total Weight', (str(doc.get('hbl_gr_weight') or 0))+' KG')
+        + _row('Port of Delivery',  _d('port_of_delivery'),  'Chargeable Weight', (str(doc.get('chargeable_weight') or 0))+' KG')
+        + _right_only_row('Volume CBM',      _d('hbl_vol_cbm'))
+        + _right_only_row('Total (CTN/PKG)', int(doc.get('no_of_pkg') or 0))
+        + _row('Goods Description', _rich_text_inline(doc.get('description_of_goods')))
+    )
+
+
 def get_invoice_usd_shipping_html(doc):
     """Shipping details section for Sea Import Invoice USD.
 
@@ -379,6 +403,8 @@ def get_invoice_usd_shipping_html(doc):
         return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
     if doc.get('doctype') == 'Export Sea House Bill':
         return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
+    if doc.get('doctype') == 'Export Air House Bill':
+        return _wrap_table(_air_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -419,6 +445,8 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
         return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
     if doc.get('doctype') == 'Export Sea House Bill':
         return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
+    if doc.get('doctype') == 'Export Air House Bill':
+        return _wrap_table(_air_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
