@@ -49,9 +49,11 @@ def _download_fc_style_certificate_pdf(
         banner_title=banner_title,
         html_title=html_title,
     )
+    # FC Import must always print on a single page
     pdf_content = get_fastrack_pdf(
         html_content,
         options=merge_fastrack_wkhtml_pdf_options(),
+        fit_to_one_page=True,
     )
     safe_stem = filename_stem.replace(" ", "_")
     filename = f"{safe_stem}_{doc_name}.pdf"
@@ -779,7 +781,8 @@ def get_to_whom_concern_html(
                 container_volume_list.append(f"{qty}x{size}")
             try:
                 if qty:
-                    ocean_freight_total += float(amount) * int(qty)
+                    # float, not int: LCL quantities are fractional CBM (e.g. 7.35)
+                    ocean_freight_total += float(amount) * float(qty)
             except (ValueError, TypeError):
                 pass
             try:
@@ -791,6 +794,7 @@ def get_to_whom_concern_html(
 
     container_volume = ", ".join(container_volume_list)
     ocean_freight_rate = ", ".join(ocean_freight_parts)
+    ocean_freight_total = round(ocean_freight_total, 2)
     
     # amountbdt
     

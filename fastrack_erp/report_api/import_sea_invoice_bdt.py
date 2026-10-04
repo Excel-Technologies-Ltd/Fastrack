@@ -104,20 +104,8 @@ def get_import_invoice_bdt_html(
             if container_no:
                 container_numbers.append((container_no, size))  # store as tuple
 
-    if len(container_numbers) > 5:
-        # Group by size
-        size_count = {}
-        for _, size in container_numbers:
-            size_count[size] = size_count.get(size, 0) + 1
-
-        # Create grouped string like "20ft: 3, 40ft: 2"
-        grouped = [f"{size}/ {qty}" for size, qty in size_count.items()]
-        container_numbers_str = "" + ",</br>".join(grouped)
-    else:
-        # List individually
-        container_numbers_str = ",</br>".join(
-            f"{no}/{size}" for no, size in container_numbers
-        )
+    # Always list every container number, one per line
+    container_numbers_str = ",</br>".join(f"{no}/{size}" for no, size in container_numbers)
 
     # Get invoice items
     invoice_rows = ""

@@ -270,8 +270,10 @@ def get_delivery_order_html(doc):
             <p class="text-right"><strong>THIS DELIVERY ORDER IS VALID UP TO :</strong> {doc.get("do_validity", "") or ""}</p>
 
             <div class="text-right mt-5" style="margin-top:150px;">
-                <p><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
-                <p>As Agents</p>
+                <div style="display:inline-block; text-align:center;">
+                    <p><strong>For, Fastrack Cargo Solutions Ltd.</strong></p>
+                    <p>As Agents</p>
+                </div>
             </div>
         </div>
     </body>
