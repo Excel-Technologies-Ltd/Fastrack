@@ -375,7 +375,7 @@ def get_import_invoice_usd_html(
                         <p style="margin:0;"><strong>TO: {customer_name} </strong> </p>
                         <p style="margin:0;">{customer_address.split('#')[0] if customer_address else ''}</p>
                     </td>
-                    <td style="width:40%; vertical-align:top;">
+                    <td style="width:40%; vertical-align:top; padding-left:20px;">
                         <table style="width:100%; border-collapse:collapse; font-size:12px;">
                             <tr>
                                 <td style="width:40%; padding:2px 4px; text-align:left;"><strong>Invoice No</strong></td>

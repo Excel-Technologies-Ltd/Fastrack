@@ -93,9 +93,13 @@ def download_sea_bill_of_lading_original_pdf(doc_name):
         html_content = get_sea_bill_of_lading_html(doc, is_original=True)
 
         # Generate PDF
+        # Original must always print on a single page: small top margin, one
+        # font size for all text, and scale down until it fits
         pdf_content = get_fastrack_pdf(
             html_content,
-            options=merge_fastrack_wkhtml_pdf_options(),
+            options=merge_fastrack_wkhtml_pdf_options({'margin-top': '10mm'}),
+            font_size='10px',
+            fit_to_one_page=True,
         )
 
         # Set filename
@@ -340,7 +344,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
           }}
           ._header_title {{
             color: #7bbf24;
-            font-size: 20px;
+            font-size: 20px !important;  /* stays larger than the uniform report font size */
             font-weight: bold;
             text-align: center;
             margin-bottom: 5px;

@@ -557,13 +557,18 @@ def merge_fastrack_wkhtml_pdf_options(extra=None):
     return opts
 
 
-def get_fastrack_pdf(html, options=None):
+def get_fastrack_pdf(html, options=None, font_size=FASTTRACK_PDF_FONT_SIZE, fit_to_one_page=False):
     """frappe get_pdf that keeps our page margins.
 
     frappe resets margin-top / margin-bottom to 15mm when the HTML has no
     #header-html / #footer-html element, but honours margins declared on a
     `.print-format { ... }` rule — so declare them there.
+
+    font_size: forced size for all text; None keeps the template's own sizes.
+    fit_to_one_page: scale the page down (5% steps, min 50%) until it fits one page.
     """
+    import re
+
     from frappe.utils.pdf import get_pdf
 
     options = dict(options or {})
@@ -573,7 +578,19 @@ def get_fastrack_pdf(html, options=None):
         if options.get(key)
     )
     if margins:
-        html = f"<style>.print-format {{ {margins}}}</style>" + html
-    # Uniform text size across every report (the footer is a separate file, unaffected)
-    html += f"<style>body, body * {{ font-size: {FASTTRACK_PDF_FONT_SIZE} !important; }}</style>"
-    return get_pdf(html, options=options)
+        # appended, not prepended: content before <!DOCTYPE> drops the doctype and
+        # renders in quirks mode (table cells stop inheriting the body font size)
+        html += f"<style>.print-format {{ {margins}}}</style>"
+    if font_size:
+        html += f"<style>body, body * {{ font-size: {font_size} !important; }}</style>"
+    if not fit_to_one_page:
+        return get_pdf(html, options=options)
+
+    # frappe deletes the footer temp file after each render, so make a fresh one per pass
+    base = {k: v for k, v in options.items() if k != "footer-html"}
+    for step in range(11):
+        zoom = round(1 - step * 0.05, 2)
+        pdf = get_pdf(html, options=merge_fastrack_wkhtml_pdf_options({**base, "zoom": str(zoom)}))
+        if len(re.findall(rb"/Type\s*/Page[^s]", pdf)) <= 1:
+            break
+    return pdf
