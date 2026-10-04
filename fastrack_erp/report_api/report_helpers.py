@@ -308,6 +308,56 @@ def _d2d_import_invoice_rows(doc, _d, _date, lc_combined):
     )
 
 
+def _right_only_row(l2, v2):
+    """Row with an empty left column and a label/value in the right column."""
+    return f"""
+        <tr>
+            <td style="{_LBL}"></td>
+            <td style="{_VAL}"></td>
+            <td style="{_RLBL}">{l2}</td>
+            {_val_cell(v2)}
+        </tr>"""
+
+
+def _rich_text_inline(html):
+    """Text Editor HTML (<div class="ql-editor"><p>..</p>..) as inline lines joined by
+    <br>, so it starts right after the ": " instead of on the next line."""
+    import re
+
+    html = (html or '').strip()
+    html = re.sub(r'(?i)<p\b[^>]*>\s*<br\s*/?>\s*</p\s*>', '</p>', html)  # empty paragraph
+    html = re.sub(r'(?i)<br\s*/?>', '\n', html)
+    html = re.sub(r'(?i)</p\s*>', '\n', html)
+    html = re.sub(r'(?i)</?(div|p)\b[^>]*>', '', html)
+    lines = [line.strip() for line in html.strip('\n').split('\n')]
+    return '<br>'.join(lines)
+
+
+def _sea_export_invoice_rows(doc, _d, _date):
+    """Sea Export invoice shipping rows: export bill field names and
+    Invoice No. & Date in place of L/C No. & Date."""
+    inv_no      = _d('inv_no')
+    inv_date    = _date('date_1')
+    inv_combined = f"{inv_no} &amp; {inv_date}" if (inv_no or inv_date) else ''
+    return (
+        _row('Notify Party',        _d('notify_to'))
+        + _row('Consignee',         _d('hbl_consignee'))
+        + _row('Shipper',           _d('hbl_shipper'))
+        + _row('HBL No',            _d('hbl_id'),            'M/Vsl. Name',      _d('mv'))
+        + _row('HBL Date',          _date('hbl_date'),        'Voyage',           _d('mv_voyage_no'))
+        + _row('MBL No',            _d('mbl_no'),            'ETD',              _date('etd'))
+        + _row('MBL Date',          _date('mbl_date'),        'ETA',              _date('eta'))
+        + _row('Invoice No. &amp; Date', inv_combined,       'F/Vsl. Name',      _d('fv'))
+        + _row('Port of Loading',   _d('port_of_loading'),   'FV Voyage No',     _d('fv__v_no'))
+        + _row('Port of Discharge', _d('port_of_discharge'), 'Inco Terms',       _d('inco_term'))
+        + _row('Port of Delivery',  _d('port_of_delivery'),  'Total Weight', (str(doc.get('gross_weight') or 0))+' KG')
+        + _row('Shipment Mode',     _d('mode'),              'Volume CBM',       _d('hbl_vol_cbm'))
+        + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
+        + _right_only_row('Total Container', int(doc.get('total_container') or 0))
+        + _row('Goods Description', _rich_text_inline(doc.get('description_of_good')))
+    )
+
+
 def get_invoice_usd_shipping_html(doc):
     """Shipping details section for Sea Import Invoice USD.
 
@@ -327,6 +377,8 @@ def get_invoice_usd_shipping_html(doc):
         return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
     if doc.get('doctype') == 'Import D2D Bill':
         return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
+    if doc.get('doctype') == 'Export Sea House Bill':
+        return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
@@ -365,6 +417,8 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
         return _wrap_table(_air_import_invoice_rows(doc, _d, _date, lc_combined))
     if doc.get('doctype') == 'Import D2D Bill':
         return _wrap_table(_d2d_import_invoice_rows(doc, _d, _date, lc_combined))
+    if doc.get('doctype') == 'Export Sea House Bill':
+        return _wrap_table(_sea_export_invoice_rows(doc, _d, _date))
 
     rows = (
         _row('Notify Party',        _d('notify_to'))
