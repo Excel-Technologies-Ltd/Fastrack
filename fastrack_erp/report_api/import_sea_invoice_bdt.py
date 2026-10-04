@@ -5,6 +5,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_invoice_vat_rows_html,
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
@@ -110,6 +111,8 @@ def get_import_invoice_bdt_html(
     # Get invoice items
     invoice_rows = ""
     total_amount_bdt = 0
+    total_rate_usd = 0
+    total_price_usd = 0
     if hasattr(doc, "invoice_list") and doc.invoice_list:
         for idx, item in enumerate(doc.invoice_list):
             rate = round(float(item.get("rate", 0) or 0), 2)
@@ -117,6 +120,8 @@ def get_import_invoice_bdt_html(
             exchange_rate = item.get("exchange_rate", 0) or 0
             base_net_amount = round(float(item.get("base_net_amount", 0) or 0), 2)
             total_amount_bdt += round(float(base_net_amount), 2)
+            total_rate_usd += rate
+            total_price_usd += total_price
 
             if idx == 0:  # First row with rowspan for container number
                 container_td = f"""<td rowspan="{len(doc.invoice_list)}" style="border: 1px solid black; padding: 5px; text-align: center; vertical-align: middle;">{container_numbers_str}</td>""" if show_container_number else ""
@@ -416,10 +421,18 @@ def get_import_invoice_bdt_html(
                 </thead>
                 <tbody>
                     {invoice_rows}
+                    {get_invoice_vat_rows_html(doc, 6, show_container_number, currency='BDT')}
                     <tr>
-                        <td colspan="{7 if show_container_number else 6}" class="total-row">
+                        <td colspan="{4 if show_container_number else 3}" class="total-row">
                             <strong>Total:</strong>
                         </td>
+                        <td style="border: 1px solid black; padding: 5px;">
+                            <strong>{total_rate_usd:.2f}</strong>
+                        </td>
+                        <td style="border: 1px solid black; padding: 5px;">
+                            <strong>{total_price_usd:.2f}</strong>
+                        </td>
+                        <td style="border: 1px solid black; padding: 5px;"></td>
                         <td style="border: 1px solid black; padding: 5px;">
                             <strong>{total_amount_bdt:.2f}</strong>
                         </td>

@@ -255,6 +255,50 @@ def get_arrival_notice_shipping_html(doc):
     return _wrap_table(rows)
 
 
+def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_number, currency='USD'):
+    """VAT rows under the charges of an HBL invoice, one per vat_list row whose
+    invoice is printed on this PDF, amount (USD or BDT) in the last column.
+    Not added to the Total."""
+    if not doc.get('vat_list'):
+        return ''
+    printed = {
+        (row.get('invoice_link') or '').strip()
+        for row in (doc.get('invoice_list') or [])
+    }
+    amount_field = 'vat_amount_bdt' if currency == 'BDT' else 'vat_amount_usd'
+    # BDT invoice: show the VAT invoice's exchange rate in the Ex. Rate column
+    ex_rates = {
+        (row.get('invoice_link') or '').strip(): row.get('exchange_rate') or ''
+        for row in (doc.get('invoice_list') or [])
+    }
+    cell = 'border: 1px solid black; padding: 5px;'
+    rows = ''
+    for vat in doc.get('vat_list') or []:
+        invoice_no = (vat.get('invoice_no') or '').strip()
+        if invoice_no not in printed:
+            continue
+        if not (float(vat.get('vat_amount_usd') or 0) or float(vat.get('vat_amount_bdt') or 0)):
+            continue  # no VAT charged on this invoice
+        amount = round(float(vat.get(amount_field) or 0), 2)
+        if currency == 'BDT':
+            # BDT invoice also shows the USD VAT under Total Price $
+            middle = (
+                f'<td colspan="{columns_after_particulars - 3}" style="{cell}"></td>'
+                f'<td style="{cell}">{round(float(vat.get("vat_amount_usd") or 0), 2)}</td>'
+                f'<td style="{cell}">{ex_rates.get(invoice_no, "")}</td>'
+            )
+        else:
+            middle = f'<td colspan="{columns_after_particulars - 1}" style="{cell}"></td>'
+        rows += f"""
+                <tr>
+                    {f'<td style="{cell}"></td>' if show_container_number else ''}
+                    <td style="{cell}">VAT</td>
+                    {middle}
+                    <td style="{cell}">{amount}</td>
+                </tr>"""
+    return rows
+
+
 # Import invoices print the ETA as the invoice date (field name per doctype)
 _IMPORT_INVOICE_ETA_FIELD = {
     'Import Sea House Bill': 'eta',

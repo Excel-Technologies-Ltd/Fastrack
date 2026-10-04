@@ -5,6 +5,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
     resolve_invoice_list_for_hbl_pdf,
 )
 from fastrack_erp.report_api.report_helpers import (
+    get_invoice_vat_rows_html,
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
@@ -409,6 +410,7 @@ def get_import_invoice_usd_html(
                 </thead>
                 <tbody>
                     {invoice_rows}
+                    {get_invoice_vat_rows_html(doc, 5, show_container_number)}
                     <tr>
                         <td colspan="{6 if show_container_number else 5}" class="total-row">
                             <strong>Total:</strong>
