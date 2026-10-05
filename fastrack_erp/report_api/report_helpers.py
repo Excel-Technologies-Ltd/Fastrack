@@ -650,6 +650,16 @@ FASTTRACK_PDF_FONT_SIZE = '12px'
 FASTTRACK_PDF_MARGIN_TOP = '38.1mm'  # 1.5 inch (wkhtmltopdf rejects the 'in' unit)
 
 
+def get_fastrack_image_data_uri(filename):
+    """public/images/<filename> as a base64 data URI, so wkhtmltopdf embeds it
+    without fetching anything over the network."""
+    import base64
+
+    path = frappe.get_app_path('fastrack_erp', 'public', 'images', filename)
+    with open(path, 'rb') as f:
+        return 'data:image/jpeg;base64,' + base64.b64encode(f.read()).decode()
+
+
 def merge_fastrack_wkhtml_pdf_options(extra=None):
     """Native wkhtml footer (correct size, no page-split). Pass orientation etc. in extra."""
     opts = {

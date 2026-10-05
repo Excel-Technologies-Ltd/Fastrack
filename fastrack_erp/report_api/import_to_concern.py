@@ -5,6 +5,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
 )
 from fastrack_erp.report_api.report_helpers import (
     get_fastrack_pdf,
+    get_fastrack_image_data_uri,
     FASTTRACK_PDF_MAIN_CSS,
     get_fc_shipping_html,
     merge_fastrack_wkhtml_pdf_options,
@@ -152,6 +153,8 @@ def download_shipping_order_pdf(doc_name):
 
 def get_shipping_order_from_so_html(doc):
     """Generate landscape Shipping Order HTML from a Shipping Order document."""
+    signature_img = get_fastrack_image_data_uri('fastrack_signature.jpg')
+    seal_img = get_fastrack_image_data_uri('fastrack_seal.jpg')
     company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
     company_addr1 = 'DHAKA OFFICE: HOUSE# 11(7th Floor), ROAD# 4, BLOCK # F, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374'
     company_addr2 = 'CHITTAGONG OFFICE: 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634'
@@ -221,12 +224,8 @@ def get_shipping_order_from_so_html(doc):
             .sign-header td {{ padding: 2px 0; font-size: 11px; }}
             .sign-row {{ width: 100%; border-collapse: collapse; margin-top: 4px; }}
             .sign-row td {{ width: 33.33%; vertical-align: bottom; padding-top: 6px; }}
-            .stamp {{
-                width: 90px; height: 90px;
-                background-image: url('https://ftcl-portal.arcapps.org/files/fastrack_stamp.png');
-                background-size: contain; background-repeat: no-repeat;
-                background-position: center; margin: 0 auto;
-            }}
+            .stamp {{ width: 90px; height: 90px; display: block; margin: 0 auto; }}
+            .signature {{ width: 120px; height: auto; display: block; }}
             .right-meta {{ text-align: right; line-height: 1.8; }}
             .right-meta table {{ margin-left: auto; border-collapse: collapse; }}
             .right-meta td {{ padding: 0 2px; text-align: left; white-space: nowrap; }}
@@ -342,9 +341,11 @@ def get_shipping_order_from_so_html(doc):
 
             <table class='sign-row'>
                 <tr>
-                    <td style='vertical-align:bottom;'></td>
+                    <td style='vertical-align:bottom;'>
+                        <img class='signature' src='{signature_img}' alt='Signature'>
+                    </td>
                     <td style='text-align:center; vertical-align:bottom;'>
-                        <div class='stamp'></div>
+                        <img class='stamp' src='{seal_img}' alt='Seal'>
                     </td>
                     <td style='vertical-align:bottom;'>
                         <div class='right-meta'>
@@ -416,6 +417,8 @@ def download_export_shipping_pdf(doc_name, invoice_ids=None):
 
 def get_export_shipping_order_html(doc):
     """Generate landscape Shipping Order HTML matching paper layout."""
+    signature_img = get_fastrack_image_data_uri('fastrack_signature.jpg')
+    seal_img = get_fastrack_image_data_uri('fastrack_seal.jpg')
     company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
     company_addr1 = 'DHAKA OFFICE: HOUSE# 11(7th Floor), ROAD# 4, BLOCK # F, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374'
     company_addr2 = 'CHITTAGONG OFFICE: 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634'
@@ -565,11 +568,13 @@ def get_export_shipping_order_html(doc):
             .stamp {{
                 width: 90px;
                 height: 90px;
-                background-image: url('https://ftcl-portal.arcapps.org/files/fastrack_stamp.png');
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
+                display: block;
                 margin: 0 auto;
+            }}
+            .signature {{
+                width: 120px;
+                height: auto;
+                display: block;
             }}
             .right-meta {{
                 text-align: right;
@@ -704,10 +709,10 @@ def get_export_shipping_order_html(doc):
             <table class='sign-row'>
                 <tr>
                     <td style='vertical-align:bottom;'>
-                        <!-- authorized signature line placeholder -->
+                        <img class='signature' src='{signature_img}' alt='Signature'>
                     </td>
                     <td style='text-align:center; vertical-align:bottom;'>
-                        <div class='stamp'></div>
+                        <img class='stamp' src='{seal_img}' alt='Seal'>
                     </td>
                     <td style='vertical-align:bottom;'>
                         <div class='right-meta'>
