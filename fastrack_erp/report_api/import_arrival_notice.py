@@ -293,10 +293,11 @@ def download_arrival_notice_pdf(doc_name="SHBL-00000064",customer_name="Fastrack
             doc, customer_address, customer_name
         )
         
-        # Generate PDF
+        # Generate PDF (always a single page: long goods descriptions scale down)
         pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(),
+            fit_to_one_page=True,
         )
 
         # Set filename

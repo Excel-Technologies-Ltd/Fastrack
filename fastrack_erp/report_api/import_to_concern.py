@@ -153,8 +153,8 @@ def download_shipping_order_pdf(doc_name):
 def get_shipping_order_from_so_html(doc):
     """Generate landscape Shipping Order HTML from a Shipping Order document."""
     company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
-    company_addr1 = 'JAHAN CHAMBER (2ND FLOOR), 3048/4255, HALISHAHAR ROAD, CHOUMOHARI,'
-    company_addr2 = 'Agrabad C/A, Chittagong. Bangladesh'
+    company_addr1 = 'DHAKA OFFICE: HOUSE# 11(7th Floor), ROAD# 4, BLOCK # F, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374'
+    company_addr2 = 'CHITTAGONG OFFICE: 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634'
     company_cell = 'Cell: +880 1708544568 (DHK) / +880 1640753506 (CTG)'
     company_email1 = 'Email: sales@fastrackcargo.com.bd'
     company_email2 = 'Email: import.crm01@fastrackcargo.com.bd'
@@ -417,8 +417,8 @@ def download_export_shipping_pdf(doc_name, invoice_ids=None):
 def get_export_shipping_order_html(doc):
     """Generate landscape Shipping Order HTML matching paper layout."""
     company_name = 'FASTRACK CARGO SOLUTIONS LTD.'
-    company_addr1 = 'JAHAN CHAMBER (2ND FLOOR), 3048/4255, HALISHAHAR ROAD, CHOUMOHARI,'
-    company_addr2 = 'Agrabad C/A, Chittagong. Bangladesh'
+    company_addr1 = 'DHAKA OFFICE: HOUSE# 11(7th Floor), ROAD# 4, BLOCK # F, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374'
+    company_addr2 = 'CHITTAGONG OFFICE: 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634'
     company_cell = 'Cell: +880 1708544568 (DHK) / +880 1640753506 (CTG)'
     company_email1 = 'Email: sales@fastrackcargo.com.bd'
     company_email2 = 'Email: import.crm01@fastrackcargo.com.bd'

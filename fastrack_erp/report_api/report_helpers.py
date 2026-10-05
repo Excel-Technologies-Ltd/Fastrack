@@ -255,16 +255,33 @@ def get_arrival_notice_shipping_html(doc):
     return _wrap_table(rows)
 
 
-def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_number, currency='USD'):
-    """VAT rows under the charges of an HBL invoice, one per vat_list row whose
-    invoice is printed on this PDF, amount (USD or BDT) in the last column.
-    Not added to the Total."""
-    if not doc.get('vat_list'):
-        return ''
+def _printed_vat_rows(doc):
+    """vat_list rows whose invoice is printed on this PDF and carry a VAT amount."""
     printed = {
         (row.get('invoice_link') or '').strip()
         for row in (doc.get('invoice_list') or [])
     }
+    return [
+        vat for vat in (doc.get('vat_list') or [])
+        if (vat.get('invoice_no') or '').strip() in printed
+        and (float(vat.get('vat_amount_usd') or 0) or float(vat.get('vat_amount_bdt') or 0))
+    ]
+
+
+def get_invoice_vat_totals(doc):
+    """(USD, BDT) sum of the VAT rows printed by get_invoice_vat_rows_html,
+    rounded per row like the printed amounts, for adding to the invoice Total."""
+    rows = _printed_vat_rows(doc)
+    return (
+        sum(round(float(vat.get('vat_amount_usd') or 0), 2) for vat in rows),
+        sum(round(float(vat.get('vat_amount_bdt') or 0), 2) for vat in rows),
+    )
+
+
+def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_number, currency='USD'):
+    """VAT rows under the charges of an HBL invoice, one per vat_list row whose
+    invoice is printed on this PDF, amount (USD or BDT) in the last column.
+    Included in the Total via get_invoice_vat_totals."""
     amount_field = 'vat_amount_bdt' if currency == 'BDT' else 'vat_amount_usd'
     # BDT invoice: show the VAT invoice's exchange rate in the Ex. Rate column
     ex_rates = {
@@ -273,12 +290,8 @@ def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_num
     }
     cell = 'border: 1px solid black; padding: 5px;'
     rows = ''
-    for vat in doc.get('vat_list') or []:
+    for vat in _printed_vat_rows(doc):
         invoice_no = (vat.get('invoice_no') or '').strip()
-        if invoice_no not in printed:
-            continue
-        if not (float(vat.get('vat_amount_usd') or 0) or float(vat.get('vat_amount_bdt') or 0)):
-            continue  # no VAT charged on this invoice
         amount = round(float(vat.get(amount_field) or 0), 2)
         if currency == 'BDT':
             # BDT invoice also shows the USD VAT under Total Price $
@@ -613,7 +626,7 @@ FASTTRACK_WKHTML_FOOTER_HTML = """<!DOCTYPE html>
 </style>
 </head>
 <body>
-<p><strong>DHAKA OFFICE:</strong> HOUSE# 14(2nd Floor), ROAD# 13/C, BLOCK # E, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374</p>
+<p><strong>DHAKA OFFICE:</strong> HOUSE# 11(7th Floor), ROAD# 4, BLOCK # F, BANANI, DHAKA -1213, BANGLADESH. Tel: +880-2-8836368, Fax: +880-2-8836374</p>
 <p><strong>CHITTAGONG OFFICE:</strong> 259B/A, HARUN BHABON (1st Floor), BADAMTOLI, SK. MUJIB ROAD, AGRABAD C/A, CHITTAGONG. Tel: +880-31-2527634</p>
 </body>
 </html>

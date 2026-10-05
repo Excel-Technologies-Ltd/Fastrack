@@ -6,6 +6,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
 )
 from fastrack_erp.report_api.report_helpers import (
     get_invoice_vat_rows_html,
+    get_invoice_vat_totals,
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
@@ -184,6 +185,10 @@ def get_import_invoice_usd_html(
         </tr>
         """
         
+    # VAT rows are printed under the charges, so they count towards the Total
+    vat_usd, _ = get_invoice_vat_totals(doc)
+    total_amount += vat_usd
+
     # --- COLON ALIGNMENT & GAP REMOVAL ---
     shipping_details_html = get_invoice_usd_shipping_html(doc)
     shipping_details_html = re.sub(r'(<td[^>]*>)(?:&nbsp;|\s)*:\s*(?:<br\s*/?>|&nbsp;|\s)+', r'\1: ', shipping_details_html)

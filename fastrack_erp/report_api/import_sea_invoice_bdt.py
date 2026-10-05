@@ -6,6 +6,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
 )
 from fastrack_erp.report_api.report_helpers import (
     get_invoice_vat_rows_html,
+    get_invoice_vat_totals,
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
@@ -191,6 +192,11 @@ def get_import_invoice_bdt_html(
             <td style="border: 1px solid black; padding: 5px;">-</td>
         </tr>
         """
+
+    # VAT rows are printed under the charges, so they count towards the Total
+    vat_usd, vat_bdt = get_invoice_vat_totals(doc)
+    total_price_usd += vat_usd
+    total_amount_bdt += vat_bdt
 
     # --- COLON ALIGNMENT & GAP REMOVAL ---
     shipping_details_html = get_invoice_bdt_shipping_html(doc, container_volume)
