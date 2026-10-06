@@ -88,6 +88,8 @@ def update_child_hbl(doc, method):
 def delete_child_hbl_on_cancel(doc, method):
     name=doc.name
     parent_doctype=doc.mbl_doctype
+    if not parent_doctype or not doc.mbl_link or not frappe.db.exists(parent_doctype, doc.mbl_link):
+        return
     mbl_doc = frappe.get_doc(parent_doctype, doc.mbl_link)
 
     if parent_doctype in ["Import Sea Master Bill", "Import Air Master Bill", "Export Sea Master Bill", "Export Air Master Bill"]:
@@ -97,5 +99,6 @@ def delete_child_hbl_on_cancel(doc, method):
                 hbl_info.is_create=0
                 break
 
+    mbl_doc.flags.ignore_validate_update_after_submit = True
     mbl_doc.save(ignore_permissions=True)
             

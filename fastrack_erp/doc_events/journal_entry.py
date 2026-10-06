@@ -1,5 +1,15 @@
 import frappe
 
+HBL_DOCTYPES = [
+    "Import Sea House Bill",
+    "Import Air House Bill",
+    "Import D2D Bill",
+    "Export Sea House Bill",
+    "Export Air House Bill",
+    "Export D2D Bill",
+    "Profit Share List",
+]
+
 # Map of HBL types to their link field names for Journal Entry
 HBL_TYPE_FIELD_MAP = {
     "Import Sea House Bill": "custom_shbl_id",
@@ -62,35 +72,54 @@ def after_submit(doc, method):
 
 
 def on_update_after_submit(doc, method):
-    on_cancel(doc, method)
+    _remove_from_hbl_profit_share_list(doc)
     after_submit(doc, method)
 
 
+def before_cancel(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
+    _remove_from_hbl_profit_share_list(doc)
+
+
 def on_cancel(doc, method):
-    if not doc.custom_hbl_type:
-        return
+    pass
 
-    # Get the link field for this HBL type
-    link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
-    if not link_field:
-        return
 
-    # Get the HBL link value
-    hbl_link = doc.get(link_field)
-    if not hbl_link:
-        return
+def on_trash(doc, method):
+    doc.ignore_linked_doctypes = HBL_DOCTYPES
+    _remove_from_hbl_profit_share_list(doc)
 
-    # Get the HBL document
-    hbl_doc = frappe.get_doc(doc.custom_hbl_type, hbl_link)
 
-    if not hbl_doc.meta.has_field("profit_share_list"):
-        return
+def _remove_from_hbl_profit_share_list(doc):
+    """Remove this journal's rows from every HBL that holds them, not just the
+    one currently set on the journal (the link fields may have changed)."""
+    affected = frappe.db.get_all(
+        "Profit Share List",
+        filters={"journal_id": doc.name},
+        fields=["parent", "parenttype"],
+        distinct=True,
+    )
 
-    for item in hbl_doc.profit_share_list:
-        if item.journal_id == doc.name:
-            hbl_doc.profit_share_list.remove(item)
+    all_affected = {(row.parenttype, row.parent) for row in affected}
 
-    if hbl_doc.meta.has_field("total_profit_share"):
-        hbl_doc.total_profit_share = sum(float(item.amount) for item in hbl_doc.profit_share_list)
-    hbl_doc.flags.ignore_validate_update_after_submit = True
-    hbl_doc.save(ignore_permissions=True)
+    if doc.custom_hbl_type:
+        link_field = HBL_TYPE_FIELD_MAP.get(doc.custom_hbl_type)
+        if link_field and (hbl_link := doc.get(link_field)):
+            all_affected.add((doc.custom_hbl_type, hbl_link))
+
+    for parenttype, parent in all_affected:
+        if not frappe.db.exists(parenttype, parent):
+            continue
+
+        hbl_doc = frappe.get_doc(parenttype, parent)
+        if not hbl_doc.meta.has_field("profit_share_list"):
+            continue
+
+        hbl_doc.profit_share_list = [
+            item for item in hbl_doc.profit_share_list if item.journal_id != doc.name
+        ]
+
+        if hbl_doc.meta.has_field("total_profit_share"):
+            hbl_doc.total_profit_share = sum(float(item.amount or 0) for item in hbl_doc.profit_share_list)
+        hbl_doc.flags.ignore_validate_update_after_submit = True
+        hbl_doc.save(ignore_permissions=True)

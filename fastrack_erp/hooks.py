@@ -253,6 +253,7 @@ ignore_links_on_delete = [
 	"Fastrack Sales Invoice",
 	"Fastrack Payment Entry",
 	"VAT List",
+	"Profit Share List",
 ]
 
 # Request Events
