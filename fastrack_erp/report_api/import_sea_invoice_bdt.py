@@ -7,6 +7,7 @@ from fastrack_erp.report_api.invoice_list_bridge import (
 from fastrack_erp.report_api.report_helpers import (
     get_invoice_vat_rows_html,
     get_invoice_vat_totals,
+    fmt_min2,
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
@@ -140,16 +141,16 @@ def get_import_invoice_bdt_html(
                         {item.get("uom", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {rate}
+                        {fmt_min2(rate)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {total_price}
+                        {fmt_min2(total_price)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {exchange_rate}
+                        {fmt_min2(exchange_rate)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {base_net_amount}
+                        {fmt_min2(base_net_amount)}
                     </td>
                 </tr>
                 """
@@ -166,16 +167,16 @@ def get_import_invoice_bdt_html(
                         {item.get("uom", "") or ""}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {rate}
+                        {fmt_min2(rate)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {total_price}
+                        {fmt_min2(total_price)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {exchange_rate}
+                        {fmt_min2(exchange_rate)}
                     </td>
                     <td style="border: 1px solid black; padding: 5px;">
-                        {base_net_amount}
+                        {fmt_min2(base_net_amount)}
                     </td>
                 </tr>
                 """

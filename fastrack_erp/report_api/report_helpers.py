@@ -255,6 +255,20 @@ def get_arrival_notice_shipping_html(doc):
     return _wrap_table(rows)
 
 
+def fmt_min2(value):
+    """Number with at least 2 decimals (5500 -> 5500.00, 123.6 -> 123.60),
+    keeping any extra precision (121.5432 stays 121.5432). '' for empty."""
+    if value is None or value == '':
+        return ''
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return value
+    text = f"{num:.6f}".rstrip('0')
+    whole, _, decimals = text.partition('.')
+    return f"{whole}.{decimals.ljust(2, '0')}"
+
+
 def _printed_vat_rows(doc):
     """vat_list rows whose invoice is printed on this PDF and carry a VAT amount."""
     printed = {
@@ -297,8 +311,8 @@ def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_num
             # BDT invoice also shows the USD VAT under Total Price $
             middle = (
                 f'<td colspan="{columns_after_particulars - 3}" style="{cell}"></td>'
-                f'<td style="{cell}">{round(float(vat.get("vat_amount_usd") or 0), 2)}</td>'
-                f'<td style="{cell}">{ex_rates.get(invoice_no, "")}</td>'
+                f'<td style="{cell}">{fmt_min2(round(float(vat.get("vat_amount_usd") or 0), 2))}</td>'
+                f'<td style="{cell}">{fmt_min2(ex_rates.get(invoice_no, ""))}</td>'
             )
         else:
             middle = f'<td colspan="{columns_after_particulars - 1}" style="{cell}"></td>'
@@ -307,7 +321,7 @@ def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_num
                     {f'<td style="{cell}"></td>' if show_container_number else ''}
                     <td style="{cell}">VAT</td>
                     {middle}
-                    <td style="{cell}">{amount}</td>
+                    <td style="{cell}">{fmt_min2(amount)}</td>
                 </tr>"""
     return rows
 
