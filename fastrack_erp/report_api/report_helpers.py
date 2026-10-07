@@ -292,10 +292,28 @@ def get_invoice_vat_totals(doc):
     )
 
 
-def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_number, currency='USD'):
+def get_invoice_vat_row_count(doc):
+    """Number of VAT rows get_invoice_vat_rows_html prints, so the Container
+    Number cell can span them as well as the charge rows."""
+    return len(_printed_vat_rows(doc))
+
+
+def get_charges_row_style(container_count, spanned_row_count):
+    """style="" for each charge / VAT row spanned by the Container Number cell.
+    wkhtmltopdf gives all of a tall rowspan cell's extra height to its last
+    row, so share it out evenly instead: one ~14.4px line (12px text, 1.2
+    line height) per container plus the cell padding."""
+    if not container_count or not spanned_row_count:
+        return ''
+    height = round((container_count * 14.4 + 8) / spanned_row_count)
+    return f' style="height: {height}px;"'
+
+
+def get_invoice_vat_rows_html(doc, columns_after_particulars, currency='USD', row_style=''):
     """VAT rows under the charges of an HBL invoice, one per vat_list row whose
     invoice is printed on this PDF, amount (USD or BDT) in the last column.
-    Included in the Total via get_invoice_vat_totals."""
+    Included in the Total via get_invoice_vat_totals. No Container Number
+    cell: the charge rows' Container Number cell spans these rows too."""
     amount_field = 'vat_amount_bdt' if currency == 'BDT' else 'vat_amount_usd'
     # BDT invoice: show the VAT invoice's exchange rate in the Ex. Rate column
     ex_rates = {
@@ -317,8 +335,7 @@ def get_invoice_vat_rows_html(doc, columns_after_particulars, show_container_num
         else:
             middle = f'<td colspan="{columns_after_particulars - 1}" style="{cell}"></td>'
         rows += f"""
-                <tr>
-                    {f'<td style="{cell}"></td>' if show_container_number else ''}
+                <tr{row_style}>
                     <td style="{cell}">VAT</td>
                     {middle}
                     <td style="{cell}">{fmt_min2(amount)}</td>

@@ -6,6 +6,8 @@ from fastrack_erp.report_api.invoice_list_bridge import (
 )
 from fastrack_erp.report_api.report_helpers import (
     get_invoice_vat_rows_html,
+    get_invoice_vat_row_count,
+    get_charges_row_style,
     get_invoice_vat_totals,
     fmt_min2,
     get_invoice_header_date,
@@ -122,16 +124,27 @@ def get_import_invoice_usd_html(
     # Get invoice items
     invoice_rows = ""
     total_amount = 0
+    total_rate = 0
+    # Rows spanned by the Container Number cell share its height evenly
+    charges_row_style = (
+        get_charges_row_style(
+            len(container_numbers),
+            len(doc.invoice_list or []) + get_invoice_vat_row_count(doc),
+        )
+        if show_container_number
+        else ''
+    )
     if hasattr(doc, 'invoice_list') and doc.invoice_list:
         for idx, item in enumerate(doc.invoice_list):
             rate = round(float(item.get('rate', 0) or 0), 2)
             total_price = round(float(item.get('total_price', 0) or 0), 2)
             total_amount += float(total_price) if total_price else 0
+            total_rate += rate
             
             if idx == 0:  # First row with rowspan for container number
-                container_td = f"""<td rowspan="{len(doc.invoice_list)}" class="container-cell">{container_numbers_str}</td>""" if show_container_number else ""
+                container_td = f"""<td rowspan="{len(doc.invoice_list) + get_invoice_vat_row_count(doc)}" class="container-cell">{container_numbers_str}</td>""" if show_container_number else ""
                 invoice_rows += f"""
-                <tr>
+                <tr{charges_row_style}>
                     {container_td}
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('item_code', '') or ''}
@@ -155,7 +168,7 @@ def get_import_invoice_usd_html(
                 """
             else:  # Subsequent rows without container number column
                 invoice_rows += f"""
-                <tr>
+                <tr{charges_row_style}>
                     <td style="border: 1px solid black; padding: 5px;">
                         {item.get('item_code', '') or ''}
                     </td>
@@ -402,11 +415,15 @@ def get_import_invoice_usd_html(
                 </thead>
                 <tbody>
                     {invoice_rows}
-                    {get_invoice_vat_rows_html(doc, 5, show_container_number)}
+                    {get_invoice_vat_rows_html(doc, 5, row_style=charges_row_style)}
                     <tr>
-                        <td colspan="{6 if show_container_number else 5}" class="total-row">
+                        <td colspan="{4 if show_container_number else 3}" class="total-row">
                             <strong>Total:</strong>
                         </td>
+                        <td style="border: 1px solid black; padding: 5px;">
+                            <strong>{total_rate:.2f}</strong>
+                        </td>
+                        <td style="border: 1px solid black; padding: 5px;"></td>
                         <td style="border: 1px solid black; padding: 5px;">
                             <strong>{total_amount:.2f}</strong>
                         </td>
