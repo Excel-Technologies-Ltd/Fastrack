@@ -496,8 +496,9 @@ def get_invoice_usd_shipping_html(doc):
         + _row('Port of Delivery',  _d('port_of_delivery'),  'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
         + _row( 'Shipment Mode', (doc.get('custom_shipment_mode') or ""), 'Volume CBM',       _d('hbl_vol_cbm'))
         + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
-        + _row( 'Goods Description', (doc.get('description_of_good') or '' ),  'Total Container',   int(doc.get('total_container_hbl') or 0) )
-        
+        + _right_only_row('Total Container', int(doc.get('total_container_hbl') or 0))
+        # Goods Description on its own row, value spanning the full width
+        + _row('Goods Description', doc.get('description_of_good') or '')
     )
     return _wrap_table(rows)
 
@@ -540,8 +541,9 @@ def get_invoice_bdt_shipping_html(doc, container_volume=''):
         + _row('Port of Delivery',  _d('port_of_delivery'),  'Total Weight', (str(doc.get('hbl_weight') or 0))+' KG')
         + _row( 'Shipment Mode', (doc.get('custom_shipment_mode') or ""), 'Volume CBM',       _d('hbl_vol_cbm'))
         + _row('Shipping Line',     _d('shipping_line'),     'Total (CTN/PKG)',  int(doc.get('no_of_pkg_hbl') or 0))
-        + _row( 'Goods Description', (doc.get('description_of_good') or '' ),  'Total Container',   int(doc.get('total_container_hbl') or 0) )
-        
+        + _right_only_row('Total Container', int(doc.get('total_container_hbl') or 0))
+        # Goods Description on its own row, value spanning the full width
+        + _row('Goods Description', doc.get('description_of_good') or '')
     )
     return _wrap_table(rows)
 
@@ -586,6 +588,38 @@ def get_shipping_details_html(doc, format_date_fn=None):
 FASTTRACK_PDF_MAIN_CSS = """
 .ft-pdf-main {
     box-sizing: border-box;
+}
+"""
+
+# Charges table of the HBL sales invoices (USD and BDT). Compact cells and a
+# one-line-per-container rowspan cell keep the whole table, Total included, on
+# the first page: wkhtmltopdf cannot split a rowspan cell across pages.
+INVOICE_CHARGES_TABLE_CSS = """
+.charges-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.2;
+    border: 1px solid black;
+}
+.charges-table th,
+.charges-table td {
+    border: 1px solid black;
+    padding: 3px 4px !important;
+}
+.charges-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.charges-table td.container-cell {
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 9.5px;
+}
+.charges-table tr {
+    page-break-inside: avoid;
 }
 """
 

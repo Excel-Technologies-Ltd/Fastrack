@@ -63,11 +63,8 @@ def download_sea_bill_of_lading_draft_pdf(doc_name):
         # Generate HTML content for draft
         html_content = get_sea_bill_of_lading_html(doc, is_original=False)
 
-        # Generate PDF
-        pdf_content = get_fastrack_pdf(
-            html_content,
-            options=merge_fastrack_wkhtml_pdf_options(),
-        )
+        # Generate PDF on a single page, same as the Original
+        pdf_content = _get_sea_bill_of_lading_pdf(html_content)
 
         # Set filename
         filename = f"Sea_Bill_of_Lading_Draft_{doc_name}.pdf"
@@ -93,14 +90,7 @@ def download_sea_bill_of_lading_original_pdf(doc_name):
         html_content = get_sea_bill_of_lading_html(doc, is_original=True)
 
         # Generate PDF
-        # Original must always print on a single page: small top margin, one
-        # font size for all text, and scale down until it fits
-        pdf_content = get_fastrack_pdf(
-            html_content,
-            options=merge_fastrack_wkhtml_pdf_options({'margin-top': '10mm'}),
-            font_size='10px',
-            fit_to_one_page=True,
-        )
+        pdf_content = _get_sea_bill_of_lading_pdf(html_content)
 
         # Set filename
         filename = f"Sea_Bill_of_Lading_Original_{doc_name}.pdf"
@@ -112,6 +102,17 @@ def download_sea_bill_of_lading_original_pdf(doc_name):
 
     except Exception as e:
         frappe.throw(f"Error generating PDF: {str(e)}")
+
+
+def _get_sea_bill_of_lading_pdf(html_content):
+    """Draft and Original must always print on a single page: small top margin,
+    one font size for all text, and scale down until it fits."""
+    return get_fastrack_pdf(
+        html_content,
+        options=merge_fastrack_wkhtml_pdf_options({'margin-top': '10mm'}),
+        font_size='10px',
+        fit_to_one_page=True,
+    )
 
 
 def get_sea_bill_of_lading_html(doc, is_original=False):
@@ -140,8 +141,6 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
     exp_date = doc.get('date_2', '') or ''  # Exp Date
     sc_no = doc.get('sc_no', '') or ''
     sc_date = doc.get('date_3', '') or ''  # SC Date
-    lc_no = doc.get('lc_no', '') or ''
-    lc_date = doc.get('date_4', '') or ''  # LC Date
 
     # Vessel and routing
     fv = doc.get('fv', '') or ''
@@ -179,7 +178,9 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             except (TypeError, ValueError):
                 return v
 
-        cell_style = 'border: 1px solid transparent; padding: 2px 4px; text-align: center; vertical-align: middle; word-break: break-word; overflow: hidden;'
+        # One line per cell: the table sizes each column to its content, so
+        # headers like "|| Type" no longer spill into the next column
+        cell_style = 'border: 1px solid transparent; padding: 2px 4px; text-align: center; vertical-align: middle; white-space: nowrap;'
         rows_html = ''
         for c in container_info:
             rows_html += (
@@ -198,15 +199,7 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             )
         hdr_style = 'border: 1px solid transparent; padding: 2px 4px; text-align: center; vertical-align: middle; white-space: nowrap;'
         container_table_html = (
-            '<table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px; table-layout: fixed;">'
-            '<colgroup>'
-            '<col style="width: 23%;" />'
-            '<col style="width: 20%;" />'
-            '<col style="width: 9%;" />'
-            '<col style="width: 12%;" />'
-            '<col style="width: 20%;" />'
-            '<col style="width: 16%;" />'
-            '</colgroup>'
+            '<table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px;">'
             '<tr style="font-size: 8px; font-weight: bold;">'
             f'<td style="{hdr_style}">Container No.</td>'
             f'<td style="{hdr_style}">|| Seal No.</td>'
@@ -220,43 +213,45 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
         )
 
     # Pre-compute conditional HTML snippets for goods table
-    inco_term_html = f'<div><strong>FREIGHT</strong> {inco_term}</div>' if inco_term else ''
-    mode_html = f"<div style='margin-top:4px;'><strong>Mode:</strong> {mode}</div>" if mode else ''
+    # FREIGHT / Mode always print, in their own bottom-aligned cell under the
+    # Shipping Marks (wkhtmltopdf ignores flexbox, so a separate row is used)
+    freight_mode_cell_html = (
+        '<td style="border: 1px solid transparent; padding: 4px 8px; vertical-align: bottom; font-size: 9px;">'
+        f'<div><strong>FREIGHT</strong> {inco_term}</div>'
+        f'<div style="margin-top:4px;"><strong>Mode:</strong> {mode}</div>'
+        '</td>'
+    )
 
     # Build goods table data rows.
-    # When container_info exists, the container table spans both
-    # "No. of Packages" and "Description" columns via colspan=2 in a second row.
-    # Outer columns (Shipping Marks, Gross Weight, Volume) use rowspan=2.
+    # When container_info exists, the container table goes in a second row,
+    # spanning every column right of Shipping Marks (colspan=4).
     if container_info:
         goods_data_rows_html = (
             '<tr style="height: 160px;" >'
-            f'<td rowspan="2" style="border: 1px solid transparent;  padding: 8px; vertical-align: top;">'
-            f'<div style="display: flex; flex-direction: column;">'
-            f'<div class="_text_center" style="flex: 1; text-align: left;"><strong>{shipping_marks}</strong></div>'
-            f'<div style="margin-top: 8px; font-size: 9px;">{inco_term_html}{mode_html}</div>'
-            f'</div></td>'
+            f'<td style="border: 1px solid transparent;  padding: 8px; vertical-align: top; text-align: left;">'
+            f'<strong>{shipping_marks}</strong></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
             f'<strong style="font-size: 10px;">{no_of_pkg_hbl}</strong></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
             f'{description_of_good}</td>'
-            f'<td rowspan="2" style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
             f'<strong>{gross_weight} KG</strong></td>'
-            f'<td rowspan="2" style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
+            f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
             f'<strong>{hbl_vol_cbm} CBM</strong></td>'
             '</tr>'
             '<tr>'
-            f'<td colspan="2" style="border: 1px solid transparent; padding: 4px 8px; vertical-align: top;">'
+            f'{freight_mode_cell_html}'
+            # Container table spans every column right of Shipping Marks so its
+            # six one-line columns have room and do not overlap
+            f'<td colspan="4" style="border: 1px solid transparent; padding: 4px 8px; vertical-align: top;">'
             f'{container_table_html}'
             '</td></tr>'
         )
     else:
         goods_data_rows_html = (
-            '<tr>'
+            '<tr style="height: 220px;">'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
-            f'<div style="display: flex; flex-direction: column; min-height: 250px;">'
-            f'<div class="_text_center" style="flex: 1;"><strong>{shipping_marks}</strong></div>'
-            f'<div style="margin-top: 8px; font-size: 9px;">{inco_term_html}{mode_html}</div>'
-            f'</div></td>'
+            f'<strong>{shipping_marks}</strong></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
             f'<strong style="font-size: 10px;">{no_of_pkg_hbl}</strong></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top;">'
@@ -265,6 +260,10 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
             f'<strong>{gross_weight} KG</strong></td>'
             f'<td style="border: 1px solid transparent; padding: 8px; vertical-align: top; text-align: center;">'
             f'<strong>{hbl_vol_cbm} CBM</strong></td>'
+            '</tr>'
+            '<tr>'
+            f'{freight_mode_cell_html}'
+            '<td colspan="4" style="border: 1px solid transparent;"></td>'
             '</tr>'
         )
 
@@ -462,22 +461,22 @@ def get_sea_bill_of_lading_html(doc, is_original=False):
                 <span class="_container_label_text">Export References:</span>
                 <div style="margin-top: 5px;">
                   <strong>
+                    <!-- "Date:" in its own column so it lines up even when a date is empty -->
                     <table style="width: 100%; table-layout: fixed;">
                       <tr>
                         <td class="_text_normal" style="width: 60%;">INV No.: {invoice_no}</td>
-                        <td class="_text_normal" style="text-align: right; width: 40%;">Date: {invoice_date}</td>
+                        <td class="_text_normal" style="width: 13%;">Date:</td>
+                        <td class="_text_normal" style="width: 27%; text-align: right;">{invoice_date}</td>
                       </tr>
                       <tr>
                         <td class="_text_normal">EXP No.: {exp_no}</td>
-                        <td class="_text_normal" style="text-align: right;">Date: {exp_date}</td>
+                        <td class="_text_normal">Date:</td>
+                        <td class="_text_normal" style="text-align: right;">{exp_date}</td>
                       </tr>
                       <tr>
                         <td class="_text_normal">S/C No.: {sc_no}</td>
-                        <td class="_text_normal" style="text-align: right;">Date: {sc_date}</td>
-                      </tr>
-                      <tr>
-                        <td class="_text_normal">LC No.: {lc_no}</td>
-                        <td class="_text_normal" style="text-align: right;">Date: {lc_date}</td>
+                        <td class="_text_normal">Date:</td>
+                        <td class="_text_normal" style="text-align: right;">{sc_date}</td>
                       </tr>
                     </table>
                   </strong>

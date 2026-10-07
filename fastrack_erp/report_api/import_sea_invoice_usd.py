@@ -10,6 +10,7 @@ from fastrack_erp.report_api.report_helpers import (
     get_invoice_header_date,
     get_fastrack_pdf,
     FASTTRACK_PDF_MAIN_CSS,
+    INVOICE_CHARGES_TABLE_CSS,
     get_invoice_usd_shipping_html,
     merge_fastrack_wkhtml_pdf_options,
 )
@@ -127,7 +128,7 @@ def get_import_invoice_usd_html(
             total_amount += float(total_price) if total_price else 0
             
             if idx == 0:  # First row with rowspan for container number
-                container_td = f"""<td rowspan="{len(doc.invoice_list)}" style="border: 1px solid black; padding: 5px; text-align: center; vertical-align: middle;">{container_numbers_str}</td>""" if show_container_number else ""
+                container_td = f"""<td rowspan="{len(doc.invoice_list)}" class="container-cell">{container_numbers_str}</td>""" if show_container_number else ""
                 invoice_rows += f"""
                 <tr>
                     {container_td}
@@ -303,22 +304,7 @@ def get_import_invoice_usd_html(
                 padding: 3px 5px;
                 vertical-align: top;
             }}
-            .charges-table {{
-                width: 100%;
-                border-collapse: collapse;
-                text-align: center;
-                font-size: 12px;
-                border: 1px solid black;
-            }}
-            .charges-table th,
-            .charges-table td {{
-                border: 1px solid black;
-                padding: 5px;
-            }}
-            .charges-table th {{
-                background-color: #f2f2f2;
-                font-weight: bold;
-            }}
+            {INVOICE_CHARGES_TABLE_CSS}
             .total-row {{
                 text-align: right;
                 font-weight: bold;
@@ -427,6 +413,7 @@ def get_import_invoice_usd_html(
                 </tbody>
             </table>
 
+            <div style="page-break-inside: avoid;">
             <p style="margin-top: 20px;"><strong>Terms:</strong></p>
             <ol>
                 <li>We accept Pay Order / Cash Only.</li>
@@ -434,6 +421,7 @@ def get_import_invoice_usd_html(
                 <li>All transactions are subject to FASTRACK CARGO SOLUTIONS LTD. terms and conditions, available upon request.</li>
                 <li>If any dispute, please notify in written within 03 days upon receipt of this Invoice.</li>
             </ol>
+            </div>
         </div>
     </body>
     </html>
