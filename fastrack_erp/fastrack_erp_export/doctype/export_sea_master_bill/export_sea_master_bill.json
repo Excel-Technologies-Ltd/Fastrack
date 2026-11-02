@@ -60,6 +60,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -185,6 +186,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "section_break_hbl_info",
    "fieldtype": "Section Break",
    "label": "HBL Info"
@@ -207,6 +209,7 @@
    "search_index": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_id",
    "fieldtype": "Data",
    "label": "MBL No"
@@ -215,7 +218,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-30 12:26:34.638634",
+ "modified": "2026-10-29 17:42:29.464232",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea Master Bill",

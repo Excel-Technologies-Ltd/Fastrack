@@ -564,6 +564,7 @@
    "label": "Billing Information"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "invoice_list",
    "fieldtype": "Table",
    "label": "Sales Invoice List",
@@ -652,6 +653,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "payment_section",
    "fieldtype": "Section Break",
    "label": "Payment Information"
@@ -717,6 +719,7 @@
    "label": "Draft Invoices"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "draft_invoice_list",
    "fieldtype": "Table",
    "label": "Draft Invoice List",
@@ -754,7 +757,7 @@
    "link_fieldname": "custom_export_hbl_sea_link"
   }
  ],
- "modified": "2026-08-06 17:04:23.198921",
+ "modified": "2026-10-29 17:56:15.439607",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Sea House Bill",

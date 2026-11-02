@@ -94,6 +94,7 @@
    "options": "\nSea\nAir"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -104,6 +105,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -189,6 +191,7 @@
    "label": "Reference Number"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
@@ -363,6 +366,7 @@
    "options": "Profit Share List"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_profit_share",
    "fieldtype": "Float",
    "label": "Total Profit Share",
@@ -470,6 +474,7 @@
    "label": "ETA"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_id",
    "fieldtype": "Data",
    "label": "HBL No."
@@ -487,7 +492,7 @@
    "link_fieldname": "custom_export_d2d_link"
   }
  ],
- "modified": "2026-09-21 12:50:51.293920",
+ "modified": "2026-10-29 18:26:12.274949",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export D2D Bill",

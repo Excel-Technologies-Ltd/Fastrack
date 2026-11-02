@@ -169,6 +169,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_data",
    "fieldtype": "Data",
    "label": "HBL No"
@@ -545,6 +546,7 @@
    "label": "ETA DHAKA"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "container_type",
    "fieldtype": "Select",
    "label": "Container Type",
@@ -572,6 +574,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "carrier.supplier_name",
    "fieldname": "carrier_name",
    "fieldtype": "Data",
@@ -580,6 +583,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "agent.supplier_name",
    "fieldname": "agent_name",
    "fieldtype": "Data",
@@ -911,6 +915,7 @@
    "search_index": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date "
@@ -939,6 +944,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "container_mode",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -1039,7 +1045,7 @@
    "link_fieldname": "custom_shbl_id"
   }
  ],
- "modified": "2026-08-06 16:14:18.586641",
+ "modified": "2026-10-29 17:56:45.930774",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Sea House Bill",

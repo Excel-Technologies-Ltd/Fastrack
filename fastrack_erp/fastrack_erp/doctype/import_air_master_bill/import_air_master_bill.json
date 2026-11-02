@@ -35,6 +35,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -74,6 +75,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "no_of_pkg",
    "fieldtype": "Int",
    "label": "No of Pkg"
@@ -159,6 +161,7 @@
    "search_index": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mawb",
    "fieldtype": "Data",
    "label": "MAWB"
@@ -172,7 +175,7 @@
    "link_fieldname": "mbl_no"
   }
  ],
- "modified": "2026-01-15 13:38:09.828550",
+ "modified": "2026-10-29 13:47:37.866531",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import Air Master Bill",

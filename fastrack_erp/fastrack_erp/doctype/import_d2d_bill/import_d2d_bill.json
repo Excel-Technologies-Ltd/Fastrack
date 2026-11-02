@@ -79,6 +79,7 @@
    "options": "Sales Person"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -89,6 +90,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -176,6 +178,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_date",
    "fieldtype": "Date",
    "label": "MBL Date"
@@ -269,6 +272,7 @@
    "options": "\nSea\nAir"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "billing_section",
    "fieldtype": "Section Break",
    "label": "Billing Information"
@@ -438,11 +442,13 @@
    "options": "Fastrack Draft Bill"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "eta",
    "fieldtype": "Date",
    "label": "ETA"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "etd",
    "fieldtype": "Date",
    "label": "ETD"
@@ -456,6 +462,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_id",
    "fieldtype": "Data",
    "label": "HBL No.",
@@ -474,7 +481,7 @@
    "link_fieldname": "custom_import_d2d_link"
   }
  ],
- "modified": "2026-09-21 12:49:04.860774",
+ "modified": "2026-10-29 17:09:56.175203",
  "modified_by": "Administrator",
  "module": "Fastrack Erp",
  "name": "Import D2D Bill",

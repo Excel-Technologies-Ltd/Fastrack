@@ -132,6 +132,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -140,6 +141,7 @@
    "options": "Export Air Master Bill"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "mbl_no",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -147,6 +149,7 @@
    "options": "Export Air Master Bill"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_no",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -489,17 +492,20 @@
    "label": "CC Charges in Dest. Currency"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "flight_name",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Flight Name"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "flight_date",
    "fieldtype": "Date",
    "label": "Flight Date"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "customer.custom_bin_no",
    "fieldname": "customer_bin",
    "fieldtype": "Data",
@@ -507,6 +513,7 @@
    "label": "Customer Bin"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "lc_date",
    "fieldtype": "Date",
    "hidden": 1,
@@ -559,6 +566,7 @@
    "label": "Description of Goods"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "hbl_id",
    "fieldtype": "Data",
    "label": "HAWB No"
@@ -569,6 +577,7 @@
    "label": "Billing Information"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "invoice_list",
    "fieldtype": "Table",
    "label": "Sales Invoice List",
@@ -662,6 +671,7 @@
    "label": "Payment Information"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "payment_entry_list",
    "fieldtype": "Table",
    "label": "Payment Entry List",
@@ -722,6 +732,7 @@
    "label": "Draft Invoices"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "draft_invoice_list",
    "fieldtype": "Table",
    "label": "Draft Invoice List",
@@ -786,7 +797,7 @@
    "link_fieldname": "custom_export_hbl_air_link"
   }
  ],
- "modified": "2026-08-06 17:35:44.796916",
+ "modified": "2026-10-29 18:19:00.837804",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export Air House Bill",
