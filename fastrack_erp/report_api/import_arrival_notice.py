@@ -152,8 +152,8 @@ def get_igm_html(doc, _customer_name=''):
                 margin: 0 0 8px 0;
             }}
             .igm-summary-wrap {{
-                width: 30%;
-                max-width: 30%;
+                width: 42%;
+                max-width: 42%;
                 margin-bottom: 12px;
             }}
             .igm-summary {{
@@ -182,24 +182,42 @@ def get_igm_html(doc, _customer_name=''):
                 table-layout: fixed;
                 margin-bottom: 6mm;
             }}
-            .igm-main th {{
+            .igm-main col.ml {{ width: 3.5%; }}
+            .igm-main col.mbl {{ width: 5.5%; }}
+            .igm-main col.ln {{ width: 3%; }}
+            .igm-main col.bl {{ width: 7%; }}
+            .igm-main col.qty {{ width: 4.5%; }}
+            .igm-main col.desc {{ width: 5%; }}
+            .igm-main col.marks {{ width: 10%; }}
+            .igm-main col.goods {{ width: 11.5%; }}
+            .igm-main col.cons {{ width: 8%; }}
+            .igm-main col.notify {{ width: 7.5%; }}
+            .igm-main col.gw {{ width: 6.5%; }}
+            .igm-main col.nw {{ width: 4.5%; }}
+            .igm-main col.cont {{ width: 11.5%; }}
+            .igm-main col.st {{ width: 3.5%; }}
+            .igm-main col.pod {{ width: 7.5%; }}
+            .igm-main th,
+            .igm-main td {{
                 border: 1px solid #000;
-                padding: 7px 4px;
-                font-size: 7px;
+                overflow: hidden;
+            }}
+            .igm-main th {{
+                padding: 3px 1px;
+                font-size: 6px;
                 font-weight: bold;
                 text-align: center;
                 vertical-align: middle;
                 text-transform: uppercase;
-                line-height: 1.25;
+                line-height: 1.2;
+                white-space: normal;
             }}
             .igm-main td {{
-                border: 1px solid #000;
-                padding: 10px 6px;
-                font-size: 7.5px;
-                line-height: 1.45;
+                padding: 5px 3px;
+                font-size: 7px;
+                line-height: 1.35;
                 vertical-align: top;
                 text-align: left;
-                word-wrap: break-word;
             }}
         </style>
     </head>
@@ -227,23 +245,40 @@ def get_igm_html(doc, _customer_name=''):
                 </table>
             </div>
             <table class="igm-main">
+                <colgroup>
+                    <col class="ml"/>
+                    <col class="mbl"/>
+                    <col class="ln"/>
+                    <col class="bl"/>
+                    <col class="qty"/>
+                    <col class="desc"/>
+                    <col class="marks"/>
+                    <col class="goods"/>
+                    <col class="cons"/>
+                    <col class="notify"/>
+                    <col class="gw"/>
+                    <col class="nw"/>
+                    <col class="cont"/>
+                    <col class="st"/>
+                    <col class="pod"/>
+                </colgroup>
                 <thead>
                     <tr>
-                        <th style="width:3.5%;">Master<br/>Line</th>
-                        <th style="width:6%;">MBL<br/>No</th>
-                        <th style="width:3.5%;">Line<br/>No</th>
-                        <th style="width:7%;">BL<br/>Number</th>
-                        <th style="width:5%;">Number of<br/>Quantity</th>
-                        <th style="width:7%;">Description</th>
-                        <th style="width:5%;">Mark &amp;<br/>Number</th>
-                        <th style="width:11%;">Description<br/>of Goods</th>
-                        <th style="width:8%;">Consignee</th>
-                        <th style="width:8%;">Notify<br/>Party</th>
-                        <th style="width:8%;">Gross<br/>Weight</th>
-                        <th style="width:4%;">Net<br/>Weight</th>
-                        <th style="width:11%;">Container</th>
-                        <th style="width:4%;">Status</th>
-                        <th style="width:8%;">POD<br/>Code</th>
+                        <th>Master<br/>Line</th>
+                        <th>MBL<br/>No</th>
+                        <th>Line<br/>No</th>
+                        <th>BL<br/>Number</th>
+                        <th>Number<br/>of<br/>Quantity</th>
+                        <th>Descrip<br/>tion</th>
+                        <th>Mark &amp;<br/>Number</th>
+                        <th>Description<br/>of Goods</th>
+                        <th>Consignee</th>
+                        <th>Notify<br/>Party</th>
+                        <th>Gross<br/>Weight</th>
+                        <th>Net<br/>Weight</th>
+                        <th>Container</th>
+                        <th>Status</th>
+                        <th>POD<br/>Code</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -319,11 +354,13 @@ def download_igm_pdf(doc_name="SHBL-00000064", customer_name="Fastrack"):
         doctype = "Import Sea House Bill"
         doc = frappe.get_doc(doctype, doc_name)
         html_content = get_igm_html(doc, customer_name)
+        # Keep template font sizes — default 12px override overflows the 15-col header.
         pdf_content = get_fastrack_pdf(
             html_content,
             options=merge_fastrack_wkhtml_pdf_options(
                 {'orientation': 'Landscape'},
             ),
+            font_size=None,
         )
         filename = f"IGM_{doc_name}.pdf"
         frappe.local.response.filename = filename
