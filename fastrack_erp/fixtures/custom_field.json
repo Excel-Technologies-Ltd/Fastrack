@@ -1225,7 +1225,7 @@
   "name": "Payment Entry-custom_payment_type_for_report",
   "no_copy": 0,
   "non_negative": 0,
-  "options": "Receive\nPay\nProfit Share\nInternal Transfer",
+  "options": "Receive\nPay\nProfit Share\nInternal Transfer\nCollection Discount",
   "permlevel": 0,
   "precision": "",
   "print_hide": 0,

@@ -31,7 +31,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Payment Type",
-   "options": "Receive\nPay\nProfit Share\nInternal Transfer",
+   "options": "Receive\nPay\nProfit Share\nInternal Transfer\nCollection Discount",
    "read_only": 1
   },
   {

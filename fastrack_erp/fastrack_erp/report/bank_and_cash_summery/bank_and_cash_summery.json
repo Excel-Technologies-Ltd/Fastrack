@@ -1,0 +1,17 @@
+{
+ "doctype": "Report",
+ "name": "Bank and Cash Summery",
+ "report_name": "Bank and Cash Summery",
+ "ref_doctype": "GL Entry",
+ "report_type": "Script Report",
+ "is_standard": "Yes",
+ "module": "Fastrack Erp",
+ "disabled": 0,
+ "prepared_report": 0,
+ "add_total_row": 1,
+ "roles": [
+  {"role": "Accounts User"},
+  {"role": "Accounts Manager"},
+  {"role": "Auditor"}
+ ]
+}

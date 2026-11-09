@@ -2,7 +2,7 @@ from collections import defaultdict
 
 import frappe
 
-REPORT_BUCKETS = ("Receive", "Pay", "Profit Share")
+REPORT_BUCKETS = ("Receive", "Pay", "Profit Share", "Collection Discount")
 
 
 def after_submit(doc, method):

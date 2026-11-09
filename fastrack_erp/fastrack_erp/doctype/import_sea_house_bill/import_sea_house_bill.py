@@ -3,6 +3,7 @@
 import random
 import frappe
 from frappe.model.document import Document
+from frappe.utils import flt
 #  "payment_link",
 #   "customer",
 #   "invoice",
@@ -103,7 +104,9 @@ class ImportSeaHouseBill(Document):
 			house_item_weight = get_house_item['weight'] or 0.0
 			master_item_weight = get_master_item['weight'] or 0.0
 			item_weight = item.weight or 0.0
-			if master_item_weight < house_item_weight + item_weight :
+			# Compare at field precision to avoid floating-point noise at the limit.
+			weight_precision = item.precision("weight")
+			if flt(master_item_weight, weight_precision) < flt(house_item_weight + item_weight, weight_precision):
 				frappe.throw(f"Weight mismatch for container: {item.custom_container_no}, should be less than or equal to {get_master_item['weight']}")
 			house_item_no_of_pkg = get_house_item['no_of_pkg'] or 0.0
 			print(get_house_item)
