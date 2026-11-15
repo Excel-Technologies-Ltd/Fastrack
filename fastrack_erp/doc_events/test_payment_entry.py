@@ -49,7 +49,10 @@ class TestCollectionDiscountSync(TestCase):
                 self.assertEqual(row.amount_usd, 30)
                 self.assertEqual(row.amount, 3720)
                 self.assertEqual(row.exchange_gain_loss, 3)
-                self.assertEqual(parent.total_payment_received_bdt, 0)
+                self.assertEqual(parent.total_collection_discount_usd, 30)
+                self.assertEqual(parent.total_collection_discount_bdt, 3720)
+                self.assertEqual(parent.total_payment_received_usd, 30)
+                self.assertEqual(parent.total_payment_received_bdt, 3720)
 
             # Submitted edits replace old allocations, including removed HBLs.
             doc.references = [refs[0]]
@@ -76,3 +79,6 @@ class TestCollectionDiscountSync(TestCase):
                 total_field = {"Receive": "total_payment_received_bdt", "Pay": "total_pay_bdt",
                     "Profit Share": "total_payment_profit_share_bdt"}[category]
                 self.assertEqual(getattr(parent, total_field), 1240)
+                self.assertEqual(parent.total_collection_discount_bdt, 0)
+                if category == "Receive":
+                    self.assertEqual(parent.total_payment_received_usd, 10)
