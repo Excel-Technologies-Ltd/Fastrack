@@ -74,8 +74,12 @@ BEGIN
             (COALESCE(ISHB.`expense_amount_bdt`, 0) - COALESCE(ISHB.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(ISHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ISHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(ISHB.`total_invoice_amount_usd`, 0) + COALESCE(ISHB.`total_payment_profit_share_usd`, 0) - COALESCE(ISHB.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(ISHB.`total_invoice_amount`, 0) + COALESCE(ISHB.`total_payment_profit_share_bdt`, 0) - COALESCE(ISHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(ISHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(ISHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            
+            ((COALESCE(ISHB.`total_invoice_amount_usd`, 0) + COALESCE(ISHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(ISHB.`expense_amount_usd`, 0) + COALESCE(ISHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(ISHB.`total_invoice_amount`, 0) + COALESCE(ISHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ISHB.`expense_amount_bdt`, 0) + COALESCE(ISHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             COALESCE(ISHB.`inco_term`, '') AS `Inco Term`
         FROM `tabImport Sea House Bill` ISHB 
         LEFT JOIN `tabImport Sea Master Bill` IMB ON ISHB.`mbl_no` = IMB.`mbl_no`
@@ -114,8 +118,12 @@ BEGIN
             (COALESCE(IAHB.`expense_amount_bdt`, 0) - COALESCE(IAHB.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(IAHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(IAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(IAHB.`total_invoice_amount_usd`, 0) + COALESCE(IAHB.`total_payment_profit_share_usd`, 0) - COALESCE(IAHB.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(IAHB.`total_invoice_amount`, 0) + COALESCE(IAHB.`total_payment_profit_share_bdt`, 0) - COALESCE(IAHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(IAHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(IAHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+
+            ((COALESCE(IAHB.`total_invoice_amount_usd`, 0) + COALESCE(IAHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(IAHB.`expense_amount_usd`, 0) + COALESCE(IAHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(IAHB.`total_invoice_amount`, 0) + COALESCE(IAHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(IAHB.`expense_amount_bdt`, 0) + COALESCE(IAHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             COALESCE(IAHB.`inco_term`, '') AS `Inco Term`
         FROM `tabImport Air House Bill` IAHB
         LEFT JOIN `tabImport Air Master Bill` IMB ON IAHB.`mbl_no` = IMB.`mbl_no`
@@ -154,8 +162,12 @@ BEGIN
             (COALESCE(ID2D.`expense_amount_bdt`, 0) - COALESCE(ID2D.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(ID2D.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ID2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(ID2D.`total_invoice_amount_usd`, 0) + COALESCE(ID2D.`total_payment_profit_share_usd`, 0) - COALESCE(ID2D.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(ID2D.`total_invoice_amount`, 0) + COALESCE(ID2D.`total_payment_profit_share_bdt`, 0) - COALESCE(ID2D.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(ID2D.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(ID2D.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+
+            ((COALESCE(ID2D.`total_invoice_amount_usd`, 0) + COALESCE(ID2D.`total_payment_profit_share_usd`, 0)) - (COALESCE(ID2D.`expense_amount_usd`, 0) + COALESCE(ID2D.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(ID2D.`total_invoice_amount`, 0) + COALESCE(ID2D.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ID2D.`expense_amount_bdt`, 0) + COALESCE(ID2D.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             '' AS `Inco Term`
         FROM `tabImport D2D Bill` ID2D
         WHERE ID2D.`etd` >= v_start_date 
@@ -193,8 +205,12 @@ BEGIN
             (COALESCE(ESHB.`expense_amount_bdt`, 0) - COALESCE(ESHB.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(ESHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ESHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(ESHB.`total_invoice_amount_usd`, 0) + COALESCE(ESHB.`total_payment_profit_share_usd`, 0) - COALESCE(ESHB.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(ESHB.`total_invoice_amount`, 0) + COALESCE(ESHB.`total_payment_profit_share_bdt`, 0) - COALESCE(ESHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(ESHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(ESHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+
+            ((COALESCE(ESHB.`total_invoice_amount_usd`, 0) + COALESCE(ESHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(ESHB.`expense_amount_usd`, 0) + COALESCE(ESHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(ESHB.`total_invoice_amount`, 0) + COALESCE(ESHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ESHB.`expense_amount_bdt`, 0) + COALESCE(ESHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             COALESCE(ESHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabExport Sea House Bill` ESHB
@@ -234,8 +250,12 @@ BEGIN
             (COALESCE(EAHB.`expense_amount_bdt`, 0) - COALESCE(EAHB.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(EAHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(EAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(EAHB.`total_invoice_amount_usd`, 0) + COALESCE(EAHB.`total_payment_profit_share_usd`, 0) - COALESCE(EAHB.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(EAHB.`total_invoice_amount`, 0) + COALESCE(EAHB.`total_payment_profit_share_bdt`, 0) - COALESCE(EAHB.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(EAHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(EAHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+
+            ((COALESCE(EAHB.`total_invoice_amount_usd`, 0) + COALESCE(EAHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(EAHB.`expense_amount_usd`, 0) + COALESCE(EAHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(EAHB.`total_invoice_amount`, 0) + COALESCE(EAHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(EAHB.`expense_amount_bdt`, 0) + COALESCE(EAHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             COALESCE(EAHB.`inco_term`, '') AS `Inco Term`
         FROM 
             `tabExport Air House Bill` EAHB
@@ -275,8 +295,12 @@ BEGIN
             (COALESCE(ED2D.`expense_amount_bdt`, 0) - COALESCE(ED2D.`total_pay_bdt`, 0)) AS `Expense Due BDT`,
             COALESCE(ED2D.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ED2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
-            (COALESCE(ED2D.`total_invoice_amount_usd`, 0) + COALESCE(ED2D.`total_payment_profit_share_usd`, 0) - COALESCE(ED2D.`expense_amount_usd`, 0)) AS `GP USD`,
-            (COALESCE(ED2D.`total_invoice_amount`, 0) + COALESCE(ED2D.`total_payment_profit_share_bdt`, 0) - COALESCE(ED2D.`expense_amount_bdt`, 0)) AS `GP BDT`,
+
+            COALESCE(ED2D.`total_collection_discount_usd`, 0) AS `Collection USD`,
+            COALESCE(ED2D.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+
+            ((COALESCE(ED2D.`total_invoice_amount_usd`, 0) + COALESCE(ED2D.`total_payment_profit_share_usd`, 0)) - (COALESCE(ED2D.`expense_amount_usd`, 0) + COALESCE(ED2D.`total_collection_discount_usd`, 0))) AS `GP USD`,
+            ((COALESCE(ED2D.`total_invoice_amount`, 0) + COALESCE(ED2D.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ED2D.`expense_amount_bdt`, 0) + COALESCE(ED2D.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
             '' AS `Inco Term`
         FROM 
             `tabExport D2D Bill` ED2D
