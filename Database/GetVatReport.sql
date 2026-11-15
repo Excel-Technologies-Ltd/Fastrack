@@ -129,8 +129,8 @@ BEGIN
             LEFT JOIN FSIAggregated FSI ON ISHB.`name` = FSI.`parent` 
             LEFT JOIN VATAggregated VL ON ISHB.`name` = VL.`parent` 
         WHERE 
-            ISHB.`hbl_etd` >= v_start_date 
-            AND ISHB.`hbl_etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            ISHB.`eta` >= v_start_date 
+            AND ISHB.`eta` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
             AND ISHB.`docstatus` = 1
     ),
     ImportAirHouseBill AS (
@@ -204,8 +204,8 @@ BEGIN
             LEFT JOIN FSIAggregated FSI ON ID2D.`name` = FSI.`parent` 
             LEFT JOIN VATAggregated VL ON ID2D.`name` = VL.`parent` 
         WHERE 
-            ID2D.`etd` >= v_start_date 
-            AND ID2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            ID2D.`eta` >= v_start_date 
+            AND ID2D.`eta` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
             AND ID2D.`docstatus` = 1
     ),
     ExportSeaHouseBill AS (
@@ -241,8 +241,8 @@ BEGIN
             LEFT JOIN FSIAggregated FSI ON ESHB.`name` = FSI.`parent`
             LEFT JOIN VATAggregated VL ON ESHB.`name` = VL.`parent` 
         WHERE 
-            ESHB.`etd` >= v_start_date 
-            AND ESHB.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            ESHB.`eta` >= v_start_date 
+            AND ESHB.`eta` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
             AND ESHB.`docstatus` = 1
     ),
     ExportAirHouseBill AS (
@@ -316,8 +316,8 @@ BEGIN
             LEFT JOIN FSIAggregated FSI ON ED2D.`name` = FSI.`parent`
             LEFT JOIN VATAggregated VL ON ED2D.`name` = VL.`parent`
         WHERE 
-            ED2D.`etd` >= v_start_date 
-            AND ED2D.`etd` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
+            ED2D.`eta` >= v_start_date 
+            AND ED2D.`eta` < DATE_ADD(v_end_date, INTERVAL 1 DAY)
             AND ED2D.`docstatus` = 1
     ),
     AllBills AS (
