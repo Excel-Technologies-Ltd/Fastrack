@@ -116,8 +116,18 @@ def _recalculate_payment_totals(hbl_doc):
             if row.payment_type_for_report == report_type
         )
 
-    hbl_doc.total_payment_received_usd = total("Receive", "amount_usd")
-    hbl_doc.total_payment_received_bdt = total("Receive", "amount")
+    collection_discount_usd = total("Collection Discount", "amount_usd")
+    collection_discount_bdt = total("Collection Discount", "amount")
+
+    hbl_doc.total_collection_discount_usd = collection_discount_usd
+    hbl_doc.total_collection_discount_bdt = collection_discount_bdt
+    # Total Received = Receive + Collection Discount
+    hbl_doc.total_payment_received_usd = (
+        total("Receive", "amount_usd") + collection_discount_usd
+    )
+    hbl_doc.total_payment_received_bdt = (
+        total("Receive", "amount") + collection_discount_bdt
+    )
     hbl_doc.total_pay_usd = total("Pay", "amount_usd")
     hbl_doc.total_pay_bdt = total("Pay", "amount")
     hbl_doc.total_exchange_gain_loss = total("Pay", "exchange_gain_loss")

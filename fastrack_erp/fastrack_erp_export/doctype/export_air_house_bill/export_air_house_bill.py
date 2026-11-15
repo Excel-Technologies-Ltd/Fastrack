@@ -12,7 +12,8 @@ class ExportAirHouseBill(Document):
 		self.hbl_data = self.name
 
 		# payment_entry_list / total_payment_received_usd / total_payment_received_bdt /
-		# total_payment_profit_share_usd / total_payment_profit_share_bdt and
+		# total_payment_profit_share_usd / total_payment_profit_share_bdt /
+		# total_collection_discount_usd / total_collection_discount_bdt and
 		# purchase_invoice_list / total_pay_bdt ("Total Pay (BDT)") are
 		# maintained persistently by doc_events.payment_entry and
 		# doc_events.purchase_invoice -- do not rebuild here.
