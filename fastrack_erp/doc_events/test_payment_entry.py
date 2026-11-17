@@ -64,7 +64,7 @@ class TestCollectionDiscountSync(TestCase):
             self.assertTrue(all(not p.payment_entry_list for p in parents.values()))
 
     def test_existing_categories_still_sync(self):
-        for category in ("Receive", "Pay", "Profit Share"):
+        for category in ("Receive", "Pay"):
             with self.subTest(category=category), patch.object(payment_entry, "frappe") as api:
                 parent = SimpleNamespace(payment_entry_list=[], flags=frappe._dict(), save=Mock())
                 parent.append = lambda field, row: parent.payment_entry_list.append(row)
@@ -76,9 +76,43 @@ class TestCollectionDiscountSync(TestCase):
                             allocated_amount=10, custom_allocated_total_bdt=1240)])
                 payment_entry.after_submit(doc, None)
                 self.assertEqual(parent.payment_entry_list[0].payment_type_for_report, category)
-                total_field = {"Receive": "total_payment_received_bdt", "Pay": "total_pay_bdt",
-                    "Profit Share": "total_payment_profit_share_bdt"}[category]
+                total_field = {"Receive": "total_payment_received_bdt",
+                    "Pay": "total_pay_bdt"}[category]
                 self.assertEqual(getattr(parent, total_field), 1240)
                 self.assertEqual(parent.total_collection_discount_bdt, 0)
                 if category == "Receive":
                     self.assertEqual(parent.total_payment_received_usd, 10)
+
+    def test_profit_share_uses_linked_hbl_not_references(self):
+        for doctype in HBL_TYPES:
+            link_field = payment_entry.HBL_TYPE_FIELD_MAP[doctype]
+            with self.subTest(doctype=doctype), patch.object(payment_entry, "frappe") as api:
+                parent = SimpleNamespace(payment_entry_list=[], flags=frappe._dict(), save=Mock())
+                parent.append = lambda field, row: parent.payment_entry_list.append(row)
+                api.get_doc.return_value = parent
+                api.new_doc.side_effect = lambda dt: frappe._dict()
+                doc = frappe._dict(
+                    name="PAY-PS",
+                    payment_type="Receive",
+                    custom_payment_type_for_report="Profit Share",
+                    party_name="Agent",
+                    custom_hbl_type=doctype,
+                    paid_to_account_currency="USD",
+                    received_amount=50,
+                    base_paid_amount=6200,
+                    references=[
+                        # Item-wise refs must be ignored for Profit Share
+                        frappe._dict(custom_hbl_type="Import Sea House Bill",
+                            custom_hbl_no="WRONG-HBL", allocated_amount=999,
+                            custom_allocated_total_bdt=999),
+                    ],
+                )
+                doc[link_field] = "LINKED-HBL"
+                payment_entry.after_submit(doc, None)
+                api.get_doc.assert_called_once_with(doctype, "LINKED-HBL")
+                row = parent.payment_entry_list[0]
+                self.assertEqual(row.payment_type_for_report, "Profit Share")
+                self.assertEqual(row.amount_usd, 50)
+                self.assertEqual(row.amount, 6200)
+                self.assertEqual(parent.total_payment_profit_share_usd, 50)
+                self.assertEqual(parent.total_payment_profit_share_bdt, 6200)

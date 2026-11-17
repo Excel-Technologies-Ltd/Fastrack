@@ -431,14 +431,14 @@ def get_import_invoice_bdt_html(
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_rate_usd:.2f}</strong>
+                            <strong>{fmt_min2(total_rate_usd)}</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_price_usd:.2f}</strong>
+                            <strong>{fmt_min2(total_price_usd)}</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;"></td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_amount_bdt:.2f}</strong>
+                            <strong>{fmt_min2(total_amount_bdt)}</strong>
                         </td>
                     </tr>
                 </tbody>

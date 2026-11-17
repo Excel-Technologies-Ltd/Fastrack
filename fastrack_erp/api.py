@@ -1,5 +1,9 @@
 import frappe
 from frappe.model.mapper import get_mapped_doc
+
+from fastrack_erp.report_api.report_helpers import fmt_min2
+
+
 @frappe.whitelist()
 def make_sea_house_bill(source_name, target_doc=None,hbl_id=None):
     def set_missing_values(source, target):
@@ -708,10 +712,10 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
                     <td>{escape_html(invoice.item_code or '')}</td>
                     <td>{escape_html(invoice.supplier or '')}</td>
                     <td class="text-right">{invoice.qty}</td>
-                    <td class="text-right">{str(frappe.utils.flt(invoice.rate))}</td>
-                    <td class="text-right">{str(frappe.utils.flt(invoice.amount))}</td>
-                    <td class="text-right">{ str(frappe.utils.flt(invoice.exchange_rate or 0))}</td>
-                    <td class="text-right">{ str(frappe.utils.flt(invoice.total_price or 0))}</td>
+                    <td class="text-right">{fmt_min2(invoice.rate)}</td>
+                    <td class="text-right">{fmt_min2(invoice.amount)}</td>
+                    <td class="text-right">{fmt_min2(invoice.exchange_rate or 0)}</td>
+                    <td class="text-right">{fmt_min2(invoice.total_price or 0)}</td>
                 </tr>
             """)
         except Exception as e:
@@ -748,15 +752,15 @@ def build_purchase_invoice_html(invoice_ids, doctype_name):
         """ + ''.join(rows) + f"""
                 <tr>
                     <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
-                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                    <td class="text-right"><strong>{fmt_min2(grand_total)}</strong></td>
                 </tr>
                 <tr>
                     <td colspan="7" class="text-right"><strong>Paid Amount</strong></td>
-                    <td class="text-right"><strong>{str(frappe.utils.flt(paid_amount))}</strong></td>
+                    <td class="text-right"><strong>{fmt_min2(paid_amount)}</strong></td>
                 </tr>
                 <tr>
                     <td colspan="7" class="text-right"><strong>Due Amount</strong></td>
-                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total - paid_amount))}</strong></td>
+                    <td class="text-right"><strong>{fmt_min2(grand_total - paid_amount)}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -870,8 +874,8 @@ def build_profit_share_html(journal_ids,doctype_name):
                     <td>{escape_html(journal_entry.party_type or '')}</td>
                     <td>{escape_html(journal_entry.party or '')}</td>
                     <td class="text-right">{journal_entry.account_name}</td>
-                    <td class="text-right">{str(frappe.utils.flt(journal_entry.credit))}</td>
-                    <td class="text-right">{str(frappe.utils.flt(journal_entry.debit))}</td>
+                    <td class="text-right">{fmt_min2(journal_entry.credit)}</td>
+                    <td class="text-right">{fmt_min2(journal_entry.debit)}</td>
                 </tr>
             """)
         except Exception as e:
@@ -900,7 +904,7 @@ def build_profit_share_html(journal_ids,doctype_name):
         """ + ''.join(rows) + f"""
                 <tr>
                     <td colspan="5" class="text-right"><strong>Grand Total</strong></td>
-                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                    <td class="text-right"><strong>{fmt_min2(grand_total)}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -1013,8 +1017,8 @@ def build_sales_invoice_html(invoice_ids, doctype_name):
                     <td>{escape_html(invoice.customer or '')}</td>
                     <td class="text-right">{invoice.item_code}</td>
                     <td class="text-right">{invoice.qty}</td>
-                    <td class="text-right">{str(frappe.utils.flt(invoice.rate))}</td>
-                    <td class="text-right">{str(frappe.utils.flt(invoice.total_price or 0))}</td>
+                    <td class="text-right">{fmt_min2(invoice.rate)}</td>
+                    <td class="text-right">{fmt_min2(invoice.total_price or 0)}</td>
                 </tr>
             """)
         except Exception as e:
@@ -1043,7 +1047,7 @@ def build_sales_invoice_html(invoice_ids, doctype_name):
         """ + ''.join(rows) + f"""
                 <tr>
                     <td colspan="5" class="text-right"><strong>Grand Total</strong></td>
-                    <td class="text-right"><strong>{str(frappe.utils.flt(grand_total))}</strong></td>
+                    <td class="text-right"><strong>{fmt_min2(grand_total)}</strong></td>
                 </tr>
             </tbody>
         </table>

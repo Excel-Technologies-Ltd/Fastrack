@@ -421,11 +421,11 @@ def get_import_invoice_usd_html(
                             <strong>Total:</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_rate:.2f}</strong>
+                            <strong>{fmt_min2(total_rate)}</strong>
                         </td>
                         <td style="border: 1px solid black; padding: 5px;"></td>
                         <td style="border: 1px solid black; padding: 5px;">
-                            <strong>{total_amount:.2f}</strong>
+                            <strong>{fmt_min2(total_amount)}</strong>
                         </td>
                     </tr>
                 </tbody>

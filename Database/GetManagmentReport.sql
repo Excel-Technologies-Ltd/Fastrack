@@ -75,8 +75,8 @@ BEGIN
             COALESCE(ISHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ISHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(ISHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(ISHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(ISHB.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(ISHB.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
             
             ((COALESCE(ISHB.`total_invoice_amount_usd`, 0) + COALESCE(ISHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(ISHB.`expense_amount_usd`, 0) + COALESCE(ISHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(ISHB.`total_invoice_amount`, 0) + COALESCE(ISHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ISHB.`expense_amount_bdt`, 0) + COALESCE(ISHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
@@ -119,8 +119,8 @@ BEGIN
             COALESCE(IAHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(IAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(IAHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(IAHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(IAHB.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(IAHB.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
 
             ((COALESCE(IAHB.`total_invoice_amount_usd`, 0) + COALESCE(IAHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(IAHB.`expense_amount_usd`, 0) + COALESCE(IAHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(IAHB.`total_invoice_amount`, 0) + COALESCE(IAHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(IAHB.`expense_amount_bdt`, 0) + COALESCE(IAHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
@@ -163,8 +163,8 @@ BEGIN
             COALESCE(ID2D.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ID2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(ID2D.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(ID2D.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(ID2D.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(ID2D.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
 
             ((COALESCE(ID2D.`total_invoice_amount_usd`, 0) + COALESCE(ID2D.`total_payment_profit_share_usd`, 0)) - (COALESCE(ID2D.`expense_amount_usd`, 0) + COALESCE(ID2D.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(ID2D.`total_invoice_amount`, 0) + COALESCE(ID2D.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ID2D.`expense_amount_bdt`, 0) + COALESCE(ID2D.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
@@ -206,8 +206,8 @@ BEGIN
             COALESCE(ESHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ESHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(ESHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(ESHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(ESHB.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(ESHB.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
 
             ((COALESCE(ESHB.`total_invoice_amount_usd`, 0) + COALESCE(ESHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(ESHB.`expense_amount_usd`, 0) + COALESCE(ESHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(ESHB.`total_invoice_amount`, 0) + COALESCE(ESHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ESHB.`expense_amount_bdt`, 0) + COALESCE(ESHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
@@ -251,8 +251,8 @@ BEGIN
             COALESCE(EAHB.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(EAHB.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(EAHB.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(EAHB.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(EAHB.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(EAHB.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
 
             ((COALESCE(EAHB.`total_invoice_amount_usd`, 0) + COALESCE(EAHB.`total_payment_profit_share_usd`, 0)) - (COALESCE(EAHB.`expense_amount_usd`, 0) + COALESCE(EAHB.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(EAHB.`total_invoice_amount`, 0) + COALESCE(EAHB.`total_payment_profit_share_bdt`, 0)) - (COALESCE(EAHB.`expense_amount_bdt`, 0) + COALESCE(EAHB.`total_collection_discount_bdt`, 0))) AS `GP BDT`,
@@ -296,8 +296,8 @@ BEGIN
             COALESCE(ED2D.`total_payment_profit_share_usd`, 0) AS `Profit Share USD`,
             COALESCE(ED2D.`total_payment_profit_share_bdt`, 0) AS `Profit Share BDT`,
 
-            COALESCE(ED2D.`total_collection_discount_usd`, 0) AS `Collection USD`,
-            COALESCE(ED2D.`total_collection_discount_bdt`, 0) AS `Collection BDT`,
+            COALESCE(ED2D.`total_collection_discount_usd`, 0) AS `Collection Discount USD`,
+            COALESCE(ED2D.`total_collection_discount_bdt`, 0) AS `Collection Discount BDT`,
 
             ((COALESCE(ED2D.`total_invoice_amount_usd`, 0) + COALESCE(ED2D.`total_payment_profit_share_usd`, 0)) - (COALESCE(ED2D.`expense_amount_usd`, 0) + COALESCE(ED2D.`total_collection_discount_usd`, 0))) AS `GP USD`,
             ((COALESCE(ED2D.`total_invoice_amount`, 0) + COALESCE(ED2D.`total_payment_profit_share_bdt`, 0)) - (COALESCE(ED2D.`expense_amount_bdt`, 0) + COALESCE(ED2D.`total_collection_discount_bdt`, 0))) AS `GP BDT`,

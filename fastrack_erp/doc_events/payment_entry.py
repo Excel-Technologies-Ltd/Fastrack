@@ -4,13 +4,30 @@ import frappe
 
 REPORT_BUCKETS = ("Receive", "Pay", "Profit Share", "Collection Discount")
 
+HBL_TYPE_FIELD_MAP = {
+    "Import Sea House Bill": "custom_hbl_sea_link",
+    "Import Air House Bill": "custom_hbl_air_link",
+    "Import D2D Bill": "custom_import_d2d_link",
+    "Export Sea House Bill": "custom_export_hbl_sea_link",
+    "Export Air House Bill": "custom_export_hbl_air_link",
+    "Export D2D Bill": "custom_export_d2d_link",
+}
+
 
 def after_submit(doc, method):
     report_type = doc.custom_payment_type_for_report or doc.payment_type
     if report_type not in REPORT_BUCKETS:
         return
 
-    for (hbl_type, hbl_no), totals in _group_references_by_hbl(doc).items():
+    # Profit Share attaches to the HBL linked on the Payment Entry header
+    # (Create > Payment Entry from Import/Export). Other report types stay
+    # reference / item-wise via custom_hbl_type / custom_hbl_no on refs.
+    if report_type == "Profit Share":
+        groups = _group_by_linked_hbl(doc)
+    else:
+        groups = _group_references_by_hbl(doc)
+
+    for (hbl_type, hbl_no), totals in groups.items():
         hbl_doc = frappe.get_doc(hbl_type, hbl_no)
 
         row = frappe.new_doc("Fastrack Payment Entry")
@@ -26,6 +43,38 @@ def after_submit(doc, method):
         _recalculate_payment_totals(hbl_doc)
         hbl_doc.flags.ignore_validate_update_after_submit = True
         hbl_doc.save(ignore_permissions=True)
+
+
+def _group_by_linked_hbl(doc):
+    """
+    Resolve the single HBL from Payment Entry header fields
+    (custom_hbl_type + matching link field) and use the PE's full amount.
+    """
+    hbl_type = doc.get("custom_hbl_type")
+    if not hbl_type:
+        return {}
+
+    link_field = HBL_TYPE_FIELD_MAP.get(hbl_type)
+    if not link_field:
+        return {}
+
+    hbl_no = doc.get(link_field)
+    if not hbl_no:
+        return {}
+
+    amount_usd = 0.0
+    if doc.get("paid_from_account_currency") == "USD":
+        amount_usd = float(doc.get("paid_amount") or 0)
+    elif doc.get("paid_to_account_currency") == "USD":
+        amount_usd = float(doc.get("received_amount") or 0)
+
+    return {
+        (hbl_type, hbl_no): {
+            "allocated_usd": amount_usd,
+            "allocated_bdt": float(doc.get("base_paid_amount") or 0),
+            "exchange_gain_loss": 0.0,
+        }
+    }
 
 
 def _group_references_by_hbl(doc):

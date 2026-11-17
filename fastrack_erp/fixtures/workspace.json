@@ -1,5 +1,205 @@
 [
  {
+  "charts": [
+   {
+    "chart_name": "Outgoing Bills (Sales Invoice)",
+    "label": "Incom Trends",
+    "parent": "Data Overview",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   },
+   {
+    "chart_name": "Incoming Bills (Purchase Invoice)",
+    "label": "Expense Trends",
+    "parent": "Data Overview",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   },
+   {
+    "chart_name": "Profit and Loss",
+    "label": "Profit and Loss",
+    "parent": "Data Overview",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   }
+  ],
+  "content": "[{\"id\":\"Qi8bWMsfxq\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fastrack Cargo Solutions Limited</span>\",\"col\":12}},{\"id\":\"Q1Y8CUOMSR\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Yearly Income\",\"col\":3}},{\"id\":\"-kyhGX6qKn\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Yearly Purchase\",\"col\":3}},{\"id\":\"I4h68wDW0t\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"A/C Receivables\",\"col\":3}},{\"id\":\"h4I5vKBZTN\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"A/C Payables\",\"col\":3}},{\"id\":\"1oTEJqMBai\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Incoming Payment\",\"col\":3}},{\"id\":\"0jwPL21azE\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Outgoing Payment\",\"col\":3}},{\"id\":\"ixWBIFxNo5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"General Ledger\",\"col\":3}},{\"id\":\"210O9y-dDV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Balance Sheet\",\"col\":3}},{\"id\":\"0tmS_lLQTN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer Ledger Summary\",\"col\":3}},{\"id\":\"m9VXpQLI3k\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Ledger Summary\",\"col\":3}},{\"id\":\"c1zy5HqAZX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bank and Cash Summery\",\"col\":3}},{\"id\":\"zLwsUjkIP4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Gross Profit\",\"col\":3}},{\"id\":\"kIvcMaqhHr\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Incom Trends\",\"col\":6}},{\"id\":\"4CMqBGOVTn\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Expense Trends\",\"col\":6}},{\"id\":\"YA1fHfFzwX\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Profit and Loss\",\"col\":6}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "chart",
+  "is_hidden": 0,
+  "label": "Data Overview",
+  "links": [],
+  "modified": "2026-11-15 15:13:15.784642",
+  "module": null,
+  "name": "Data Overview",
+  "number_cards": [
+   {
+    "label": "Yearly Income",
+    "number_card_name": "Annual Sales",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   },
+   {
+    "label": "Yearly Purchase",
+    "number_card_name": "Annual Purchase",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   },
+   {
+    "label": "A/C Receivables",
+    "number_card_name": "A/C Receivables",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   },
+   {
+    "label": "A/C Payables",
+    "number_card_name": "A/C Payables",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   },
+   {
+    "label": "Total Incoming Payment",
+    "number_card_name": "Total Incoming Payment",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   },
+   {
+    "label": "Total Outgoing Payment",
+    "number_card_name": "Total Outgoing Payment",
+    "parent": "Data Overview",
+    "parentfield": "number_cards",
+    "parenttype": "Workspace"
+   }
+  ],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "parent": "Data Overview",
+    "parentfield": "roles",
+    "parenttype": "Workspace",
+    "role": "Hide"
+   },
+   {
+    "parent": "Data Overview",
+    "parentfield": "roles",
+    "parenttype": "Workspace",
+    "role": "Accounts Manager"
+   }
+  ],
+  "sequence_id": 1.0,
+  "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "General Ledger",
+    "link_to": "ArcApps General Ledger",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Customer Ledger Summary",
+    "link_to": "ArcApps Customer Ledger Summary",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Balance Sheet",
+    "link_to": "Balance Sheet",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Supplier Ledger Summary",
+    "link_to": "ArcApps Supplier Ledger Summary",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Bank and Cash Summery",
+    "link_to": "Bank and Cash Summery",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Gross Profit",
+    "link_to": "Gross Profit",
+    "parent": "Data Overview",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   }
+  ],
+  "title": "Data Overview"
+ },
+ {
   "charts": [],
   "content": "[{\"id\":\"kb3XPLg8lb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"nWd2KJPW8l\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"snrzfbFr5Y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"SHJKakmLLf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"CPxEyhaf3G\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoice\",\"col\":3}},{\"id\":\"HpUrDcnf4b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Man Visit\",\"col\":3}},{\"id\":\"JVu8-FJZCu\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"JiuSi0ubOg\",\"type\":\"card\",\"data\":{\"card_name\":\"Accounting\",\"col\":4}},{\"id\":\"ji2Jlm3Q8i\",\"type\":\"card\",\"data\":{\"card_name\":\"Stock\",\"col\":4}},{\"id\":\"N61oiXpuwK\",\"type\":\"card\",\"data\":{\"card_name\":\"CRM\",\"col\":4}},{\"id\":\"6J0CVl1mPo\",\"type\":\"card\",\"data\":{\"card_name\":\"Data Import and Settings\",\"col\":4}}]",
   "custom_blocks": [],

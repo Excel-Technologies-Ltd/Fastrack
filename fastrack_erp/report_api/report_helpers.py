@@ -256,8 +256,9 @@ def get_arrival_notice_shipping_html(doc):
 
 
 def fmt_min2(value):
-    """Number with at least 2 decimals (5500 -> 5500.00, 123.6 -> 123.60),
-    keeping any extra precision (121.5432 stays 121.5432). '' for empty."""
+    """Simple currency-style number: thousand commas, at least 2 decimals
+    (5500 -> 5,500.00, 123.6 -> 123.60), keeping extra precision
+    (121.5432 stays 121.5432). '' for empty."""
     if value is None or value == '':
         return ''
     try:
@@ -266,7 +267,13 @@ def fmt_min2(value):
         return value
     text = f"{num:.6f}".rstrip('0')
     whole, _, decimals = text.partition('.')
-    return f"{whole}.{decimals.ljust(2, '0')}"
+    decimals = decimals.ljust(2, '0')
+    sign = ''
+    if whole.startswith('-'):
+        sign = '-'
+        whole = whole[1:]
+    whole = f"{int(whole or 0):,}"
+    return f"{sign}{whole}.{decimals}"
 
 
 def _printed_vat_rows(doc):
