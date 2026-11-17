@@ -123,7 +123,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Shipper",
-   "options": "Supplier"
+   "options": "Customer"
   },
   {
    "allow_on_submit": 1,
@@ -508,7 +508,7 @@
    "link_fieldname": "custom_export_d2d_link"
   }
  ],
- "modified": "2026-10-29 18:26:12.274949",
+ "modified": "2026-11-17 12:36:53.164880",
  "modified_by": "Administrator",
  "module": "Fastrack Erp Export",
  "name": "Export D2D Bill",
